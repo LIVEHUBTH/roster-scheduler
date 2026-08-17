@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>โปรแกรมจัดตารางเวร</title>
+<style>
+
+:root{--bg:#f6f7fb;--card:#fff;--text:#202534;--muted:#6b7280;--line:#d9dce6;--accent:#6d5dfc;--accent2:#efeefe;--danger:#b42318;--dangerbg:#fff0ee;--ok:#067647;--okbg:#ecfdf3;--weekend:#ececf0;--holiday:#e2e2e6}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Noto Sans Thai",Tahoma,Arial,sans-serif}
+header{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.95);border-bottom:1px solid var(--line);backdrop-filter:blur(10px)}
+.header-wrap{max-width:1700px;margin:auto;padding:14px;display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}.header-wrap h1{font-size:clamp(21px,4vw,34px);margin:0}.header-sub{font-size:13px;color:var(--muted);margin-top:4px}.version{font-size:12px;color:var(--muted)}
+.app{max-width:1700px;margin:auto;padding:14px}.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 4px 18px rgba(30,40,70,.05);padding:14px;margin-bottom:14px}.toolbar{display:flex;gap:10px;align-items:end;flex-wrap:wrap}.field{display:flex;flex-direction:column;font-size:12px;font-weight:700;gap:5px}.field select,.field input,.holidaybar input,.rulebar input,.rulebar select{min-height:43px;border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 10px;font-size:16px;color:var(--text)}button{min-height:43px;border:0;border-radius:11px;background:#edeef3;color:var(--text);padding:9px 14px;font-weight:800;font-size:14px;cursor:pointer;-webkit-tap-highlight-color:transparent}.run{background:var(--accent);color:#fff}.save{background:#e8f7ee;color:#17663b}.danger{background:#fee4e2;color:var(--danger)}button:active{transform:translateY(1px)}
+.status{margin:0 0 14px;padding:10px 12px;border-radius:11px;background:#eef2ff;font-size:14px;line-height:1.45}.status.ok{background:var(--okbg);color:var(--ok);border:0}.status.err{background:var(--dangerbg);color:var(--danger);border:0}
+.sheet-wrap{overflow:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:15px;background:#fff;max-height:72vh;margin-bottom:14px}.sheet{border-collapse:separate;border-spacing:0;min-width:1900px;width:100%;font-size:11px;table-layout:fixed}.sheet caption{caption-side:top;background:#fff;font-weight:800;font-size:14px;padding:9px;border-bottom:1px solid var(--line)}.sheet th,.sheet td{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:4px;min-width:92px;text-align:center;height:32px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.sheet thead th{position:sticky;top:0;background:#f1f2f6;font-weight:800;z-index:5}.sheet .date{width:76px;position:sticky;left:0;z-index:4}.sheet tbody .date{background:#fff}.sheet thead .date{z-index:8;background:#f1f2f6}.sheet tr.weekend td,.sheet tr.weekend .date{background:var(--weekend)!important;color:#222}.sheet tr.holiday td,.sheet tr.holiday .date{background:var(--holiday)!important;color:#222}.sheet select{width:100%;height:26px;border:1px solid transparent;border-radius:6px;background:transparent;color:inherit;font-size:11px;text-align:center;appearance:none;-webkit-appearance:none}.sheet select:focus{border-color:var(--accent);background:#fff;outline:0}.sheet td.inactive{background:#fff!important;color:#aaa}.sheet tr.weekend td.inactive{background:var(--weekend)!important;color:#222}.sheet tr.holiday td.inactive{background:var(--holiday)!important;color:#222}.sheet td.conflict{box-shadow:inset 0 0 0 2px #f04438!important;background:#fff1f0!important;color:#111!important}
+.section-title{font-weight:800;font-size:18px;margin-bottom:8px}.muted{font-size:12px;color:var(--muted);line-height:1.55}.names{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:7px;margin-top:9px}.name-row{display:grid;grid-template-columns:33px 1fr auto;gap:6px;align-items:center}.name-row b{text-align:center;font-size:13px}.name-row input{width:100%;min-height:38px;border:1px solid var(--line);border-radius:8px;padding:6px 8px;font-size:14px}.name-row .lastbadge{font-size:10px;background:var(--accent2);color:#4d3ed7;padding:4px 6px;border-radius:999px;white-space:nowrap;font-weight:800}.smallbtn{min-height:auto;padding:3px 7px;border-radius:7px}.holidaybar,.rulebar{display:flex;gap:7px;flex-wrap:wrap;align-items:end}.chips{margin-top:8px;display:flex;gap:6px;flex-wrap:wrap}.chip{display:inline-flex;align-items:center;gap:4px;border:1px solid #ddd7a7;padding:6px 9px;border-radius:999px;background:#fff8db;font-size:12px}.rule-list{display:grid;grid-template-columns:repeat(2,minmax(260px,1fr));gap:7px;margin-top:9px}.rule-item{padding:9px 10px;border-radius:10px;background:#f7f7fb;font-size:13px;line-height:1.45}.rule-item label{display:flex;align-items:center;gap:7px}.rule-item input{accent-color:var(--accent)}hr{border:0;border-top:1px solid var(--line);margin:12px 0}
+.summary{margin-top:0;background:#fff;border:1px solid var(--line);border-radius:15px;overflow:auto;padding-bottom:5px}.summary table{border-collapse:separate;border-spacing:0;min-width:2850px;width:max-content;font-size:12px}.summary th,.summary td{border-right:1px solid #e2e4ec;border-bottom:1px solid var(--line);padding:9px 12px;text-align:center;min-width:112px;white-space:nowrap}.summary th{background:#f1f2f6;font-weight:800}.summary th:first-child,.summary td:first-child{min-width:54px}.summary td:nth-child(2),.summary th:nth-child(2){text-align:left;position:sticky;left:0;background:#fff;min-width:180px;max-width:220px;z-index:2}.summary th:nth-child(2){background:#f1f2f6}.summary th:nth-child(3),.summary td:nth-child(3),.summary th:nth-child(4),.summary td:nth-child(4),.summary th:nth-child(5),.summary td:nth-child(5){min-width:105px}.balance-good{font-weight:800;color:var(--ok);background:#ecfdf3}.balance-warn{font-weight:800;color:#b54708;background:#fff4d6}.history-info{font-size:12px;color:var(--muted);margin-top:7px}.flex-spacer{flex:1}
+@media(max-width:700px){.header-wrap,.app{padding:10px}.panel{padding:11px}.toolbar{gap:7px}.toolbar button{flex:1 1 calc(50% - 7px)}.field{flex:1 1 42%}.names{grid-template-columns:1fr 1fr}.name-row{grid-template-columns:28px 1fr auto}.name-row input{font-size:13px}.rule-list{grid-template-columns:1fr}.sheet-wrap{max-height:68vh}.sheet{font-size:9px}.sheet select{font-size:9px}}
+@media(max-width:480px){.names{grid-template-columns:1fr}.header-sub{font-size:12px}}
+@page{size:A4 landscape;margin:4mm}@media print{html,body{width:100%;height:auto}body{background:#fff}.no-print,header,.status,.summary{display:none!important}.app{padding:0;max-width:none}.sheet-wrap{overflow:visible;border:0;border-radius:0;max-height:none}.sheet{min-width:0;width:100%;font-size:6.2px;table-layout:fixed;page-break-inside:avoid}.sheet th,.sheet td{height:18px;padding:1px;min-width:0}.sheet .date{position:static;width:auto}.sheet thead th{position:static}.sheet select{font-size:7px}.sheet tr.weekend td,.sheet tr.weekend .date,.sheet tr.holiday td,.sheet tr.holiday .date{background:#e0e0e0!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.sheet td.inactive{background:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.sheet tr.weekend td.inactive,.sheet tr.holiday td.inactive{background:#e0e0e0!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+
+</style>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+</head>
+<body>
+<header><div class="header-wrap"><div><h1>โปรแกรมรันตารางเวร</h1><div class="header-sub">จัดเวรอัตโนมัติ • ไม่ซ้ำในวันเดียวกัน • อ้างอิงเดือนก่อน • เฉลี่ยเวร/OT</div></div><div class="version">V18 • Cloud Sync</div></div></header>
+<div class="app">
+  <div class="panel no-print">
+    <div class="toolbar">
+      <label class="field">เดือน<select id="month"></select></label>
+      <label class="field">ปี พ.ศ.<input id="year" type="number" min="2500" max="2700"></label>
+      <button class="run" type="button" id="runBtn">รันตารางเวร</button>
+      <button class="save" type="button" id="saveBtn">บันทึกเดือนนี้</button>
+      <button type="button" id="loadBtn">เปิดที่บันทึก</button>
+      <button type="button" id="validateBtn">ตรวจตาราง</button>
+      <button type="button" id="printBtn">พิมพ์ตาราง</button>
+      <button type="button" id="pdfBtn">บันทึกไฟล์ PDF</button>
+      <button class="danger" type="button" id="clearBtn">ล้างตาราง</button>
+    </div>
+    <div id="historyInfo" class="history-info"></div>
+  </div>
+
+  <div id="status" class="status ok">กำลังเริ่มระบบ...</div>
+
+  <div class="panel no-print" id="cloudPanel">
+    <div class="section-title">บันทึกข้อมูลออนไลน์ทุกเครื่อง</div>
+    <div class="muted">เชื่อม Cloudflare D1 ผ่าน Worker • เมื่อเชื่อมแล้ว รายชื่อ กติกา วันหยุด และตารางรายเดือนจะซิงก์ข้ามเครื่อง</div>
+    <div class="toolbar" style="margin-top:8px">
+      <label class="field" style="min-width:280px;flex:1">Cloud API URL<input id="cloudApiUrl" type="url" placeholder="https://roster-scheduler-api....workers.dev"></label>
+      <label class="field" style="min-width:180px">Sync PIN / Token<input id="cloudToken" type="password" placeholder="อย่างน้อย 8 ตัวอักษร"></label>
+      <button type="button" id="cloudConnectBtn">เชื่อมฐานข้อมูล</button>
+      <button type="button" id="cloudUploadBtn">อัปโหลดข้อมูลเครื่องนี้</button>
+      <button type="button" id="cloudDownloadBtn">โหลดข้อมูลออนไลน์</button>
+    </div>
+    <div id="cloudStatus" class="history-info">ยังไม่ได้เชื่อมฐานข้อมูลออนไลน์</div>
+  </div>
+  <div class="sheet-wrap"><table id="sheet" class="sheet"></table></div>
+
+  <div class="panel no-print" style="margin-top:10px">
+    <div class="section-title">หมายเหตุท้ายตาราง PDF</div>
+    <div class="muted">ข้อความนี้จะแสดงที่มุมซ้ายล่างของไฟล์ PDF โดยเว้นระยะจากตาราง และสามารถแก้ไขได้ทุกครั้งก่อนบันทึก</div>
+    <textarea id="pdfNote" rows="3" style="width:100%;margin-top:8px;min-height:78px;border:1px solid var(--line);border-radius:10px;padding:10px;font-size:15px;resize:vertical" placeholder="หมายเหตุ: ..."></textarea>
+  </div>
+
+  <div class="panel no-print" style="margin-top:10px">
+    <div class="section-title">รายชื่อบุคลากร</div>
+    <div class="muted">เพิ่มหรือลดจำนวนรายชื่อได้ตามจริง • <b>รายชื่อสุดท้าย</b> จะถูกจำกัดให้รันเฉพาะ EXTRA 1, EXTRA 2, EXTRA 3 อัตโนมัติ</div>
+    <div class="toolbar" style="margin-top:7px"><button type="button" id="addPersonBtn">+ เพิ่มรายชื่อ</button><button type="button" id="removePersonBtn">− ลบรายชื่อสุดท้าย</button><span id="personCount" class="muted"></span></div>
+    <div id="names" class="names"></div>
+  </div>
+
+  <div class="panel no-print">
+    <div class="section-title">วันหยุดนักขัตฤกษ์ / วันหยุดพิเศษ</div>
+    <div class="holidaybar"><input id="holidayDate" type="date"><input id="holidayName" type="text" placeholder="ชื่อวันหยุด (ไม่บังคับ)"><button type="button" id="addHolidayBtn">เพิ่มวันหยุด</button></div>
+    <div id="chips" class="chips"></div>
+  </div>
+
+  <div class="panel no-print">
+    <div class="section-title">กติกาการจัดเวร</div>
+    <div class="muted">กติกาหลักเปิด/ปิดได้ และสามารถเพิ่ม / แก้ไข / ลบกติกาจัดเวรเพิ่มเติมได้เอง</div>
+    <div id="ruleList" class="rule-list"></div>
+    <hr>
+    <div style="font-weight:800;margin-bottom:7px">เพิ่มกติกาจัดเวร</div>
+    <div class="rulebar">
+      <label class="field">เวรที่ต้องการรัน<select id="globalSlots" multiple size="5" style="height:106px;min-width:230px"></select></label>
+      <label class="field">ใช้กับวัน (เลือกได้หลายตัวเลือก)<select id="globalDayTypes" multiple size="11" style="height:236px;min-width:250px"><option value="all">ทุกวัน</option><option value="all_no_holiday">ทุกวัน (ไม่รวมนักขัตฤกษ์)</option><option value="no_holiday">ไม่รวมนักขัตฤกษ์</option><option value="weekday">จันทร์–ศุกร์</option><option value="weekday_no_holiday">จันทร์–ศุกร์ (ไม่รวมนักขัตฤกษ์)</option><option value="saturday">เสาร์</option><option value="sunday">อาทิตย์</option><option value="holiday">นักขัตฤกษ์</option><option value="monday">จันทร์</option><option value="tuesday">อังคาร</option><option value="wednesday">พุธ</option><option value="thursday">พฤหัสบดี</option><option value="friday">ศุกร์</option></select></label>
+      <label class="field" style="min-width:280px;flex:1">คำอธิบายกติกา<textarea id="globalRuleDescription" rows="5" style="width:100%;min-height:106px;resize:vertical" placeholder="เช่น ใช้สำหรับรันเวรบ่าย–ดึกเฉพาะวันศุกร์ เสาร์ และอาทิตย์"></textarea></label>
+      <button type="button" id="addGlobalRuleBtn">+ เพิ่มกติกา</button><button type="button" id="cancelGlobalEditBtn" style="display:none">ยกเลิกแก้ไข</button>
+    </div>
+    <div id="globalRules" class="chips"></div>
+    <hr>
+    <div style="font-weight:800;margin-bottom:7px">กติกาเฉพาะบุคคล</div>
+    <div class="rulebar">
+      <label class="field">บุคลากร<select id="customPerson"></select></label>
+      <label class="field">ประเภทกติกา<select id="customRuleType"><option value="only">อนุญาตเฉพาะเวรที่เลือก</option><option value="block">ห้ามเวรที่เลือก</option></select></label>
+      <label class="field">เลือกเวร<select id="customSlots" multiple size="5" style="height:106px;min-width:230px"></select></label>
+      <button type="button" id="addCustomRuleBtn">+ เพิ่มกติกาเฉพาะบุคคล</button><button type="button" id="cancelCustomEditBtn" style="display:none">ยกเลิกแก้ไข</button>
+    </div>
+    <div id="customRules" class="chips"></div>
+  </div>
+
+  <div class="panel no-print">
+    <div class="section-title">หลักการเฉลี่ยเวร</div>
+    <div class="muted">ระบบจะนับทั้ง <b>เดือนก่อนหน้า + เดือนที่กำลังจัด</b> แยกตามประเภทเวร และเลือกผู้ที่มีจำนวนน้อยกว่าก่อน เพื่อลดความต่างระหว่างบุคลากร รวมถึงตรวจรอยต่อเวรบ่าย–ดึกจากวันสุดท้ายของเดือนก่อนหน้า</div>
+  </div>
+
+  <div id="summary" class="summary no-print"></div>
+</div>
+<script>
+(function(){
+'use strict';
+var MONTHS=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+var DAYS=['อา.','จ.','อ.','พ.','พฤ.','ศ.','ส.'];
+var SLOTS=[
+ {id:'v1',group:'เวร1',sub:'',time:'',type:'workday'},
+ {id:'v2',group:'เวร2',sub:'',time:'',type:'workday'},
+ {id:'ot1',group:'OT1',sub:'',time:'',type:'workday'},
+ {id:'ot2',group:'OT2',sub:'',time:'',type:'workday'},
+ {id:'s1d',group:'SDMC1',sub:'เช้า',time:'8.00-16.00',type:'morning'},
+ {id:'s1n',group:'SDMC1',sub:'บ่าย-ดึก',time:'16.00-8.00',type:'night'},
+ {id:'s2d',group:'SDMC2',sub:'เช้า',time:'8.00-16.00',type:'morning'},
+ {id:'s2n',group:'SDMC2',sub:'บ่าย-ดึก',time:'16.00-8.00',type:'night'},
+ {id:'s3d',group:'SDMC3',sub:'เช้า',time:'8.00-16.00',type:'morning'},
+ {id:'s3n',group:'SDMC3',sub:'บ่าย-ดึก',time:'16.00-8.00',type:'night'},
+ {id:'s4d',group:'SDMC4',sub:'เช้า',time:'8.00-16.00',type:'morning'},
+ {id:'s4n',group:'SDMC4',sub:'บ่าย-ดึก',time:'16.00-8.00',type:'night'},
+ {id:'s5',group:'SDMC5',sub:'เช้า-บ่าย',time:'7.00-23.00',type:'dayoff'},
+ {id:'s6',group:'SDMC6',sub:'เช้า-บ่าย',time:'7.00-23.00',type:'dayoff'},
+ {id:'s7',group:'SDMC7',sub:'บ่าย',time:'16.00-24.00',type:'daily'},
+ {id:'s8',group:'SDMC8',sub:'บ่าย',time:'16.00-24.00',type:'daily'},
+ {id:'e1',group:'Extra',sub:'',time:'Premium 1',type:'daily'},
+ {id:'e2',group:'Extra',sub:'',time:'Premium 2',type:'daily'},
+ {id:'e3',group:'Extra',sub:'',time:'Premium 3',type:'daily'}
+];
+var EXTRA_IDS={e1:true,e2:true,e3:true};
+var state={people:[],assignments:{},holidays:{},customRules:[],customGlobalRules:[],pdfNote:'',rules:{uniqueDay:true,postNightLock:true,allowWeekendNightChain:true,lastExtraOnly:true,balancePrevMonth:true,rotateSameSlot:true}};
+var cloud={apiUrl:'',token:'',connected:false,savingConfigTimer:null};
+var editingGlobalRuleId=null,editingCustomRuleId=null;
+var loadedSnapshotNames={};
+function el(id){return document.getElementById(id)}
+function pad(n){return n<10?'0'+n:String(n)}
+function py(){var x=parseInt(el('year').value,10);return x||2569}
+function gy(){return py()-543}
+function cm(){return parseInt(el('month').value,10)||0}
+function daysIn(y,m){return new Date(y,m+1,0).getDate()}
+function dim(){return daysIn(gy(),cm())}
+function monthKey(y,m){return y+'-'+pad(m+1)}
+function currentKey(){return monthKey(gy(),cm())}
+function prevYM(){var y=gy(),m=cm()-1;if(m<0){m=11;y--}return {y:y,m:m}}
+function prevKey(){var p=prevYM();return monthKey(p.y,p.m)}
+function dateKeyFor(y,m,d){return monthKey(y,m)+'-'+pad(d)}
+function dkey(d){return dateKeyFor(gy(),cm(),d)}
+function akey(d,id){return d+'|'+id}
+function dowFor(y,m,d){return new Date(y,m,d).getDay()}
+function dow(d){return dowFor(gy(),cm(),d)}
+function isWeekend(d){var w=dow(d);return w===0||w===6}
+function isHoliday(d){return !!state.holidays[dkey(d)]}
+function isDayOff(d){return isWeekend(d)||isHoliday(d)}
+function isWeekday(d){var w=dow(d);return w>=1&&w<=5}
+function baseSlotActive(slot,d){
+ if(slot.type==='workday')return isWeekday(d)&&!isHoliday(d);
+ if(slot.type==='morning')return isWeekday(d)&&isHoliday(d); /* 08-16 ไม่รัน จ-ศ ปกติ และไม่รัน ส-อา */
+ if(slot.type==='dayoff')return isDayOff(d);
+ return true;
+}
+function dayTypeMatches(type,d){
+ var w=dow(d);
+ if(type==='all')return true;
+ if(type==='all_no_holiday')return !isHoliday(d);if(type==='no_holiday')return !isHoliday(d);
+ if(type==='weekday')return isWeekday(d);if(type==='weekday_no_holiday')return isWeekday(d)&&!isHoliday(d);
+ if(type==='saturday')return w===6&&!isHoliday(d);
+ if(type==='sunday')return w===0&&!isHoliday(d);
+ if(type==='weekend')return isWeekend(d)&&!isHoliday(d); /* รองรับกติกาจากเวอร์ชันก่อน */
+ if(type==='holiday')return isHoliday(d);
+ if(type==='monday')return w===1&&!isHoliday(d);
+ if(type==='tuesday')return w===2&&!isHoliday(d);
+ if(type==='wednesday')return w===3&&!isHoliday(d);
+ if(type==='thursday')return w===4&&!isHoliday(d);
+ if(type==='friday')return w===5&&!isHoliday(d);
+ return false;
+}
+function globalRunRuleResult(slotId,d){
+ var found=false,match=false;
+ for(var i=0;i<state.customGlobalRules.length;i++){
+   var r=state.customGlobalRules[i];
+   if(r.enabled===false||r.slots.indexOf(slotId)<0)continue;
+   found=true;
+   var types=Array.isArray(r.dayTypes)?r.dayTypes:(r.dayType?[r.dayType]:[]);
+   for(var j=0;j<types.length;j++){if(dayTypeMatches(types[j],d)){match=true;break}}
+   if(match)break;
+ }
+ return {found:found,match:match};
+}
+function slotActive(slot,d){
+ var rr=globalRunRuleResult(slot.id,d);
+ if(rr.found)return rr.match;
+ return baseSlotActive(slot,d);
+}
+function makeId(){return 'p_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,7)}
+function defaultPeople(){var a=[];for(var i=1;i<=28;i++)a.push({id:'p'+i,name:'บุคลากร '+i});return a}
+function safeParse(s,fallback){try{return JSON.parse(s)}catch(e){return fallback}}
+function configPayload(){return {people:state.people,holidays:state.holidays,customRules:state.customRules,customGlobalRules:state.customGlobalRules,pdfNote:state.pdfNote,rules:state.rules}}
+function saveConfig(){state.pdfNote=el('pdfNote')?el('pdfNote').value:state.pdfNote;var payload=configPayload();localStorage.setItem('roster_config_v8',JSON.stringify(payload));scheduleCloudConfigSave(payload)}
+function loadConfig(){var c=safeParse(localStorage.getItem('roster_config_v8'),null)||safeParse(localStorage.getItem('roster_config_v7'),null);if(c){state.people=Array.isArray(c.people)&&c.people.length?c.people:defaultPeople();state.holidays=c.holidays||{};state.customRules=c.customRules||[];state.customGlobalRules=c.customGlobalRules||[];state.pdfNote=c.pdfNote||'';state.rules=Object.assign(state.rules,c.rules||{})}else state.people=defaultPeople()}
+function scheduleStorageKey(k){return 'roster_month_v7_'+k}
+function getSavedMonth(k){return safeParse(localStorage.getItem(scheduleStorageKey(k)),null)}
+function makeMonthPayload(){return {version:18,key:currentKey(),year:gy(),month:cm(),savedAt:new Date().toISOString(),assignments:state.assignments,peopleSnapshot:state.people.map(function(p){return {id:p.id,name:p.name}}),holidaysSnapshot:Object.assign({},state.holidays),rulesSnapshot:Object.assign({},state.rules),customRulesSnapshot:state.customRules.slice(),customGlobalRulesSnapshot:state.customGlobalRules.slice()}}
+function saveMonth(silent){var data=makeMonthPayload();localStorage.setItem(scheduleStorageKey(currentKey()),JSON.stringify(data));cloudSaveMonth(data);if(!silent)setStatus('บันทึกตารางเดือน '+MONTHS[cm()]+' '+py()+' แล้ว'+(cloud.connected?' และกำลังซิงก์ออนไลน์':''),true);renderHistoryInfo()}
+function loadMonth(silent){var data=getSavedMonth(currentKey());state.assignments={};loadedSnapshotNames={};if(data){state.assignments=data.assignments||{};(data.peopleSnapshot||[]).forEach(function(p){loadedSnapshotNames[p.id]=p.name});if(!silent)setStatus('เปิดตารางที่บันทึกของเดือน '+MONTHS[cm()]+' '+py()+' แล้ว',true)}else if(!silent)setStatus('เดือนนี้ยังไม่มีตารางที่บันทึก',false);renderSheet();renderHistoryInfo()}
+function renderHistoryInfo(){var cur=getSavedMonth(currentKey()),prev=getSavedMonth(prevKey());el('historyInfo').innerHTML='เดือนนี้: <b>'+(cur?'มีข้อมูลบันทึก':'ยังไม่บันทึก')+'</b> &nbsp;|&nbsp; เดือนก่อนหน้า ('+prevKey()+'): <b>'+(prev?'พบข้อมูลสำหรับอ้างอิง':'ไม่พบข้อมูล')+'</b>'}
+function personName(id){for(var i=0;i<state.people.length;i++)if(state.people[i].id===id)return state.people[i].name;return loadedSnapshotNames[id]||id}
+function buildMonths(){var h='';for(var i=0;i<12;i++)h+='<option value="'+i+'">'+MONTHS[i]+'</option>';el('month').innerHTML=h}
+function buildNames(){var h='';state.people.forEach(function(p,i){var last=i===state.people.length-1;h+='<div class="name-row"><b>'+(i+1)+'.</b><input data-pid="'+p.id+'" value="'+escapeHtml(p.name)+'"><span class="lastbadge" style="display:'+(last?'inline-block':'none')+'">EXTRA 1-3 เท่านั้น</span></div>'});el('names').innerHTML=h;el('personCount').textContent='จำนวน '+state.people.length+' รายชื่อ';var inputs=el('names').querySelectorAll('input');for(var j=0;j<inputs.length;j++)inputs[j].addEventListener('change',function(){var id=this.getAttribute('data-pid');for(var k=0;k<state.people.length;k++)if(state.people[k].id===id)state.people[k].name=this.value.trim()||('บุคลากร '+(k+1));saveConfig();buildCustomPersonOptions();renderSheet()});buildCustomPersonOptions()}
+function addPerson(){state.people.push({id:makeId(),name:'บุคลากร '+(state.people.length+1)});saveConfig();buildNames();renderSheet();setStatus('เพิ่มรายชื่อแล้ว',true)}
+function removePerson(){if(state.people.length<=1){setStatus('ต้องมีบุคลากรอย่างน้อย 1 รายชื่อ',false);return}var removed=state.people.pop();state.customRules=state.customRules.filter(function(r){return r.personId!==removed.id});saveConfig();buildNames();renderRules();renderSheet();setStatus('ลบรายชื่อสุดท้ายแล้ว',true)}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function optionHtml(selected){var h='<option value=""></option>',seen={};state.people.forEach(function(p,i){seen[p.id]=true;h+='<option value="'+p.id+'"'+(selected===p.id?' selected':'')+'>'+(i+1)+'. '+escapeHtml(p.name)+'</option>'});if(selected&&!seen[selected])h+='<option value="'+selected+'" selected>'+escapeHtml(personName(selected))+' (รายชื่อเดิม)</option>';return h}
+function buildHeader(){var h='<caption>ตารางเวรผู้ช่วยพยาบาล เดือน'+MONTHS[cm()]+' '+py()+'</caption><thead><tr><th class="date" rowspan="3">วันที่</th>';for(var i=0;i<SLOTS.length;i++){var s=SLOTS[i];if(s.id==='v1'||s.id==='v2'||s.id==='ot1'||s.id==='ot2'){h+='<th rowspan="3">'+s.group+'</th>';continue}if(s.id==='s1d'||s.id==='s2d'||s.id==='s3d'||s.id==='s4d'){h+='<th colspan="2">'+s.group+'</th>';i++;continue}if(s.id==='s5'||s.id==='s6'||s.id==='s7'||s.id==='s8'){h+='<th>'+s.group+'</th>';continue}h+='<th rowspan="2">'+s.group+'</th>'}h+='</tr><tr>';for(i=0;i<SLOTS.length;i++){s=SLOTS[i];if(s.id==='v1'||s.id==='v2'||s.id==='ot1'||s.id==='ot2')continue;if(s.id==='s1d'||s.id==='s2d'||s.id==='s3d'||s.id==='s4d'){h+='<th>'+s.sub+'</th><th>'+SLOTS[i+1].sub+'</th>';i++;continue}if(s.id==='s5'||s.id==='s6'||s.id==='s7'||s.id==='s8')h+='<th>'+s.sub+'</th>'}h+='</tr><tr>';for(i=0;i<SLOTS.length;i++){s=SLOTS[i];if(s.id==='v1'||s.id==='v2'||s.id==='ot1'||s.id==='ot2')continue;h+='<th>'+s.time+'</th>'}h+='</tr></thead>';return h}
+function renderSheet(){var h=buildHeader()+'<tbody>';for(var d=1;d<=dim();d++){var cls=isHoliday(d)?'holiday':(isWeekend(d)?'weekend':'');h+='<tr class="'+cls+'"><td class="date"><b>'+DAYS[dow(d)]+d+'</b>'+(isHoliday(d)?'<br><small>นักขัตฯ</small>':'')+'</td>';for(var i=0;i<SLOTS.length;i++){var s=SLOTS[i];if(!slotActive(s,d)){h+='<td class="inactive"></td>';continue}var v=state.assignments[akey(d,s.id)]||'';h+='<td data-d="'+d+'" data-s="'+s.id+'"><select data-d="'+d+'" data-s="'+s.id+'">'+optionHtml(v)+'</select></td>'}h+='</tr>'}h+='</tbody>';el('sheet').innerHTML=h;var sels=el('sheet').querySelectorAll('select');for(var j=0;j<sels.length;j++)sels[j].addEventListener('change',function(){manualChange(this)});validateSchedule(false);renderSummary()}
+function manualChange(sel){var d=parseInt(sel.getAttribute('data-d'),10),id=sel.getAttribute('data-s');state.assignments[akey(d,id)]=sel.value;if(!sel.value)delete state.assignments[akey(d,id)];validateSchedule(false);renderSummary()}
+function usedToday(d,assign){var o={};assign=assign||state.assignments;for(var i=0;i<SLOTS.length;i++){var v=assign[akey(d,SLOTS[i].id)];if(v)o[v]=true}return o}
+function hadNightIn(assign,person,d){for(var i=0;i<SLOTS.length;i++)if(SLOTS[i].type==='night'&&assign[akey(d,SLOTS[i].id)]===person)return true;return false}
+function previousMonthBoundaryHadNight(person){var p=prevYM(),data=getSavedMonth(prevKey());if(!data)return false;var last=daysIn(p.y,p.m),a=data.assignments||{};for(var i=0;i<SLOTS.length;i++)if(SLOTS[i].type==='night'&&a[last+'|'+SLOTS[i].id]===person)return true;return false}
+function canNightContinueFromDate(y,m,d,nextY,nextM,nextD){var pw=dowFor(y,m,d),cw=dowFor(nextY,nextM,nextD);if(state.rules.allowWeekendNightChain&&(pw===5&&cw===6||pw===6&&cw===0))return true;var prevHoliday=!!state.holidays[dateKeyFor(y,m,d)],nextOff=(cw===0||cw===6||!!state.holidays[dateKeyFor(nextY,nextM,nextD)]);if(state.rules.allowWeekendNightChain&&prevHoliday&&nextOff)return true;return false}
+function canNightContinue(prevD,currentD){return canNightContinueFromDate(gy(),cm(),prevD,gy(),cm(),currentD)}
+function customAllowed(person,slotId){for(var i=0;i<state.customRules.length;i++){var r=state.customRules[i];if(r.enabled===false||r.personId!==person)continue;if(r.type==='only'&&r.slots.indexOf(slotId)<0)return false;if(r.type==='block'&&r.slots.indexOf(slotId)>=0)return false}return true}
+function eligible(person,d,slot){
+ if(!slotActive(slot,d))return false;
+ if(state.rules.uniqueDay&&usedToday(d)[person])return false;
+ if(state.rules.lastExtraOnly&&state.people.length&&person===state.people[state.people.length-1].id&&!EXTRA_IDS[slot.id])return false;
+ if(!customAllowed(person,slot.id))return false;
+ if(state.rules.postNightLock){
+   if(d===1&&previousMonthBoundaryHadNight(person)){
+     var p=prevYM(),last=daysIn(p.y,p.m);if(!(slot.type==='night'&&canNightContinueFromDate(p.y,p.m,last,gy(),cm(),1)))return false;
+   }
+   if(d>1&&hadNightIn(state.assignments,person,d-1)){
+     if(slot.type==='night'&&canNightContinue(d-1,d))return true;
+     return false;
+   }
+ }
+ return true;
+}
+function initCounts(){var c={total:{},slot:{}};state.people.forEach(function(p){c.total[p.id]=0});SLOTS.forEach(function(s){c.slot[s.id]={};state.people.forEach(function(p){c.slot[s.id][p.id]=0})});return c}
+function addCountsFromAssignments(c,assign){for(var k in assign)if(Object.prototype.hasOwnProperty.call(assign,k)){var pid=assign[k];if(!pid||c.total[pid]===undefined)continue;var sid=k.split('|')[1];if(c.slot[sid]){c.slot[sid][pid]=(c.slot[sid][pid]||0)+1;c.total[pid]=(c.total[pid]||0)+1}}}
+function previousCounts(){var c=initCounts();if(!state.rules.balancePrevMonth)return c;var data=getSavedMonth(prevKey());if(data)addCountsFromAssignments(c,data.assignments||{});return c}
+function previousSlotLastPerson(slotId){var data=getSavedMonth(prevKey());if(!data||!data.assignments)return '';var bestDay=-1,last='';for(var k in data.assignments)if(Object.prototype.hasOwnProperty.call(data.assignments,k)){var parts=k.split('|');if(parts[1]!==slotId)continue;var dd=parseInt(parts[0],10)||0;if(dd>bestDay){bestDay=dd;last=data.assignments[k]}}return last}
+function recentSameSlotPenalty(person,slot,d){if(!state.rules.rotateSameSlot)return 0;for(var x=d-1;x>=1;x--){var v=state.assignments[akey(x,slot.id)];if(v)return v===person?1:0}return previousSlotLastPerson(slot.id)===person?1:0}
+function rotationTie(person,slot,d){if(!state.rules.rotateSameSlot)return Math.random();var pi=0,si=0;for(var i=0;i<state.people.length;i++)if(state.people[i].id===person){pi=i;break}for(i=0;i<SLOTS.length;i++)if(SLOTS[i].id===slot.id){si=i;break}return ((pi+cm()+si+d)%Math.max(1,state.people.length))/Math.max(1,state.people.length)}
+function choose(cands,slot,currentCounts,baseCounts,d){var best=[],bestKey=null;for(var i=0;i<cands.length;i++){var p=cands[i];var slotCombined=(baseCounts.slot[slot.id][p]||0)+(currentCounts.slot[slot.id][p]||0);var totalCombined=(baseCounts.total[p]||0)+(currentCounts.total[p]||0);var recent=recentSameSlotPenalty(p,slot,d);var allSlotLoad=0;for(var z=0;z<SLOTS.length;z++){var sid=SLOTS[z].id;allSlotLoad+=(baseCounts.slot[sid][p]||0)+(currentCounts.slot[sid][p]||0)}var key=[slotCombined,totalCombined,allSlotLoad,recent,rotationTie(p,slot,d)];if(bestKey===null){bestKey=key;best=[p];continue}var cmp=0;for(var q=0;q<key.length;q++){if(key[q]<bestKey[q]){cmp=-1;break}if(key[q]>bestKey[q]){cmp=1;break}}if(cmp<0){bestKey=key;best=[p]}else if(cmp===0)best.push(p)}return best.length===1?best[0]:best[Math.floor(Math.random()*best.length)]}
+async function runSchedule(){try{if(cloud.connected)await ensureCloudMonths([prevKey(),currentKey()]);state.assignments={};var current=initCounts(),base=previousCounts(),order=[],i,d,j,s,p,cands;for(i=0;i<SLOTS.length;i++)if(SLOTS[i].type==='night')order.push(SLOTS[i]);for(i=0;i<SLOTS.length;i++)if(SLOTS[i].type!=='night')order.push(SLOTS[i]);for(d=1;d<=dim();d++){for(j=0;j<order.length;j++){s=order[j];if(!slotActive(s,d))continue;cands=[];for(i=0;i<state.people.length;i++){p=state.people[i].id;if(eligible(p,d,s))cands.push(p)}if(!cands.length)continue;p=choose(cands,s,current,base,d);state.assignments[akey(d,s.id)]=p;current.slot[s.id][p]++;current.total[p]++}}renderSheet();var e=validateSchedule(false);saveMonth(true);setStatus(e?'รันเสร็จ แต่พบข้อขัดแย้ง '+e+' จุด':'รันและบันทึกตารางเวรเสร็จแล้ว โดยอ้างอิงเดือนก่อนหน้าแล้ว',!e)}catch(err){setStatus('เกิดข้อผิดพลาด: '+err.message,false)}}
+function validateSchedule(show){var old=document.querySelectorAll('td.conflict');for(var x=0;x<old.length;x++)old[x].classList.remove('conflict');var e=0;for(var d=1;d<=dim();d++){var seen={};for(var i=0;i<SLOTS.length;i++){var s=SLOTS[i],v=state.assignments[akey(d,s.id)];if(!v)continue;if(state.rules.uniqueDay&&seen[v]){mark(d,s.id);mark(d,seen[v]);e++}else seen[v]=s.id;if(state.rules.lastExtraOnly&&state.people.length&&v===state.people[state.people.length-1].id&&!EXTRA_IDS[s.id]){mark(d,s.id);e++}}
+ if(state.rules.postNightLock){for(i=0;i<SLOTS.length;i++){s=SLOTS[i];v=state.assignments[akey(d,s.id)];if(!v)continue;var blocked=false;if(d===1&&previousMonthBoundaryHadNight(v)){var p=prevYM(),last=daysIn(p.y,p.m);blocked=!(s.type==='night'&&canNightContinueFromDate(p.y,p.m,last,gy(),cm(),1))}else if(d>1&&hadNightIn(state.assignments,v,d-1))blocked=!(s.type==='night'&&canNightContinue(d-1,d));if(blocked){mark(d,s.id);e++}}}}
+ if(show)setStatus(e?'พบข้อขัดแย้ง '+e+' จุด':'ไม่พบข้อขัดแย้ง',!e);return e}
+function mark(d,id){var x=document.querySelector('td[data-d="'+d+'"][data-s="'+id+'"]');if(x)x.classList.add('conflict')}
+function clearSchedule(){if(!confirm('ล้างตารางเดือนนี้ทั้งหมดหรือไม่?'))return;state.assignments={};renderSheet();setStatus('ล้างตารางแล้ว (ยังไม่ลบข้อมูลที่บันทึกจนกว่าจะกดบันทึกเดือนนี้)',true)}
+function setStatus(t,ok){el('status').textContent=t;el('status').className='status '+(ok?'ok':'err')}
+function addHoliday(){var v=el('holidayDate').value;if(!v){setStatus('กรุณาเลือกวันที่ก่อน',false);return}state.holidays[v]={name:el('holidayName').value.trim()||'วันหยุด'};saveConfig();renderHolidays();renderSheet();setStatus('เพิ่มวันหยุด '+v+' แล้ว',true)}
+function renderHolidays(){var keys=Object.keys(state.holidays).sort(),h='';for(var i=0;i<keys.length;i++){var k=keys[i],obj=state.holidays[k],nm=(obj&&obj.name)||'วันหยุด';h+='<span class="chip">'+k+' '+escapeHtml(nm)+' <button class="smallbtn" type="button" data-holiday="'+k+'">×</button></span>'}el('chips').innerHTML=h;var btns=el('chips').querySelectorAll('button');for(i=0;i<btns.length;i++)btns[i].addEventListener('click',function(){delete state.holidays[this.getAttribute('data-holiday')];saveConfig();renderHolidays();renderSheet()})}
+var RULE_LABELS={uniqueDay:'ชื่อห้ามซ้ำในวัน/แถวเดียวกัน',postNightLock:'หลังเวรบ่าย–ดึก วันถัดไปห้ามเวร/OT อื่น',allowWeekendNightChain:'ศุกร์→เสาร์ / เสาร์→อาทิตย์ / ช่วงวันหยุด อนุญาตบ่าย–ดึกต่อกัน',lastExtraOnly:'รายชื่อสุดท้ายขึ้นได้เฉพาะ EXTRA 1–3',balancePrevMonth:'เฉลี่ยทุกเวรในตารางให้แต่ละคนใกล้เคียงกันที่สุด (เวร1–2, OT1–2, SDMC1–8 ทุกช่วง, EXTRA1–3) โดยอ้างอิงเดือนก่อนหน้า + เดือนปัจจุบัน',rotateSameSlot:'วนเวรในแต่ละเดือน ไม่ให้คนเดิมขึ้นเวรเดิมซ้ำ ๆ'};
+function renderRules(){var h='';Object.keys(RULE_LABELS).forEach(function(k){h+='<div class="rule-item"><label><input type="checkbox" data-rule="'+k+'" '+(state.rules[k]?'checked':'')+'> '+RULE_LABELS[k]+'</label></div>'});el('ruleList').innerHTML=h;var cbs=el('ruleList').querySelectorAll('input');for(var i=0;i<cbs.length;i++)cbs[i].addEventListener('change',function(){state.rules[this.getAttribute('data-rule')]=this.checked;saveConfig();renderSheet()});renderGlobalRules();renderCustomRules()}
+function buildCustomPersonOptions(){var h='';state.people.forEach(function(p,i){h+='<option value="'+p.id+'">'+(i+1)+'. '+escapeHtml(p.name)+'</option>'});el('customPerson').innerHTML=h;var s='';SLOTS.forEach(function(x){s+='<option value="'+x.id+'">'+x.group+(x.sub?' '+x.sub:'')+' '+x.time+'</option>'});el('customSlots').innerHTML=s;el('globalSlots').innerHTML=s}
+function selectedValues(sel){var a=[];for(var i=0;i<sel.options.length;i++)if(sel.options[i].selected)a.push(sel.options[i].value);return a}
+function setSelectedValues(sel,vals){for(var i=0;i<sel.options.length;i++)sel.options[i].selected=vals.indexOf(sel.options[i].value)>=0}
+function cancelCustomEdit(){editingCustomRuleId=null;el('addCustomRuleBtn').textContent='+ เพิ่มกติกาเฉพาะบุคคล';el('cancelCustomEditBtn').style.display='none';setSelectedValues(el('customSlots'),[])}
+function addCustomRule(){var pid=el('customPerson').value,slots=selectedValues(el('customSlots')),type=el('customRuleType').value;if(!pid||!slots.length){setStatus('เลือกบุคลากรและเวรอย่างน้อย 1 รายการ',false);return}if(editingCustomRuleId){for(var i=0;i<state.customRules.length;i++)if(state.customRules[i].id===editingCustomRuleId){state.customRules[i].personId=pid;state.customRules[i].type=type;state.customRules[i].slots=slots;break}saveConfig();cancelCustomEdit();renderCustomRules();renderSheet();setStatus('บันทึกการแก้ไขกติกาเฉพาะบุคคลแล้ว',true);return}state.customRules.push({id:'r_'+Date.now(),type:type,personId:pid,slots:slots,enabled:true});saveConfig();renderCustomRules();setSelectedValues(el('customSlots'),[]);setStatus('เพิ่มกติกาเฉพาะบุคคลแล้ว',true)}
+function editCustomRule(id){var r=null;for(var i=0;i<state.customRules.length;i++)if(state.customRules[i].id===id){r=state.customRules[i];break}if(!r)return;editingCustomRuleId=id;el('customPerson').value=r.personId;el('customRuleType').value=r.type;setSelectedValues(el('customSlots'),r.slots);el('addCustomRuleBtn').textContent='บันทึกการแก้ไข';el('cancelCustomEditBtn').style.display='inline-block';el('customPerson').scrollIntoView({behavior:'smooth',block:'center'})}
+function renderCustomRules(){var h='';state.customRules.forEach(function(r){var labels=r.slots.map(function(id){for(var i=0;i<SLOTS.length;i++)if(SLOTS[i].id===id)return SLOTS[i].group+(SLOTS[i].sub?' '+SLOTS[i].sub:'');return id});var action=r.type==='block'?'ห้าม':'เฉพาะ';h+='<span class="chip">'+escapeHtml(personName(r.personId))+' → '+action+' '+escapeHtml(labels.join(', '))+' <button class="smallbtn" type="button" data-editrule="'+r.id+'">แก้ไข</button> <button class="smallbtn" type="button" data-ruleid="'+r.id+'">×</button></span>'});el('customRules').innerHTML=h;var es=el('customRules').querySelectorAll('[data-editrule]');for(var i=0;i<es.length;i++)es[i].addEventListener('click',function(){editCustomRule(this.getAttribute('data-editrule'))});var bs=el('customRules').querySelectorAll('[data-ruleid]');for(i=0;i<bs.length;i++)bs[i].addEventListener('click',function(){var id=this.getAttribute('data-ruleid');state.customRules=state.customRules.filter(function(r){return r.id!==id});if(editingCustomRuleId===id)cancelCustomEdit();saveConfig();renderCustomRules();renderSheet();setStatus('ลบกติกาเฉพาะบุคคลแล้ว',true)})}
+function cancelGlobalEdit(){editingGlobalRuleId=null;el('addGlobalRuleBtn').textContent='+ เพิ่มกติกา';el('cancelGlobalEditBtn').style.display='none';setSelectedValues(el('globalSlots'),[]);setSelectedValues(el('globalDayTypes'),[]);el('globalRuleDescription').value=''}
+function addGlobalRule(){var slots=selectedValues(el('globalSlots')),dayTypes=selectedValues(el('globalDayTypes')),description=el('globalRuleDescription').value.trim();if(!slots.length){setStatus('เลือกเวรที่ต้องการรันอย่างน้อย 1 รายการ',false);return}if(!dayTypes.length){setStatus('เลือกวันที่ต้องการให้รันอย่างน้อย 1 ตัวเลือก',false);return}if(editingGlobalRuleId){for(var i=0;i<state.customGlobalRules.length;i++)if(state.customGlobalRules[i].id===editingGlobalRuleId){state.customGlobalRules[i].slots=slots;state.customGlobalRules[i].dayTypes=dayTypes;state.customGlobalRules[i].description=description;state.customGlobalRules[i].type='run';delete state.customGlobalRules[i].dayType;break}saveConfig();cancelGlobalEdit();renderGlobalRules();renderSheet();setStatus('บันทึกการแก้ไขกติกาจัดเวรแล้ว',true);return}state.customGlobalRules.push({id:'g_'+Date.now(),type:'run',slots:slots,dayTypes:dayTypes,description:description,enabled:true});saveConfig();renderGlobalRules();setSelectedValues(el('globalSlots'),[]);setSelectedValues(el('globalDayTypes'),[]);el('globalRuleDescription').value='';renderSheet();setStatus('เพิ่มกติกาจัดเวรแล้ว',true)}
+function editGlobalRule(id){var r=null;for(var i=0;i<state.customGlobalRules.length;i++)if(state.customGlobalRules[i].id===id){r=state.customGlobalRules[i];break}if(!r)return;editingGlobalRuleId=id;setSelectedValues(el('globalSlots'),r.slots);var types=Array.isArray(r.dayTypes)?r.dayTypes.slice():(r.dayType?[r.dayType]:[]);if(types.indexOf('weekend')>=0){types=types.filter(function(x){return x!=='weekend'}).concat(['saturday','sunday'])}setSelectedValues(el('globalDayTypes'),types);el('globalRuleDescription').value=r.description||'';el('addGlobalRuleBtn').textContent='บันทึกการแก้ไข';el('cancelGlobalEditBtn').style.display='inline-block';el('globalSlots').scrollIntoView({behavior:'smooth',block:'center'})}
+function renderGlobalRules(){var dayNames={all:'ทุกวัน',all_no_holiday:'ทุกวัน (ไม่รวมนักขัตฤกษ์)',no_holiday:'ไม่รวมนักขัตฤกษ์',weekday:'จันทร์–ศุกร์',weekday_no_holiday:'จันทร์–ศุกร์ (ไม่รวมนักขัตฤกษ์)',saturday:'เสาร์',sunday:'อาทิตย์',weekend:'เสาร์–อาทิตย์',holiday:'นักขัตฤกษ์',monday:'จันทร์',tuesday:'อังคาร',wednesday:'พุธ',thursday:'พฤหัสบดี',friday:'ศุกร์'},h='';state.customGlobalRules.forEach(function(r){var labels=r.slots.map(function(id){for(var i=0;i<SLOTS.length;i++)if(SLOTS[i].id===id)return SLOTS[i].group+(SLOTS[i].sub?' '+SLOTS[i].sub:'');return id});var types=Array.isArray(r.dayTypes)?r.dayTypes:(r.dayType?[r.dayType]:[]);var desc=(r.description||'').trim();h+='<span class="chip" style="align-items:flex-start"><span><b>รัน</b> '+escapeHtml(labels.join(', '))+' • '+escapeHtml(types.map(function(t){return dayNames[t]||t}).join(', '))+(desc?'<br><span class="muted">คำอธิบาย: '+escapeHtml(desc)+'</span>':'')+'</span> <button class="smallbtn" type="button" data-editglobal="'+r.id+'">แก้ไข</button> <button class="smallbtn" type="button" data-globalid="'+r.id+'">×</button></span>'});el('globalRules').innerHTML=h;var es=el('globalRules').querySelectorAll('[data-editglobal]');for(var i=0;i<es.length;i++)es[i].addEventListener('click',function(){editGlobalRule(this.getAttribute('data-editglobal'))});var bs=el('globalRules').querySelectorAll('[data-globalid]');for(i=0;i<bs.length;i++)bs[i].addEventListener('click',function(){var id=this.getAttribute('data-globalid');state.customGlobalRules=state.customGlobalRules.filter(function(r){return r.id!==id});if(editingGlobalRuleId===id)cancelGlobalEdit();saveConfig();renderGlobalRules();renderSheet();setStatus('ลบกติกาจัดเวรแล้ว',true)})}
+function renderSummary(){var current=initCounts(),base=previousCounts();addCountsFromAssignments(current,state.assignments);var h='<table><tr><th>#</th><th>ชื่อ</th><th>เดือนก่อน</th><th>เดือนนี้</th><th>รวม 2 เดือน</th>';for(var si=0;si<SLOTS.length;si++){var sl=SLOTS[si];var label=sl.group+(sl.sub?' '+sl.sub:'');if(sl.id==='e1')label='EXTRA1';if(sl.id==='e2')label='EXTRA2';if(sl.id==='e3')label='EXTRA3';h+='<th>'+escapeHtml(label)+'</th>'}h+='<th>ส่วนต่างจากค่าเฉลี่ยรวม</th></tr>';var totals=[],i,j;for(i=0;i<state.people.length;i++){var id=state.people[i].id;totals.push((base.total[id]||0)+(current.total[id]||0))}var avg=totals.length?totals.reduce(function(a,b){return a+b},0)/totals.length:0;for(i=0;i<state.people.length;i++){var p=state.people[i],combined=(base.total[p.id]||0)+(current.total[p.id]||0),diff=combined-avg,cls=Math.abs(diff)<=1?'balance-good':'balance-warn';h+='<tr><td>'+(i+1)+'</td><td>'+escapeHtml(p.name)+'</td><td>'+(base.total[p.id]||0)+'</td><td><b>'+(current.total[p.id]||0)+'</b></td><td><b>'+combined+'</b></td>';for(j=0;j<SLOTS.length;j++){var sid=SLOTS[j].id;var twoMonth=(base.slot[sid][p.id]||0)+(current.slot[sid][p.id]||0);h+='<td>'+twoMonth+'</td>'}h+='<td class="'+cls+'">'+(diff>=0?'+':'')+diff.toFixed(1)+'</td></tr>'}h+='</table>';el('summary').innerHTML=h}
+async function monthChanged(){if(cloud.connected)await ensureCloudMonths([prevKey(),currentKey()]);loadMonth(true);renderSheet();renderHistoryInfo();setStatus(getSavedMonth(currentKey())?'เปิดข้อมูลเดือนที่บันทึกแล้ว':'เดือนนี้ยังไม่มีข้อมูล กด “รันตารางเวร” เพื่อสร้างใหม่',true)}
+function savePDF(){
+ var sheet=document.querySelector('.sheet');
+ if(!sheet){setStatus('ยังไม่มีตารางสำหรับบันทึก PDF',false);return}
+ if(typeof html2canvas==='undefined'||!window.jspdf||!window.jspdf.jsPDF){setStatus('ไม่สามารถโหลดระบบ PDF ได้ กรุณาตรวจอินเทอร์เน็ตแล้วลองใหม่',false);return}
+ state.pdfNote=el('pdfNote')?el('pdfNote').value:state.pdfNote;saveConfig();
+ setStatus('กำลังสร้างไฟล์ PDF แนวนอน 1 หน้า...',true);
+
+ // สร้างสำเนาตารางสำหรับ PDF โดยเฉพาะ เพื่อไม่ให้คอลัมน์วันที่แบบ sticky ไปทับ EXTRA3
+ var clone=sheet.cloneNode(true);
+ clone.style.minWidth='0';clone.style.width='1600px';clone.style.fontSize='11.5px';clone.style.tableLayout='fixed';clone.style.background='#fff';clone.style.borderCollapse='collapse';
+ var caption=clone.querySelector('caption');
+ if(caption){caption.style.fontSize='18px';caption.style.fontWeight='800';caption.style.padding='10px 4px';caption.style.lineHeight='1.25'}
+ var allCells=clone.querySelectorAll('th,td');
+ for(var ci=0;ci<allCells.length;ci++){
+   allCells[ci].style.minWidth='0';allCells[ci].style.height='28px';allCells[ci].style.padding='2px 2px';allCells[ci].style.fontSize='11.5px';allCells[ci].style.lineHeight='1.15';allCells[ci].style.whiteSpace='nowrap';allCells[ci].style.overflow='hidden';allCells[ci].style.textOverflow='clip';
+ }
+ var headCells=clone.querySelectorAll('thead th');
+ for(ci=0;ci<headCells.length;ci++){headCells[ci].style.position='static';headCells[ci].style.fontSize='12px';headCells[ci].style.fontWeight='800';headCells[ci].style.padding='3px 2px';headCells[ci].style.background='#e7e7ea';headCells[ci].style.color='#111'}
+ var dateCells=clone.querySelectorAll('.date');
+ for(ci=0;ci<dateCells.length;ci++){dateCells[ci].style.position='static';dateCells[ci].style.left='auto';dateCells[ci].style.width='66px';dateCells[ci].style.minWidth='66px';dateCells[ci].style.maxWidth='66px';dateCells[ci].style.fontSize='11.5px'}
+ // ใน PDF ระบายสีเฉพาะหัวตาราง และทั้งแถวของวันเสาร์/อาทิตย์/นักขัตฤกษ์เท่านั้น
+ var bodyRows=clone.querySelectorAll('tbody tr');
+ for(ci=0;ci<bodyRows.length;ci++){
+   var row=bodyRows[ci],cells=row.querySelectorAll('td');
+   var shade=row.classList.contains('weekend')||row.classList.contains('holiday');
+   for(var cj=0;cj<cells.length;cj++){cells[cj].style.background=shade?'#e6e6e6':'#ffffff';cells[cj].style.color=shade?'#111':(cells[cj].classList.contains('inactive')?'#888':'#111')}
+ }
+ var selects=clone.querySelectorAll('select');
+ for(var i=0;i<selects.length;i++){
+   var sp=document.createElement('span');sp.textContent=selects[i].options[selects[i].selectedIndex]?selects[i].options[selects[i].selectedIndex].text:'';
+   sp.style.display='block';sp.style.width='100%';sp.style.textAlign='center';sp.style.fontSize='11.5px';sp.style.lineHeight='1.1';sp.style.whiteSpace='nowrap';sp.style.overflow='hidden';
+   selects[i].parentNode.replaceChild(sp,selects[i]);
+ }
+ var wrap=document.createElement('div');
+ wrap.style.position='fixed';wrap.style.left='-10000px';wrap.style.top='0';wrap.style.width='1600px';wrap.style.background='#fff';wrap.style.padding='0';wrap.style.zIndex='-1';
+ wrap.appendChild(clone);document.body.appendChild(wrap);
+
+ // หมายเหตุแยกจากตาราง เพื่อวางชิดมุมซ้ายล่างของหน้า PDF โดยไม่เบียดตาราง
+ var noteWrap=document.createElement('div');
+ noteWrap.style.position='fixed';noteWrap.style.left='-10000px';noteWrap.style.top='0';noteWrap.style.width='1250px';noteWrap.style.background='#fff';noteWrap.style.padding='8px 0';noteWrap.style.fontFamily='-apple-system,BlinkMacSystemFont,"Noto Sans Thai",Tahoma,Arial,sans-serif';noteWrap.style.color='#111';
+ var noteTitle=document.createElement('div');noteTitle.textContent='หมายเหตุ';noteTitle.style.fontWeight='800';noteTitle.style.fontSize='18px';noteTitle.style.marginBottom='5px';
+ var noteText=document.createElement('div');noteText.textContent=(state.pdfNote||'').trim()||'-';noteText.style.fontSize='16px';noteText.style.lineHeight='1.35';noteText.style.whiteSpace='pre-wrap';noteText.style.wordBreak='break-word';
+ noteWrap.appendChild(noteTitle);noteWrap.appendChild(noteText);document.body.appendChild(noteWrap);
+
+ Promise.all([
+   html2canvas(wrap,{scale:2,useCORS:true,backgroundColor:'#ffffff',logging:false,windowWidth:1600}),
+   html2canvas(noteWrap,{scale:2,useCORS:true,backgroundColor:'#ffffff',logging:false,windowWidth:1250})
+ ]).then(function(canvases){
+   var canvas=canvases[0],noteCanvas=canvases[1];
+   var jsPDF=window.jspdf.jsPDF;
+   var pdf=new jsPDF({orientation:'landscape',unit:'mm',format:'a4',compress:true});
+   var pw=pdf.internal.pageSize.getWidth(),ph=pdf.internal.pageSize.getHeight(),margin=3;
+   var noteAreaH=20; // กันพื้นที่ท้ายหน้าสำหรับหมายเหตุ
+   var maxW=pw-margin*2,maxH=ph-margin*2-noteAreaH;
+   var ratio=Math.min(maxW/canvas.width,maxH/canvas.height);
+   var w=canvas.width*ratio,h=canvas.height*ratio,x=(pw-w)/2,y=margin;
+   pdf.addImage(canvas.toDataURL('image/jpeg',0.98),'JPEG',x,y,w,h,undefined,'FAST');
+
+   var noteMaxW=pw-margin*2;
+   var noteRatio=Math.min(noteMaxW/noteCanvas.width,16/noteCanvas.height);
+   var nw=noteCanvas.width*noteRatio,nh=noteCanvas.height*noteRatio;
+   pdf.addImage(noteCanvas.toDataURL('image/png'),'PNG',margin,ph-margin-nh,nw,nh,undefined,'FAST');
+
+   var m=MONTHS[cm()]||String(cm()+1),filename='ตารางเวร_'+m+'_'+gy()+'.pdf';
+   pdf.save(filename);
+   document.body.removeChild(wrap);document.body.removeChild(noteWrap);setStatus('บันทึก PDF แนวนอน 1 หน้าเรียบร้อยแล้ว',true);
+ }).catch(function(err){try{document.body.removeChild(wrap)}catch(e){}try{document.body.removeChild(noteWrap)}catch(e){}setStatus('สร้าง PDF ไม่สำเร็จ: '+(err&&err.message?err.message:err),false)});
+}
+
+function normalizeApiUrl(v){return String(v||'').trim().replace(/\/+$/,'')}
+function loadCloudSettings(){cloud.apiUrl=normalizeApiUrl(localStorage.getItem('roster_cloud_api')||'');cloud.token=localStorage.getItem('roster_cloud_token')||'';if(el('cloudApiUrl'))el('cloudApiUrl').value=cloud.apiUrl;if(el('cloudToken'))el('cloudToken').value=cloud.token}
+function saveCloudSettings(){cloud.apiUrl=normalizeApiUrl(el('cloudApiUrl').value);cloud.token=el('cloudToken').value.trim();localStorage.setItem('roster_cloud_api',cloud.apiUrl);localStorage.setItem('roster_cloud_token',cloud.token)}
+function setCloudStatus(t,ok){var x=el('cloudStatus');if(!x)return;x.textContent=t;x.style.color=ok?'#067647':'#b42318'}
+async function cloudRequest(path,opts){if(!cloud.apiUrl||!cloud.token)throw new Error('ยังไม่ได้ตั้งค่า Cloud API URL และ Sync PIN');opts=opts||{};opts.headers=Object.assign({'Content-Type':'application/json','X-Sync-Token':cloud.token},opts.headers||{});var r=await fetch(cloud.apiUrl+path,opts);var data=null;try{data=await r.json()}catch(e){}if(!r.ok)throw new Error((data&&data.error)||('HTTP '+r.status));return data}
+async function connectCloud(showMessage){saveCloudSettings();if(!cloud.apiUrl||cloud.token.length<8){cloud.connected=false;setCloudStatus('กรอก Cloud API URL และ Sync PIN อย่างน้อย 8 ตัวอักษร',false);return false}try{var data=await cloudRequest('/api/health',{method:'GET'});if(!data||!data.ok)throw new Error('ฐานข้อมูลไม่พร้อม');var auth=await cloudRequest('/api/config',{method:'GET'});cloud.connected=true;setCloudStatus('เชื่อมฐานข้อมูลออนไลน์แล้ว • ซิงก์อัตโนมัติเปิดอยู่',true);if(showMessage)setStatus('เชื่อม Cloudflare D1 สำเร็จ',true);return true}catch(err){cloud.connected=false;setCloudStatus('เชื่อมไม่สำเร็จ: '+err.message,false);if(showMessage)setStatus('เชื่อมฐานข้อมูลออนไลน์ไม่สำเร็จ: '+err.message,false);return false}}
+function scheduleCloudConfigSave(payload){if(!cloud.connected)return;clearTimeout(cloud.savingConfigTimer);cloud.savingConfigTimer=setTimeout(function(){cloudRequest('/api/config',{method:'PUT',body:JSON.stringify(payload)}).then(function(){setCloudStatus('ซิงก์การตั้งค่าออนไลน์ล่าสุดแล้ว',true)}).catch(function(err){setCloudStatus('ซิงก์การตั้งค่าไม่สำเร็จ: '+err.message,false)})},450)}
+async function cloudSaveMonth(data){if(!cloud.connected)return false;try{await cloudRequest('/api/month/'+encodeURIComponent(data.key),{method:'PUT',body:JSON.stringify(data)});setCloudStatus('ซิงก์ตาราง '+data.key+' ออนไลน์แล้ว',true);return true}catch(err){setCloudStatus('ซิงก์ตารางไม่สำเร็จ: '+err.message,false);return false}}
+async function fetchCloudConfig(apply){if(!cloud.connected)return null;var r=await cloudRequest('/api/config',{method:'GET'});if(r&&r.found&&r.data){localStorage.setItem('roster_config_v8',JSON.stringify(r.data));if(apply){var c=r.data;state.people=Array.isArray(c.people)&&c.people.length?c.people:defaultPeople();state.holidays=c.holidays||{};state.customRules=c.customRules||[];state.customGlobalRules=c.customGlobalRules||[];state.pdfNote=c.pdfNote||'';state.rules=Object.assign(state.rules,c.rules||{});el('pdfNote').value=state.pdfNote||'';buildNames();renderHolidays();renderRules();renderSheet()}return r.data}return null}
+async function fetchCloudMonth(key){if(!cloud.connected)return null;var r=await cloudRequest('/api/month/'+encodeURIComponent(key),{method:'GET'});if(r&&r.found&&r.data){localStorage.setItem(scheduleStorageKey(key),JSON.stringify(r.data));return r.data}return null}
+async function ensureCloudMonths(keys){if(!cloud.connected)return;for(var i=0;i<keys.length;i++){try{await fetchCloudMonth(keys[i])}catch(err){setCloudStatus('โหลดเดือน '+keys[i]+' ไม่สำเร็จ: '+err.message,false)}}}
+async function uploadAllLocalToCloud(){if(!cloud.connected&&!(await connectCloud(false)))return;try{await cloudRequest('/api/config',{method:'PUT',body:JSON.stringify(configPayload())});var uploaded=0;for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(k&&k.indexOf('roster_month_v7_')===0){var mk=k.replace('roster_month_v7_',''),data=safeParse(localStorage.getItem(k),null);if(data){await cloudRequest('/api/month/'+encodeURIComponent(mk),{method:'PUT',body:JSON.stringify(data)});uploaded++}}}setCloudStatus('อัปโหลดข้อมูลเครื่องนี้แล้ว • '+uploaded+' เดือน',true);setStatus('ย้ายข้อมูลจากเครื่องนี้ขึ้นฐานข้อมูลออนไลน์สำเร็จ',true)}catch(err){setCloudStatus('อัปโหลดไม่สำเร็จ: '+err.message,false);setStatus('อัปโหลดข้อมูลออนไลน์ไม่สำเร็จ: '+err.message,false)}}
+async function downloadAllFromCloud(){if(!cloud.connected&&!(await connectCloud(false)))return;try{await fetchCloudConfig(true);var list=await cloudRequest('/api/months',{method:'GET'}),months=(list&&list.months)||[];for(var i=0;i<months.length;i++)await fetchCloudMonth(months[i].key);loadMonth(true);renderSheet();renderHistoryInfo();setCloudStatus('โหลดข้อมูลออนไลน์แล้ว • '+months.length+' เดือน',true);setStatus('โหลดข้อมูลจากฐานข้อมูลออนไลน์สำเร็จ',true)}catch(err){setCloudStatus('โหลดข้อมูลไม่สำเร็จ: '+err.message,false);setStatus('โหลดข้อมูลออนไลน์ไม่สำเร็จ: '+err.message,false)}}
+async function initCloudSync(){loadCloudSettings();if(!cloud.apiUrl||!cloud.token){setCloudStatus('ยังไม่ได้เชื่อมฐานข้อมูลออนไลน์ — ข้อมูลยังอยู่เฉพาะเครื่องนี้',false);return}if(await connectCloud(false)){try{await fetchCloudConfig(true);await ensureCloudMonths([prevKey(),currentKey()]);loadMonth(true);renderSheet();renderHistoryInfo();setStatus('ระบบพร้อมใช้งาน — โหลดข้อมูลออนไลน์และเดือนก่อนหน้าแล้ว',true)}catch(err){setCloudStatus('เชื่อมได้ แต่โหลดข้อมูลไม่สำเร็จ: '+err.message,false)}}}
+
+function bind(){el('runBtn').addEventListener('click',runSchedule);el('cloudConnectBtn').addEventListener('click',function(){connectCloud(true)});el('cloudUploadBtn').addEventListener('click',uploadAllLocalToCloud);el('cloudDownloadBtn').addEventListener('click',downloadAllFromCloud);el('saveBtn').addEventListener('click',function(){saveMonth(false)});el('loadBtn').addEventListener('click',function(){loadMonth(false)});el('validateBtn').addEventListener('click',function(){validateSchedule(true)});el('printBtn').addEventListener('click',function(){window.print()});el('pdfBtn').addEventListener('click',savePDF);el('clearBtn').addEventListener('click',clearSchedule);el('addPersonBtn').addEventListener('click',addPerson);el('removePersonBtn').addEventListener('click',removePerson);el('addHolidayBtn').addEventListener('click',addHoliday);el('addGlobalRuleBtn').addEventListener('click',addGlobalRule);el('addCustomRuleBtn').addEventListener('click',addCustomRule);el('cancelCustomEditBtn').addEventListener('click',cancelCustomEdit);el('cancelGlobalEditBtn').addEventListener('click',cancelGlobalEdit);el('month').addEventListener('change',monthChanged);el('year').addEventListener('change',monthChanged);el('pdfNote').addEventListener('change',saveConfig);el('pdfNote').addEventListener('input',function(){state.pdfNote=this.value})}
+function init(){buildMonths();loadConfig();var now=new Date();el('month').value=String(now.getMonth());el('year').value=String(now.getFullYear()+543);el('pdfNote').value=state.pdfNote||'';bind();buildNames();renderHolidays();renderRules();loadMonth(true);renderSheet();renderHistoryInfo();setStatus('ระบบพร้อมใช้งาน — ถ้ายังไม่เชื่อม Cloud ข้อมูลจะอยู่เฉพาะเครื่องนี้',true);initCloudSync()}
+window.addEventListener('error',function(e){setStatus('JavaScript error: '+e.message,false)});
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+</body>
+</html>
