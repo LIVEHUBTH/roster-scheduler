@@ -13,13 +13,9 @@
   --muted:#6b7280;
   --line:#d9dce6;
   --accent:#6d5dfc;
-  --accent2:#efeefe;
   --danger:#b42318;
-  --dangerbg:#fff0ee;
   --ok:#067647;
-  --okbg:#ecfdf3;
   --weekend:#ececf0;
-  --holiday:#e2e2e6
 }
 
 *{box-sizing:border-box}
@@ -30,7 +26,7 @@ body{
   margin:0;
   background:var(--bg);
   color:var(--text);
-  font-family:-apple-system,BlinkMacSystemFont,"Noto Sans Thai",Tahoma,Arial,sans-serif
+  font-family:-apple-system,BlinkMacSystemFont,"Noto Sans Thai",Tahoma,Arial,sans-serif;
 }
 
 header{
@@ -39,7 +35,7 @@ header{
   z-index:30;
   background:rgba(255,255,255,.95);
   border-bottom:1px solid var(--line);
-  backdrop-filter:blur(10px)
+  backdrop-filter:blur(10px);
 }
 
 .header-wrap{
@@ -50,29 +46,29 @@ header{
   justify-content:space-between;
   gap:12px;
   align-items:center;
-  flex-wrap:wrap
+  flex-wrap:wrap;
 }
 
 .header-wrap h1{
   font-size:clamp(21px,4vw,34px);
-  margin:0
+  margin:0;
 }
 
 .header-sub{
   font-size:13px;
   color:var(--muted);
-  margin-top:4px
+  margin-top:4px;
 }
 
 .version{
   font-size:12px;
-  color:var(--muted)
+  color:var(--muted);
 }
 
 .app{
   max-width:1700px;
   margin:auto;
-  padding:14px
+  padding:14px;
 }
 
 .panel{
@@ -81,14 +77,14 @@ header{
   border-radius:16px;
   box-shadow:0 4px 18px rgba(30,40,70,.05);
   padding:14px;
-  margin-bottom:14px
+  margin-bottom:14px;
 }
 
 .toolbar{
   display:flex;
   gap:10px;
   align-items:end;
-  flex-wrap:wrap
+  flex-wrap:wrap;
 }
 
 .field{
@@ -96,21 +92,22 @@ header{
   flex-direction:column;
   font-size:12px;
   font-weight:700;
-  gap:5px
+  gap:5px;
 }
 
 .field select,
 .field input,
 .holidaybar input,
 .rulebar input,
-.rulebar select{
+.rulebar select,
+.rulebar textarea{
   min-height:43px;
   border:1px solid var(--line);
   background:#fff;
   border-radius:10px;
   padding:8px 10px;
-  font-size:16px;
-  color:var(--text)
+  font-size:15px;
+  color:var(--text);
 }
 
 button{
@@ -123,33 +120,38 @@ button{
   font-weight:800;
   font-size:14px;
   cursor:pointer;
-  -webkit-tap-highlight-color:transparent
 }
 
-.run{background:var(--accent);color:#fff}
-.save{background:#e8f7ee;color:#17663b}
-.danger{background:#fee4e2;color:var(--danger)}
+.run{
+  background:var(--accent);
+  color:#fff;
+}
 
-button:active{transform:translateY(1px)}
+.save{
+  background:#e8f7ee;
+  color:#17663b;
+}
+
+.danger{
+  background:#fee4e2;
+  color:var(--danger);
+}
 
 .status{
   margin:0 0 14px;
   padding:10px 12px;
   border-radius:11px;
-  background:#eef2ff;
+  background:#ecfdf3;
+  color:var(--ok);
   font-size:14px;
-  line-height:1.45
-}
-
-.status.ok{
-  background:var(--okbg);
-  color:var(--ok)
 }
 
 .status.err{
-  background:var(--dangerbg);
-  color:var(--danger)
+  background:#fff0ee;
+  color:var(--danger);
 }
+
+/* ===== ตารางเวร ===== */
 
 .sheet-wrap{
   overflow:auto;
@@ -158,7 +160,7 @@ button:active{transform:translateY(1px)}
   border-radius:15px;
   background:#fff;
   max-height:72vh;
-  margin-bottom:14px
+  margin-bottom:14px;
 }
 
 .sheet{
@@ -167,7 +169,7 @@ button:active{transform:translateY(1px)}
   min-width:1900px;
   width:100%;
   font-size:11px;
-  table-layout:fixed
+  table-layout:fixed;
 }
 
 .sheet caption{
@@ -176,7 +178,7 @@ button:active{transform:translateY(1px)}
   font-weight:800;
   font-size:14px;
   padding:9px;
-  border-bottom:1px solid var(--line)
+  border-bottom:1px solid var(--line);
 }
 
 .sheet th,
@@ -189,7 +191,7 @@ button:active{transform:translateY(1px)}
   height:32px;
   white-space:nowrap;
   overflow:hidden;
-  text-overflow:ellipsis
+  text-overflow:ellipsis;
 }
 
 .sheet thead th{
@@ -197,33 +199,36 @@ button:active{transform:translateY(1px)}
   top:0;
   background:#f1f2f6;
   font-weight:800;
-  z-index:5
+  z-index:5;
+}
+
+.sheet thead tr:nth-child(2) th{
+  top:32px;
 }
 
 .sheet .date{
   width:76px;
   position:sticky;
   left:0;
-  z-index:4
+  z-index:4;
 }
 
-.sheet tbody .date{background:#fff}
+.sheet tbody .date{
+  background:#fff;
+}
 
 .sheet thead .date{
   z-index:8;
-  background:#f1f2f6
+  background:#f1f2f6;
 }
 
+/* สีเทาเฉพาะ เสาร์ อาทิตย์ นักขัตฤกษ์ */
 .sheet tr.weekend td,
-.sheet tr.weekend .date{
-  background:var(--weekend)!important;
-  color:#222
-}
-
+.sheet tr.weekend .date,
 .sheet tr.holiday td,
 .sheet tr.holiday .date{
-  background:var(--holiday)!important;
-  color:#222
+  background:var(--weekend)!important;
+  color:#222;
 }
 
 .sheet select{
@@ -236,65 +241,58 @@ button:active{transform:translateY(1px)}
   font-size:11px;
   text-align:center;
   appearance:none;
-  -webkit-appearance:none
+  -webkit-appearance:none;
 }
 
 .sheet select:focus{
   border-color:var(--accent);
   background:#fff;
-  outline:0
+  outline:0;
 }
 
 .sheet td.inactive{
   background:#fff!important;
-  color:#aaa
+  color:#aaa;
 }
 
-.sheet tr.weekend td.inactive{
-  background:var(--weekend)!important;
-  color:#222
-}
-
+.sheet tr.weekend td.inactive,
 .sheet tr.holiday td.inactive{
-  background:var(--holiday)!important;
-  color:#222
+  background:var(--weekend)!important;
+  color:#222;
 }
 
 .sheet td.conflict{
   box-shadow:inset 0 0 0 2px #f04438!important;
   background:#fff1f0!important;
-  color:#111!important
+  color:#111!important;
 }
+
+/* ===== ส่วนทั่วไป ===== */
 
 .section-title{
   font-weight:800;
   font-size:18px;
-  margin-bottom:8px
+  margin-bottom:8px;
 }
 
 .muted{
   font-size:12px;
   color:var(--muted);
-  line-height:1.55
+  line-height:1.55;
 }
 
 .names{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(185px,1fr));
   gap:7px;
-  margin-top:9px
+  margin-top:9px;
 }
 
 .name-row{
   display:grid;
   grid-template-columns:33px 1fr auto;
   gap:6px;
-  align-items:center
-}
-
-.name-row b{
-  text-align:center;
-  font-size:13px
+  align-items:center;
 }
 
 .name-row input{
@@ -303,23 +301,17 @@ button:active{transform:translateY(1px)}
   border:1px solid var(--line);
   border-radius:8px;
   padding:6px 8px;
-  font-size:14px
+  font-size:14px;
 }
 
-.name-row .lastbadge{
+.lastbadge{
   font-size:10px;
-  background:var(--accent2);
+  background:#efeefe;
   color:#4d3ed7;
   padding:4px 6px;
   border-radius:999px;
   white-space:nowrap;
-  font-weight:800
-}
-
-.smallbtn{
-  min-height:auto;
-  padding:3px 7px;
-  border-radius:7px
+  font-weight:800;
 }
 
 .holidaybar,
@@ -327,14 +319,14 @@ button:active{transform:translateY(1px)}
   display:flex;
   gap:7px;
   flex-wrap:wrap;
-  align-items:end
+  align-items:end;
 }
 
 .chips{
   margin-top:8px;
   display:flex;
   gap:6px;
-  flex-wrap:wrap
+  flex-wrap:wrap;
 }
 
 .chip{
@@ -345,14 +337,14 @@ button:active{transform:translateY(1px)}
   padding:6px 9px;
   border-radius:999px;
   background:#fff8db;
-  font-size:12px
+  font-size:12px;
 }
 
 .rule-list{
   display:grid;
-  grid-template-columns:repeat(2,minmax(260px,1fr));
-  gap:7px;
-  margin-top:9px
+  grid-template-columns:repeat(2,minmax(280px,1fr));
+  gap:8px;
+  margin-top:10px;
 }
 
 .rule-item{
@@ -361,141 +353,191 @@ button:active{transform:translateY(1px)}
   background:#f7f7fb;
   border:1px solid #ececf5;
   font-size:13px;
-  line-height:1.55
+  line-height:1.5;
 }
 
-.rule-num{
-  display:inline-flex;
-  width:24px;
-  height:24px;
-  align-items:center;
-  justify-content:center;
-  border-radius:999px;
-  background:var(--accent2);
-  color:#4d3ed7;
-  font-weight:900;
-  margin-right:7px
+.rule-actions{
+  margin-top:7px;
+  display:flex;
+  gap:6px;
 }
 
-hr{
-  border:0;
-  border-top:1px solid var(--line);
-  margin:12px 0
+.smallbtn{
+  min-height:auto;
+  padding:5px 8px;
+  border-radius:7px;
+  font-size:12px;
 }
+
+/* ===== ตารางเฉลี่ย ===== */
 
 .summary{
-  margin-top:0;
   background:#fff;
   border:1px solid var(--line);
   border-radius:15px;
   overflow:auto;
-  padding-bottom:5px
 }
 
 .summary table{
   border-collapse:separate;
   border-spacing:0;
-  min-width:3000px;
+  min-width:2700px;
   width:max-content;
-  font-size:12px
+  font-size:12px;
 }
 
 .summary th,
 .summary td{
   border-right:1px solid #e2e4ec;
   border-bottom:1px solid var(--line);
-  padding:9px 12px;
+  padding:8px 10px;
   text-align:center;
-  min-width:108px;
-  white-space:nowrap
+  min-width:105px;
+  white-space:nowrap;
 }
 
 .summary th{
   background:#f1f2f6;
-  font-weight:800
+  font-weight:800;
 }
 
-.summary th:first-child,
-.summary td:first-child{
-  min-width:54px
-}
-
-.summary td:nth-child(2),
-.summary th:nth-child(2){
+.summary th:nth-child(2),
+.summary td:nth-child(2){
   text-align:left;
   position:sticky;
   left:0;
   background:#fff;
+  z-index:2;
   min-width:180px;
-  max-width:220px;
-  z-index:2
 }
 
 .summary th:nth-child(2){
-  background:#f1f2f6
-}
-
-.summary tfoot th,
-.summary tfoot td{
-  font-weight:800;
-  background:#f8f8fb
+  background:#f1f2f6;
 }
 
 .history-info{
   font-size:12px;
   color:var(--muted);
-  margin-top:7px
+  margin-top:7px;
 }
 
 @media(max-width:700px){
-  .header-wrap,.app{padding:10px}
-  .panel{padding:11px}
-  .toolbar{gap:7px}
-  .toolbar button{flex:1 1 calc(50% - 7px)}
-  .field{flex:1 1 42%}
-  .names{grid-template-columns:1fr 1fr}
-  .name-row{grid-template-columns:28px 1fr auto}
-  .name-row input{font-size:13px}
-  .rule-list{grid-template-columns:1fr}
-  .sheet-wrap{max-height:68vh}
-  .sheet{font-size:9px}
-  .sheet select{font-size:9px}
+
+  .header-wrap,
+  .app{
+    padding:10px;
+  }
+
+  .panel{
+    padding:11px;
+  }
+
+  .toolbar button{
+    flex:1 1 calc(50% - 7px);
+  }
+
+  .field{
+    flex:1 1 42%;
+  }
+
+  .names{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .rule-list{
+    grid-template-columns:1fr;
+  }
+
+  .sheet{
+    font-size:9px;
+  }
+
+  .sheet select{
+    font-size:9px;
+  }
 }
 
 @media(max-width:480px){
-  .names{grid-template-columns:1fr}
-  .header-sub{font-size:12px}
+
+  .names{
+    grid-template-columns:1fr;
+  }
 }
 
+/* ขอบ PDF/Print:
+   บน 2 ซม.
+   ล่าง 1.5 ซม.
+   ซ้าย/ขวา 1 ซม.
+*/
 @page{
   size:A4 landscape;
-  margin:20mm 10mm 10mm 10mm
+  margin:20mm 10mm 15mm 10mm;
 }
 
 @media print{
-  html,body{width:100%;height:auto}
-  body{background:#fff}
-  .no-print,header,.status,.summary{display:none!important}
-  .app{padding:0;max-width:none}
-  .sheet-wrap{overflow:visible;border:0;border-radius:0;max-height:none}
-  .sheet{min-width:0;width:100%;font-size:6.2px;table-layout:fixed;page-break-inside:avoid}
-  .sheet th,.sheet td{height:18px;padding:1px;min-width:0}
-  .sheet .date{position:static;width:auto}
-  .sheet thead th{position:static}
-  .sheet select{font-size:7px}
+
+  html,
+  body{
+    width:100%;
+    height:auto;
+  }
+
+  body{
+    background:#fff;
+  }
+
+  .no-print,
+  header,
+  .status,
+  .summary{
+    display:none!important;
+  }
+
+  .app{
+    padding:0;
+    max-width:none;
+  }
+
+  .sheet-wrap{
+    overflow:visible;
+    border:0;
+    max-height:none;
+  }
+
+  .sheet{
+    min-width:0;
+    width:100%;
+    font-size:6.2px;
+    table-layout:fixed;
+    page-break-inside:avoid;
+  }
+
+  .sheet th,
+  .sheet td{
+    height:18px;
+    padding:1px;
+    min-width:0;
+  }
+
+  .sheet .date,
+  .sheet thead th{
+    position:static;
+  }
+
   .sheet tr.weekend td,
   .sheet tr.weekend .date,
   .sheet tr.holiday td,
   .sheet tr.holiday .date{
     background:#e0e0e0!important;
     -webkit-print-color-adjust:exact;
-    print-color-adjust:exact
+    print-color-adjust:exact;
   }
 }
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+
 </head>
 
 <body>
@@ -505,16 +547,21 @@ hr{
     <div>
       <h1>โปรแกรมรันตารางเวร</h1>
       <div class="header-sub">
-        จัดเวรอัตโนมัติ • ตรวจรอยต่อเดือน • แยกค่าเฉลี่ยตามประเภท • หมุนคิวตามรายชื่อ
+        จัดเวรอัตโนมัติ • อ้างอิงเดือนก่อน • หมุนคิว • เฉลี่ยวันธรรมดา/เสาร์อาทิตย์/นักขัตฤกษ์
       </div>
     </div>
-    <div class="version">V20 • Cloud Sync</div>
+
+    <div class="version">
+      V20.1 • Cloud Sync
+    </div>
   </div>
 </header>
 
 <div class="app">
 
+  <!-- เครื่องมือ -->
   <div class="panel no-print">
+
     <div class="toolbar">
 
       <label class="field">
@@ -527,21 +574,45 @@ hr{
         <input id="year" type="number" min="2500" max="2700">
       </label>
 
-      <button class="run" id="runBtn">รันตารางเวร</button>
-      <button class="save" id="saveBtn">บันทึกเดือนนี้</button>
-      <button id="loadBtn">เปิดที่บันทึก</button>
-      <button id="validateBtn">ตรวจตาราง</button>
-      <button id="printBtn">พิมพ์ตาราง</button>
-      <button id="pdfBtn">บันทึกไฟล์ PDF</button>
-      <button class="danger" id="clearBtn">ล้างตาราง</button>
+      <button class="run" id="runBtn">
+        รันตารางเวร
+      </button>
+
+      <button class="save" id="saveBtn">
+        บันทึกเดือนนี้
+      </button>
+
+      <button id="loadBtn">
+        เปิดที่บันทึก
+      </button>
+
+      <button id="validateBtn">
+        ตรวจตาราง
+      </button>
+
+      <button id="printBtn">
+        พิมพ์ตาราง
+      </button>
+
+      <button id="pdfBtn">
+        บันทึกไฟล์ PDF
+      </button>
+
+      <button class="danger" id="clearBtn">
+        ล้างตาราง
+      </button>
 
     </div>
 
     <div id="historyInfo" class="history-info"></div>
+
   </div>
 
-  <div id="status" class="status ok">กำลังเริ่มระบบ...</div>
+  <div id="status" class="status">
+    กำลังเริ่มระบบ...
+  </div>
 
+  <!-- Cloud -->
   <div class="panel no-print">
 
     <div class="section-title">
@@ -549,7 +620,7 @@ hr{
     </div>
 
     <div class="muted">
-      เชื่อม Cloudflare D1 ผ่าน Worker • เมื่อเชื่อมแล้ว รายชื่อ กติกา วันหยุด และตารางรายเดือนจะซิงก์ข้ามเครื่อง
+      เชื่อม Cloudflare D1 ผ่าน Worker • รายชื่อ กติกา วันหยุด และตารางรายเดือนซิงก์ข้ามเครื่อง
     </div>
 
     <div class="toolbar" style="margin-top:8px">
@@ -564,9 +635,17 @@ hr{
         <input id="cloudToken" type="password">
       </label>
 
-      <button id="cloudConnectBtn">เชื่อมฐานข้อมูล</button>
-      <button id="cloudUploadBtn">อัปโหลดข้อมูลเครื่องนี้</button>
-      <button id="cloudDownloadBtn">โหลดข้อมูลออนไลน์</button>
+      <button id="cloudConnectBtn">
+        เชื่อมฐานข้อมูล
+      </button>
+
+      <button id="cloudUploadBtn">
+        อัปโหลดข้อมูลเครื่องนี้
+      </button>
+
+      <button id="cloudDownloadBtn">
+        โหลดข้อมูลออนไลน์
+      </button>
 
     </div>
 
@@ -576,10 +655,12 @@ hr{
 
   </div>
 
+  <!-- ตารางหลัก -->
   <div class="sheet-wrap">
     <table id="sheet" class="sheet"></table>
   </div>
 
+  <!-- หมายเหตุ PDF -->
   <div class="panel no-print">
 
     <div class="section-title">
@@ -590,10 +671,12 @@ hr{
       id="pdfNote"
       rows="3"
       style="width:100%;min-height:78px;border:1px solid var(--line);border-radius:10px;padding:10px;font-size:15px"
+      placeholder="หมายเหตุ: ..."
     ></textarea>
 
   </div>
 
+  <!-- รายชื่อ -->
   <div class="panel no-print">
 
     <div class="section-title">
@@ -601,19 +684,28 @@ hr{
     </div>
 
     <div class="muted">
-      รายชื่อสุดท้ายสามารถขึ้นได้เฉพาะ EXTRA1–3
+      รายชื่อสุดท้ายจัดได้เฉพาะ EXTRA1–3
     </div>
 
     <div class="toolbar">
-      <button id="addPersonBtn">+ เพิ่มรายชื่อ</button>
-      <button id="removePersonBtn">− ลบรายชื่อสุดท้าย</button>
+
+      <button id="addPersonBtn">
+        + เพิ่มรายชื่อ
+      </button>
+
+      <button id="removePersonBtn">
+        − ลบรายชื่อสุดท้าย
+      </button>
+
       <span id="personCount" class="muted"></span>
+
     </div>
 
     <div id="names" class="names"></div>
 
   </div>
 
+  <!-- วันหยุด -->
   <div class="panel no-print">
 
     <div class="section-title">
@@ -621,15 +713,26 @@ hr{
     </div>
 
     <div class="holidaybar">
+
       <input id="holidayDate" type="date">
-      <input id="holidayName" type="text" placeholder="ชื่อวันหยุด">
-      <button id="addHolidayBtn">เพิ่มวันหยุด</button>
+
+      <input
+        id="holidayName"
+        type="text"
+        placeholder="ชื่อวันหยุด"
+      >
+
+      <button id="addHolidayBtn">
+        เพิ่มวันหยุด
+      </button>
+
     </div>
 
     <div id="chips" class="chips"></div>
 
   </div>
 
+  <!-- กติกาหลัก -->
   <div class="panel no-print">
 
     <div class="section-title">
@@ -637,14 +740,36 @@ hr{
     </div>
 
     <div class="muted">
-      กติกาหลัก 20 ข้อนี้เป็นกฎบังคับของระบบ
+      กติกาหลักสามารถเพิ่ม แก้ไข และลบได้
     </div>
 
     <div id="ruleList" class="rule-list"></div>
 
     <hr>
 
-    <div style="font-weight:800">
+    <div class="rulebar">
+
+      <label class="field" style="flex:1;min-width:300px">
+        เพิ่มกติกา
+        <textarea
+          id="newRuleText"
+          rows="3"
+          placeholder="พิมพ์กติกาใหม่"
+        ></textarea>
+      </label>
+
+      <button id="addRuleBtn">
+        + เพิ่มกติกา
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- กติกาเฉพาะบุคคล -->
+  <div class="panel no-print">
+
+    <div class="section-title">
       กติกาเฉพาะบุคคล
     </div>
 
@@ -658,14 +783,25 @@ hr{
       <label class="field">
         ประเภท
         <select id="customRuleType">
-          <option value="only">อนุญาตเฉพาะเวรที่เลือก</option>
-          <option value="block">ห้ามเวรที่เลือก</option>
+
+          <option value="only">
+            อนุญาตเฉพาะเวรที่เลือก
+          </option>
+
+          <option value="block">
+            ห้ามเวรที่เลือก
+          </option>
+
         </select>
       </label>
 
       <label class="field">
         เลือกเวร
-        <select id="customSlots" multiple size="6"></select>
+        <select
+          id="customSlots"
+          multiple
+          size="6"
+        ></select>
       </label>
 
       <button id="addCustomRuleBtn">
@@ -678,22 +814,49 @@ hr{
 
   </div>
 
+  <!-- ตารางเฉลี่ย -->
   <div class="panel no-print">
 
-    <div class="section-title" id="summaryTitle">
+    <div
+      class="section-title"
+      id="summaryTitle"
+    >
       ตารางหลักการเฉลี่ยเวร
     </div>
 
-    <div class="toolbar">
-      <button id="summaryPdfBtn">บันทึก PDF หลักการเฉลี่ยเวร</button>
-      <button id="summaryPrintBtn">พิมพ์หลักการเฉลี่ยเวร</button>
-      <button id="summaryOpenPdfBtn">เปิด PDF ย้อนหลัง</button>
-      <input id="summaryPdfFile" type="file" accept="application/pdf" style="display:none">
+    <div class="muted">
+      จำนวนในคอลัมน์เวรแต่ละประเภทเป็นของเดือนปัจจุบัน
+    </div>
+
+    <div class="toolbar" style="margin-top:8px">
+
+      <button id="summaryPdfBtn">
+        บันทึก PDF หลักการเฉลี่ยเวร
+      </button>
+
+      <button id="summaryPrintBtn">
+        พิมพ์หลักการเฉลี่ยเวร
+      </button>
+
+      <button id="summaryOpenPdfBtn">
+        เปิด PDF ย้อนหลัง
+      </button>
+
+      <input
+        id="summaryPdfFile"
+        type="file"
+        accept="application/pdf"
+        style="display:none"
+      >
+
     </div>
 
   </div>
 
-  <div id="summary" class="summary no-print"></div>
+  <div
+    id="summary"
+    class="summary no-print"
+  ></div>
 
 </div>
 
@@ -702,2540 +865,4478 @@ hr{
 
 'use strict';
 
+/* =========================
+   ข้อมูลพื้นฐาน
+========================= */
+
 var MONTHS=[
-'มกราคม','กุมภาพันธ์','มีนาคม','เมษายน',
-'พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม',
-'กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'
+  'มกราคม',
+  'กุมภาพันธ์',
+  'มีนาคม',
+  'เมษายน',
+  'พฤษภาคม',
+  'มิถุนายน',
+  'กรกฎาคม',
+  'สิงหาคม',
+  'กันยายน',
+  'ตุลาคม',
+  'พฤศจิกายน',
+  'ธันวาคม'
 ];
 
-var DAYS=['อา.','จ.','อ.','พ.','พฤ.','ศ.','ส.'];
+var DAYS=[
+  'อา.',
+  'จ.',
+  'อ.',
+  'พ.',
+  'พฤ.',
+  'ศ.',
+  'ส.'
+];
+
+/* =========================
+   ช่องเวร
+========================= */
 
 var SLOTS=[
 
-{id:'v1',label:'เวร1',kind:'v'},
-{id:'v2',label:'เวร2',kind:'v'},
+  {
+    id:'v1',
+    label:'เวร1',
+    kind:'v',
+    time:''
+  },
 
-{id:'ot1',label:'OT1',kind:'ot'},
-{id:'ot2',label:'OT2',kind:'ot'},
+  {
+    id:'v2',
+    label:'เวร2',
+    kind:'v',
+    time:''
+  },
 
-{id:'s1d',label:'SDMC1 เช้า',kind:'morning'},
-{id:'s1n',label:'SDMC1 บ่าย-ดึก',kind:'night'},
+  {
+    id:'ot1',
+    label:'OT1',
+    kind:'ot',
+    time:''
+  },
 
-{id:'s2d',label:'SDMC2 เช้า',kind:'morning'},
-{id:'s2n',label:'SDMC2 บ่าย-ดึก',kind:'night'},
+  {
+    id:'ot2',
+    label:'OT2',
+    kind:'ot',
+    time:''
+  },
 
-{id:'s3d',label:'SDMC3 เช้า',kind:'morning'},
-{id:'s3n',label:'SDMC3 บ่าย-ดึก',kind:'night'},
+  {
+    id:'s1d',
+    label:'SDMC1 เช้า',
+    kind:'morning',
+    time:'8.00-16.00'
+  },
 
-{id:'s4d',label:'SDMC4 เช้า',kind:'morning'},
-{id:'s4n',label:'SDMC4 บ่าย-ดึก',kind:'night'},
+  {
+    id:'s1n',
+    label:'SDMC1 บ่าย-ดึก',
+    kind:'night',
+    time:'16.00-8.00'
+  },
 
-{id:'s5',label:'SDMC5 เช้า-บ่าย',kind:'long'},
-{id:'s6',label:'SDMC6 เช้า-บ่าย',kind:'long'},
+  {
+    id:'s2d',
+    label:'SDMC2 เช้า',
+    kind:'morning',
+    time:'8.00-16.00'
+  },
 
-{id:'s7',label:'SDMC7 บ่าย',kind:'evening'},
-{id:'s8',label:'SDMC8 บ่าย',kind:'evening'},
+  {
+    id:'s2n',
+    label:'SDMC2 บ่าย-ดึก',
+    kind:'night',
+    time:'16.00-8.00'
+  },
 
-{id:'e1',label:'EXTRA1',kind:'extra'},
-{id:'e2',label:'EXTRA2',kind:'extra'},
-{id:'e3',label:'EXTRA3',kind:'extra'}
+  {
+    id:'s3d',
+    label:'SDMC3 เช้า',
+    kind:'morning',
+    time:'8.00-16.00'
+  },
+
+  {
+    id:'s3n',
+    label:'SDMC3 บ่าย-ดึก',
+    kind:'night',
+    time:'16.00-8.00'
+  },
+
+  {
+    id:'s4d',
+    label:'SDMC4 เช้า',
+    kind:'morning',
+    time:'8.00-16.00'
+  },
+
+  {
+    id:'s4n',
+    label:'SDMC4 บ่าย-ดึก',
+    kind:'night',
+    time:'16.00-8.00'
+  },
+
+  {
+    id:'s5',
+    label:'SDMC5 เช้า-บ่าย',
+    kind:'long',
+    time:'7.00-23.00'
+  },
+
+  {
+    id:'s6',
+    label:'SDMC6 เช้า-บ่าย',
+    kind:'long',
+    time:'7.00-23.00'
+  },
+
+  {
+    id:'s7',
+    label:'SDMC7 บ่าย',
+    kind:'evening',
+    time:'16.00-24.00'
+  },
+
+  {
+    id:'s8',
+    label:'SDMC8 บ่าย',
+    kind:'evening',
+    time:'16.00-24.00'
+  },
+
+  {
+    id:'e1',
+    label:'EXTRA1',
+    kind:'extra',
+    time:''
+  },
+
+  {
+    id:'e2',
+    label:'EXTRA2',
+    kind:'extra',
+    time:''
+  },
+
+  {
+    id:'e3',
+    label:'EXTRA3',
+    kind:'extra',
+    time:''
+  }
 
 ];
 
+/* =========================
+   กลุ่มสำหรับเฉลี่ย
+========================= */
+
 var GROUPS={
 
-v:{
- label:'เวร1–2',
- slots:['v1','v2']
-},
+  v:[
+    'v1',
+    'v2'
+  ],
 
-ot:{
- label:'OT1–2',
- slots:['ot1','ot2']
-},
+  ot:[
+    'ot1',
+    'ot2'
+  ],
 
-morning:{
- label:'SDMC เช้า1–4',
- slots:['s1d','s2d','s3d','s4d']
-},
+  morning:[
+    's1d',
+    's2d',
+    's3d',
+    's4d'
+  ],
 
-night:{
- label:'SDMC บ่าย–ดึก1–4',
- slots:['s1n','s2n','s3n','s4n']
-},
+  night:[
+    's1n',
+    's2n',
+    's3n',
+    's4n'
+  ],
 
-long:{
- label:'SDMC เช้า–บ่าย5–6',
- slots:['s5','s6']
-},
+  long:[
+    's5',
+    's6'
+  ],
 
-evening:{
- label:'SDMC บ่าย7–8',
- slots:['s7','s8']
-},
+  evening:[
+    's7',
+    's8'
+  ],
 
-extra:{
- label:'EXTRA1–3',
- slots:['e1','e2','e3']
-}
+  extra:[
+    'e1',
+    'e2',
+    'e3'
+  ]
 
 };
 
 var SLOT_GROUP={};
 
-Object.keys(GROUPS).forEach(function(g){
+Object.keys(GROUPS)
+.forEach(function(group){
 
-GROUPS[g].slots.forEach(function(s){
+  GROUPS[group]
+  .forEach(function(slot){
 
-SLOT_GROUP[s]=g;
+    SLOT_GROUP[slot]=group;
+
+  });
 
 });
 
-});
+/* =========================
+   กติกาเริ่มต้น 20 ข้อ
+========================= */
 
-var CORE_RULES=[
+var DEFAULT_RULES=[
 
-'เวลาปฏิบัติงานในเวลาราชการ คือ วันจันทร์–ศุกร์ เวลา 08:00–16:00 น. โดยไม่รวมวันหยุดนักขัตฤกษ์ ส่วนวันและเวลาอื่นทั้งหมดถือเป็นเวรนอกเวลา',
+  {
+    id:'r1',
+    text:'เวลาปฏิบัติงานในเวลาราชการ คือ วันจันทร์–ศุกร์ เวลา 08:00–16:00 น. โดยไม่รวมวันหยุดนักขัตฤกษ์ ส่วนวันและเวลาอื่นทั้งหมดถือเป็นเวรนอกเวลา'
+  },
 
-'ชื่อบุคลากรห้ามซ้ำในวันเดียวกันทุกประเภทเวร',
+  {
+    id:'r2',
+    text:'ชื่อบุคลากรห้ามซ้ำในวันเดียวกันทุกประเภทเวร'
+  },
 
-'หลังจากขึ้นเวรบ่าย–ดึก วันถัดไปห้ามจัดเวรทุกประเภท ยกเว้นช่วงวันศุกร์ วันเสาร์ วันอาทิตย์ และวันหยุดนักขัตฤกษ์ สามารถจัดเวรบ่าย–ดึกต่อเนื่องกันได้',
+  {
+    id:'r3',
+    text:'หลังจากขึ้นเวรบ่าย–ดึก วันถัดไปห้ามจัดเวรทุกประเภท ข้อยกเว้น: ช่วงวันศุกร์ วันเสาร์ วันอาทิตย์ และวันหยุดนักขัตฤกษ์ สามารถจัดเวรบ่าย–ดึกต่อเนื่องกันได้'
+  },
 
-'รายชื่อบุคลากรคนสุดท้ายสามารถจัดได้เฉพาะ EXTRA1, EXTRA2 และ EXTRA3',
+  {
+    id:'r4',
+    text:'รายชื่อบุคลากรคนสุดท้าย สามารถจัดได้เฉพาะ EXTRA1, EXTRA2 และ EXTRA3 เท่านั้น'
+  },
 
-'หลีกเลี่ยงการจัดเวรหนักติดต่อกันหลายวัน',
+  {
+    id:'r5',
+    text:'ต้องหลีกเลี่ยงการจัดเวรหนักติดต่อกันหลายวัน แม้จะไม่ขัดกับกฎข้ออื่น'
+  },
 
-'แยกค่าเฉลี่ยเป็น เวร1–2 / OT1–2 / SDMC เช้า1–4 / SDMC บ่าย–ดึก1–4 / SDMC เช้า–บ่าย5–6 / SDMC บ่าย7–8 / EXTRA1–3',
+  {
+    id:'r6',
+    text:'ต้องแยกการจัดเวรและการคำนวณค่าเฉลี่ยออกเป็นแต่ละประเภท ได้แก่ เวร1–2 / OT1–2 / SDMC เช้า1–4 / SDMC บ่าย–ดึก1–4 / SDMC เช้า–บ่าย5–6 / SDMC บ่าย7–8 / EXTRA1–3'
+  },
 
-'เวร1–2 จัดทุกวัน รวมวันหยุดนักขัตฤกษ์',
+  {
+    id:'r7',
+    text:'เวร1–2 จัดทุกวัน ได้แก่ จันทร์–อาทิตย์ รวมวันหยุดนักขัตฤกษ์'
+  },
 
-'OT1–2 จัดเฉพาะจันทร์–ศุกร์ ไม่รวมวันหยุดนักขัตฤกษ์',
+  {
+    id:'r8',
+    text:'OT1–2 จัดเฉพาะวันจันทร์–ศุกร์ และไม่จัดวันเสาร์ วันอาทิตย์ และวันหยุดนักขัตฤกษ์'
+  },
 
-'SDMC เช้า1–4 จัดเฉพาะเสาร์ อาทิตย์ และวันหยุดนักขัตฤกษ์',
+  {
+    id:'r9',
+    text:'SDMC เช้า1–4 จัดเฉพาะวันเสาร์ วันอาทิตย์ และวันหยุดนักขัตฤกษ์'
+  },
 
-'SDMC บ่าย–ดึก1–4 จัดทุกวัน รวมวันหยุดนักขัตฤกษ์',
+  {
+    id:'r10',
+    text:'SDMC บ่าย–ดึก1–4 จัดทุกวัน ได้แก่ จันทร์–อาทิตย์ รวมวันหยุดนักขัตฤกษ์'
+  },
 
-'SDMC เช้า–บ่าย5–6 จัดเฉพาะเสาร์ อาทิตย์ และวันหยุดนักขัตฤกษ์',
+  {
+    id:'r11',
+    text:'SDMC เช้า–บ่าย5–6 จัดเฉพาะวันเสาร์ วันอาทิตย์ และวันหยุดนักขัตฤกษ์'
+  },
 
-'SDMC บ่าย7–8 จัดเฉพาะจันทร์–ศุกร์ ไม่รวมวันหยุดนักขัตฤกษ์',
+  {
+    id:'r12',
+    text:'SDMC บ่าย7–8 จัดเฉพาะวันจันทร์–ศุกร์ และไม่จัดวันเสาร์ วันอาทิตย์ และวันหยุดนักขัตฤกษ์'
+  },
 
-'EXTRA1 จัดทุกวัน แต่ไม่จัดวันหยุดนักขัตฤกษ์',
+  {
+    id:'r13',
+    text:'EXTRA1 จัดทุกวัน จันทร์–อาทิตย์ แต่ไม่จัดในวันหยุดนักขัตฤกษ์'
+  },
 
-'EXTRA2 จัดเฉพาะ จันทร์ อังคาร พุธ พฤหัสบดี และอาทิตย์ ไม่จัดศุกร์ เสาร์ และวันหยุดนักขัตฤกษ์',
+  {
+    id:'r14',
+    text:'EXTRA2 จัดในวันจันทร์ อังคาร พุธ พฤหัสบดี และวันอาทิตย์ ไม่จัดวันศุกร์ วันเสาร์ และวันหยุดนักขัตฤกษ์'
+  },
 
-'EXTRA3 จัดทุกวัน รวมวันหยุดนักขัตฤกษ์',
+  {
+    id:'r15',
+    text:'EXTRA3 จัดทุกวัน ได้แก่ จันทร์–อาทิตย์ รวมวันหยุดนักขัตฤกษ์'
+  },
 
-'กระจายเวรแต่ละประเภทอย่างยุติธรรม และแยกภาระในเวลาราชการกับนอกเวลา',
+  {
+    id:'r16',
+    text:'กระจายเวรแต่ละประเภทอย่างยุติธรรม ทั้งวันธรรมดา และวันเสาร์ วันอาทิตย์ วันหยุดนักขัตฤกษ์ โดยจำนวนเวรของแต่ละคนในแต่ละประเภทต้องใกล้เคียงกันมากที่สุด'
+  },
 
-'ใช้ระบบหมุนเวียนตามลำดับรายชื่อ หากถึงคิวแต่ติดเงื่อนไขให้ข้ามชั่วคราว',
+  {
+    id:'r17',
+    text:'แต่ละประเภทเวรต้องใช้ระบบหมุนเวียนตามลำดับรายชื่อ หากถึงคิวแต่ติดเงื่อนไขให้ข้ามชั่วคราวและนำกลับมาพิจารณาในรอบถัดไป'
+  },
 
-'หมุนเวียนตำแหน่งภายในประเภท และหลีกเลี่ยงตำแหน่งเดิมหรือชื่อเดียวกันติดกันหลายวัน',
+  {
+    id:'r18',
+    text:'ต้องหมุนเวียนตำแหน่งภายในแต่ละประเภทเวร และไม่ให้บุคคลเดิมอยู่ในเวรหรือตำแหน่งเดิมซ้ำ ๆ รวมถึงหลีกเลี่ยงชื่อเดียวกันติดต่อกันหลายวัน'
+  },
 
-'เดือนใหม่ต้องอ้างอิงจำนวนเวร คิว ประเภท และประวัติของเดือนก่อนหน้า',
+  {
+    id:'r19',
+    text:'การจัดตารางเดือนใหม่ต้องอ้างอิงตารางเวรของเดือนก่อนหน้า โดยนำข้อมูลการหมุนคิว จำนวนเวรสะสม ประเภทเวร และประวัติการขึ้นเวรมาประกอบการจัดเดือนใหม่'
+  },
 
-'ตรวจรอยต่อปลายเดือนก่อนกับวันที่ 1 ของเดือนใหม่ด้วยกฎเดียวกัน'
+  {
+    id:'r20',
+    text:'ต้องตรวจสอบรอยต่อระหว่างปลายเดือนก่อนหน้ากับต้นเดือนใหม่ โดยใช้กฎทั้งหมดเหมือนเป็นตารางต่อเนื่องกัน'
+  }
 
 ];
 
+/* =========================
+   State
+========================= */
+
 var state={
 
-people:[],
+  people:[],
 
-assignments:{},
+  assignments:{},
 
-holidays:{},
+  holidays:{},
 
-customRules:[],
+  rules:[],
 
-pdfNote:'',
+  customRules:[],
 
-rotation:{}
+  pdfNote:'',
+
+  rotation:{}
 
 };
 
 var cloud={
- apiUrl:'',
- token:'',
- connected:false,
- timer:null
+
+  apiUrl:'',
+
+  token:'',
+
+  connected:false,
+
+  timer:null
+
 };
 
+/* =========================
+   Helpers
+========================= */
+
 function el(id){
- return document.getElementById(id);
+  return document.getElementById(id);
+}
+
+function esc(s){
+
+  return String(s)
+  .replace(/[&<>"']/g,function(c){
+
+    return {
+      '&':'&amp;',
+      '<':'&lt;',
+      '>':'&gt;',
+      '"':'&quot;',
+      "'":'&#39;'
+    }[c];
+
+  });
+
+}
+
+function parse(v,f){
+
+  try{
+    return JSON.parse(v);
+  }catch(e){
+    return f;
+  }
+
 }
 
 function pad(n){
- return n<10?'0'+n:String(n);
+  return n<10?'0'+n:String(n);
 }
 
 function py(){
- return parseInt(el('year').value,10)||2569;
+  return parseInt(el('year').value,10)||2569;
 }
 
 function gy(){
- return py()-543;
+  return py()-543;
 }
 
 function cm(){
- return parseInt(el('month').value,10)||0;
+  return parseInt(el('month').value,10)||0;
 }
 
 function dim(){
- return new Date(gy(),cm()+1,0).getDate();
+  return new Date(gy(),cm()+1,0).getDate();
 }
 
-function keyMonth(y,m){
- return y+'-'+pad(m+1);
+function monthKey(y,m){
+  return y+'-'+pad(m+1);
 }
 
 function currentKey(){
- return keyMonth(gy(),cm());
+  return monthKey(gy(),cm());
 }
 
 function prevYM(){
 
- var y=gy();
- var m=cm()-1;
+  var y=gy();
 
- if(m<0){
-  m=11;
-  y--;
- }
+  var m=cm()-1;
 
- return {y:y,m:m};
+  if(m<0){
+
+    m=11;
+    y--;
+
+  }
+
+  return {
+    y:y,
+    m:m
+  };
 
 }
 
 function prevKey(){
 
- var p=prevYM();
+  var p=prevYM();
 
- return keyMonth(p.y,p.m);
+  return monthKey(
+    p.y,
+    p.m
+  );
 
 }
 
-function dayKey(y,m,d){
- return keyMonth(y,m)+'-'+pad(d);
+function dateKey(y,m,d){
+
+  return monthKey(y,m)+
+  '-'+
+  pad(d);
+
 }
 
 function dkey(d){
- return dayKey(gy(),cm(),d);
+
+  return dateKey(
+    gy(),
+    cm(),
+    d
+  );
+
 }
 
 function akey(d,s){
- return d+'|'+s;
+
+  return d+'|'+s;
+
+}
+
+function dowFor(y,m,d){
+
+  return new Date(
+    y,
+    m,
+    d
+  ).getDay();
+
 }
 
 function dow(d){
- return new Date(gy(),cm(),d).getDay();
+
+  return dowFor(
+    gy(),
+    cm(),
+    d
+  );
+
 }
 
 function isHoliday(d){
- return !!state.holidays[dkey(d)];
+
+  return !!state.holidays[
+    dkey(d)
+  ];
+
 }
 
 function isWeekend(d){
 
- var w=dow(d);
+  var w=dow(d);
 
- return w===0||w===6;
+  return (
+    w===0||
+    w===6
+  );
+
+}
+
+function isOffDay(d){
+
+  return (
+    isWeekend(d)||
+    isHoliday(d)
+  );
 
 }
 
 function weekdayNoHoliday(d){
 
- var w=dow(d);
+  var w=dow(d);
 
- return w>=1&&w<=5&&!isHoliday(d);
+  return (
+    w>=1&&
+    w<=5&&
+    !isHoliday(d)
+  );
 
 }
 
 function slotById(id){
 
- return SLOTS.find(function(s){
-  return s.id===id;
- });
+  for(
+    var i=0;
+    i<SLOTS.length;
+    i++
+  ){
+
+    if(
+      SLOTS[i].id===id
+    ){
+      return SLOTS[i];
+    }
+
+  }
+
+  return null;
 
 }
 
-function active(slot,d){
+function hasRule(n){
 
- var w=dow(d);
+  return state.rules
+  .some(function(r){
 
- if(slot.id==='v1'||slot.id==='v2'){
-  return true;
- }
+    return r.id==='r'+n;
 
- if(slot.id==='ot1'||slot.id==='ot2'){
-  return weekdayNoHoliday(d);
- }
-
- if(slot.kind==='morning'){
-  return isWeekend(d)||isHoliday(d);
- }
-
- if(slot.kind==='night'){
-  return true;
- }
-
- if(slot.kind==='long'){
-  return isWeekend(d)||isHoliday(d);
- }
-
- if(slot.kind==='evening'){
-  return weekdayNoHoliday(d);
- }
-
- if(slot.id==='e1'){
-  return !isHoliday(d);
- }
-
- if(slot.id==='e2'){
-
-  return !isHoliday(d)&&(
-   w===0||
-   w===1||
-   w===2||
-   w===3||
-   w===4
-  );
-
- }
-
- if(slot.id==='e3'){
-  return true;
- }
-
- return false;
+  });
 
 }
+
+/* =========================
+   บุคลากรเริ่มต้น
+========================= */
 
 function defaultPeople(){
 
- var a=[];
+  var a=[];
 
- for(var i=1;i<=28;i++){
+  for(
+    var i=1;
+    i<=28;
+    i++
+  ){
 
-  a.push({
-   id:'p'+i,
-   name:'บุคลากร '+i
-  });
+    a.push({
 
- }
+      id:'p'+i,
 
- return a;
+      name:'บุคลากร '+i
 
-}
+    });
 
-function parseJSON(v,f){
+  }
 
- try{
-  return JSON.parse(v);
- }catch(e){
-  return f;
- }
+  return a;
 
 }
 
-function loadConfig(){
-
- var c=parseJSON(
-  localStorage.getItem('roster_config_v8'),
-  null
- );
-
- if(c){
-
-  state.people=
-   Array.isArray(c.people)&&c.people.length
-   ?c.people
-   :defaultPeople();
-
-  state.holidays=c.holidays||{};
-
-  state.customRules=c.customRules||[];
-
-  state.pdfNote=c.pdfNote||'';
-
- }else{
-
-  state.people=defaultPeople();
-
- }
-
-}
-
-function configPayload(){
-
- return {
-  people:state.people,
-  holidays:state.holidays,
-  customRules:state.customRules,
-  pdfNote:state.pdfNote
- };
-
-}
-
-function saveConfig(){
-
- state.pdfNote=el('pdfNote').value;
-
- var payload=configPayload();
-
- localStorage.setItem(
-  'roster_config_v8',
-  JSON.stringify(payload)
- );
-
- scheduleCloudConfigSave(payload);
-
-}
+/* =========================
+   Local Storage
+========================= */
 
 function storageKey(k){
 
- return 'roster_month_v7_'+k;
+  return 'roster_month_v7_'+k;
 
 }
 
 function savedMonth(k){
 
- return parseJSON(
-  localStorage.getItem(storageKey(k)),
-  null
- );
+  return parse(
+    localStorage.getItem(
+      storageKey(k)
+    ),
+    null
+  );
+
+}
+
+function loadConfig(){
+
+  var c=parse(
+    localStorage.getItem(
+      'roster_config_v8'
+    ),
+    null
+  );
+
+  state.people=
+  c&&Array.isArray(c.people)&&c.people.length
+  ?c.people
+  :defaultPeople();
+
+  state.holidays=
+  c&&c.holidays
+  ?c.holidays
+  :{};
+
+  state.customRules=
+  c&&c.customRules
+  ?c.customRules
+  :[];
+
+  state.pdfNote=
+  c&&c.pdfNote
+  ?c.pdfNote
+  :'';
+
+  state.rules=
+  c&&Array.isArray(c.rules)&&c.rules.length
+  ?c.rules
+  :DEFAULT_RULES.map(function(r){
+
+    return {
+      id:r.id,
+      text:r.text
+    };
+
+  });
+
+}
+
+function configPayload(){
+
+  return {
+
+    people:state.people,
+
+    holidays:state.holidays,
+
+    customRules:state.customRules,
+
+    pdfNote:state.pdfNote,
+
+    rules:state.rules
+
+  };
+
+}
+
+function saveConfig(){
+
+  state.pdfNote=
+  el('pdfNote').value;
+
+  var payload=
+  configPayload();
+
+  localStorage.setItem(
+    'roster_config_v8',
+    JSON.stringify(payload)
+  );
+
+  scheduleCloudConfigSave(
+    payload
+  );
 
 }
 
 function monthPayload(){
 
- return {
+  return {
 
-  version:20,
+    version:'20.1',
 
-  key:currentKey(),
+    key:currentKey(),
 
-  year:gy(),
+    year:gy(),
 
-  month:cm(),
+    month:cm(),
 
-  savedAt:new Date().toISOString(),
+    savedAt:
+    new Date().toISOString(),
 
-  assignments:state.assignments,
+    assignments:
+    state.assignments,
 
-  rotation:state.rotation,
+    rotation:
+    state.rotation,
 
-  peopleSnapshot:state.people,
+    peopleSnapshot:
+    state.people
 
-  holidaysSnapshot:state.holidays
-
- };
+  };
 
 }
 
 function saveMonth(silent){
 
- var data=monthPayload();
+  var data=
+  monthPayload();
 
- localStorage.setItem(
-  storageKey(currentKey()),
-  JSON.stringify(data)
- );
-
- cloudSaveMonth(data);
-
- if(!silent){
-
-  setStatus(
-   'บันทึกเดือน '+MONTHS[cm()]+' '+py()+' แล้ว',
-   true
+  localStorage.setItem(
+    storageKey(currentKey()),
+    JSON.stringify(data)
   );
 
- }
+  cloudSaveMonth(data);
 
- renderHistory();
+  if(!silent){
+
+    setStatus(
+      'บันทึกเดือน '+
+      MONTHS[cm()]+' '+
+      py()+
+      ' แล้ว',
+      true
+    );
+
+  }
+
+  renderHistory();
 
 }
 
 function loadMonth(silent){
 
- var data=savedMonth(currentKey());
+  var data=
+  savedMonth(
+    currentKey()
+  );
 
- state.assignments={};
- state.rotation={};
+  state.assignments=
+  data&&data.assignments
+  ?data.assignments
+  :{};
 
- if(data){
-
-  state.assignments=data.assignments||{};
-
-  state.rotation=data.rotation||{};
+  state.rotation=
+  data&&data.rotation
+  ?data.rotation
+  :{};
 
   if(!silent){
 
-   setStatus(
-    'เปิดตารางที่บันทึกแล้ว',
-    true
-   );
+    setStatus(
+      data
+      ?'เปิดตารางที่บันทึกแล้ว'
+      :'เดือนนี้ยังไม่มีข้อมูลที่บันทึก',
+      !!data
+    );
 
   }
 
- }else if(!silent){
+  renderSheet();
 
-  setStatus(
-   'เดือนนี้ยังไม่มีข้อมูลที่บันทึก',
-   false
-  );
-
- }
-
- renderSheet();
- renderHistory();
+  renderHistory();
 
 }
 
 function renderHistory(){
 
- var cur=savedMonth(currentKey());
+  el('historyInfo').innerHTML=
 
- var prev=savedMonth(prevKey());
+  'เดือนนี้: <b>'+
 
- el('historyInfo').innerHTML=
- 'เดือนนี้: <b>'+
- (cur?'มีข้อมูลบันทึก':'ยังไม่บันทึก')+
- '</b> | เดือนก่อน: <b>'+
- (prev?'พบข้อมูล':'ไม่พบข้อมูล')+
- '</b>';
+  (
+    savedMonth(currentKey())
+    ?'มีข้อมูลบันทึก'
+    :'ยังไม่บันทึก'
+  )+
 
-}
+  '</b> | เดือนก่อน: <b>'+
 
-function personName(pid){
+  (
+    savedMonth(prevKey())
+    ?'พบข้อมูล'
+    :'ไม่พบข้อมูล'
+  )+
 
- var p=state.people.find(function(x){
-  return x.id===pid;
- });
-
- return p?p.name:pid;
-
-}
-
-function personIndex(pid){
-
- return state.people.findIndex(function(p){
-  return p.id===pid;
- });
+  '</b>';
 
 }
 
-function buildMonths(){
+function setStatus(t,ok){
 
- var h='';
+  el('status').textContent=t;
 
- MONTHS.forEach(function(m,i){
-
-  h+='<option value="'+i+'">'+m+'</option>';
-
- });
-
- el('month').innerHTML=h;
-
-}
-
-function escapeHtml(s){
-
- return String(s).replace(/[&<>"']/g,function(c){
-
-  return {
-   '&':'&amp;',
-   '<':'&lt;',
-   '>':'&gt;',
-   '"':'&quot;',
-   "'":'&#39;'
-  }[c];
-
- });
+  el('status').className=
+  'status'+
+  (
+    ok
+    ?''
+    :' err'
+  );
 
 }
 
-function buildNames(){
+/* =========================
+   วันทำงานของแต่ละเวร
+========================= */
 
- var h='';
+function active(slot,d){
 
- state.people.forEach(function(p,i){
-
-  h+=
-  '<div class="name-row">'+
-  '<b>'+(i+1)+'.</b>'+
-  '<input data-pid="'+p.id+'" value="'+escapeHtml(p.name)+'">'+
-  '<span class="lastbadge" style="display:'+
-  (i===state.people.length-1?'inline-block':'none')+
-  '">EXTRA1–3 เท่านั้น</span>'+
-  '</div>';
-
- });
-
- el('names').innerHTML=h;
-
- el('personCount').textContent=
- 'จำนวน '+state.people.length+' รายชื่อ';
-
- el('names')
- .querySelectorAll('input')
- .forEach(function(input){
-
-  input.addEventListener('change',function(){
-
-   var pid=this.dataset.pid;
-
-   var p=state.people.find(function(x){
-    return x.id===pid;
-   });
-
-   if(p){
-
-    p.name=this.value.trim()||p.name;
-
-   }
-
-   saveConfig();
-
-   buildCustomPerson();
-
-   renderSheet();
-
-  });
-
- });
-
- buildCustomPerson();
-
-}
-
-function addPerson(){
-
- state.people.push({
-
-  id:'p_'+Date.now(),
-
-  name:'บุคลากร '+(state.people.length+1)
-
- });
-
- saveConfig();
-
- buildNames();
-
- renderSheet();
-
-}
-
-function removePerson(){
-
- if(state.people.length<=1)return;
-
- var removed=state.people.pop();
-
- state.customRules=
- state.customRules.filter(function(r){
-
-  return r.personId!==removed.id;
-
- });
-
- saveConfig();
-
- buildNames();
-
- renderCustomRules();
-
- renderSheet();
-
-}
-
-function buildCustomPerson(){
-
- var h='';
-
- state.people.forEach(function(p,i){
-
-  h+=
-  '<option value="'+p.id+'">'+
-  (i+1)+'. '+
-  escapeHtml(p.name)+
-  '</option>';
-
- });
-
- el('customPerson').innerHTML=h;
-
- var s='';
-
- SLOTS.forEach(function(slot){
-
-  s+=
-  '<option value="'+slot.id+'">'+
-  slot.label+
-  '</option>';
-
- });
-
- el('customSlots').innerHTML=s;
-
-}
-
-function selectedValues(sel){
-
- return Array.from(sel.options)
- .filter(function(o){
-  return o.selected;
- })
- .map(function(o){
-  return o.value;
- });
-
-}
-
-function customAllowed(pid,sid){
-
- for(var i=0;i<state.customRules.length;i++){
-
-  var r=state.customRules[i];
-
-  if(r.personId!==pid)continue;
+  var w=dow(d);
 
   if(
-   r.type==='only'&&
-   r.slots.indexOf(sid)<0
+    slot.id==='v1'||
+    slot.id==='v2'
   ){
-   return false;
+    return true;
   }
 
   if(
-   r.type==='block'&&
-   r.slots.indexOf(sid)>=0
+    slot.id==='ot1'||
+    slot.id==='ot2'
   ){
-   return false;
+
+    return hasRule(8)
+    ?weekdayNoHoliday(d)
+    :true;
+
   }
 
- }
+  if(
+    slot.kind==='morning'
+  ){
 
- return true;
+    return hasRule(9)
+    ?isOffDay(d)
+    :true;
 
-}
+  }
 
-function addCustomRule(){
+  if(
+    slot.kind==='night'
+  ){
+    return true;
+  }
 
- var pid=el('customPerson').value;
+  if(
+    slot.kind==='long'
+  ){
 
- var type=el('customRuleType').value;
+    return hasRule(11)
+    ?isOffDay(d)
+    :true;
 
- var slots=selectedValues(el('customSlots'));
+  }
 
- if(!pid||!slots.length)return;
+  if(
+    slot.kind==='evening'
+  ){
 
- state.customRules.push({
+    return hasRule(12)
+    ?weekdayNoHoliday(d)
+    :true;
 
-  id:'r_'+Date.now(),
+  }
 
-  personId:pid,
+  if(
+    slot.id==='e1'
+  ){
 
-  type:type,
+    return hasRule(13)
+    ?!isHoliday(d)
+    :true;
 
-  slots:slots
+  }
 
- });
+  if(
+    slot.id==='e2'
+  ){
 
- saveConfig();
+    return hasRule(14)
+    ?(
+      !isHoliday(d)&&
+      (
+        w===0||
+        w===1||
+        w===2||
+        w===3||
+        w===4
+      )
+    )
+    :true;
 
- renderCustomRules();
+  }
 
- renderSheet();
+  if(
+    slot.id==='e3'
+  ){
+    return true;
+  }
 
-}
-
-function renderCustomRules(){
-
- var h='';
-
- state.customRules.forEach(function(r){
-
-  var labels=r.slots.map(function(id){
-
-   var s=slotById(id);
-
-   return s?s.label:id;
-
-  });
-
-  h+=
-  '<span class="chip">'+
-  escapeHtml(personName(r.personId))+
-  ' → '+
-  (r.type==='block'?'ห้าม ':'เฉพาะ ')+
-  escapeHtml(labels.join(', '))+
-  ' <button class="smallbtn" data-rid="'+r.id+'">×</button>'+
-  '</span>';
-
- });
-
- el('customRules').innerHTML=h;
-
- el('customRules')
- .querySelectorAll('[data-rid]')
- .forEach(function(btn){
-
-  btn.onclick=function(){
-
-   var id=this.dataset.rid;
-
-   state.customRules=
-   state.customRules.filter(function(r){
-    return r.id!==id;
-   });
-
-   saveConfig();
-
-   renderCustomRules();
-
-   renderSheet();
-
-  };
-
- });
+  return true;
 
 }
 
-function renderRules(){
-
- var h='';
-
- CORE_RULES.forEach(function(rule,i){
-
-  h+=
-  '<div class="rule-item">'+
-  '<span class="rule-num">'+(i+1)+'</span>'+
-  escapeHtml(rule)+
-  '</div>';
-
- });
-
- el('ruleList').innerHTML=h;
-
- renderCustomRules();
-
-}
-
-function optionHtml(selected){
-
- var h='<option value=""></option>';
-
- state.people.forEach(function(p,i){
-
-  h+=
-  '<option value="'+p.id+'" '+
-  (selected===p.id?'selected':'')+
-  '>'+
-  (i+1)+'. '+
-  escapeHtml(p.name)+
-  '</option>';
-
- });
-
- return h;
-
-}
-
-function header(){
-
- return ''+
-
- '<caption>'+
- 'ตารางเวรผู้ช่วยพยาบาล เดือน'+
- MONTHS[cm()]+' '+py()+
- '</caption>'+
-
- '<thead>'+
-
- '<tr>'+
- '<th class="date">วันที่</th>'+
- '<th>เวร1</th>'+
- '<th>เวร2</th>'+
- '<th>OT1</th>'+
- '<th>OT2</th>'+
- '<th>SDMC1 เช้า</th>'+
- '<th>SDMC1 บ่าย-ดึก</th>'+
- '<th>SDMC2 เช้า</th>'+
- '<th>SDMC2 บ่าย-ดึก</th>'+
- '<th>SDMC3 เช้า</th>'+
- '<th>SDMC3 บ่าย-ดึก</th>'+
- '<th>SDMC4 เช้า</th>'+
- '<th>SDMC4 บ่าย-ดึก</th>'+
- '<th>SDMC5</th>'+
- '<th>SDMC6</th>'+
- '<th>SDMC7</th>'+
- '<th>SDMC8</th>'+
- '<th>EXTRA1</th>'+
- '<th>EXTRA2</th>'+
- '<th>EXTRA3</th>'+
- '</tr>'+
-
- '</thead>';
-
-}
-
-function renderSheet(){
-
- var h=header()+'<tbody>';
-
- for(var d=1;d<=dim();d++){
-
-  var cls=
-   isHoliday(d)
-   ?'holiday'
-   :(isWeekend(d)?'weekend':'');
-
-  h+='<tr class="'+cls+'">';
-
-  h+=
-  '<td class="date">'+
-  '<b>'+DAYS[dow(d)]+d+'</b>'+
-  (isHoliday(d)?'<br><small>นักขัตฯ</small>':'')+
-  '</td>';
-
-  SLOTS.forEach(function(slot){
-
-   if(!active(slot,d)){
-
-    h+='<td class="inactive"></td>';
-
-    return;
-
-   }
-
-   var v=
-   state.assignments[
-    akey(d,slot.id)
-   ]||'';
-
-   h+=
-   '<td data-d="'+d+'" data-s="'+slot.id+'">'+
-   '<select data-d="'+d+'" data-s="'+slot.id+'">'+
-   optionHtml(v)+
-   '</select>'+
-   '</td>';
-
-  });
-
-  h+='</tr>';
-
- }
-
- h+='</tbody>';
-
- el('sheet').innerHTML=h;
-
- el('sheet')
- .querySelectorAll('select')
- .forEach(function(s){
-
-  s.onchange=function(){
-
-   var d=parseInt(this.dataset.d,10);
-
-   var sid=this.dataset.s;
-
-   if(this.value){
-
-    state.assignments[
-     akey(d,sid)
-    ]=this.value;
-
-   }else{
-
-    delete state.assignments[
-     akey(d,sid)
-    ];
-
-   }
-
-   validate(false);
-
-   renderSummary();
-
-  };
-
- });
-
- validate(false);
-
- renderSummary();
-
-}
+/* =========================
+   กฎไม่ซ้ำ/บ่ายดึก
+========================= */
 
 function usedToday(pid,d){
 
- return SLOTS.some(function(s){
+  for(
+    var i=0;
+    i<SLOTS.length;
+    i++
+  ){
 
-  return state.assignments[
-   akey(d,s.id)
-  ]===pid;
+    if(
+      state.assignments[
+        akey(
+          d,
+          SLOTS[i].id
+        )
+      ]===pid
+    ){
 
- });
+      return true;
+
+    }
+
+  }
+
+  return false;
 
 }
 
 function hadNight(assign,pid,d){
 
- return SLOTS.some(function(s){
+  for(
+    var i=0;
+    i<SLOTS.length;
+    i++
+  ){
 
-  return (
-   s.kind==='night'&&
-   assign[akey(d,s.id)]===pid
-  );
+    if(
+      SLOTS[i].kind==='night'&&
+      assign[
+        akey(
+          d,
+          SLOTS[i].id
+        )
+      ]===pid
+    ){
 
- });
+      return true;
 
-}
+    }
 
-function holidayFor(y,m,d){
+  }
 
- return !!state.holidays[
-  dayKey(y,m,d)
- ];
+  return false;
 
 }
 
 function specialNightDay(y,m,d){
 
- var w=new Date(y,m,d).getDay();
+  var w=
+  dowFor(y,m,d);
 
- return (
-  w===5||
-  w===6||
-  w===0||
-  holidayFor(y,m,d)
- );
+  return (
+    w===5||
+    w===6||
+    w===0||
+    !!state.holidays[
+      dateKey(y,m,d)
+    ]
+  );
 
 }
 
 function allowNightChain(
- y1,m1,d1,
- y2,m2,d2
+  y1,m1,d1,
+  y2,m2,d2
 ){
 
- return (
-  specialNightDay(y1,m1,d1)&&
-  specialNightDay(y2,m2,d2)
- );
+  return (
+    specialNightDay(
+      y1,m1,d1
+    )&&
+    specialNightDay(
+      y2,m2,d2
+    )
+  );
 
 }
 
 function prevMonthNight(pid){
 
- var p=prevYM();
+  var p=
+  prevYM();
 
- var data=savedMonth(prevKey());
+  var data=
+  savedMonth(
+    prevKey()
+  );
 
- if(!data)return false;
-
- var last=
- new Date(p.y,p.m+1,0).getDate();
-
- return hadNight(
-  data.assignments||{},
-  pid,
-  last
- );
-
-}
-
-function eligible(pid,d,slot){
-
- if(!active(slot,d))return false;
-
- if(usedToday(pid,d))return false;
-
- if(
-  pid===state.people[state.people.length-1].id&&
-  ['e1','e2','e3'].indexOf(slot.id)<0
- ){
-  return false;
- }
-
- if(!customAllowed(pid,slot.id)){
-  return false;
- }
-
- if(d===1&&prevMonthNight(pid)){
-
-  var p=prevYM();
+  if(!data){
+    return false;
+  }
 
   var last=
-  new Date(p.y,p.m+1,0).getDate();
+  new Date(
+    p.y,
+    p.m+1,
+    0
+  ).getDate();
 
-  if(
-   !(
-    slot.kind==='night'&&
-    allowNightChain(
-     p.y,p.m,last,
-     gy(),cm(),1
-    )
-   )
-  ){
-   return false;
-  }
-
- }
-
- if(
-  d>1&&
-  hadNight(
-   state.assignments,
-   pid,
-   d-1
-  )
- ){
-
-  if(
-   !(
-    slot.kind==='night'&&
-    allowNightChain(
-     gy(),cm(),d-1,
-     gy(),cm(),d
-    )
-   )
-  ){
-   return false;
-  }
-
- }
-
- return true;
-
-}
-
-function emptyCounts(){
-
- var c={
-  group:{},
-  slot:{},
-  total:{},
-  official:{},
-  off:{}
- };
-
- state.people.forEach(function(p){
-
-  c.total[p.id]=0;
-  c.official[p.id]=0;
-  c.off[p.id]=0;
-
- });
-
- Object.keys(GROUPS).forEach(function(g){
-
-  c.group[g]={};
-
-  state.people.forEach(function(p){
-
-   c.group[g][p.id]=0;
-
-  });
-
- });
-
- SLOTS.forEach(function(s){
-
-  c.slot[s.id]={};
-
-  state.people.forEach(function(p){
-
-   c.slot[s.id][p.id]=0;
-
-  });
-
- });
-
- return c;
-
-}
-
-function officialOccurrence(slot,d){
-
- if(!weekdayNoHoliday(d)){
-  return false;
- }
-
- return (
-  slot.id==='v1'||
-  slot.id==='v2'||
-  slot.id==='ot1'||
-  slot.id==='ot2'
- );
-
-}
-
-function addCounts(c,assign,y,m){
-
- Object.keys(assign).forEach(function(k){
-
-  var pid=assign[k];
-
-  if(c.total[pid]===undefined)return;
-
-  var parts=k.split('|');
-
-  var d=parseInt(parts[0],10);
-
-  var sid=parts[1];
-
-  var slot=slotById(sid);
-
-  if(!slot)return;
-
-  var g=SLOT_GROUP[sid];
-
-  c.total[pid]++;
-
-  c.group[g][pid]++;
-
-  c.slot[sid][pid]++;
-
-  var w=
-  new Date(y,m,d).getDay();
-
-  var holiday=
-  holidayFor(y,m,d);
-
-  var official=
-  w>=1&&
-  w<=5&&
-  !holiday&&
-  (
-   sid==='v1'||
-   sid==='v2'||
-   sid==='ot1'||
-   sid==='ot2'
+  return hadNight(
+    data.assignments||{},
+    pid,
+    last
   );
 
-  if(official){
-
-   c.official[pid]++;
-
-  }else{
-
-   c.off[pid]++;
-
-  }
-
- });
-
 }
 
-function previousCounts(){
-
- var c=emptyCounts();
-
- var data=savedMonth(prevKey());
-
- if(data){
-
-  var p=prevYM();
-
-  addCounts(
-   c,
-   data.assignments||{},
-   p.y,
-   p.m
-  );
-
- }
-
- return c;
-
-}
-
-function lastGroupPerson(group){
-
- var data=savedMonth(prevKey());
-
- if(!data)return '';
-
- var best=-1;
-
- var pid='';
-
- Object.keys(data.assignments||{})
- .forEach(function(k){
-
-  var parts=k.split('|');
-
-  var d=parseInt(parts[0],10);
-
-  var sid=parts[1];
-
-  if(
-   GROUPS[group].slots.indexOf(sid)<0
-  ){
-   return;
-  }
-
-  if(d>=best){
-
-   best=d;
-
-   pid=data.assignments[k];
-
-  }
-
- });
-
- return pid;
-
-}
-
-function initialCursor(group){
-
- var data=savedMonth(prevKey());
-
- if(
-  data&&
-  data.rotation&&
-  Number.isFinite(
-   data.rotation[group]
-  )
- ){
-
-  return (
-   data.rotation[group]%
-   state.people.length
-  );
-
- }
-
- var pid=lastGroupPerson(group);
-
- var idx=personIndex(pid);
-
- return idx>=0
- ?(idx+1)%state.people.length
- :0;
-
-}
-
-function queueDistance(pid,cursor){
-
- var i=personIndex(pid);
-
- var n=state.people.length;
-
- return (
-  i-cursor+n
- )%n;
-
-}
-
-function previousAny(pid){
-
- var data=savedMonth(prevKey());
-
- if(!data)return false;
-
- var p=prevYM();
-
- var last=
- new Date(p.y,p.m+1,0).getDate();
-
- return SLOTS.some(function(s){
-
-  return (
-   data.assignments[
-    last+'|'+s.id
-   ]===pid
-  );
-
- });
-
-}
-
-function previousHeavy(pid){
-
- var data=savedMonth(prevKey());
-
- if(!data)return false;
-
- var p=prevYM();
-
- var last=
- new Date(p.y,p.m+1,0).getDate();
-
- return SLOTS.some(function(s){
-
-  return (
-   (
-    s.kind==='night'||
-    s.kind==='long'
-   )&&
-   data.assignments[
-    last+'|'+s.id
-   ]===pid
-  );
-
- });
-
-}
-
-function recentPenalty(pid,d){
-
- if(d===1){
-
-  return previousAny(pid)?3:0;
-
- }
-
- return SLOTS.some(function(s){
-
-  return (
-   state.assignments[
-    akey(d-1,s.id)
-   ]===pid
-  );
-
- })?3:0;
-
-}
-
-function heavyPenalty(pid,d,slot){
-
- if(
-  slot.kind!=='night'&&
-  slot.kind!=='long'
- ){
-  return 0;
- }
-
- if(d===1){
-
-  return previousHeavy(pid)?5:0;
-
- }
-
- return SLOTS.some(function(s){
-
-  return (
-   (
-    s.kind==='night'||
-    s.kind==='long'
-   )&&
-   state.assignments[
-    akey(d-1,s.id)
-   ]===pid
-  );
-
- })?5:0;
-
-}
-
-function positionPenalty(pid,d,sid){
-
- for(
-  var x=d-1;
-  x>=Math.max(1,d-7);
-  x--
- ){
-
-  if(
-   state.assignments[
-    akey(x,sid)
-   ]===pid
-  ){
-   return 1;
-  }
-
- }
-
- return 0;
-
-}
-
-function choose(
- candidates,
- slot,
- current,
- previous,
- d,
- cursor
+/* =========================
+   กติกาเฉพาะบุคคล
+========================= */
+
+function customAllowed(
+  pid,
+  sid
 ){
 
- var group=SLOT_GROUP[slot.id];
-
- var best=null;
-
- var bestKey=null;
-
- candidates.forEach(function(pid){
-
-  var groupLoad=
-  current.group[group][pid]+
-  previous.group[group][pid];
-
-  var periodLoad=
-  officialOccurrence(slot,d)
-  ?current.official[pid]+previous.official[pid]
-  :current.off[pid]+previous.off[pid];
-
-  var slotLoad=
-  current.slot[slot.id][pid]+
-  previous.slot[slot.id][pid];
-
-  var key=[
-
-   groupLoad,
-
-   periodLoad,
-
-   heavyPenalty(pid,d,slot),
-
-   recentPenalty(pid,d),
-
-   slotLoad,
-
-   positionPenalty(
-    pid,
-    d,
-    slot.id
-   ),
-
-   queueDistance(
-    pid,
-    cursor[group]
-   )
-
-  ];
-
-  if(bestKey===null){
-
-   bestKey=key;
-
-   best=pid;
-
-   return;
-
-  }
-
-  for(var i=0;i<key.length;i++){
-
-   if(key[i]<bestKey[i]){
-
-    bestKey=key;
-
-    best=pid;
-
-    break;
-
-   }
-
-   if(key[i]>bestKey[i]){
-    break;
-   }
-
-  }
-
- });
-
- return best;
-
-}
-
-async function runSchedule(){
-
- try{
-
-  if(cloud.connected){
-
-   await ensureCloudMonths([
-    prevKey(),
-    currentKey()
-   ]);
-
-  }
-
-  state.assignments={};
-
-  var previous=
-  previousCounts();
-
-  var current=
-  emptyCounts();
-
-  var cursor={};
-
-  Object.keys(GROUPS)
-  .forEach(function(g){
-
-   cursor[g]=
-   initialCursor(g);
-
-  });
-
-  var order=
-  SLOTS.filter(function(s){
-
-   return s.kind==='night';
-
-  }).concat(
-
-   SLOTS.filter(function(s){
-
-    return s.kind!=='night';
-
-   })
-
-  );
-
   for(
-   var d=1;
-   d<=dim();
-   d++
+    var i=0;
+    i<state.customRules.length;
+    i++
   ){
 
-   for(
-    var i=0;
-    i<order.length;
-    i++
-   ){
-
-    var slot=order[i];
-
-    if(!active(slot,d)){
-     continue;
-    }
-
-    var candidates=
-    state.people
-    .filter(function(p){
-
-     return eligible(
-      p.id,
-      d,
-      slot
-     );
-
-    })
-    .map(function(p){
-
-     return p.id;
-
-    });
-
-    if(!candidates.length){
-     continue;
-    }
-
-    var pid=
-    choose(
-     candidates,
-     slot,
-     current,
-     previous,
-     d,
-     cursor
-    );
-
-    state.assignments[
-     akey(d,slot.id)
-    ]=pid;
-
-    var group=
-    SLOT_GROUP[slot.id];
-
-    current.total[pid]++;
-
-    current.group[group][pid]++;
-
-    current.slot[slot.id][pid]++;
+    var r=
+    state.customRules[i];
 
     if(
-     officialOccurrence(
-      slot,
-      d
-     )
+      r.personId!==pid
     ){
-
-     current.official[pid]++;
-
-    }else{
-
-     current.off[pid]++;
-
+      continue;
     }
 
-    cursor[group]=
-    (
-     personIndex(pid)+1
-    )%
-    state.people.length;
-
-   }
-
-  }
-
-  state.rotation=cursor;
-
-  renderSheet();
-
-  var errors=
-  validate(false);
-
-  saveMonth(true);
-
-  setStatus(
-   errors
-   ?'รันเสร็จ แต่พบข้อขัดแย้ง '+errors+' จุด'
-   :'รันตารางเวรเรียบร้อยแล้ว',
-   !errors
-  );
-
- }catch(err){
-
-  setStatus(
-   'เกิดข้อผิดพลาด: '+err.message,
-   false
-  );
-
- }
-
-}
-
-function mark(d,sid){
-
- var td=
- document.querySelector(
-  'td[data-d="'+d+'"][data-s="'+sid+'"]'
- );
-
- if(td){
-  td.classList.add('conflict');
- }
-
-}
-
-function validate(show){
-
- document
- .querySelectorAll('.conflict')
- .forEach(function(x){
-
-  x.classList.remove('conflict');
-
- });
-
- var errors=0;
-
- for(var d=1;d<=dim();d++){
-
-  var used={};
-
-  SLOTS.forEach(function(slot){
-
-   var pid=
-   state.assignments[
-    akey(d,slot.id)
-   ];
-
-   if(!pid)return;
-
-   if(!active(slot,d)){
-
-    mark(d,slot.id);
-
-    errors++;
-
-   }
-
-   if(used[pid]){
-
-    mark(d,slot.id);
-
-    mark(d,used[pid]);
-
-    errors++;
-
-   }else{
-
-    used[pid]=slot.id;
-
-   }
-
-   if(
-    pid===
-    state.people[
-     state.people.length-1
-    ].id&&
-    ['e1','e2','e3']
-    .indexOf(slot.id)<0
-   ){
-
-    mark(d,slot.id);
-
-    errors++;
-
-   }
-
-   var blocked=false;
-
-   if(
-    d>1&&
-    hadNight(
-     state.assignments,
-     pid,
-     d-1
-    )
-   ){
-
-    blocked=
-    !(
-     slot.kind==='night'&&
-     allowNightChain(
-      gy(),cm(),d-1,
-      gy(),cm(),d
-     )
-    );
-
-   }
-
-   if(
-    d===1&&
-    prevMonthNight(pid)
-   ){
-
-    var p=prevYM();
-
-    var last=
-    new Date(
-     p.y,
-     p.m+1,
-     0
-    ).getDate();
-
-    blocked=
-    !(
-     slot.kind==='night'&&
-     allowNightChain(
-      p.y,p.m,last,
-      gy(),cm(),1
-     )
-    );
-
-   }
-
-   if(blocked){
-
-    mark(d,slot.id);
-
-    errors++;
-
-   }
-
-  });
-
- }
-
- if(show){
-
-  setStatus(
-   errors
-   ?'พบข้อขัดแย้ง '+errors+' จุด'
-   :'ไม่พบข้อขัดแย้ง',
-   !errors
-  );
-
- }
-
- return errors;
-
-}
-
-function renderSummary(){
-
- var c=emptyCounts();
-
- addCounts(
-  c,
-  state.assignments,
-  gy(),
-  cm()
- );
-
- var title=
- 'ตารางหลักการเฉลี่ยเวร เดือน'+
- MONTHS[cm()]+' พ.ศ. '+py();
-
- el('summaryTitle').textContent=
- title;
-
- var h=
- '<table id="summaryTable">'+
- '<thead>'+
- '<tr>'+
- '<th>#</th>'+
- '<th>ชื่อ</th>'+
- '<th>รวม</th>'+
- '<th>ในเวลาราชการ</th>'+
- '<th>นอกเวลา</th>';
-
- Object.keys(GROUPS)
- .forEach(function(g){
-
-  h+='<th>'+
-  GROUPS[g].label+
-  '</th>';
-
- });
-
- SLOTS.forEach(function(s){
-
-  h+='<th>'+
-  s.label+
-  '</th>';
-
- });
-
- h+='</tr></thead><tbody>';
-
- state.people.forEach(function(p,i){
-
-  h+=
-  '<tr>'+
-  '<td>'+(i+1)+'</td>'+
-  '<td>'+escapeHtml(p.name)+'</td>'+
-  '<td>'+c.total[p.id]+'</td>'+
-  '<td>'+c.official[p.id]+'</td>'+
-  '<td>'+c.off[p.id]+'</td>';
-
-  Object.keys(GROUPS)
-  .forEach(function(g){
-
-   h+=
-   '<td>'+
-   c.group[g][p.id]+
-   '</td>';
-
-  });
-
-  SLOTS.forEach(function(s){
-
-   h+=
-   '<td>'+
-   c.slot[s.id][p.id]+
-   '</td>';
-
-  });
-
-  h+='</tr>';
-
- });
-
- h+='</tbody></table>';
-
- el('summary').innerHTML=h;
-
-}
-
-function clearSchedule(){
-
- if(!confirm('ล้างตารางเดือนนี้หรือไม่?')){
-  return;
- }
-
- state.assignments={};
-
- renderSheet();
-
- setStatus(
-  'ล้างตารางแล้ว',
-  true
- );
-
-}
-
-function setStatus(text,ok){
-
- el('status').textContent=text;
-
- el('status').className=
- 'status '+(ok?'ok':'err');
-
-}
-
-function renderHolidays(){
-
- var keys=
- Object.keys(state.holidays).sort();
-
- var h='';
-
- keys.forEach(function(k){
-
-  h+=
-  '<span class="chip">'+
-  k+' '+
-  escapeHtml(
-   state.holidays[k].name||
-   'วันหยุด'
-  )+
-  ' <button class="smallbtn" data-holiday="'+k+'">×</button>'+
-  '</span>';
-
- });
-
- el('chips').innerHTML=h;
-
- el('chips')
- .querySelectorAll(
-  '[data-holiday]'
- )
- .forEach(function(btn){
-
-  btn.onclick=function(){
-
-   delete state.holidays[
-    this.dataset.holiday
-   ];
-
-   saveConfig();
-
-   renderHolidays();
-
-   renderSheet();
-
-  };
-
- });
-
-}
-
-function addHoliday(){
-
- var date=
- el('holidayDate').value;
-
- if(!date)return;
-
- state.holidays[date]={
-
-  name:
-  el('holidayName').value.trim()||
-  'วันหยุด'
-
- };
-
- saveConfig();
-
- renderHolidays();
-
- renderSheet();
-
-}
-
-function savePDF(){
-
- var sheet=
- document.querySelector('.sheet');
-
- if(!sheet)return;
-
- html2canvas(
-  sheet,
-  {
-   scale:2,
-   backgroundColor:'#ffffff'
-  }
- )
- .then(function(canvas){
-
-  var jsPDF=
-  window.jspdf.jsPDF;
-
-  var pdf=
-  new jsPDF({
-   orientation:'landscape',
-   unit:'mm',
-   format:'a4'
-  });
-
-  var pw=
-  pdf.internal.pageSize.getWidth();
-
-  var ph=
-  pdf.internal.pageSize.getHeight();
-
-  var left=10;
-  var right=10;
-  var top=20;
-  var bottom=10;
-
-  var maxW=
-  pw-left-right;
-
-  var maxH=
-  ph-top-bottom;
-
-  var ratio=
-  Math.min(
-   maxW/canvas.width,
-   maxH/canvas.height
-  );
-
-  pdf.addImage(
-   canvas.toDataURL(
-    'image/jpeg',
-    .98
-   ),
-   'JPEG',
-   left,
-   top,
-   canvas.width*ratio,
-   canvas.height*ratio
-  );
-
-  pdf.save(
-   'ตารางเวร_'+
-   MONTHS[cm()]+'_'+
-   py()+'.pdf'
-  );
-
- });
-
-}
-
-function saveSummaryPDF(){
-
- var table=
- document.querySelector(
-  '#summaryTable'
- );
-
- if(!table)return;
-
- html2canvas(
-  table,
-  {
-   scale:2,
-   backgroundColor:'#fff'
-  }
- )
- .then(function(canvas){
-
-  var jsPDF=
-  window.jspdf.jsPDF;
-
-  var pdf=
-  new jsPDF({
-   orientation:'landscape',
-   unit:'mm',
-   format:'a4'
-  });
-
-  var pw=
-  pdf.internal.pageSize.getWidth();
-
-  var ph=
-  pdf.internal.pageSize.getHeight();
-
-  var ratio=
-  Math.min(
-   (pw-20)/canvas.width,
-   (ph-30)/canvas.height
-  );
-
-  pdf.addImage(
-   canvas.toDataURL('image/jpeg',.98),
-   'JPEG',
-   10,
-   20,
-   canvas.width*ratio,
-   canvas.height*ratio
-  );
-
-  pdf.save(
-   'หลักการเฉลี่ยเวร_'+
-   MONTHS[cm()]+'_'+
-   py()+'.pdf'
-  );
-
- });
-
-}
-
-function printSummary(){
-
- var table=
- document.querySelector(
-  '#summaryTable'
- );
-
- if(!table)return;
-
- var w=
- window.open('','_blank');
-
- if(!w)return;
-
- w.document.write(
-  '<html><head>'+
-  '<style>'+
-  '@page{size:A4 landscape;margin:20mm 10mm 10mm 10mm}'+
-  'table{border-collapse:collapse;width:100%;font-size:6px}'+
-  'td,th{border:1px solid #999;padding:2px;text-align:center}'+
-  '</style>'+
-  '</head><body>'+
-  table.outerHTML+
-  '<script>window.onload=function(){window.print()}<\/script>'+
-  '</body></html>'
- );
-
- w.document.close();
-
-}
-
-function openOldSummaryPdf(){
-
- el('summaryPdfFile').click();
-
-}
-
-function normalizeApiUrl(v){
-
- return String(v||'')
- .trim()
- .replace(/\/+$/,'');
-
-}
-
-function loadCloudSettings(){
-
- cloud.apiUrl=
- normalizeApiUrl(
-  localStorage.getItem(
-   'roster_cloud_api'
-  )||
-  'https://roster-scheduler-api.supaporn-gf.workers.dev'
- );
-
- cloud.token=
- localStorage.getItem(
-  'roster_cloud_token'
- )||'';
-
- el('cloudApiUrl').value=
- cloud.apiUrl;
-
- el('cloudToken').value=
- cloud.token;
-
-}
-
-function saveCloudSettings(){
-
- cloud.apiUrl=
- normalizeApiUrl(
-  el('cloudApiUrl').value
- );
-
- cloud.token=
- el('cloudToken').value.trim();
-
- localStorage.setItem(
-  'roster_cloud_api',
-  cloud.apiUrl
- );
-
- localStorage.setItem(
-  'roster_cloud_token',
-  cloud.token
- );
-
-}
-
-async function cloudRequest(path,opts){
-
- if(
-  !cloud.apiUrl||
-  !cloud.token
- ){
-  throw new Error(
-   'ยังไม่ได้ตั้งค่า Cloud'
-  );
- }
-
- opts=opts||{};
-
- opts.headers=
- Object.assign(
-  {
-   'Content-Type':'application/json',
-   'X-Sync-Token':cloud.token
-  },
-  opts.headers||{}
- );
-
- var r=
- await fetch(
-  cloud.apiUrl+path,
-  opts
- );
-
- var data=null;
-
- try{
-  data=await r.json();
- }catch(e){}
-
- if(!r.ok){
-
-  throw new Error(
-   data&&data.error
-   ?data.error
-   :'HTTP '+r.status
-  );
-
- }
-
- return data;
-
-}
-
-async function connectCloud(show){
-
- saveCloudSettings();
-
- try{
-
-  await cloudRequest(
-   '/api/health',
-   {method:'GET'}
-  );
-
-  await cloudRequest(
-   '/api/config',
-   {method:'GET'}
-  );
-
-  cloud.connected=true;
-
-  el('cloudStatus').textContent=
-  'เชื่อมฐานข้อมูลออนไลน์แล้ว • ซิงก์อัตโนมัติเปิดอยู่';
-
-  el('cloudStatus').style.color=
-  '#067647';
-
-  if(show){
-
-   setStatus(
-    'เชื่อมฐานข้อมูลสำเร็จ',
-    true
-   );
+    if(
+      r.type==='only'&&
+      r.slots.indexOf(sid)<0
+    ){
+      return false;
+    }
+
+    if(
+      r.type==='block'&&
+      r.slots.indexOf(sid)>=0
+    ){
+      return false;
+    }
 
   }
 
   return true;
 
- }catch(err){
-
-  cloud.connected=false;
-
-  el('cloudStatus').textContent=
-  'เชื่อมไม่สำเร็จ: '+
-  err.message;
-
-  el('cloudStatus').style.color=
-  '#b42318';
-
-  return false;
-
- }
-
 }
 
-function scheduleCloudConfigSave(payload){
+/* =========================
+   ตรวจสิทธิ์
+========================= */
 
- if(!cloud.connected)return;
+function eligible(
+  pid,
+  d,
+  slot
+){
 
- clearTimeout(cloud.timer);
-
- cloud.timer=
- setTimeout(function(){
-
-  cloudRequest(
-   '/api/config',
-   {
-    method:'PUT',
-    body:JSON.stringify(payload)
-   }
-  );
-
- },500);
-
-}
-
-async function cloudSaveMonth(data){
-
- if(!cloud.connected)return;
-
- await cloudRequest(
-  '/api/month/'+
-  encodeURIComponent(data.key),
-  {
-   method:'PUT',
-   body:JSON.stringify(data)
+  if(
+    !active(slot,d)
+  ){
+    return false;
   }
- );
+
+  if(
+    hasRule(2)&&
+    usedToday(pid,d)
+  ){
+    return false;
+  }
+
+  if(
+    hasRule(4)&&
+    pid===
+    state.people[
+      state.people.length-1
+    ].id&&
+    [
+      'e1',
+      'e2',
+      'e3'
+    ].indexOf(slot.id)<0
+  ){
+    return false;
+  }
+
+  if(
+    !customAllowed(
+      pid,
+      slot.id
+    )
+  ){
+    return false;
+  }
+
+  if(
+    hasRule(3)
+  ){
+
+    if(
+      d===1&&
+      prevMonthNight(pid)
+    ){
+
+      var p=
+      prevYM();
+
+      var last=
+      new Date(
+        p.y,
+        p.m+1,
+        0
+      ).getDate();
+
+      if(
+        !(
+          slot.kind==='night'&&
+          allowNightChain(
+            p.y,
+            p.m,
+            last,
+            gy(),
+            cm(),
+            1
+          )
+        )
+      ){
+
+        return false;
+
+      }
+
+    }
+
+    if(
+      d>1&&
+      hadNight(
+        state.assignments,
+        pid,
+        d-1
+      )
+    ){
+
+      if(
+        !(
+          slot.kind==='night'&&
+          allowNightChain(
+            gy(),
+            cm(),
+            d-1,
+            gy(),
+            cm(),
+            d
+          )
+        )
+      ){
+
+        return false;
+
+      }
+
+    }
+
+  }
+
+  return true;
 
 }
 
-async function fetchCloudMonth(k){
+/* =========================
+   ตัวนับ
+========================= */
 
- if(!cloud.connected)return null;
+function initCounts(){
 
- var r=
- await cloudRequest(
-  '/api/month/'+
-  encodeURIComponent(k),
-  {method:'GET'}
- );
+  var c={
 
- if(
-  r&&
-  r.found&&
-  r.data
- ){
+    total:{},
 
-  localStorage.setItem(
-   storageKey(k),
-   JSON.stringify(r.data)
+    slot:{},
+
+    group:{},
+
+    groupWeekday:{},
+
+    groupOff:{}
+
+  };
+
+  state.people
+  .forEach(function(p){
+
+    c.total[p.id]=0;
+
+  });
+
+  SLOTS
+  .forEach(function(s){
+
+    c.slot[s.id]={};
+
+    state.people
+    .forEach(function(p){
+
+      c.slot[s.id][p.id]=0;
+
+    });
+
+  });
+
+  Object.keys(GROUPS)
+  .forEach(function(g){
+
+    c.group[g]={};
+
+    c.groupWeekday[g]={};
+
+    c.groupOff[g]={};
+
+    state.people
+    .forEach(function(p){
+
+      c.group[g][p.id]=0;
+
+      c.groupWeekday[g][p.id]=0;
+
+      c.groupOff[g][p.id]=0;
+
+    });
+
+  });
+
+  return c;
+
+}
+
+function addCounts(
+  c,
+  assign,
+  y,
+  m
+){
+
+  Object.keys(
+    assign||{}
+  )
+  .forEach(function(k){
+
+    var pid=
+    assign[k];
+
+    if(
+      c.total[pid]===
+      undefined
+    ){
+      return;
+    }
+
+    var parts=
+    k.split('|');
+
+    var d=
+    parseInt(
+      parts[0],
+      10
+    );
+
+    var sid=
+    parts[1];
+
+    var group=
+    SLOT_GROUP[sid];
+
+    c.total[pid]++;
+
+    c.slot[sid][pid]++;
+
+    c.group[group][pid]++;
+
+    var w=
+    dowFor(
+      y,
+      m,
+      d
+    );
+
+    var off=
+    (
+      w===0||
+      w===6||
+      !!state.holidays[
+        dateKey(
+          y,
+          m,
+          d
+        )
+      ]
+    );
+
+    if(off){
+
+      c.groupOff[group][pid]++;
+
+    }else{
+
+      c.groupWeekday[group][pid]++;
+
+    }
+
+  });
+
+}
+
+function previousCounts(){
+
+  var c=
+  initCounts();
+
+  var data=
+  savedMonth(
+    prevKey()
   );
 
-  return r.data;
+  if(data){
 
- }
+    var p=
+    prevYM();
 
- return null;
+    addCounts(
+      c,
+      data.assignments||{},
+      p.y,
+      p.m
+    );
+
+  }
+
+  return c;
 
 }
 
-async function ensureCloudMonths(keys){
+function currentCounts(){
 
- for(var i=0;i<keys.length;i++){
+  var c=
+  initCounts();
+
+  addCounts(
+    c,
+    state.assignments,
+    gy(),
+    cm()
+  );
+
+  return c;
+
+}
+
+/* =========================
+   ระบบหมุนคิว
+========================= */
+
+function personIndex(pid){
+
+  for(
+    var i=0;
+    i<state.people.length;
+    i++
+  ){
+
+    if(
+      state.people[i].id===pid
+    ){
+      return i;
+    }
+
+  }
+
+  return -1;
+
+}
+
+function initialCursor(group){
+
+  var data=
+  savedMonth(
+    prevKey()
+  );
+
+  if(
+    data&&
+    data.rotation&&
+    Number.isFinite(
+      data.rotation[group]
+    )
+  ){
+
+    return (
+      data.rotation[group]%
+      Math.max(
+        1,
+        state.people.length
+      )
+    );
+
+  }
+
+  return 0;
+
+}
+
+function queueDistance(
+  pid,
+  cursor
+){
+
+  var index=
+  personIndex(pid);
+
+  var n=
+  Math.max(
+    1,
+    state.people.length
+  );
+
+  return (
+    index-cursor+n
+  )%n;
+
+}
+
+/* =========================
+   ลดเวรติดกัน
+========================= */
+
+function recentPenalty(
+  pid,
+  d
+){
+
+  if(
+    !hasRule(18)
+  ){
+    return 0;
+  }
+
+  if(
+    d>1&&
+    usedToday(
+      pid,
+      d-1
+    )
+  ){
+    return 3;
+  }
+
+  return 0;
+
+}
+
+function heavyPenalty(
+  pid,
+  d,
+  slot
+){
+
+  if(
+    !hasRule(5)||
+    (
+      slot.kind!=='night'&&
+      slot.kind!=='long'
+    )
+  ){
+    return 0;
+  }
+
+  if(d>1){
+
+    for(
+      var i=0;
+      i<SLOTS.length;
+      i++
+    ){
+
+      var s=
+      SLOTS[i];
+
+      if(
+        (
+          s.kind==='night'||
+          s.kind==='long'
+        )&&
+        state.assignments[
+          akey(
+            d-1,
+            s.id
+          )
+        ]===pid
+      ){
+
+        return 5;
+
+      }
+
+    }
+
+  }
+
+  return 0;
+
+}
+
+function sameSlotPenalty(
+  pid,
+  d,
+  sid
+){
+
+  if(
+    !hasRule(18)
+  ){
+    return 0;
+  }
+
+  for(
+    var x=d-1;
+    x>=Math.max(
+      1,
+      d-7
+    );
+    x--
+  ){
+
+    if(
+      state.assignments[
+        akey(
+          x,
+          sid
+        )
+      ]===pid
+    ){
+
+      return 1;
+
+    }
+
+  }
+
+  return 0;
+
+}
+
+/* =========================
+   เลือกบุคลากร
+========================= */
+
+function choose(
+  candidates,
+  slot,
+  current,
+  previous,
+  d,
+  cursor
+){
+
+  var group=
+  SLOT_GROUP[
+    slot.id
+  ];
+
+  var off=
+  isOffDay(d);
+
+  var best=null;
+
+  var bestKey=null;
+
+  candidates
+  .forEach(function(pid){
+
+    var groupLoad=
+    (
+      current.group[group][pid]||0
+    )+
+    (
+      previous.group[group][pid]||0
+    );
+
+    var classLoad=
+    off
+    ?(
+      (
+        current.groupOff[group][pid]||0
+      )+
+      (
+        previous.groupOff[group][pid]||0
+      )
+    )
+    :(
+      (
+        current.groupWeekday[group][pid]||0
+      )+
+      (
+        previous.groupWeekday[group][pid]||0
+      )
+    );
+
+    var slotLoad=
+    (
+      current.slot[slot.id][pid]||0
+    )+
+    (
+      previous.slot[slot.id][pid]||0
+    );
+
+    var key=[
+
+      groupLoad,
+
+      classLoad,
+
+      heavyPenalty(
+        pid,
+        d,
+        slot
+      ),
+
+      recentPenalty(
+        pid,
+        d
+      ),
+
+      slotLoad,
+
+      sameSlotPenalty(
+        pid,
+        d,
+        slot.id
+      ),
+
+      queueDistance(
+        pid,
+        cursor[group]||0
+      )
+
+    ];
+
+    if(
+      bestKey===null
+    ){
+
+      bestKey=key;
+
+      best=pid;
+
+      return;
+
+    }
+
+    for(
+      var i=0;
+      i<key.length;
+      i++
+    ){
+
+      if(
+        key[i]<
+        bestKey[i]
+      ){
+
+        bestKey=key;
+
+        best=pid;
+
+        break;
+
+      }
+
+      if(
+        key[i]>
+        bestKey[i]
+      ){
+        break;
+      }
+
+    }
+
+  });
+
+  return best;
+
+}
+
+/* =========================
+   รันตาราง
+========================= */
+
+async function runSchedule(){
 
   try{
 
-   await fetchCloudMonth(
-    keys[i]
-   );
+    if(
+      cloud.connected
+    ){
+
+      await ensureCloudMonths([
+        prevKey(),
+        currentKey()
+      ]);
+
+    }
+
+    state.assignments={};
+
+    var previous=
+    previousCounts();
+
+    var current=
+    initCounts();
+
+    var cursor={};
+
+    Object.keys(GROUPS)
+    .forEach(function(group){
+
+      cursor[group]=
+      initialCursor(group);
+
+    });
+
+    var order=[];
+
+    SLOTS
+    .forEach(function(s){
+
+      if(
+        s.kind==='night'
+      ){
+        order.push(s);
+      }
+
+    });
+
+    SLOTS
+    .forEach(function(s){
+
+      if(
+        s.kind!=='night'
+      ){
+        order.push(s);
+      }
+
+    });
+
+    for(
+      var d=1;
+      d<=dim();
+      d++
+    ){
+
+      for(
+        var j=0;
+        j<order.length;
+        j++
+      ){
+
+        var slot=
+        order[j];
+
+        if(
+          !active(
+            slot,
+            d
+          )
+        ){
+          continue;
+        }
+
+        var candidates=[];
+
+        for(
+          var i=0;
+          i<state.people.length;
+          i++
+        ){
+
+          var pid=
+          state.people[i].id;
+
+          if(
+            eligible(
+              pid,
+              d,
+              slot
+            )
+          ){
+
+            candidates.push(
+              pid
+            );
+
+          }
+
+        }
+
+        if(
+          !candidates.length
+        ){
+          continue;
+        }
+
+        pid=
+        choose(
+          candidates,
+          slot,
+          current,
+          previous,
+          d,
+          cursor
+        );
+
+        state.assignments[
+          akey(
+            d,
+            slot.id
+          )
+        ]=pid;
+
+        var group=
+        SLOT_GROUP[
+          slot.id
+        ];
+
+        var off=
+        isOffDay(d);
+
+        current.total[pid]++;
+
+        current.slot[
+          slot.id
+        ][pid]++;
+
+        current.group[
+          group
+        ][pid]++;
+
+        if(off){
+
+          current.groupOff[
+            group
+          ][pid]++;
+
+        }else{
+
+          current.groupWeekday[
+            group
+          ][pid]++;
+
+        }
+
+        cursor[group]=
+        (
+          personIndex(pid)+1
+        )%
+        Math.max(
+          1,
+          state.people.length
+        );
+
+      }
+
+    }
+
+    state.rotation=
+    cursor;
+
+    renderSheet();
+
+    var errors=
+    validate(false);
+
+    saveMonth(true);
+
+    setStatus(
+      errors
+      ?'รันเสร็จ แต่พบข้อขัดแย้ง '+errors+' จุด'
+      :'รันและบันทึกตารางเวรเรียบร้อยแล้ว',
+      !errors
+    );
+
+  }catch(err){
+
+    setStatus(
+      'เกิดข้อผิดพลาด: '+
+      err.message,
+      false
+    );
+
+  }
+
+}
+
+/* =========================
+   หัวตารางแบบ V18
+   เพิ่มแถวเวลา 1 แถว
+========================= */
+
+function buildHeader(){
+
+  var h='';
+
+  h+=
+  '<caption>'+
+  'ตารางเวรผู้ช่วยพยาบาล เดือน'+
+  MONTHS[cm()]+' '+
+  py()+
+  '</caption>';
+
+  h+='<thead>';
+
+  /* แถวหัวตาราง */
+  h+='<tr>';
+
+  /* rowspan = 2 ตามที่ขอ */
+  h+='<th class="date" rowspan="2">วันที่</th>';
+
+  h+='<th rowspan="2">เวร1</th>';
+
+  h+='<th rowspan="2">เวร2</th>';
+
+  h+='<th rowspan="2">OT1</th>';
+
+  h+='<th rowspan="2">OT2</th>';
+
+  h+='<th>SDMC1<br>เช้า</th>';
+
+  h+='<th>SDMC1<br>บ่าย-ดึก</th>';
+
+  h+='<th>SDMC2<br>เช้า</th>';
+
+  h+='<th>SDMC2<br>บ่าย-ดึก</th>';
+
+  h+='<th>SDMC3<br>เช้า</th>';
+
+  h+='<th>SDMC3<br>บ่าย-ดึก</th>';
+
+  h+='<th>SDMC4<br>เช้า</th>';
+
+  h+='<th>SDMC4<br>บ่าย-ดึก</th>';
+
+  h+='<th>SDMC5<br>เช้า-บ่าย</th>';
+
+  h+='<th>SDMC6<br>เช้า-บ่าย</th>';
+
+  h+='<th>SDMC7<br>บ่าย</th>';
+
+  h+='<th>SDMC8<br>บ่าย</th>';
+
+  h+='<th rowspan="2">EXTRA1</th>';
+
+  h+='<th rowspan="2">EXTRA2</th>';
+
+  h+='<th rowspan="2">EXTRA3</th>';
+
+  h+='</tr>';
+
+  /* แถวเวลา */
+  h+='<tr>';
+
+  [
+    's1d',
+    's1n',
+    's2d',
+    's2n',
+    's3d',
+    's3n',
+    's4d',
+    's4n',
+    's5',
+    's6',
+    's7',
+    's8'
+  ]
+  .forEach(function(id){
+
+    h+=
+    '<th>'+
+    slotById(id).time+
+    '</th>';
+
+  });
+
+  h+='</tr>';
+
+  h+='</thead>';
+
+  return h;
+
+}
+
+/* =========================
+   Dropdown รายชื่อ
+========================= */
+
+function optionHtml(selected){
+
+  var h=
+  '<option value=""></option>';
+
+  state.people
+  .forEach(function(p,i){
+
+    h+=
+    '<option value="'+
+    p.id+
+    '"'+
+    (
+      selected===p.id
+      ?' selected'
+      :''
+    )+
+    '>'+
+    (i+1)+'. '+
+    esc(p.name)+
+    '</option>';
+
+  });
+
+  return h;
+
+}
+
+/* =========================
+   Render ตารางหลัก
+========================= */
+
+function renderSheet(){
+
+  var h=
+  buildHeader()+
+  '<tbody>';
+
+  for(
+    var d=1;
+    d<=dim();
+    d++
+  ){
+
+    var cls=
+    isHoliday(d)
+    ?'holiday'
+    :(
+      isWeekend(d)
+      ?'weekend'
+      :''
+    );
+
+    h+=
+    '<tr class="'+
+    cls+
+    '">';
+
+    h+=
+    '<td class="date">'+
+    '<b>'+
+    DAYS[dow(d)]+
+    d+
+    '</b>'+
+    (
+      isHoliday(d)
+      ?'<br><small>นักขัตฯ</small>'
+      :''
+    )+
+    '</td>';
+
+    SLOTS
+    .forEach(function(slot){
+
+      if(
+        !active(
+          slot,
+          d
+        )
+      ){
+
+        h+=
+        '<td class="inactive"></td>';
+
+        return;
+
+      }
+
+      var value=
+      state.assignments[
+        akey(
+          d,
+          slot.id
+        )
+      ]||'';
+
+      h+=
+      '<td data-d="'+
+      d+
+      '" data-s="'+
+      slot.id+
+      '">'+
+
+      '<select data-d="'+
+      d+
+      '" data-s="'+
+      slot.id+
+      '">'+
+
+      optionHtml(
+        value
+      )+
+
+      '</select>'+
+
+      '</td>';
+
+    });
+
+    h+='</tr>';
+
+  }
+
+  h+='</tbody>';
+
+  el('sheet').innerHTML=h;
+
+  el('sheet')
+  .querySelectorAll(
+    'select'
+  )
+  .forEach(function(select){
+
+    select.onchange=
+    function(){
+
+      var d=
+      parseInt(
+        this.dataset.d,
+        10
+      );
+
+      var sid=
+      this.dataset.s;
+
+      if(
+        this.value
+      ){
+
+        state.assignments[
+          akey(
+            d,
+            sid
+          )
+        ]=
+        this.value;
+
+      }else{
+
+        delete state.assignments[
+          akey(
+            d,
+            sid
+          )
+        ];
+
+      }
+
+      validate(false);
+
+      renderSummary();
+
+    };
+
+  });
+
+  validate(false);
+
+  renderSummary();
+
+}
+
+/* =========================
+   ตรวจข้อขัดแย้ง
+========================= */
+
+function mark(
+  d,
+  sid
+){
+
+  var td=
+  document.querySelector(
+    'td[data-d="'+
+    d+
+    '"][data-s="'+
+    sid+
+    '"]'
+  );
+
+  if(td){
+
+    td.classList.add(
+      'conflict'
+    );
+
+  }
+
+}
+
+function validate(show){
+
+  document
+  .querySelectorAll(
+    '.conflict'
+  )
+  .forEach(function(x){
+
+    x.classList.remove(
+      'conflict'
+    );
+
+  });
+
+  var errors=0;
+
+  for(
+    var d=1;
+    d<=dim();
+    d++
+  ){
+
+    var seen={};
+
+    SLOTS
+    .forEach(function(slot){
+
+      var pid=
+      state.assignments[
+        akey(
+          d,
+          slot.id
+        )
+      ];
+
+      if(!pid){
+        return;
+      }
+
+      if(
+        !active(
+          slot,
+          d
+        )
+      ){
+
+        mark(
+          d,
+          slot.id
+        );
+
+        errors++;
+
+      }
+
+      /* ห้ามซ้ำวันเดียวกัน */
+      if(
+        hasRule(2)
+      ){
+
+        if(
+          seen[pid]
+        ){
+
+          mark(
+            d,
+            slot.id
+          );
+
+          mark(
+            d,
+            seen[pid]
+          );
+
+          errors++;
+
+        }else{
+
+          seen[pid]=
+          slot.id;
+
+        }
+
+      }
+
+      /* รายชื่อสุดท้าย EXTRA เท่านั้น */
+      if(
+        hasRule(4)&&
+        pid===
+        state.people[
+          state.people.length-1
+        ].id&&
+        [
+          'e1',
+          'e2',
+          'e3'
+        ].indexOf(
+          slot.id
+        )<0
+      ){
+
+        mark(
+          d,
+          slot.id
+        );
+
+        errors++;
+
+      }
+
+      /* หลังบ่ายดึก */
+      if(
+        hasRule(3)
+      ){
+
+        var blocked=false;
+
+        if(
+          d===1&&
+          prevMonthNight(pid)
+        ){
+
+          var p=
+          prevYM();
+
+          var last=
+          new Date(
+            p.y,
+            p.m+1,
+            0
+          ).getDate();
+
+          blocked=
+          !(
+            slot.kind==='night'&&
+            allowNightChain(
+              p.y,
+              p.m,
+              last,
+              gy(),
+              cm(),
+              1
+            )
+          );
+
+        }else if(
+          d>1&&
+          hadNight(
+            state.assignments,
+            pid,
+            d-1
+          )
+        ){
+
+          blocked=
+          !(
+            slot.kind==='night'&&
+            allowNightChain(
+              gy(),
+              cm(),
+              d-1,
+              gy(),
+              cm(),
+              d
+            )
+          );
+
+        }
+
+        if(blocked){
+
+          mark(
+            d,
+            slot.id
+          );
+
+          errors++;
+
+        }
+
+      }
+
+    });
+
+  }
+
+  if(show){
+
+    setStatus(
+      errors
+      ?'พบข้อขัดแย้ง '+errors+' จุด'
+      :'ไม่พบข้อขัดแย้ง',
+      !errors
+    );
+
+  }
+
+  return errors;
+
+}
+
+/* =========================
+   เดือน
+========================= */
+
+function buildMonths(){
+
+  el('month').innerHTML=
+  MONTHS
+  .map(function(m,i){
+
+    return (
+      '<option value="'+
+      i+
+      '">'+
+      m+
+      '</option>'
+    );
+
+  })
+  .join('');
+
+}
+
+/* =========================
+   รายชื่อ
+========================= */
+
+function buildNames(){
+
+  el('names').innerHTML=
+  state.people
+  .map(function(p,i){
+
+    return (
+
+      '<div class="name-row">'+
+
+      '<b>'+
+      (i+1)+
+      '.</b>'+
+
+      '<input data-pid="'+
+      p.id+
+      '" value="'+
+      esc(p.name)+
+      '">' +
+
+      '<span class="lastbadge" style="display:'+
+      (
+        i===
+        state.people.length-1
+        ?'inline-block'
+        :'none'
+      )+
+      '">'+
+      'EXTRA1–3 เท่านั้น'+
+      '</span>'+
+
+      '</div>'
+
+    );
+
+  })
+  .join('');
+
+  el('personCount')
+  .textContent=
+  'จำนวน '+
+  state.people.length+
+  ' รายชื่อ';
+
+  el('names')
+  .querySelectorAll(
+    'input'
+  )
+  .forEach(function(input){
+
+    input.onchange=
+    function(){
+
+      var pid=
+      this.dataset.pid;
+
+      state.people
+      .forEach(function(p){
+
+        if(
+          p.id===pid
+        ){
+
+          p.name=
+          input.value.trim()||
+          p.name;
+
+        }
+
+      });
+
+      saveConfig();
+
+      buildCustomOptions();
+
+      renderSheet();
+
+    };
+
+  });
+
+  buildCustomOptions();
+
+}
+
+function addPerson(){
+
+  state.people.push({
+
+    id:
+    'p_'+Date.now(),
+
+    name:
+    'บุคลากร '+
+    (
+      state.people.length+1
+    )
+
+  });
+
+  saveConfig();
+
+  buildNames();
+
+  renderSheet();
+
+}
+
+function removePerson(){
+
+  if(
+    state.people.length<=1
+  ){
+    return;
+  }
+
+  var removed=
+  state.people.pop();
+
+  state.customRules=
+  state.customRules
+  .filter(function(r){
+
+    return (
+      r.personId!==
+      removed.id
+    );
+
+  });
+
+  saveConfig();
+
+  buildNames();
+
+  renderCustomRules();
+
+  renderSheet();
+
+}
+
+/* =========================
+   วันหยุด
+========================= */
+
+function renderHolidays(){
+
+  var h='';
+
+  Object.keys(
+    state.holidays
+  )
+  .sort()
+  .forEach(function(k){
+
+    h+=
+
+    '<span class="chip">'+
+
+    k+' '+
+
+    esc(
+      state.holidays[k].name||
+      'วันหยุด'
+    )+
+
+    ' <button class="smallbtn" data-holiday="'+
+    k+
+    '">×</button>'+
+
+    '</span>';
+
+  });
+
+  el('chips').innerHTML=h;
+
+  el('chips')
+  .querySelectorAll(
+    '[data-holiday]'
+  )
+  .forEach(function(button){
+
+    button.onclick=
+    function(){
+
+      delete state.holidays[
+        this.dataset.holiday
+      ];
+
+      saveConfig();
+
+      renderHolidays();
+
+      renderSheet();
+
+    };
+
+  });
+
+}
+
+function addHoliday(){
+
+  var d=
+  el('holidayDate').value;
+
+  if(!d){
+    return;
+  }
+
+  state.holidays[d]={
+
+    name:
+    el('holidayName')
+    .value
+    .trim()||
+    'วันหยุด'
+
+  };
+
+  saveConfig();
+
+  renderHolidays();
+
+  renderSheet();
+
+}
+
+/* =========================
+   เพิ่ม/แก้ไข/ลบกติกา 20 ข้อ
+========================= */
+
+function renderRules(){
+
+  el('ruleList').innerHTML=
+
+  state.rules
+  .map(function(rule,i){
+
+    return (
+
+      '<div class="rule-item">'+
+
+      '<b>'+
+      (i+1)+
+      '.</b> ' +
+
+      '<span>'+
+      esc(rule.text)+
+      '</span>'+
+
+      '<div class="rule-actions">'+
+
+      '<button class="smallbtn" data-edit-rule="'+
+      rule.id+
+      '">'+
+      'แก้ไข'+
+      '</button>'+
+
+      '<button class="smallbtn danger" data-delete-rule="'+
+      rule.id+
+      '">'+
+      'ลบ'+
+      '</button>'+
+
+      '</div>'+
+
+      '</div>'
+
+    );
+
+  })
+  .join('');
+
+  el('ruleList')
+  .querySelectorAll(
+    '[data-edit-rule]'
+  )
+  .forEach(function(button){
+
+    button.onclick=
+    function(){
+
+      var id=
+      this.dataset.editRule;
+
+      var rule=
+      state.rules
+      .find(function(r){
+
+        return r.id===id;
+
+      });
+
+      if(!rule){
+        return;
+      }
+
+      var text=
+      prompt(
+        'แก้ไขกติกา',
+        rule.text
+      );
+
+      if(
+        text!==null&&
+        text.trim()
+      ){
+
+        rule.text=
+        text.trim();
+
+        saveConfig();
+
+        renderRules();
+
+      }
+
+    };
+
+  });
+
+  el('ruleList')
+  .querySelectorAll(
+    '[data-delete-rule]'
+  )
+  .forEach(function(button){
+
+    button.onclick=
+    function(){
+
+      var id=
+      this.dataset.deleteRule;
+
+      if(
+        !confirm(
+          'ลบกติกาข้อนี้หรือไม่?'
+        )
+      ){
+        return;
+      }
+
+      state.rules=
+      state.rules
+      .filter(function(r){
+
+        return r.id!==id;
+
+      });
+
+      saveConfig();
+
+      renderRules();
+
+      renderSheet();
+
+    };
+
+  });
+
+}
+
+function addRule(){
+
+  var text=
+  el('newRuleText')
+  .value
+  .trim();
+
+  if(!text){
+    return;
+  }
+
+  state.rules.push({
+
+    id:
+    'custom_'+
+    Date.now(),
+
+    text:text
+
+  });
+
+  el('newRuleText').value='';
+
+  saveConfig();
+
+  renderRules();
+
+}
+
+/* =========================
+   กติกาเฉพาะบุคคล
+========================= */
+
+function buildCustomOptions(){
+
+  el('customPerson').innerHTML=
+
+  state.people
+  .map(function(p,i){
+
+    return (
+
+      '<option value="'+
+      p.id+
+      '">'+
+      (i+1)+'. '+
+      esc(p.name)+
+      '</option>'
+
+    );
+
+  })
+  .join('');
+
+  el('customSlots').innerHTML=
+
+  SLOTS
+  .map(function(s){
+
+    return (
+
+      '<option value="'+
+      s.id+
+      '">'+
+      s.label+
+      '</option>'
+
+    );
+
+  })
+  .join('');
+
+}
+
+function selectedValues(select){
+
+  return Array.from(
+    select.options
+  )
+  .filter(function(option){
+
+    return option.selected;
+
+  })
+  .map(function(option){
+
+    return option.value;
+
+  });
+
+}
+
+function addCustomRule(){
+
+  var pid=
+  el('customPerson').value;
+
+  var type=
+  el('customRuleType').value;
+
+  var slots=
+  selectedValues(
+    el('customSlots')
+  );
+
+  if(
+    !pid||
+    !slots.length
+  ){
+    return;
+  }
+
+  state.customRules.push({
+
+    id:
+    'cr_'+
+    Date.now(),
+
+    personId:pid,
+
+    type:type,
+
+    slots:slots
+
+  });
+
+  saveConfig();
+
+  renderCustomRules();
+
+}
+
+function renderCustomRules(){
+
+  el('customRules').innerHTML=
+
+  state.customRules
+  .map(function(rule){
+
+    var person=
+    state.people
+    .find(function(p){
+
+      return (
+        p.id===
+        rule.personId
+      );
+
+    })||
+    {
+      name:
+      rule.personId
+    };
+
+    var labels=
+    rule.slots
+    .map(function(id){
+
+      var s=
+      slotById(id);
+
+      return s
+      ?s.label
+      :id;
+
+    });
+
+    return (
+
+      '<span class="chip">'+
+
+      esc(person.name)+
+
+      ' → '+
+
+      (
+        rule.type==='block'
+        ?'ห้าม '
+        :'เฉพาะ '
+      )+
+
+      esc(
+        labels.join(', ')
+      )+
+
+      ' <button class="smallbtn" data-custom-rule="'+
+      rule.id+
+      '">×</button>'+
+
+      '</span>'
+
+    );
+
+  })
+  .join('');
+
+  el('customRules')
+  .querySelectorAll(
+    '[data-custom-rule]'
+  )
+  .forEach(function(button){
+
+    button.onclick=
+    function(){
+
+      var id=
+      this.dataset.customRule;
+
+      state.customRules=
+      state.customRules
+      .filter(function(r){
+
+        return r.id!==id;
+
+      });
+
+      saveConfig();
+
+      renderCustomRules();
+
+      renderSheet();
+
+    };
+
+  });
+
+}
+
+/* =========================
+   ตารางหลักการเฉลี่ยเวร
+   23 คอลัมน์
+========================= */
+
+function renderSummary(){
+
+  var current=
+  currentCounts();
+
+  var previous=
+  previousCounts();
+
+  var title=
+  'ตารางหลักการเฉลี่ยเวร เดือน'+
+  MONTHS[cm()]+
+  ' พ.ศ. '+
+  py();
+
+  el('summaryTitle')
+  .textContent=
+  title;
+
+  var columns=[
+
+    'v1',
+    'v2',
+
+    'ot1',
+    'ot2',
+
+    's1d',
+    's1n',
+
+    's2d',
+    's2n',
+
+    's3d',
+    's3n',
+
+    's4d',
+    's4n',
+
+    's5',
+    's6',
+
+    's7',
+    's8',
+
+    'e1',
+    'e2',
+    'e3'
+
+  ];
+
+  var h=
+
+  '<table id="summaryTable">'+
+
+  '<thead>'+
+
+  '<tr>'+
+
+  '<th>ลำดับ</th>'+
+
+  '<th>ชื่อ</th>'+
+
+  '<th>รวมเวรทั้งหมดเดือนก่อนหน้า</th>'+
+
+  '<th>รวมเวรทั้งหมดเดือนนี้</th>';
+
+  columns
+  .forEach(function(id){
+
+    h+=
+    '<th>'+
+    slotById(id).label+
+    '</th>';
+
+  });
+
+  h+=
+  '</tr>'+
+
+  '</thead>'+
+
+  '<tbody>';
+
+  state.people
+  .forEach(function(person,i){
+
+    h+=
+    '<tr>';
+
+    h+=
+    '<td>'+
+    (i+1)+
+    '</td>';
+
+    h+=
+    '<td>'+
+    esc(person.name)+
+    '</td>';
+
+    h+=
+    '<td>'+
+    previous.total[
+      person.id
+    ]+
+    '</td>';
+
+    h+=
+    '<td>'+
+    current.total[
+      person.id
+    ]+
+    '</td>';
+
+    columns
+    .forEach(function(id){
+
+      h+=
+      '<td>'+
+      current.slot[id][
+        person.id
+      ]+
+      '</td>';
+
+    });
+
+    h+=
+    '</tr>';
+
+  });
+
+  h+=
+  '</tbody>'+
+  '</table>';
+
+  el('summary').innerHTML=h;
+
+}
+
+/* =========================
+   สร้าง PDF
+========================= */
+
+function createPdfFromElement(
+  node,
+  filename
+){
+
+  return html2canvas(
+    node,
+    {
+      scale:2,
+      useCORS:true,
+      backgroundColor:'#ffffff',
+      logging:false
+    }
+  )
+  .then(function(canvas){
+
+    var jsPDF=
+    window.jspdf.jsPDF;
+
+    var pdf=
+    new jsPDF({
+
+      orientation:'landscape',
+
+      unit:'mm',
+
+      format:'a4',
+
+      compress:true
+
+    });
+
+    var pw=
+    pdf.internal.pageSize
+    .getWidth();
+
+    var ph=
+    pdf.internal.pageSize
+    .getHeight();
+
+    /* ตามที่กำหนด:
+       บน 20 mm
+       ล่าง 15 mm
+       ซ้าย 10 mm
+       ขวา 10 mm
+    */
+
+    var left=10;
+
+    var right=10;
+
+    var top=20;
+
+    var bottom=15;
+
+    var maxW=
+    pw-left-right;
+
+    var maxH=
+    ph-top-bottom;
+
+    var ratio=
+    Math.min(
+
+      maxW/
+      canvas.width,
+
+      maxH/
+      canvas.height
+
+    );
+
+    pdf.addImage(
+
+      canvas.toDataURL(
+        'image/jpeg',
+        0.98
+      ),
+
+      'JPEG',
+
+      left,
+
+      top,
+
+      canvas.width*
+      ratio,
+
+      canvas.height*
+      ratio,
+
+      undefined,
+
+      'FAST'
+
+    );
+
+    pdf.save(
+      filename
+    );
+
+  });
+
+}
+
+/* =========================
+   PDF ตารางเวรแบบ V18
+========================= */
+
+function saveSchedulePDF(){
+
+  var table=
+  el('sheet');
+
+  if(!table){
+    return;
+  }
+
+  var clone=
+  table.cloneNode(true);
+
+  clone.style.minWidth='0';
+
+  clone.style.width='1800px';
+
+  clone.style.fontSize='10px';
+
+  clone.style.tableLayout='fixed';
+
+  clone.style.borderCollapse='collapse';
+
+  clone
+  .querySelectorAll(
+    'th,.date'
+  )
+  .forEach(function(x){
+
+    x.style.position='static';
+
+  });
+
+  /* Dropdown -> ข้อความ */
+  clone
+  .querySelectorAll(
+    'select'
+  )
+  .forEach(function(select){
+
+    var span=
+    document.createElement(
+      'span'
+    );
+
+    span.textContent=
+    select.options[
+      select.selectedIndex
+    ]
+    ?select.options[
+      select.selectedIndex
+    ].text
+    :'';
+
+    span.style.display='block';
+
+    span.style.textAlign='center';
+
+    span.style.fontSize='10px';
+
+    select.parentNode
+    .replaceChild(
+      span,
+      select
+    );
+
+  });
+
+  /* สีเทาเฉพาะวันเสาร์/อาทิตย์/นักขัตฤกษ์ */
+  clone
+  .querySelectorAll(
+    'tbody tr'
+  )
+  .forEach(function(row){
+
+    var shade=
+    row.classList.contains(
+      'weekend'
+    )||
+    row.classList.contains(
+      'holiday'
+    );
+
+    row
+    .querySelectorAll(
+      'td'
+    )
+    .forEach(function(td){
+
+      td.style.background=
+      shade
+      ?'#e6e6e6'
+      :'#ffffff';
+
+      td.style.color='#111';
+
+    });
+
+  });
+
+  var wrap=
+  document.createElement(
+    'div'
+  );
+
+  wrap.style.position='fixed';
+
+  wrap.style.left='-12000px';
+
+  wrap.style.top='0';
+
+  wrap.style.width='1800px';
+
+  wrap.style.background='#fff';
+
+  wrap.appendChild(
+    clone
+  );
+
+  document.body
+  .appendChild(
+    wrap
+  );
+
+  createPdfFromElement(
+
+    wrap,
+
+    'ตารางเวร_'+
+    MONTHS[cm()]+'_'
+    +py()+
+    '.pdf'
+
+  )
+  .then(function(){
+
+    document.body
+    .removeChild(
+      wrap
+    );
+
+    setStatus(
+      'บันทึก PDF ตารางเวรเรียบร้อยแล้ว',
+      true
+    );
+
+  })
+  .catch(function(err){
+
+    try{
+      document.body.removeChild(wrap);
+    }catch(e){}
+
+    setStatus(
+      'สร้าง PDF ไม่สำเร็จ: '+
+      err.message,
+      false
+    );
+
+  });
+
+}
+
+/* =========================
+   PDF ตารางเฉลี่ย
+========================= */
+
+function saveSummaryPDF(){
+
+  var table=
+  el('summaryTable');
+
+  if(!table){
+    return;
+  }
+
+  var clone=
+  table.cloneNode(true);
+
+  clone.style.width='3000px';
+
+  clone.style.borderCollapse='collapse';
+
+  clone
+  .querySelectorAll(
+    'th,td'
+  )
+  .forEach(function(cell){
+
+    cell.style.position='static';
+
+    cell.style.fontSize='12px';
+
+    cell.style.padding='3px';
+
+    cell.style.border=
+    '1px solid #bbb';
+
+  });
+
+  var wrap=
+  document.createElement(
+    'div'
+  );
+
+  wrap.style.position='fixed';
+
+  wrap.style.left='-12000px';
+
+  wrap.style.top='0';
+
+  wrap.style.width='3000px';
+
+  wrap.style.background='#fff';
+
+  var title=
+  document.createElement(
+    'h2'
+  );
+
+  title.textContent=
+  'ตารางหลักการเฉลี่ยเวร เดือน'+
+  MONTHS[cm()]+
+  ' พ.ศ. '+
+  py();
+
+  title.style.textAlign=
+  'center';
+
+  title.style.margin=
+  '0 0 12px 0';
+
+  wrap.appendChild(
+    title
+  );
+
+  wrap.appendChild(
+    clone
+  );
+
+  document.body
+  .appendChild(
+    wrap
+  );
+
+  createPdfFromElement(
+
+    wrap,
+
+    'หลักการเฉลี่ยเวร_'+
+    MONTHS[cm()]+'_'
+    +py()+
+    '.pdf'
+
+  )
+  .then(function(){
+
+    document.body
+    .removeChild(
+      wrap
+    );
+
+    setStatus(
+      'บันทึก PDF หลักการเฉลี่ยเวรเรียบร้อยแล้ว',
+      true
+    );
+
+  })
+  .catch(function(err){
+
+    try{
+      document.body.removeChild(wrap);
+    }catch(e){}
+
+    setStatus(
+      'สร้าง PDF หลักการเฉลี่ยเวรไม่สำเร็จ: '+
+      err.message,
+      false
+    );
+
+  });
+
+}
+
+/* =========================
+   Print ตารางเฉลี่ย
+========================= */
+
+function printSummary(){
+
+  var table=
+  el('summaryTable');
+
+  if(!table){
+    return;
+  }
+
+  var win=
+  window.open(
+    '',
+    '_blank'
+  );
+
+  if(!win){
+    return;
+  }
+
+  var title=
+  'ตารางหลักการเฉลี่ยเวร เดือน'+
+  MONTHS[cm()]+
+  ' พ.ศ. '+
+  py();
+
+  win.document.write(
+
+    '<!DOCTYPE html>'+
+
+    '<html lang="th">'+
+
+    '<head>'+
+
+    '<meta charset="utf-8">'+
+
+    '<title>'+
+    title+
+    '</title>'+
+
+    '<style>'+
+
+    '@page{' +
+    'size:A4 landscape;' +
+    'margin:20mm 10mm 15mm 10mm;' +
+    '}' +
+
+    'body{' +
+    'font-family:-apple-system,BlinkMacSystemFont,"Noto Sans Thai",Tahoma,Arial,sans-serif;' +
+    'margin:0;' +
+    '}' +
+
+    'h2{' +
+    'text-align:center;' +
+    'font-size:15px;' +
+    '}' +
+
+    'table{' +
+    'border-collapse:collapse;' +
+    'width:100%;' +
+    'font-size:6px;' +
+    '}' +
+
+    'th,td{' +
+    'border:1px solid #999;' +
+    'padding:2px;' +
+    'text-align:center;' +
+    'white-space:nowrap;' +
+    '}' +
+
+    'th{' +
+    'background:#e7e7ea;' +
+    '}' +
+
+    '</style>'+
+
+    '</head>'+
+
+    '<body>'+
+
+    '<h2>'+
+    title+
+    '</h2>'+
+
+    table.outerHTML+
+
+    '<script>'+
+    'window.onload=function(){window.print()};'+
+    '<\/script>'+
+
+    '</body>'+
+
+    '</html>'
+
+  );
+
+  win.document.close();
+
+}
+
+/* =========================
+   เปิด PDF ย้อนหลัง
+========================= */
+
+function openSummaryPdf(){
+
+  el('summaryPdfFile')
+  .click();
+
+}
+
+/* =========================
+   Cloud Sync
+========================= */
+
+function normalizeUrl(v){
+
+  return String(v||'')
+  .trim()
+  .replace(/\/+$/,'');
+
+}
+
+function loadCloudSettings(){
+
+  cloud.apiUrl=
+  normalizeUrl(
+
+    localStorage.getItem(
+      'roster_cloud_api'
+    )||
+
+    'https://roster-scheduler-api.supaporn-gf.workers.dev'
+
+  );
+
+  cloud.token=
+  localStorage.getItem(
+    'roster_cloud_token'
+  )||'';
+
+  el('cloudApiUrl').value=
+  cloud.apiUrl;
+
+  el('cloudToken').value=
+  cloud.token;
+
+}
+
+function saveCloudSettings(){
+
+  cloud.apiUrl=
+  normalizeUrl(
+    el('cloudApiUrl').value
+  );
+
+  cloud.token=
+  el('cloudToken')
+  .value
+  .trim();
+
+  localStorage.setItem(
+    'roster_cloud_api',
+    cloud.apiUrl
+  );
+
+  localStorage.setItem(
+    'roster_cloud_token',
+    cloud.token
+  );
+
+}
+
+async function cloudRequest(
+  path,
+  options
+){
+
+  if(
+    !cloud.apiUrl||
+    !cloud.token
+  ){
+
+    throw new Error(
+      'ยังไม่ได้ตั้งค่า Cloud'
+    );
+
+  }
+
+  options=
+  options||{};
+
+  options.headers=
+  Object.assign(
+
+    {
+      'Content-Type':
+      'application/json',
+
+      'X-Sync-Token':
+      cloud.token
+    },
+
+    options.headers||{}
+
+  );
+
+  var response=
+  await fetch(
+
+    cloud.apiUrl+
+    path,
+
+    options
+
+  );
+
+  var data=null;
+
+  try{
+
+    data=
+    await response.json();
 
   }catch(e){}
 
- }
+  if(
+    !response.ok
+  ){
+
+    throw new Error(
+
+      data&&data.error
+      ?data.error
+      :'HTTP '+
+      response.status
+
+    );
+
+  }
+
+  return data;
+
+}
+
+async function connectCloud(show){
+
+  saveCloudSettings();
+
+  try{
+
+    await cloudRequest(
+
+      '/api/health',
+
+      {
+        method:'GET'
+      }
+
+    );
+
+    await cloudRequest(
+
+      '/api/config',
+
+      {
+        method:'GET'
+      }
+
+    );
+
+    cloud.connected=true;
+
+    el('cloudStatus')
+    .textContent=
+    'เชื่อมฐานข้อมูลออนไลน์แล้ว • ซิงก์อัตโนมัติเปิดอยู่';
+
+    el('cloudStatus')
+    .style.color=
+    '#067647';
+
+    if(show){
+
+      setStatus(
+        'เชื่อมฐานข้อมูลสำเร็จ',
+        true
+      );
+
+    }
+
+    return true;
+
+  }catch(err){
+
+    cloud.connected=false;
+
+    el('cloudStatus')
+    .textContent=
+    'เชื่อมไม่สำเร็จ: '+
+    err.message;
+
+    el('cloudStatus')
+    .style.color=
+    '#b42318';
+
+    return false;
+
+  }
+
+}
+
+function scheduleCloudConfigSave(
+  payload
+){
+
+  if(
+    !cloud.connected
+  ){
+    return;
+  }
+
+  clearTimeout(
+    cloud.timer
+  );
+
+  cloud.timer=
+  setTimeout(
+    function(){
+
+      cloudRequest(
+
+        '/api/config',
+
+        {
+          method:'PUT',
+
+          body:
+          JSON.stringify(
+            payload
+          )
+        }
+
+      )
+      .catch(function(){});
+
+    },
+    500
+  );
+
+}
+
+async function cloudSaveMonth(
+  data
+){
+
+  if(
+    !cloud.connected
+  ){
+    return;
+  }
+
+  try{
+
+    await cloudRequest(
+
+      '/api/month/'+
+      encodeURIComponent(
+        data.key
+      ),
+
+      {
+        method:'PUT',
+
+        body:
+        JSON.stringify(
+          data
+        )
+      }
+
+    );
+
+  }catch(e){}
+
+}
+
+async function fetchCloudMonth(
+  key
+){
+
+  if(
+    !cloud.connected
+  ){
+    return null;
+  }
+
+  var response=
+  await cloudRequest(
+
+    '/api/month/'+
+    encodeURIComponent(
+      key
+    ),
+
+    {
+      method:'GET'
+    }
+
+  );
+
+  if(
+    response&&
+    response.found&&
+    response.data
+  ){
+
+    localStorage.setItem(
+
+      storageKey(key),
+
+      JSON.stringify(
+        response.data
+      )
+
+    );
+
+    return response.data;
+
+  }
+
+  return null;
+
+}
+
+async function ensureCloudMonths(
+  keys
+){
+
+  for(
+    var i=0;
+    i<keys.length;
+    i++
+  ){
+
+    try{
+
+      await fetchCloudMonth(
+        keys[i]
+      );
+
+    }catch(e){}
+
+  }
 
 }
 
 async function uploadCloud(){
 
- if(
-  !cloud.connected&&
-  !(await connectCloud(false))
- ){
-  return;
- }
-
- await cloudRequest(
-  '/api/config',
-  {
-   method:'PUT',
-   body:JSON.stringify(
-    configPayload()
-   )
-  }
- );
-
- for(
-  var i=0;
-  i<localStorage.length;
-  i++
- ){
-
-  var k=
-  localStorage.key(i);
-
   if(
-   k&&
-   k.indexOf(
-    'roster_month_v7_'
-   )===0
+    !cloud.connected&&
+    !(await connectCloud(false))
+  ){
+    return;
+  }
+
+  await cloudRequest(
+
+    '/api/config',
+
+    {
+      method:'PUT',
+
+      body:
+      JSON.stringify(
+        configPayload()
+      )
+    }
+
+  );
+
+  for(
+    var i=0;
+    i<localStorage.length;
+    i++
   ){
 
-   var key=
-   k.replace(
-    'roster_month_v7_',
-    ''
-   );
+    var key=
+    localStorage.key(i);
 
-   var data=
-   parseJSON(
-    localStorage.getItem(k),
-    null
-   );
+    if(
+      key&&
+      key.indexOf(
+        'roster_month_v7_'
+      )===0
+    ){
 
-   if(data){
+      var data=
+      parse(
+        localStorage.getItem(
+          key
+        ),
+        null
+      );
 
-    await cloudRequest(
-     '/api/month/'+
-     encodeURIComponent(key),
-     {
-      method:'PUT',
-      body:JSON.stringify(data)
-     }
-    );
+      if(data){
 
-   }
+        await cloudRequest(
+
+          '/api/month/'+
+          encodeURIComponent(
+            key.replace(
+              'roster_month_v7_',
+              ''
+            )
+          ),
+
+          {
+            method:'PUT',
+
+            body:
+            JSON.stringify(
+              data
+            )
+          }
+
+        );
+
+      }
+
+    }
 
   }
 
- }
-
- setStatus(
-  'อัปโหลดข้อมูลออนไลน์แล้ว',
-  true
- );
+  setStatus(
+    'อัปโหลดข้อมูลออนไลน์แล้ว',
+    true
+  );
 
 }
 
 async function downloadCloud(){
 
- if(
-  !cloud.connected&&
-  !(await connectCloud(false))
- ){
-  return;
- }
+  if(
+    !cloud.connected&&
+    !(await connectCloud(false))
+  ){
+    return;
+  }
 
- var config=
- await cloudRequest(
-  '/api/config',
-  {method:'GET'}
- );
+  var config=
+  await cloudRequest(
 
- if(
-  config&&
-  config.found&&
-  config.data
- ){
+    '/api/config',
 
-  localStorage.setItem(
-   'roster_config_v8',
-   JSON.stringify(config.data)
+    {
+      method:'GET'
+    }
+
   );
 
+  if(
+    config&&
+    config.found&&
+    config.data
+  ){
+
+    localStorage.setItem(
+
+      'roster_config_v8',
+
+      JSON.stringify(
+        config.data
+      )
+
+    );
+
+    loadConfig();
+
+    buildNames();
+
+    renderHolidays();
+
+    renderRules();
+
+    renderCustomRules();
+
+  }
+
+  var list=
+  await cloudRequest(
+
+    '/api/months',
+
+    {
+      method:'GET'
+    }
+
+  );
+
+  var months=
+  list.months||[];
+
+  for(
+    var i=0;
+    i<months.length;
+    i++
+  ){
+
+    await fetchCloudMonth(
+      months[i].key
+    );
+
+  }
+
+  loadMonth(true);
+
+  setStatus(
+    'โหลดข้อมูลออนไลน์แล้ว',
+    true
+  );
+
+}
+
+async function initCloud(){
+
+  loadCloudSettings();
+
+  if(
+    !cloud.apiUrl||
+    !cloud.token
+  ){
+    return;
+  }
+
+  if(
+    await connectCloud(false)
+  ){
+
+    await ensureCloudMonths([
+      prevKey(),
+      currentKey()
+    ]);
+
+    loadMonth(true);
+
+  }
+
+}
+
+/* =========================
+   Event
+========================= */
+
+function bind(){
+
+  el('runBtn')
+  .onclick=
+  runSchedule;
+
+  el('saveBtn')
+  .onclick=
+  function(){
+
+    saveMonth(false);
+
+  };
+
+  el('loadBtn')
+  .onclick=
+  function(){
+
+    loadMonth(false);
+
+  };
+
+  el('validateBtn')
+  .onclick=
+  function(){
+
+    validate(true);
+
+  };
+
+  el('printBtn')
+  .onclick=
+  function(){
+
+    window.print();
+
+  };
+
+  el('pdfBtn')
+  .onclick=
+  saveSchedulePDF;
+
+  el('clearBtn')
+  .onclick=
+  function(){
+
+    if(
+      !confirm(
+        'ล้างตารางเดือนนี้หรือไม่?'
+      )
+    ){
+      return;
+    }
+
+    state.assignments={};
+
+    renderSheet();
+
+    setStatus(
+      'ล้างตารางแล้ว',
+      true
+    );
+
+  };
+
+  el('addPersonBtn')
+  .onclick=
+  addPerson;
+
+  el('removePersonBtn')
+  .onclick=
+  removePerson;
+
+  el('addHolidayBtn')
+  .onclick=
+  addHoliday;
+
+  el('addRuleBtn')
+  .onclick=
+  addRule;
+
+  el('addCustomRuleBtn')
+  .onclick=
+  addCustomRule;
+
+  el('cloudConnectBtn')
+  .onclick=
+  function(){
+
+    connectCloud(true);
+
+  };
+
+  el('cloudUploadBtn')
+  .onclick=
+  uploadCloud;
+
+  el('cloudDownloadBtn')
+  .onclick=
+  downloadCloud;
+
+  el('summaryPdfBtn')
+  .onclick=
+  saveSummaryPDF;
+
+  el('summaryPrintBtn')
+  .onclick=
+  printSummary;
+
+  el('summaryOpenPdfBtn')
+  .onclick=
+  openSummaryPdf;
+
+  el('summaryPdfFile')
+  .onchange=
+  function(){
+
+    if(
+      !this.files[0]
+    ){
+      return;
+    }
+
+    var url=
+    URL.createObjectURL(
+      this.files[0]
+    );
+
+    window.open(
+      url,
+      '_blank'
+    );
+
+  };
+
+  el('month')
+  .onchange=
+  async function(){
+
+    if(
+      cloud.connected
+    ){
+
+      await ensureCloudMonths([
+        prevKey(),
+        currentKey()
+      ]);
+
+    }
+
+    loadMonth(true);
+
+  };
+
+  el('year')
+  .onchange=
+  el('month').onchange;
+
+  el('pdfNote')
+  .onchange=
+  saveConfig;
+
+}
+
+/* =========================
+   Init
+========================= */
+
+function init(){
+
+  buildMonths();
+
   loadConfig();
+
+  var now=
+  new Date();
+
+  el('month').value=
+  String(
+    now.getMonth()
+  );
+
+  el('year').value=
+  String(
+    now.getFullYear()+543
+  );
+
+  el('pdfNote').value=
+  state.pdfNote||'';
+
+  bind();
 
   buildNames();
 
@@ -3243,231 +5344,49 @@ async function downloadCloud(){
 
   renderRules();
 
- }
-
- var list=
- await cloudRequest(
-  '/api/months',
-  {method:'GET'}
- );
-
- var months=
- list.months||[];
-
- for(var i=0;i<months.length;i++){
-
-  await fetchCloudMonth(
-   months[i].key
-  );
-
- }
-
- loadMonth(true);
-
- setStatus(
-  'โหลดข้อมูลออนไลน์แล้ว',
-  true
- );
-
-}
-
-async function initCloud(){
-
- loadCloudSettings();
-
- if(
-  !cloud.apiUrl||
-  !cloud.token
- ){
-  return;
- }
-
- if(
-  await connectCloud(false)
- ){
-
-  await ensureCloudMonths([
-   prevKey(),
-   currentKey()
-  ]);
+  renderCustomRules();
 
   loadMonth(true);
 
- }
+  renderSheet();
 
-}
+  renderHistory();
 
-function bind(){
-
- el('runBtn').onclick=
- runSchedule;
-
- el('saveBtn').onclick=
- function(){
-  saveMonth(false);
- };
-
- el('loadBtn').onclick=
- function(){
-  loadMonth(false);
- };
-
- el('validateBtn').onclick=
- function(){
-  validate(true);
- };
-
- el('printBtn').onclick=
- function(){
-  window.print();
- };
-
- el('pdfBtn').onclick=
- savePDF;
-
- el('clearBtn').onclick=
- clearSchedule;
-
- el('addPersonBtn').onclick=
- addPerson;
-
- el('removePersonBtn').onclick=
- removePerson;
-
- el('addHolidayBtn').onclick=
- addHoliday;
-
- el('addCustomRuleBtn').onclick=
- addCustomRule;
-
- el('cloudConnectBtn').onclick=
- function(){
-  connectCloud(true);
- };
-
- el('cloudUploadBtn').onclick=
- uploadCloud;
-
- el('cloudDownloadBtn').onclick=
- downloadCloud;
-
- el('summaryPdfBtn').onclick=
- saveSummaryPDF;
-
- el('summaryPrintBtn').onclick=
- printSummary;
-
- el('summaryOpenPdfBtn').onclick=
- openOldSummaryPdf;
-
- el('summaryPdfFile').onchange=
- function(){
-
-  if(!this.files[0])return;
-
-  var url=
-  URL.createObjectURL(
-   this.files[0]
+  setStatus(
+    'ระบบพร้อมใช้งาน',
+    true
   );
 
-  window.open(
-   url,
-   '_blank'
-  );
-
- };
-
- el('month').onchange=
- async function(){
-
-  if(cloud.connected){
-
-   await ensureCloudMonths([
-    prevKey(),
-    currentKey()
-   ]);
-
-  }
-
-  loadMonth(true);
-
- };
-
- el('year').onchange=
- el('month').onchange;
-
- el('pdfNote').onchange=
- saveConfig;
-
-}
-
-function init(){
-
- buildMonths();
-
- loadConfig();
-
- var now=new Date();
-
- el('month').value=
- String(now.getMonth());
-
- el('year').value=
- String(
-  now.getFullYear()+543
- );
-
- el('pdfNote').value=
- state.pdfNote||'';
-
- bind();
-
- buildNames();
-
- renderHolidays();
-
- renderRules();
-
- loadMonth(true);
-
- renderSheet();
-
- renderHistory();
-
- setStatus(
-  'ระบบพร้อมใช้งาน',
-  true
- );
-
- initCloud();
+  initCloud();
 
 }
 
 window.addEventListener(
- 'error',
- function(e){
+  'error',
+  function(e){
 
-  setStatus(
-   'JavaScript error: '+
-   e.message,
-   false
-  );
+    setStatus(
+      'JavaScript error: '+
+      e.message,
+      false
+    );
 
- }
+  }
 );
 
 if(
- document.readyState==='loading'
+  document.readyState===
+  'loading'
 ){
 
- document.addEventListener(
-  'DOMContentLoaded',
-  init
- );
+  document.addEventListener(
+    'DOMContentLoaded',
+    init
+  );
 
 }else{
 
- init();
+  init();
 
 }
 
