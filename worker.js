@@ -1,3 +1,4 @@
+// Trigger Cloudflare deploy
 const JSON_HEADERS = { 'content-type': 'application/json; charset=utf-8' };
 
 function corsHeaders(request, env) {
