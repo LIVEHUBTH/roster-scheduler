@@ -2,5 +2,13 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "roster-scheduler-api",
   "main": "worker.js",
-  "compatibility_date": "2026-08-17"
+  "compatibility_date": "2026-08-17",
+
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "roster-scheduler-db",
+      "database_id": "38d2fa24-84cf-4a01-861b-34a57d0efed5"
+    }
+  ]
 }
