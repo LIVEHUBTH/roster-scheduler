@@ -342,7 +342,16 @@ function savePDF(){
 }
 
 function normalizeApiUrl(v){return String(v||'').trim().replace(/\/+$/,'')}
-function loadCloudSettings(){cloud.apiUrl=normalizeApiUrl(localStorage.getItem('roster_cloud_api')||'');cloud.token=localStorage.getItem('roster_cloud_token')||'';if(el('cloudApiUrl'))el('cloudApiUrl').value=cloud.apiUrl;if(el('cloudToken'))el('cloudToken').value=cloud.token}
+function loadCloudSettings(){
+  cloud.apiUrl=normalizeApiUrl(
+    localStorage.getItem('roster_cloud_api') ||
+    'https://roster-scheduler-api.supaporn-gf.workers.dev'
+  );
+  cloud.token=localStorage.getItem('roster_cloud_token')||'';
+
+  if(el('cloudApiUrl')) el('cloudApiUrl').value=cloud.apiUrl;
+  if(el('cloudToken')) el('cloudToken').value=cloud.token;
+}
 function saveCloudSettings(){cloud.apiUrl=normalizeApiUrl(el('cloudApiUrl').value);cloud.token=el('cloudToken').value.trim();localStorage.setItem('roster_cloud_api',cloud.apiUrl);localStorage.setItem('roster_cloud_token',cloud.token)}
 function setCloudStatus(t,ok){var x=el('cloudStatus');if(!x)return;x.textContent=t;x.style.color=ok?'#067647':'#b42318'}
 async function cloudRequest(path,opts){if(!cloud.apiUrl||!cloud.token)throw new Error('ยังไม่ได้ตั้งค่า Cloud API URL และ Sync PIN');opts=opts||{};opts.headers=Object.assign({'Content-Type':'application/json','X-Sync-Token':cloud.token},opts.headers||{});var r=await fetch(cloud.apiUrl+path,opts);var data=null;try{data=await r.json()}catch(e){}if(!r.ok)throw new Error((data&&data.error)||('HTTP '+r.status));return data}
