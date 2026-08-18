@@ -47,7 +47,7 @@ button{min-height:43px;border:0;border-radius:11px;background:#edeef3;color:var(
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 </head>
 <body>
-<header><div class="header-wrap"><div><h1>โปรแกรมรันตารางเวร</h1><div class="header-sub">จัดเวรอัตโนมัติ • อ้างอิงเดือนก่อน • หมุนคิว • เฉลี่ยวันธรรมดา/เสาร์อาทิตย์/นักขัตฤกษ์</div></div><div class="version">V20.3 • Cloud Sync</div></div></header>
+<header><div class="header-wrap"><div><h1>โปรแกรมรันตารางเวร</h1><div class="header-sub">จัดเวรอัตโนมัติ • อ้างอิงเดือนก่อน • หมุนคิว • เฉลี่ยวันธรรมดา/เสาร์อาทิตย์/นักขัตฤกษ์</div></div><div class="version">V20.4 • Cloud Sync</div></div></header>
 <div class="app">
 <div class="panel no-print"><div class="toolbar">
 <label class="field">เดือน<select id="month"></select></label><label class="field">ปี พ.ศ.<input id="year" type="number" min="2500" max="2700"></label>
@@ -125,7 +125,7 @@ function storageKey(k){return 'roster_month_v7_'+k} function savedMonth(k){retur
 function loadConfig(){var c=parse(localStorage.getItem('roster_config_v8'),null);state.people=c&&Array.isArray(c.people)&&c.people.length?c.people:defaultPeople();state.holidays=c&&c.holidays?c.holidays:{};state.customRules=c&&c.customRules?c.customRules:[];state.pdfNote=c&&c.pdfNote?c.pdfNote:'';state.rules=c&&Array.isArray(c.rules)&&c.rules.length?c.rules:DEFAULT_RULES.map(function(r){return {id:r.id,text:r.text}})}
 function configPayload(){return {people:state.people,holidays:state.holidays,customRules:state.customRules,pdfNote:state.pdfNote,rules:state.rules}}
 function saveConfig(){state.pdfNote=el('pdfNote').value;var p=configPayload();localStorage.setItem('roster_config_v8',JSON.stringify(p));scheduleCloudConfigSave(p)}
-function monthPayload(){return {version:'20.3',key:currentKey(),year:gy(),month:cm(),savedAt:new Date().toISOString(),assignments:state.assignments,rotation:state.rotation,peopleSnapshot:state.people}}
+function monthPayload(){return {version:'20.4',key:currentKey(),year:gy(),month:cm(),savedAt:new Date().toISOString(),assignments:state.assignments,rotation:state.rotation,peopleSnapshot:state.people}}
 function saveMonth(silent){var d=monthPayload();localStorage.setItem(storageKey(currentKey()),JSON.stringify(d));cloudSaveMonth(d);if(!silent)setStatus('บันทึกเดือน '+MONTHS[cm()]+' '+py()+' แล้ว',true);renderHistory()}
 function loadMonth(silent){var d=savedMonth(currentKey());state.assignments=d&&d.assignments?d.assignments:{};state.rotation=d&&d.rotation?d.rotation:{};if(!silent)setStatus(d?'เปิดตารางที่บันทึกแล้ว':'เดือนนี้ยังไม่มีข้อมูลที่บันทึก',!!d);renderSheet();renderHistory()}
 function renderHistory(){el('historyInfo').innerHTML='เดือนนี้: <b>'+(savedMonth(currentKey())?'มีข้อมูลบันทึก':'ยังไม่บันทึก')+'</b> | เดือนก่อน: <b>'+(savedMonth(prevKey())?'พบข้อมูล':'ไม่พบข้อมูล')+'</b>'}
@@ -170,7 +170,7 @@ function addCustomRule(){var pid=el('customPerson').value,type=el('customRuleTyp
 function renderCustomRules(){el('customRules').innerHTML=state.customRules.map(function(r){var p=state.people.find(function(x){return x.id===r.personId})||{name:r.personId};var labels=r.slots.map(function(id){var s=slotById(id);return s?s.label:id});return '<span class="chip">'+esc(p.name)+' → '+(r.type==='block'?'ห้าม ':'เฉพาะ ')+esc(labels.join(', '))+' <button class="smallbtn" data-custom-rule="'+r.id+'">×</button></span>'}).join('');el('customRules').querySelectorAll('[data-custom-rule]').forEach(function(b){b.onclick=function(){var id=this.dataset.customRule;state.customRules=state.customRules.filter(function(r){return r.id!==id});saveConfig();renderCustomRules();renderSheet()}})}
 function renderSummary(){var current=currentCounts(),previous=previousCounts(),title='ตารางหลักการเฉลี่ยเวร เดือน'+MONTHS[cm()]+' พ.ศ. '+py();el('summaryTitle').textContent=title;var columns=['v1','v2','ot1','ot2','s1d','s1n','s2d','s2n','s3d','s3n','s4d','s4n','s5','s6','s7','s8','e1','e2','e3'];var h='<table id="summaryTable"><thead><tr><th>ลำดับ</th><th>ชื่อ</th><th>รวมเวรทั้งหมดเดือนก่อนหน้า</th><th>รวมเวรทั้งหมดเดือนนี้</th>';columns.forEach(function(id){h+='<th>'+slotById(id).label+'</th>'});h+='</tr></thead><tbody>';state.people.forEach(function(p,i){h+='<tr><td>'+(i+1)+'</td><td>'+esc(p.name)+'</td><td>'+previous.total[p.id]+'</td><td>'+current.total[p.id]+'</td>';columns.forEach(function(id){h+='<td>'+current.slot[id][p.id]+'</td>'});h+='</tr>'});h+='</tbody></table>';el('summary').innerHTML=h}
 
-/* V20.3: fit-to-page อัตโนมัติจริง โดยใช้พื้นที่ A4 หลังหัก margin */
+/* V20.4: fit-to-page + auto-fill แนวตั้ง โดยใช้พื้นที่ A4 หลังหัก margin */
 function fitCanvasToA4(canvas,pdf,left,top,right,bottom){
   var pw=pdf.internal.pageSize.getWidth(),ph=pdf.internal.pageSize.getHeight();
   var maxW=pw-left-right,maxH=ph-top-bottom;
@@ -199,13 +199,63 @@ function prepareSchedulePdfNode(){
   noteBox.innerHTML='<b>หมายเหตุ:</b> '+esc(note||'-');wrap.appendChild(noteBox);
   document.body.appendChild(wrap);return wrap;
 }
+function autoFillPdfHeight(wrap,table){
+  var printableRatio=182/277;
+  var targetHeight=wrap.scrollWidth*printableRatio;
+  var currentHeight=wrap.scrollHeight;
+  if(currentHeight>=targetHeight)return;
+  var rows=table.querySelectorAll('tbody tr');
+  if(!rows.length)return;
+  var extra=(targetHeight-currentHeight)/rows.length;
+  rows.forEach(function(row){
+    var h=row.getBoundingClientRect().height+extra;
+    row.querySelectorAll('td').forEach(function(td){
+      td.style.height=h+'px';
+      td.style.verticalAlign='middle';
+    });
+  });
+}
+
+function autoFillSummaryPdfHeight(wrap,table){
+  var printableRatio=182/277;
+  var targetHeight=wrap.scrollWidth*printableRatio;
+  var currentHeight=wrap.scrollHeight;
+  if(currentHeight>=targetHeight)return;
+  var rows=table.querySelectorAll('tbody tr');
+  if(!rows.length)return;
+  var extra=(targetHeight-currentHeight)/rows.length;
+  rows.forEach(function(row){
+    var h=row.getBoundingClientRect().height+extra;
+    row.querySelectorAll('td').forEach(function(td){
+      td.style.height=h+'px';
+      td.style.verticalAlign='middle';
+    });
+  });
+}
+
 function saveSchedulePDF(){
   state.pdfNote=el('pdfNote').value;saveConfig();
   var wrap=prepareSchedulePdfNode();
-  html2canvas(wrap,{scale:2,useCORS:true,backgroundColor:'#fff',logging:false,windowWidth:1700}).then(function(canvas){
-    saveCanvasAsPdf(canvas,'ตารางเวร_'+MONTHS[cm()]+'_'+py()+'.pdf');
-    document.body.removeChild(wrap);setStatus('บันทึก PDF ตารางเวรแบบเต็มกระดาษอัตโนมัติเรียบร้อยแล้ว',true);
-  }).catch(function(err){try{document.body.removeChild(wrap)}catch(e){}setStatus('สร้าง PDF ไม่สำเร็จ: '+err.message,false)});
+  var pdfTable=wrap.querySelector('table');
+
+  requestAnimationFrame(function(){
+    autoFillPdfHeight(wrap,pdfTable);
+
+    html2canvas(wrap,{
+      scale:2,
+      useCORS:true,
+      backgroundColor:'#fff',
+      logging:false,
+      windowWidth:1700
+    }).then(function(canvas){
+      saveCanvasAsPdf(canvas,'ตารางเวร_'+MONTHS[cm()]+'_'+py()+'.pdf');
+      document.body.removeChild(wrap);
+      setStatus('บันทึก PDF ตารางเวรแบบเต็มกระดาษอัตโนมัติเรียบร้อยแล้ว',true);
+    }).catch(function(err){
+      try{document.body.removeChild(wrap)}catch(e){}
+      setStatus('สร้าง PDF ไม่สำเร็จ: '+err.message,false);
+    });
+  });
 }
 function prepareSummaryPdfNode(){
   var table=el('summaryTable').cloneNode(true);
@@ -219,10 +269,25 @@ function prepareSummaryPdfNode(){
 function saveSummaryPDF(){
   var table=el('summaryTable');if(!table)return;
   var wrap=prepareSummaryPdfNode();
-  html2canvas(wrap,{scale:2,useCORS:true,backgroundColor:'#fff',logging:false}).then(function(canvas){
-    saveCanvasAsPdf(canvas,'หลักการเฉลี่ยเวร_'+MONTHS[cm()]+'_'+py()+'.pdf');
-    document.body.removeChild(wrap);setStatus('บันทึก PDF หลักการเฉลี่ยเวรแบบเต็มกระดาษอัตโนมัติเรียบร้อยแล้ว',true);
-  }).catch(function(err){try{document.body.removeChild(wrap)}catch(e){}setStatus('สร้าง PDF หลักการเฉลี่ยเวรไม่สำเร็จ: '+err.message,false)});
+  var summaryTable=wrap.querySelector('table');
+
+  requestAnimationFrame(function(){
+    autoFillSummaryPdfHeight(wrap,summaryTable);
+
+    html2canvas(wrap,{
+      scale:2,
+      useCORS:true,
+      backgroundColor:'#fff',
+      logging:false
+    }).then(function(canvas){
+      saveCanvasAsPdf(canvas,'หลักการเฉลี่ยเวร_'+MONTHS[cm()]+'_'+py()+'.pdf');
+      document.body.removeChild(wrap);
+      setStatus('บันทึก PDF หลักการเฉลี่ยเวรแบบเต็มกระดาษอัตโนมัติเรียบร้อยแล้ว',true);
+    }).catch(function(err){
+      try{document.body.removeChild(wrap)}catch(e){}
+      setStatus('สร้าง PDF หลักการเฉลี่ยเวรไม่สำเร็จ: '+err.message,false);
+    });
+  });
 }
 function printSummary(){var table=el('summaryTable');if(!table)return;var win=window.open('','_blank');if(!win)return;var title='ตารางหลักการเฉลี่ยเวร เดือน'+MONTHS[cm()]+' พ.ศ. '+py();win.document.write('<!DOCTYPE html><html lang="th"><head><meta charset="utf-8"><title>'+title+'</title><style>@page{size:A4 landscape;margin:15mm 10mm 13mm 10mm}body{font-family:-apple-system,BlinkMacSystemFont,"Noto Sans Thai",Tahoma,Arial,sans-serif;margin:0}h2{text-align:center;font-size:15px}table{border-collapse:collapse;width:100%;font-size:6px}th,td{border:1px solid #999;padding:1.5px;text-align:center;white-space:nowrap}th{background:#e7e7ea}</style></head><body><h2>'+title+'</h2>'+table.outerHTML+'<script>window.onload=function(){window.print()}<\/script></body></html>');win.document.close()}
 function openSummaryPdf(){el('summaryPdfFile').click()}
