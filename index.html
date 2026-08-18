@@ -4,1218 +4,3475 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>โปรแกรมจัดตารางเวร</title>
+
 <style>
-:root{--bg:#f6f7fb;--card:#fff;--text:#202534;--muted:#6b7280;--line:#d9dce6;--accent:#6d5dfc;--accent2:#efeefe;--danger:#b42318;--dangerbg:#fff0ee;--ok:#067647;--okbg:#ecfdf3;--weekend:#ececf0;--holiday:#e2e2e6}
-*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Noto Sans Thai",Tahoma,Arial,sans-serif}
-header{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.95);border-bottom:1px solid var(--line);backdrop-filter:blur(10px)}
-.header-wrap{max-width:1700px;margin:auto;padding:14px;display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}.header-wrap h1{font-size:clamp(21px,4vw,34px);margin:0}.header-sub{font-size:13px;color:var(--muted);margin-top:4px}.version{font-size:12px;color:var(--muted)}
-.app{max-width:1700px;margin:auto;padding:14px}.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 4px 18px rgba(30,40,70,.05);padding:14px;margin-bottom:14px}.toolbar{display:flex;gap:10px;align-items:end;flex-wrap:wrap}.field{display:flex;flex-direction:column;font-size:12px;font-weight:700;gap:5px}.field select,.field input,.holidaybar input,.rulebar input,.rulebar select{min-height:43px;border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 10px;font-size:16px;color:var(--text)}button{min-height:43px;border:0;border-radius:11px;background:#edeef3;color:var(--text);padding:9px 14px;font-weight:800;font-size:14px;cursor:pointer;-webkit-tap-highlight-color:transparent}.run{background:var(--accent);color:#fff}.save{background:#e8f7ee;color:#17663b}.danger{background:#fee4e2;color:var(--danger)}button:active{transform:translateY(1px)}
-.status{margin:0 0 14px;padding:10px 12px;border-radius:11px;background:#eef2ff;font-size:14px;line-height:1.45}.status.ok{background:var(--okbg);color:var(--ok);border:0}.status.err{background:var(--dangerbg);color:var(--danger);border:0}
-.sheet-wrap{overflow:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:15px;background:#fff;max-height:72vh;margin-bottom:14px}.sheet{border-collapse:separate;border-spacing:0;min-width:1900px;width:100%;font-size:11px;table-layout:fixed}.sheet caption{caption-side:top;background:#fff;font-weight:800;font-size:14px;padding:9px;border-bottom:1px solid var(--line)}.sheet th,.sheet td{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:4px;min-width:92px;text-align:center;height:32px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.sheet thead th{position:sticky;top:0;background:#f1f2f6;font-weight:800;z-index:5}.sheet .date{width:76px;position:sticky;left:0;z-index:4}.sheet tbody .date{background:#fff}.sheet thead .date{z-index:8;background:#f1f2f6}.sheet tr.weekend td,.sheet tr.weekend .date{background:var(--weekend)!important;color:#222}.sheet tr.holiday td,.sheet tr.holiday .date{background:var(--holiday)!important;color:#222}.sheet select{width:100%;height:26px;border:1px solid transparent;border-radius:6px;background:transparent;color:inherit;font-size:11px;text-align:center;appearance:none;-webkit-appearance:none}.sheet select:focus{border-color:var(--accent);background:#fff;outline:0}.sheet td.inactive{background:#fff!important;color:#aaa}.sheet tr.weekend td.inactive{background:var(--weekend)!important;color:#222}.sheet tr.holiday td.inactive{background:var(--holiday)!important;color:#222}.sheet td.conflict{box-shadow:inset 0 0 0 2px #f04438!important;background:#fff1f0!important;color:#111!important}
-.section-title{font-weight:800;font-size:18px;margin-bottom:8px}.muted{font-size:12px;color:var(--muted);line-height:1.55}.names{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:7px;margin-top:9px}.name-row{display:grid;grid-template-columns:33px 1fr auto;gap:6px;align-items:center}.name-row b{text-align:center;font-size:13px}.name-row input{width:100%;min-height:38px;border:1px solid var(--line);border-radius:8px;padding:6px 8px;font-size:14px}.name-row .lastbadge{font-size:10px;background:var(--accent2);color:#4d3ed7;padding:4px 6px;border-radius:999px;white-space:nowrap;font-weight:800}.smallbtn{min-height:auto;padding:3px 7px;border-radius:7px}.holidaybar,.rulebar{display:flex;gap:7px;flex-wrap:wrap;align-items:end}.chips{margin-top:8px;display:flex;gap:6px;flex-wrap:wrap}.chip{display:inline-flex;align-items:center;gap:4px;border:1px solid #ddd7a7;padding:6px 9px;border-radius:999px;background:#fff8db;font-size:12px}.rule-list{display:grid;grid-template-columns:repeat(2,minmax(260px,1fr));gap:7px;margin-top:9px}.rule-item{padding:9px 10px;border-radius:10px;background:#f7f7fb;font-size:13px;line-height:1.45}.rule-item label{display:flex;align-items:center;gap:7px}.rule-item input{accent-color:var(--accent)}hr{border:0;border-top:1px solid var(--line);margin:12px 0}
-.summary{margin-top:0;background:#fff;border:1px solid var(--line);border-radius:15px;overflow:auto;padding-bottom:5px}.summary table{border-collapse:separate;border-spacing:0;min-width:2450px;width:max-content;font-size:12px}.summary th,.summary td{border-right:1px solid #e2e4ec;border-bottom:1px solid var(--line);padding:9px 12px;text-align:center;min-width:108px;white-space:nowrap}.summary th{background:#f1f2f6;font-weight:800}.summary th:first-child,.summary td:first-child{min-width:54px}.summary td:nth-child(2),.summary th:nth-child(2){text-align:left;position:sticky;left:0;background:#fff;min-width:180px;max-width:220px;z-index:2}.summary th:nth-child(2){background:#f1f2f6}.summary tfoot th,.summary tfoot td{font-weight:800;background:#f8f8fb}.history-info{font-size:12px;color:var(--muted);margin-top:7px}.flex-spacer{flex:1}
-@media(max-width:700px){.header-wrap,.app{padding:10px}.panel{padding:11px}.toolbar{gap:7px}.toolbar button{flex:1 1 calc(50% - 7px)}.field{flex:1 1 42%}.names{grid-template-columns:1fr 1fr}.name-row{grid-template-columns:28px 1fr auto}.name-row input{font-size:13px}.rule-list{grid-template-columns:1fr}.sheet-wrap{max-height:68vh}.sheet{font-size:9px}.sheet select{font-size:9px}}
-@media(max-width:480px){.names{grid-template-columns:1fr}.header-sub{font-size:12px}}
-@page{size:A4 landscape;margin:20mm 10mm 10mm 10mm}
-@media print{html,body{width:100%;height:auto}body{background:#fff}.no-print,header,.status,.summary{display:none!important}.app{padding:0;max-width:none}.sheet-wrap{overflow:visible;border:0;border-radius:0;max-height:none}.sheet{min-width:0;width:100%;font-size:6.2px;table-layout:fixed;page-break-inside:avoid}.sheet th,.sheet td{height:18px;padding:1px;min-width:0}.sheet .date{position:static;width:auto}.sheet thead th{position:static}.sheet select{font-size:7px}.sheet tr.weekend td,.sheet tr.weekend .date,.sheet tr.holiday td,.sheet tr.holiday .date{background:#e0e0e0!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.sheet td.inactive{background:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.sheet tr.weekend td.inactive,.sheet tr.holiday td.inactive{background:#e0e0e0!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+:root{
+  --bg:#f6f7fb;
+  --card:#fff;
+  --text:#202534;
+  --muted:#6b7280;
+  --line:#d9dce6;
+  --accent:#6d5dfc;
+  --accent2:#efeefe;
+  --danger:#b42318;
+  --dangerbg:#fff0ee;
+  --ok:#067647;
+  --okbg:#ecfdf3;
+  --weekend:#ececf0;
+  --holiday:#e2e2e6
+}
+
+*{box-sizing:border-box}
+
+html{-webkit-text-size-adjust:100%}
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Noto Sans Thai",Tahoma,Arial,sans-serif
+}
+
+header{
+  position:sticky;
+  top:0;
+  z-index:30;
+  background:rgba(255,255,255,.95);
+  border-bottom:1px solid var(--line);
+  backdrop-filter:blur(10px)
+}
+
+.header-wrap{
+  max-width:1700px;
+  margin:auto;
+  padding:14px;
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:center;
+  flex-wrap:wrap
+}
+
+.header-wrap h1{
+  font-size:clamp(21px,4vw,34px);
+  margin:0
+}
+
+.header-sub{
+  font-size:13px;
+  color:var(--muted);
+  margin-top:4px
+}
+
+.version{
+  font-size:12px;
+  color:var(--muted)
+}
+
+.app{
+  max-width:1700px;
+  margin:auto;
+  padding:14px
+}
+
+.panel{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:16px;
+  box-shadow:0 4px 18px rgba(30,40,70,.05);
+  padding:14px;
+  margin-bottom:14px
+}
+
+.toolbar{
+  display:flex;
+  gap:10px;
+  align-items:end;
+  flex-wrap:wrap
+}
+
+.field{
+  display:flex;
+  flex-direction:column;
+  font-size:12px;
+  font-weight:700;
+  gap:5px
+}
+
+.field select,
+.field input,
+.holidaybar input,
+.rulebar input,
+.rulebar select{
+  min-height:43px;
+  border:1px solid var(--line);
+  background:#fff;
+  border-radius:10px;
+  padding:8px 10px;
+  font-size:16px;
+  color:var(--text)
+}
+
+button{
+  min-height:43px;
+  border:0;
+  border-radius:11px;
+  background:#edeef3;
+  color:var(--text);
+  padding:9px 14px;
+  font-weight:800;
+  font-size:14px;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent
+}
+
+.run{background:var(--accent);color:#fff}
+.save{background:#e8f7ee;color:#17663b}
+.danger{background:#fee4e2;color:var(--danger)}
+
+button:active{transform:translateY(1px)}
+
+.status{
+  margin:0 0 14px;
+  padding:10px 12px;
+  border-radius:11px;
+  background:#eef2ff;
+  font-size:14px;
+  line-height:1.45
+}
+
+.status.ok{
+  background:var(--okbg);
+  color:var(--ok)
+}
+
+.status.err{
+  background:var(--dangerbg);
+  color:var(--danger)
+}
+
+.sheet-wrap{
+  overflow:auto;
+  -webkit-overflow-scrolling:touch;
+  border:1px solid var(--line);
+  border-radius:15px;
+  background:#fff;
+  max-height:72vh;
+  margin-bottom:14px
+}
+
+.sheet{
+  border-collapse:separate;
+  border-spacing:0;
+  min-width:1900px;
+  width:100%;
+  font-size:11px;
+  table-layout:fixed
+}
+
+.sheet caption{
+  caption-side:top;
+  background:#fff;
+  font-weight:800;
+  font-size:14px;
+  padding:9px;
+  border-bottom:1px solid var(--line)
+}
+
+.sheet th,
+.sheet td{
+  border-right:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  padding:4px;
+  min-width:92px;
+  text-align:center;
+  height:32px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis
+}
+
+.sheet thead th{
+  position:sticky;
+  top:0;
+  background:#f1f2f6;
+  font-weight:800;
+  z-index:5
+}
+
+.sheet .date{
+  width:76px;
+  position:sticky;
+  left:0;
+  z-index:4
+}
+
+.sheet tbody .date{background:#fff}
+
+.sheet thead .date{
+  z-index:8;
+  background:#f1f2f6
+}
+
+.sheet tr.weekend td,
+.sheet tr.weekend .date{
+  background:var(--weekend)!important;
+  color:#222
+}
+
+.sheet tr.holiday td,
+.sheet tr.holiday .date{
+  background:var(--holiday)!important;
+  color:#222
+}
+
+.sheet select{
+  width:100%;
+  height:26px;
+  border:1px solid transparent;
+  border-radius:6px;
+  background:transparent;
+  color:inherit;
+  font-size:11px;
+  text-align:center;
+  appearance:none;
+  -webkit-appearance:none
+}
+
+.sheet select:focus{
+  border-color:var(--accent);
+  background:#fff;
+  outline:0
+}
+
+.sheet td.inactive{
+  background:#fff!important;
+  color:#aaa
+}
+
+.sheet tr.weekend td.inactive{
+  background:var(--weekend)!important;
+  color:#222
+}
+
+.sheet tr.holiday td.inactive{
+  background:var(--holiday)!important;
+  color:#222
+}
+
+.sheet td.conflict{
+  box-shadow:inset 0 0 0 2px #f04438!important;
+  background:#fff1f0!important;
+  color:#111!important
+}
+
+.section-title{
+  font-weight:800;
+  font-size:18px;
+  margin-bottom:8px
+}
+
+.muted{
+  font-size:12px;
+  color:var(--muted);
+  line-height:1.55
+}
+
+.names{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(185px,1fr));
+  gap:7px;
+  margin-top:9px
+}
+
+.name-row{
+  display:grid;
+  grid-template-columns:33px 1fr auto;
+  gap:6px;
+  align-items:center
+}
+
+.name-row b{
+  text-align:center;
+  font-size:13px
+}
+
+.name-row input{
+  width:100%;
+  min-height:38px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:6px 8px;
+  font-size:14px
+}
+
+.name-row .lastbadge{
+  font-size:10px;
+  background:var(--accent2);
+  color:#4d3ed7;
+  padding:4px 6px;
+  border-radius:999px;
+  white-space:nowrap;
+  font-weight:800
+}
+
+.smallbtn{
+  min-height:auto;
+  padding:3px 7px;
+  border-radius:7px
+}
+
+.holidaybar,
+.rulebar{
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+  align-items:end
+}
+
+.chips{
+  margin-top:8px;
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap
+}
+
+.chip{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  border:1px solid #ddd7a7;
+  padding:6px 9px;
+  border-radius:999px;
+  background:#fff8db;
+  font-size:12px
+}
+
+.rule-list{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(260px,1fr));
+  gap:7px;
+  margin-top:9px
+}
+
+.rule-item{
+  padding:10px 12px;
+  border-radius:10px;
+  background:#f7f7fb;
+  border:1px solid #ececf5;
+  font-size:13px;
+  line-height:1.55
+}
+
+.rule-num{
+  display:inline-flex;
+  width:24px;
+  height:24px;
+  align-items:center;
+  justify-content:center;
+  border-radius:999px;
+  background:var(--accent2);
+  color:#4d3ed7;
+  font-weight:900;
+  margin-right:7px
+}
+
+hr{
+  border:0;
+  border-top:1px solid var(--line);
+  margin:12px 0
+}
+
+.summary{
+  margin-top:0;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:15px;
+  overflow:auto;
+  padding-bottom:5px
+}
+
+.summary table{
+  border-collapse:separate;
+  border-spacing:0;
+  min-width:3000px;
+  width:max-content;
+  font-size:12px
+}
+
+.summary th,
+.summary td{
+  border-right:1px solid #e2e4ec;
+  border-bottom:1px solid var(--line);
+  padding:9px 12px;
+  text-align:center;
+  min-width:108px;
+  white-space:nowrap
+}
+
+.summary th{
+  background:#f1f2f6;
+  font-weight:800
+}
+
+.summary th:first-child,
+.summary td:first-child{
+  min-width:54px
+}
+
+.summary td:nth-child(2),
+.summary th:nth-child(2){
+  text-align:left;
+  position:sticky;
+  left:0;
+  background:#fff;
+  min-width:180px;
+  max-width:220px;
+  z-index:2
+}
+
+.summary th:nth-child(2){
+  background:#f1f2f6
+}
+
+.summary tfoot th,
+.summary tfoot td{
+  font-weight:800;
+  background:#f8f8fb
+}
+
+.history-info{
+  font-size:12px;
+  color:var(--muted);
+  margin-top:7px
+}
+
+@media(max-width:700px){
+  .header-wrap,.app{padding:10px}
+  .panel{padding:11px}
+  .toolbar{gap:7px}
+  .toolbar button{flex:1 1 calc(50% - 7px)}
+  .field{flex:1 1 42%}
+  .names{grid-template-columns:1fr 1fr}
+  .name-row{grid-template-columns:28px 1fr auto}
+  .name-row input{font-size:13px}
+  .rule-list{grid-template-columns:1fr}
+  .sheet-wrap{max-height:68vh}
+  .sheet{font-size:9px}
+  .sheet select{font-size:9px}
+}
+
+@media(max-width:480px){
+  .names{grid-template-columns:1fr}
+  .header-sub{font-size:12px}
+}
+
+@page{
+  size:A4 landscape;
+  margin:20mm 10mm 10mm 10mm
+}
+
+@media print{
+  html,body{width:100%;height:auto}
+  body{background:#fff}
+  .no-print,header,.status,.summary{display:none!important}
+  .app{padding:0;max-width:none}
+  .sheet-wrap{overflow:visible;border:0;border-radius:0;max-height:none}
+  .sheet{min-width:0;width:100%;font-size:6.2px;table-layout:fixed;page-break-inside:avoid}
+  .sheet th,.sheet td{height:18px;padding:1px;min-width:0}
+  .sheet .date{position:static;width:auto}
+  .sheet thead th{position:static}
+  .sheet select{font-size:7px}
+  .sheet tr.weekend td,
+  .sheet tr.weekend .date,
+  .sheet tr.holiday td,
+  .sheet tr.holiday .date{
+    background:#e0e0e0!important;
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact
+  }
+}
 </style>
+
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 </head>
+
 <body>
-<header><div class="header-wrap"><div><h1>โปรแกรมรันตารางเวร</h1><div class="header-sub">จัดเวรอัตโนมัติ • ไม่ซ้ำในวันเดียวกัน • อ้างอิงเดือนก่อน • เฉลี่ยแต่ละเวรแยกกัน</div></div><div class="version">V19.1 • Cloud Sync</div></div></header>
+
+<header>
+  <div class="header-wrap">
+    <div>
+      <h1>โปรแกรมรันตารางเวร</h1>
+      <div class="header-sub">
+        จัดเวรอัตโนมัติ • ตรวจรอยต่อเดือน • แยกค่าเฉลี่ยตามประเภท • หมุนคิวตามรายชื่อ
+      </div>
+    </div>
+    <div class="version">V20 • Cloud Sync</div>
+  </div>
+</header>
+
 <div class="app">
+
   <div class="panel no-print">
     <div class="toolbar">
-      <label class="field">เดือน<select id="month"></select></label>
-      <label class="field">ปี พ.ศ.<input id="year" type="number" min="2500" max="2700"></label>
-      <button class="run" type="button" id="runBtn">รันตารางเวร</button>
-      <button class="save" type="button" id="saveBtn">บันทึกเดือนนี้</button>
-      <button type="button" id="loadBtn">เปิดที่บันทึก</button>
-      <button type="button" id="validateBtn">ตรวจตาราง</button>
-      <button type="button" id="printBtn">พิมพ์ตาราง</button>
-      <button type="button" id="pdfBtn">บันทึกไฟล์ PDF</button>
-      <button class="danger" type="button" id="clearBtn">ล้างตาราง</button>
+
+      <label class="field">
+        เดือน
+        <select id="month"></select>
+      </label>
+
+      <label class="field">
+        ปี พ.ศ.
+        <input id="year" type="number" min="2500" max="2700">
+      </label>
+
+      <button class="run" id="runBtn">รันตารางเวร</button>
+      <button class="save" id="saveBtn">บันทึกเดือนนี้</button>
+      <button id="loadBtn">เปิดที่บันทึก</button>
+      <button id="validateBtn">ตรวจตาราง</button>
+      <button id="printBtn">พิมพ์ตาราง</button>
+      <button id="pdfBtn">บันทึกไฟล์ PDF</button>
+      <button class="danger" id="clearBtn">ล้างตาราง</button>
+
     </div>
+
     <div id="historyInfo" class="history-info"></div>
   </div>
 
   <div id="status" class="status ok">กำลังเริ่มระบบ...</div>
 
-  <div class="panel no-print" id="cloudPanel">
-    <div class="section-title">บันทึกข้อมูลออนไลน์ทุกเครื่อง</div>
-    <div class="muted">เชื่อม Cloudflare D1 ผ่าน Worker • เมื่อเชื่อมแล้ว รายชื่อ กติกา วันหยุด และตารางรายเดือนจะซิงก์ข้ามเครื่อง</div>
+  <div class="panel no-print">
+
+    <div class="section-title">
+      บันทึกข้อมูลออนไลน์ทุกเครื่อง
+    </div>
+
+    <div class="muted">
+      เชื่อม Cloudflare D1 ผ่าน Worker • เมื่อเชื่อมแล้ว รายชื่อ กติกา วันหยุด และตารางรายเดือนจะซิงก์ข้ามเครื่อง
+    </div>
+
     <div class="toolbar" style="margin-top:8px">
-      <label class="field" style="min-width:280px;flex:1">Cloud API URL<input id="cloudApiUrl" type="url" placeholder="https://roster-scheduler-api....workers.dev"></label>
-      <label class="field" style="min-width:180px">Sync PIN / Token<input id="cloudToken" type="password" placeholder="อย่างน้อย 8 ตัวอักษร"></label>
-      <button type="button" id="cloudConnectBtn">เชื่อมฐานข้อมูล</button>
-      <button type="button" id="cloudUploadBtn">อัปโหลดข้อมูลเครื่องนี้</button>
-      <button type="button" id="cloudDownloadBtn">โหลดข้อมูลออนไลน์</button>
+
+      <label class="field" style="min-width:280px;flex:1">
+        Cloud API URL
+        <input id="cloudApiUrl" type="url">
+      </label>
+
+      <label class="field" style="min-width:180px">
+        Sync PIN / Token
+        <input id="cloudToken" type="password">
+      </label>
+
+      <button id="cloudConnectBtn">เชื่อมฐานข้อมูล</button>
+      <button id="cloudUploadBtn">อัปโหลดข้อมูลเครื่องนี้</button>
+      <button id="cloudDownloadBtn">โหลดข้อมูลออนไลน์</button>
+
     </div>
-    <div id="cloudStatus" class="history-info">ยังไม่ได้เชื่อมฐานข้อมูลออนไลน์</div>
+
+    <div id="cloudStatus" class="history-info">
+      ยังไม่ได้เชื่อมฐานข้อมูลออนไลน์
+    </div>
+
   </div>
 
-  <div class="sheet-wrap"><table id="sheet" class="sheet"></table></div>
-
-  <div class="panel no-print" style="margin-top:10px">
-    <div class="section-title">หมายเหตุท้ายตาราง PDF</div>
-    <div class="muted">ข้อความนี้จะแสดงที่มุมซ้ายล่างของไฟล์ PDF โดยเว้นระยะจากตาราง และสามารถแก้ไขได้ทุกครั้งก่อนบันทึก</div>
-    <textarea id="pdfNote" rows="3" style="width:100%;margin-top:8px;min-height:78px;border:1px solid var(--line);border-radius:10px;padding:10px;font-size:15px;resize:vertical" placeholder="หมายเหตุ: ..."></textarea>
+  <div class="sheet-wrap">
+    <table id="sheet" class="sheet"></table>
   </div>
 
-  <div class="panel no-print" style="margin-top:10px">
-    <div class="section-title">รายชื่อบุคลากร</div>
-    <div class="muted">เพิ่มหรือลดจำนวนรายชื่อได้ตามจริง • <b>รายชื่อสุดท้าย</b> จะถูกจำกัดให้รันเฉพาะ EXTRA 1, EXTRA 2, EXTRA 3 อัตโนมัติ</div>
-    <div class="toolbar" style="margin-top:7px"><button type="button" id="addPersonBtn">+ เพิ่มรายชื่อ</button><button type="button" id="removePersonBtn">− ลบรายชื่อสุดท้าย</button><span id="personCount" class="muted"></span></div>
+  <div class="panel no-print">
+
+    <div class="section-title">
+      หมายเหตุท้ายตาราง PDF
+    </div>
+
+    <textarea
+      id="pdfNote"
+      rows="3"
+      style="width:100%;min-height:78px;border:1px solid var(--line);border-radius:10px;padding:10px;font-size:15px"
+    ></textarea>
+
+  </div>
+
+  <div class="panel no-print">
+
+    <div class="section-title">
+      รายชื่อบุคลากร
+    </div>
+
+    <div class="muted">
+      รายชื่อสุดท้ายสามารถขึ้นได้เฉพาะ EXTRA1–3
+    </div>
+
+    <div class="toolbar">
+      <button id="addPersonBtn">+ เพิ่มรายชื่อ</button>
+      <button id="removePersonBtn">− ลบรายชื่อสุดท้าย</button>
+      <span id="personCount" class="muted"></span>
+    </div>
+
     <div id="names" class="names"></div>
+
   </div>
 
   <div class="panel no-print">
-    <div class="section-title">วันหยุดนักขัตฤกษ์ / วันหยุดพิเศษ</div>
-    <div class="holidaybar"><input id="holidayDate" type="date"><input id="holidayName" type="text" placeholder="ชื่อวันหยุด (ไม่บังคับ)"><button type="button" id="addHolidayBtn">เพิ่มวันหยุด</button></div>
+
+    <div class="section-title">
+      วันหยุดนักขัตฤกษ์ / วันหยุดพิเศษ
+    </div>
+
+    <div class="holidaybar">
+      <input id="holidayDate" type="date">
+      <input id="holidayName" type="text" placeholder="ชื่อวันหยุด">
+      <button id="addHolidayBtn">เพิ่มวันหยุด</button>
+    </div>
+
     <div id="chips" class="chips"></div>
+
   </div>
 
   <div class="panel no-print">
-    <div class="section-title">กติกาการจัดเวร</div>
-    <div class="muted">กติกาหลักเปิด/ปิดได้ และสามารถเพิ่ม / แก้ไข / ลบกติกาจัดเวรเพิ่มเติมได้เอง</div>
+
+    <div class="section-title">
+      กติกาการจัดตารางเวร
+    </div>
+
+    <div class="muted">
+      กติกาหลัก 20 ข้อนี้เป็นกฎบังคับของระบบ
+    </div>
+
     <div id="ruleList" class="rule-list"></div>
+
     <hr>
-    <div style="font-weight:800;margin-bottom:7px">เพิ่มกติกาจัดเวร</div>
-    <div class="rulebar">
-      <label class="field">เวรที่ต้องการรัน<select id="globalSlots" multiple size="5" style="height:106px;min-width:230px"></select></label>
-      <label class="field">ใช้กับวัน (เลือกได้หลายตัวเลือก)<select id="globalDayTypes" multiple size="11" style="height:236px;min-width:250px"><option value="all">ทุกวัน</option><option value="all_no_holiday">ทุกวัน (ไม่รวมนักขัตฤกษ์)</option><option value="no_holiday">ไม่รวมนักขัตฤกษ์</option><option value="weekday">จันทร์–ศุกร์</option><option value="weekday_no_holiday">จันทร์–ศุกร์ (ไม่รวมนักขัตฤกษ์)</option><option value="saturday">เสาร์</option><option value="sunday">อาทิตย์</option><option value="holiday">นักขัตฤกษ์</option><option value="monday">จันทร์</option><option value="tuesday">อังคาร</option><option value="wednesday">พุธ</option><option value="thursday">พฤหัสบดี</option><option value="friday">ศุกร์</option></select></label>
-      <label class="field" style="min-width:280px;flex:1">คำอธิบายกติกา<textarea id="globalRuleDescription" rows="5" style="width:100%;min-height:106px;resize:vertical" placeholder="เช่น ใช้สำหรับรันเวรบ่าย–ดึกเฉพาะวันศุกร์ เสาร์ และอาทิตย์"></textarea></label>
-      <button type="button" id="addGlobalRuleBtn">+ เพิ่มกติกา</button><button type="button" id="cancelGlobalEditBtn" style="display:none">ยกเลิกแก้ไข</button>
+
+    <div style="font-weight:800">
+      กติกาเฉพาะบุคคล
     </div>
-    <div id="globalRules" class="chips"></div>
-    <hr>
-    <div style="font-weight:800;margin-bottom:7px">กติกาเฉพาะบุคคล</div>
+
     <div class="rulebar">
-      <label class="field">บุคลากร<select id="customPerson"></select></label>
-      <label class="field">ประเภทกติกา<select id="customRuleType"><option value="only">อนุญาตเฉพาะเวรที่เลือก</option><option value="block">ห้ามเวรที่เลือก</option></select></label>
-      <label class="field">เลือกเวร<select id="customSlots" multiple size="5" style="height:106px;min-width:230px"></select></label>
-      <button type="button" id="addCustomRuleBtn">+ เพิ่มกติกาเฉพาะบุคคล</button><button type="button" id="cancelCustomEditBtn" style="display:none">ยกเลิกแก้ไข</button>
+
+      <label class="field">
+        บุคลากร
+        <select id="customPerson"></select>
+      </label>
+
+      <label class="field">
+        ประเภท
+        <select id="customRuleType">
+          <option value="only">อนุญาตเฉพาะเวรที่เลือก</option>
+          <option value="block">ห้ามเวรที่เลือก</option>
+        </select>
+      </label>
+
+      <label class="field">
+        เลือกเวร
+        <select id="customSlots" multiple size="6"></select>
+      </label>
+
+      <button id="addCustomRuleBtn">
+        + เพิ่มกติกาเฉพาะบุคคล
+      </button>
+
     </div>
+
     <div id="customRules" class="chips"></div>
+
   </div>
 
   <div class="panel no-print">
-    <div class="section-title">หลักการเฉลี่ยเวร</div>
-    <div class="muted">ระบบจะเฉลี่ย <b>แต่ละเวรแยกจากกัน</b> โดยอ้างอิงจำนวนของ <b>เดือนก่อนหน้า + เดือนปัจจุบัน</b> ในเวรชนิดเดียวกัน เช่น เวร1 เทียบเฉพาะเวร1, OT1 เทียบเฉพาะ OT1, SDMC1 เช้าเทียบเฉพาะ SDMC1 เช้า และ EXTRA1 เทียบเฉพาะ EXTRA1 เพื่อให้แต่ละคนได้จำนวนในแต่ละเวรใกล้เคียงกันที่สุด • หลังเวร SDMC บ่าย–ดึก วันถัดไปพักเต็มวันและห้ามทุกเวร</div>
+
+    <div class="section-title" id="summaryTitle">
+      ตารางหลักการเฉลี่ยเวร
+    </div>
+
+    <div class="toolbar">
+      <button id="summaryPdfBtn">บันทึก PDF หลักการเฉลี่ยเวร</button>
+      <button id="summaryPrintBtn">พิมพ์หลักการเฉลี่ยเวร</button>
+      <button id="summaryOpenPdfBtn">เปิด PDF ย้อนหลัง</button>
+      <input id="summaryPdfFile" type="file" accept="application/pdf" style="display:none">
+    </div>
+
   </div>
 
-  <div class="panel no-print" id="summaryTools">
-    <div class="section-title" id="summaryTitle">ตารางหลักการเฉลี่ยเวร</div>
-    <div class="muted">แสดงจำนวนเวรของเดือนปัจจุบันแยกทุกเวร • เดือนก่อนหน้าจะใช้เฉพาะตอนคำนวณการรัน</div>
-    <div class="toolbar" style="margin-top:9px">
-      <button type="button" id="summaryPdfBtn">บันทึก PDF หลักการเฉลี่ยเวร</button>
-      <button type="button" id="summaryPrintBtn">พิมพ์หลักการเฉลี่ยเวร</button>
-      <button type="button" id="summaryOpenPdfBtn">เปิด PDF ย้อนหลัง</button>
-      <input type="file" id="summaryPdfFile" accept="application/pdf" style="display:none">
-    </div>
-  </div>
   <div id="summary" class="summary no-print"></div>
+
 </div>
 
 <script>
 (function(){
+
 'use strict';
-var MONTHS=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
-var DAYS=['อา.','จ.','อ.','พ.','พฤ.','ศ.','ส.'];
-var SLOTS=[
- {id:'v1',group:'เวร1',sub:'',time:'',type:'workday'},
- {id:'v2',group:'เวร2',sub:'',time:'',type:'workday'},
- {id:'ot1',group:'OT1',sub:'',time:'',type:'workday'},
- {id:'ot2',group:'OT2',sub:'',time:'',type:'workday'},
- {id:'s1d',group:'SDMC1',sub:'เช้า',time:'8.00-16.00',type:'morning'},
- {id:'s1n',group:'SDMC1',sub:'บ่าย-ดึก',time:'16.00-8.00',type:'night'},
- {id:'s2d',group:'SDMC2',sub:'เช้า',time:'8.00-16.00',type:'morning'},
- {id:'s2n',group:'SDMC2',sub:'บ่าย-ดึก',time:'16.00-8.00',type:'night'},
- {id:'s3d',group:'SDMC3',sub:'เช้า',time:'8.00-16.00',type:'morning'},
- {id:'s3n',group:'SDMC3',sub:'บ่าย-ดึก',time:'16.00-8.00',type:'night'},
- {id:'s4d',group:'SDMC4',sub:'เช้า',time:'8.00-16.00',type:'morning'},
- {id:'s4n',group:'SDMC4',sub:'บ่าย-ดึก',time:'16.00-8.00',type:'night'},
- {id:'s5',group:'SDMC5',sub:'เช้า-บ่าย',time:'7.00-23.00',type:'dayoff'},
- {id:'s6',group:'SDMC6',sub:'เช้า-บ่าย',time:'7.00-23.00',type:'dayoff'},
- {id:'s7',group:'SDMC7',sub:'บ่าย',time:'16.00-24.00',type:'daily'},
- {id:'s8',group:'SDMC8',sub:'บ่าย',time:'16.00-24.00',type:'daily'},
- {id:'e1',group:'Extra',sub:'',time:'Premium 1',type:'daily'},
- {id:'e2',group:'Extra',sub:'',time:'Premium 2',type:'daily'},
- {id:'e3',group:'Extra',sub:'',time:'Premium 3',type:'daily'}
+
+var MONTHS=[
+'มกราคม','กุมภาพันธ์','มีนาคม','เมษายน',
+'พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม',
+'กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'
 ];
-var EXTRA_IDS={e1:true,e2:true,e3:true};
-var state={people:[],assignments:{},holidays:{},customRules:[],customGlobalRules:[],pdfNote:'',rules:{uniqueDay:true,postNightLock:true,allowWeekendNightChain:false,lastExtraOnly:true,balancePrevMonth:true,rotateSameSlot:true}};
-var cloud={apiUrl:'',token:'',connected:false,savingConfigTimer:null};
-var editingGlobalRuleId=null,editingCustomRuleId=null;
-var loadedSnapshotNames={};
 
-function el(id){return document.getElementById(id)}
-function pad(n){return n<10?'0'+n:String(n)}
-function py(){var x=parseInt(el('year').value,10);return x||2569}
-function gy(){return py()-543}
-function cm(){return parseInt(el('month').value,10)||0}
-function daysIn(y,m){return new Date(y,m+1,0).getDate()}
-function dim(){return daysIn(gy(),cm())}
-function monthKey(y,m){return y+'-'+pad(m+1)}
-function currentKey(){return monthKey(gy(),cm())}
-function prevYM(){var y=gy(),m=cm()-1;if(m<0){m=11;y--}return {y:y,m:m}}
-function prevKey(){var p=prevYM();return monthKey(p.y,p.m)}
-function dateKeyFor(y,m,d){return monthKey(y,m)+'-'+pad(d)}
-function dkey(d){return dateKeyFor(gy(),cm(),d)}
-function akey(d,id){return d+'|'+id}
-function dowFor(y,m,d){return new Date(y,m,d).getDay()}
-function dow(d){return dowFor(gy(),cm(),d)}
-function isWeekend(d){var w=dow(d);return w===0||w===6}
-function isHoliday(d){return !!state.holidays[dkey(d)]}
-function isDayOff(d){return isWeekend(d)||isHoliday(d)}
-function isWeekday(d){var w=dow(d);return w>=1&&w<=5}
+var DAYS=['อา.','จ.','อ.','พ.','พฤ.','ศ.','ส.'];
 
-function baseSlotActive(slot,d){
- if(slot.type==='workday')return isWeekday(d)&&!isHoliday(d);
- if(slot.type==='morning')return isWeekday(d)&&isHoliday(d);
- if(slot.type==='dayoff')return isDayOff(d);
- return true;
+var SLOTS=[
+
+{id:'v1',label:'เวร1',kind:'v'},
+{id:'v2',label:'เวร2',kind:'v'},
+
+{id:'ot1',label:'OT1',kind:'ot'},
+{id:'ot2',label:'OT2',kind:'ot'},
+
+{id:'s1d',label:'SDMC1 เช้า',kind:'morning'},
+{id:'s1n',label:'SDMC1 บ่าย-ดึก',kind:'night'},
+
+{id:'s2d',label:'SDMC2 เช้า',kind:'morning'},
+{id:'s2n',label:'SDMC2 บ่าย-ดึก',kind:'night'},
+
+{id:'s3d',label:'SDMC3 เช้า',kind:'morning'},
+{id:'s3n',label:'SDMC3 บ่าย-ดึก',kind:'night'},
+
+{id:'s4d',label:'SDMC4 เช้า',kind:'morning'},
+{id:'s4n',label:'SDMC4 บ่าย-ดึก',kind:'night'},
+
+{id:'s5',label:'SDMC5 เช้า-บ่าย',kind:'long'},
+{id:'s6',label:'SDMC6 เช้า-บ่าย',kind:'long'},
+
+{id:'s7',label:'SDMC7 บ่าย',kind:'evening'},
+{id:'s8',label:'SDMC8 บ่าย',kind:'evening'},
+
+{id:'e1',label:'EXTRA1',kind:'extra'},
+{id:'e2',label:'EXTRA2',kind:'extra'},
+{id:'e3',label:'EXTRA3',kind:'extra'}
+
+];
+
+var GROUPS={
+
+v:{
+ label:'เวร1–2',
+ slots:['v1','v2']
+},
+
+ot:{
+ label:'OT1–2',
+ slots:['ot1','ot2']
+},
+
+morning:{
+ label:'SDMC เช้า1–4',
+ slots:['s1d','s2d','s3d','s4d']
+},
+
+night:{
+ label:'SDMC บ่าย–ดึก1–4',
+ slots:['s1n','s2n','s3n','s4n']
+},
+
+long:{
+ label:'SDMC เช้า–บ่าย5–6',
+ slots:['s5','s6']
+},
+
+evening:{
+ label:'SDMC บ่าย7–8',
+ slots:['s7','s8']
+},
+
+extra:{
+ label:'EXTRA1–3',
+ slots:['e1','e2','e3']
 }
 
-function dayTypeMatches(type,d){
- var w=dow(d);
- if(type==='all')return true;
- if(type==='all_no_holiday')return !isHoliday(d);
- if(type==='no_holiday')return !isHoliday(d);
- if(type==='weekday')return isWeekday(d);
- if(type==='weekday_no_holiday')return isWeekday(d)&&!isHoliday(d);
- if(type==='saturday')return w===6&&!isHoliday(d);
- if(type==='sunday')return w===0&&!isHoliday(d);
- if(type==='weekend')return isWeekend(d)&&!isHoliday(d);
- if(type==='holiday')return isHoliday(d);
- if(type==='monday')return w===1&&!isHoliday(d);
- if(type==='tuesday')return w===2&&!isHoliday(d);
- if(type==='wednesday')return w===3&&!isHoliday(d);
- if(type==='thursday')return w===4&&!isHoliday(d);
- if(type==='friday')return w===5&&!isHoliday(d);
- return false;
-}
-
-function globalRunRuleResult(slotId,d){
- var found=false,match=false;
- for(var i=0;i<state.customGlobalRules.length;i++){
-   var r=state.customGlobalRules[i];
-   if(r.enabled===false||r.slots.indexOf(slotId)<0)continue;
-   found=true;
-   var types=Array.isArray(r.dayTypes)?r.dayTypes:(r.dayType?[r.dayType]:[]);
-   for(var j=0;j<types.length;j++){if(dayTypeMatches(types[j],d)){match=true;break}}
-   if(match)break;
- }
- return {found:found,match:match};
-}
-
-function slotActive(slot,d){
- var rr=globalRunRuleResult(slot.id,d);
- if(rr.found)return rr.match;
- return baseSlotActive(slot,d);
-}
-
-function makeId(){return 'p_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,7)}
-function defaultPeople(){var a=[];for(var i=1;i<=28;i++)a.push({id:'p'+i,name:'บุคลากร '+i});return a}
-function safeParse(s,fallback){try{return JSON.parse(s)}catch(e){return fallback}}
-function configPayload(){return {people:state.people,holidays:state.holidays,customRules:state.customRules,customGlobalRules:state.customGlobalRules,pdfNote:state.pdfNote,rules:state.rules}}
-function saveConfig(){state.pdfNote=el('pdfNote')?el('pdfNote').value:state.pdfNote;var payload=configPayload();localStorage.setItem('roster_config_v8',JSON.stringify(payload));scheduleCloudConfigSave(payload)}
-function loadConfig(){var c=safeParse(localStorage.getItem('roster_config_v8'),null)||safeParse(localStorage.getItem('roster_config_v7'),null);if(c){state.people=Array.isArray(c.people)&&c.people.length?c.people:defaultPeople();state.holidays=c.holidays||{};state.customRules=c.customRules||[];state.customGlobalRules=c.customGlobalRules||[];state.pdfNote=c.pdfNote||'';state.rules=Object.assign(state.rules,c.rules||{});state.rules.allowWeekendNightChain=false}else state.people=defaultPeople()}
-function scheduleStorageKey(k){return 'roster_month_v7_'+k}
-function getSavedMonth(k){return safeParse(localStorage.getItem(scheduleStorageKey(k)),null)}
-function makeMonthPayload(){return {version:19,key:currentKey(),year:gy(),month:cm(),savedAt:new Date().toISOString(),assignments:state.assignments,peopleSnapshot:state.people.map(function(p){return {id:p.id,name:p.name}}),holidaysSnapshot:Object.assign({},state.holidays),rulesSnapshot:Object.assign({},state.rules),customRulesSnapshot:state.customRules.slice(),customGlobalRulesSnapshot:state.customGlobalRules.slice()}}
-function saveMonth(silent){var data=makeMonthPayload();localStorage.setItem(scheduleStorageKey(currentKey()),JSON.stringify(data));cloudSaveMonth(data);if(!silent)setStatus('บันทึกตารางเดือน '+MONTHS[cm()]+' '+py()+' แล้ว'+(cloud.connected?' และกำลังซิงก์ออนไลน์':''),true);renderHistoryInfo()}
-function loadMonth(silent){var data=getSavedMonth(currentKey());state.assignments={};loadedSnapshotNames={};if(data){state.assignments=data.assignments||{};(data.peopleSnapshot||[]).forEach(function(p){loadedSnapshotNames[p.id]=p.name});if(!silent)setStatus('เปิดตารางที่บันทึกของเดือน '+MONTHS[cm()]+' '+py()+' แล้ว',true)}else if(!silent)setStatus('เดือนนี้ยังไม่มีตารางที่บันทึก',false);renderSheet();renderHistoryInfo()}
-function renderHistoryInfo(){var cur=getSavedMonth(currentKey()),prev=getSavedMonth(prevKey());el('historyInfo').innerHTML='เดือนนี้: <b>'+(cur?'มีข้อมูลบันทึก':'ยังไม่บันทึก')+'</b> &nbsp;|&nbsp; เดือนก่อนหน้า ('+prevKey()+'): <b>'+(prev?'พบข้อมูลสำหรับอ้างอิง':'ไม่พบข้อมูล')+'</b>'}
-function personName(id){for(var i=0;i<state.people.length;i++)if(state.people[i].id===id)return state.people[i].name;return loadedSnapshotNames[id]||id}
-function buildMonths(){var h='';for(var i=0;i<12;i++)h+='<option value="'+i+'">'+MONTHS[i]+'</option>';el('month').innerHTML=h}
-
-function buildNames(){
- var h='';
- state.people.forEach(function(p,i){
-   var last=i===state.people.length-1;
-   h+='<div class="name-row"><b>'+(i+1)+'.</b><input data-pid="'+p.id+'" value="'+escapeHtml(p.name)+'"><span class="lastbadge" style="display:'+(last?'inline-block':'none')+'">EXTRA 1-3 เท่านั้น</span></div>';
- });
- el('names').innerHTML=h;
- el('personCount').textContent='จำนวน '+state.people.length+' รายชื่อ';
- var inputs=el('names').querySelectorAll('input');
- for(var j=0;j<inputs.length;j++)inputs[j].addEventListener('change',function(){
-   var id=this.getAttribute('data-pid');
-   for(var k=0;k<state.people.length;k++)if(state.people[k].id===id)state.people[k].name=this.value.trim()||('บุคลากร '+(k+1));
-   saveConfig();buildCustomPersonOptions();renderSheet();
- });
- buildCustomPersonOptions();
-}
-
-function addPerson(){state.people.push({id:makeId(),name:'บุคลากร '+(state.people.length+1)});saveConfig();buildNames();renderSheet();setStatus('เพิ่มรายชื่อแล้ว',true)}
-function removePerson(){if(state.people.length<=1){setStatus('ต้องมีบุคลากรอย่างน้อย 1 รายชื่อ',false);return}var removed=state.people.pop();state.customRules=state.customRules.filter(function(r){return r.personId!==removed.id});saveConfig();buildNames();renderRules();renderSheet();setStatus('ลบรายชื่อสุดท้ายแล้ว',true)}
-function escapeHtml(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
-
-function optionHtml(selected){
- var h='<option value=""></option>',seen={};
- state.people.forEach(function(p,i){seen[p.id]=true;h+='<option value="'+p.id+'"'+(selected===p.id?' selected':'')+'>'+(i+1)+'. '+escapeHtml(p.name)+'</option>'});
- if(selected&&!seen[selected])h+='<option value="'+selected+'" selected>'+escapeHtml(personName(selected))+' (รายชื่อเดิม)</option>';
- return h;
-}
-
-function buildHeader(){
- var h='<caption>ตารางเวรผู้ช่วยพยาบาล เดือน'+MONTHS[cm()]+' '+py()+'</caption><thead><tr><th class="date" rowspan="3">วันที่</th>';
- for(var i=0;i<SLOTS.length;i++){
-   var s=SLOTS[i];
-   if(s.id==='v1'||s.id==='v2'||s.id==='ot1'||s.id==='ot2'){h+='<th rowspan="3">'+s.group+'</th>';continue}
-   if(s.id==='s1d'||s.id==='s2d'||s.id==='s3d'||s.id==='s4d'){h+='<th colspan="2">'+s.group+'</th>';i++;continue}
-   if(s.id==='s5'||s.id==='s6'||s.id==='s7'||s.id==='s8'){h+='<th>'+s.group+'</th>';continue}
-   h+='<th rowspan="2">'+s.group+'</th>';
- }
- h+='</tr><tr>';
- for(i=0;i<SLOTS.length;i++){
-   s=SLOTS[i];
-   if(s.id==='v1'||s.id==='v2'||s.id==='ot1'||s.id==='ot2')continue;
-   if(s.id==='s1d'||s.id==='s2d'||s.id==='s3d'||s.id==='s4d'){h+='<th>'+s.sub+'</th><th>'+SLOTS[i+1].sub+'</th>';i++;continue}
-   if(s.id==='s5'||s.id==='s6'||s.id==='s7'||s.id==='s8')h+='<th>'+s.sub+'</th>';
- }
- h+='</tr><tr>';
- for(i=0;i<SLOTS.length;i++){
-   s=SLOTS[i];
-   if(s.id==='v1'||s.id==='v2'||s.id==='ot1'||s.id==='ot2')continue;
-   h+='<th>'+s.time+'</th>';
- }
- h+='</tr></thead>';
- return h;
-}
-
-function renderSheet(){
- var h=buildHeader()+'<tbody>';
- for(var d=1;d<=dim();d++){
-   var cls=isHoliday(d)?'holiday':(isWeekend(d)?'weekend':'');
-   h+='<tr class="'+cls+'"><td class="date"><b>'+DAYS[dow(d)]+d+'</b>'+(isHoliday(d)?'<br><small>นักขัตฯ</small>':'')+'</td>';
-   for(var i=0;i<SLOTS.length;i++){
-     var s=SLOTS[i];
-     if(!slotActive(s,d)){h+='<td class="inactive"></td>';continue}
-     var v=state.assignments[akey(d,s.id)]||'';
-     h+='<td data-d="'+d+'" data-s="'+s.id+'"><select data-d="'+d+'" data-s="'+s.id+'">'+optionHtml(v)+'</select></td>';
-   }
-   h+='</tr>';
- }
- h+='</tbody>';
- el('sheet').innerHTML=h;
- var sels=el('sheet').querySelectorAll('select');
- for(var j=0;j<sels.length;j++)sels[j].addEventListener('change',function(){manualChange(this)});
- validateSchedule(false);
- renderSummary();
-}
-
-function manualChange(sel){var d=parseInt(sel.getAttribute('data-d'),10),id=sel.getAttribute('data-s');state.assignments[akey(d,id)]=sel.value;if(!sel.value)delete state.assignments[akey(d,id)];validateSchedule(false);renderSummary()}
-function usedToday(d,assign){var o={};assign=assign||state.assignments;for(var i=0;i<SLOTS.length;i++){var v=assign[akey(d,SLOTS[i].id)];if(v)o[v]=true}return o}
-function hadNightIn(assign,person,d){for(var i=0;i<SLOTS.length;i++)if(SLOTS[i].type==='night'&&assign[akey(d,SLOTS[i].id)]===person)return true;return false}
-function previousMonthBoundaryHadNight(person){var p=prevYM(),data=getSavedMonth(prevKey());if(!data)return false;var last=daysIn(p.y,p.m),a=data.assignments||{};for(var i=0;i<SLOTS.length;i++)if(SLOTS[i].type==='night'&&a[last+'|'+SLOTS[i].id]===person)return true;return false}
-function customAllowed(person,slotId){for(var i=0;i<state.customRules.length;i++){var r=state.customRules[i];if(r.enabled===false||r.personId!==person)continue;if(r.type==='only'&&r.slots.indexOf(slotId)<0)return false;if(r.type==='block'&&r.slots.indexOf(slotId)>=0)return false}return true}
-
-function eligible(person,d,slot){
- if(!slotActive(slot,d))return false;
- if(state.rules.uniqueDay&&usedToday(d)[person])return false;
- if(state.rules.lastExtraOnly&&state.people.length&&person===state.people[state.people.length-1].id&&!EXTRA_IDS[slot.id])return false;
- if(!customAllowed(person,slot.id))return false;
-
- // V19: หลัง SDMC บ่าย-ดึก วันถัดไปพักเต็มวัน ห้ามทุกเวร/OT/EXTRA/SDMC
- if(state.rules.postNightLock){
-   if(d===1&&previousMonthBoundaryHadNight(person))return false;
-   if(d>1&&hadNightIn(state.assignments,person,d-1))return false;
- }
- return true;
-}
-
-function initCounts(){
- var c={total:{},slot:{}};
- state.people.forEach(function(p){c.total[p.id]=0});
- SLOTS.forEach(function(s){c.slot[s.id]={};state.people.forEach(function(p){c.slot[s.id][p.id]=0})});
- return c;
-}
-
-function addCountsFromAssignments(c,assign){
- for(var k in assign)if(Object.prototype.hasOwnProperty.call(assign,k)){
-   var pid=assign[k];
-   if(!pid||c.total[pid]===undefined)continue;
-   var sid=k.split('|')[1];
-   if(c.slot[sid]){
-     c.slot[sid][pid]=(c.slot[sid][pid]||0)+1;
-     c.total[pid]=(c.total[pid]||0)+1;
-   }
- }
-}
-
-function previousCounts(){
- var c=initCounts();
- if(!state.rules.balancePrevMonth)return c;
- var data=getSavedMonth(prevKey());
- if(data)addCountsFromAssignments(c,data.assignments||{});
- return c;
-}
-
-function previousSlotLastPerson(slotId){
- var data=getSavedMonth(prevKey());
- if(!data||!data.assignments)return '';
- var bestDay=-1,last='';
- for(var k in data.assignments)if(Object.prototype.hasOwnProperty.call(data.assignments,k)){
-   var parts=k.split('|');
-   if(parts[1]!==slotId)continue;
-   var dd=parseInt(parts[0],10)||0;
-   if(dd>bestDay){bestDay=dd;last=data.assignments[k]}
- }
- return last;
-}
-
-function recentSameSlotPenalty(person,slot,d){
- if(!state.rules.rotateSameSlot)return 0;
- for(var x=d-1;x>=1;x--){
-   var v=state.assignments[akey(x,slot.id)];
-   if(v)return v===person?1:0;
- }
- return previousSlotLastPerson(slot.id)===person?1:0;
-}
-
-function rotationTie(person,slot,d){
- if(!state.rules.rotateSameSlot)return Math.random();
- var pi=0,si=0;
- for(var i=0;i<state.people.length;i++)if(state.people[i].id===person){pi=i;break}
- for(i=0;i<SLOTS.length;i++)if(SLOTS[i].id===slot.id){si=i;break}
- return ((pi+cm()+si+d)%Math.max(1,state.people.length))/Math.max(1,state.people.length);
-}
-
-// V19: คิดค่าเฉลี่ยแยกทีละเวร ไม่เอาเวรอื่นมาถ่วง
-function choose(cands,slot,currentCounts,baseCounts,d){
- var best=[],bestKey=null;
- for(var i=0;i<cands.length;i++){
-   var p=cands[i];
-   var slotCombined=(baseCounts.slot[slot.id][p]||0)+(currentCounts.slot[slot.id][p]||0);
-   var recent=recentSameSlotPenalty(p,slot,d);
-   var key=[slotCombined,recent,rotationTie(p,slot,d)];
-
-   if(bestKey===null){bestKey=key;best=[p];continue}
-
-   var cmp=0;
-   for(var q=0;q<key.length;q++){
-     if(key[q]<bestKey[q]){cmp=-1;break}
-     if(key[q]>bestKey[q]){cmp=1;break}
-   }
-
-   if(cmp<0){bestKey=key;best=[p]}
-   else if(cmp===0)best.push(p);
- }
- return best.length===1?best[0]:best[Math.floor(Math.random()*best.length)];
-}
-
-async function runSchedule(){
- try{
-   if(cloud.connected)await ensureCloudMonths([prevKey(),currentKey()]);
-   state.assignments={};
-
-   var current=initCounts(),base=previousCounts(),order=[],i,d,j,s,p,cands;
-
-   // จัดบ่าย-ดึกก่อน เพื่อให้กฎพักวันถัดไปถูกบังคับแน่นอน
-   for(i=0;i<SLOTS.length;i++)if(SLOTS[i].type==='night')order.push(SLOTS[i]);
-   for(i=0;i<SLOTS.length;i++)if(SLOTS[i].type!=='night')order.push(SLOTS[i]);
-
-   for(d=1;d<=dim();d++){
-     for(j=0;j<order.length;j++){
-       s=order[j];
-       if(!slotActive(s,d))continue;
-
-       cands=[];
-       for(i=0;i<state.people.length;i++){
-         p=state.people[i].id;
-         if(eligible(p,d,s))cands.push(p);
-       }
-
-       if(!cands.length)continue;
-
-       p=choose(cands,s,current,base,d);
-       state.assignments[akey(d,s.id)]=p;
-       current.slot[s.id][p]++;
-       current.total[p]++;
-     }
-   }
-
-   renderSheet();
-   var e=validateSchedule(false);
-   saveMonth(true);
-   setStatus(e?'รันเสร็จ แต่พบข้อขัดแย้ง '+e+' จุด':'รันและบันทึกตารางเวรเสร็จแล้ว โดยเฉลี่ยแต่ละเวรแยกกันและอ้างอิงเดือนก่อนหน้าแล้ว',!e);
- }catch(err){
-   setStatus('เกิดข้อผิดพลาด: '+err.message,false);
- }
-}
-
-function validateSchedule(show){
- var old=document.querySelectorAll('td.conflict');
- for(var x=0;x<old.length;x++)old[x].classList.remove('conflict');
-
- var e=0;
-
- for(var d=1;d<=dim();d++){
-   var seen={};
-
-   for(var i=0;i<SLOTS.length;i++){
-     var s=SLOTS[i],v=state.assignments[akey(d,s.id)];
-     if(!v)continue;
-
-     if(state.rules.uniqueDay&&seen[v]){
-       mark(d,s.id);
-       mark(d,seen[v]);
-       e++;
-     }else{
-       seen[v]=s.id;
-     }
-
-     if(state.rules.lastExtraOnly&&state.people.length&&v===state.people[state.people.length-1].id&&!EXTRA_IDS[s.id]){
-       mark(d,s.id);
-       e++;
-     }
-   }
-
-   // V19: ถ้าวันก่อนหน้ามี SDMC บ่าย-ดึก คนเดิมห้ามอยู่ทุกช่องในวันนี้
-   if(state.rules.postNightLock){
-     for(i=0;i<SLOTS.length;i++){
-       s=SLOTS[i];
-       v=state.assignments[akey(d,s.id)];
-       if(!v)continue;
-
-       var blocked=false;
-       if(d===1&&previousMonthBoundaryHadNight(v))blocked=true;
-       else if(d>1&&hadNightIn(state.assignments,v,d-1))blocked=true;
-
-       if(blocked){
-         mark(d,s.id);
-         e++;
-       }
-     }
-   }
- }
-
- if(show)setStatus(e?'พบข้อขัดแย้ง '+e+' จุด':'ไม่พบข้อขัดแย้ง',!e);
- return e;
-}
-
-function mark(d,id){var x=document.querySelector('td[data-d="'+d+'"][data-s="'+id+'"]');if(x)x.classList.add('conflict')}
-function clearSchedule(){if(!confirm('ล้างตารางเดือนนี้ทั้งหมดหรือไม่?'))return;state.assignments={};renderSheet();setStatus('ล้างตารางแล้ว (ยังไม่ลบข้อมูลที่บันทึกจนกว่าจะกดบันทึกเดือนนี้)',true)}
-function setStatus(t,ok){el('status').textContent=t;el('status').className='status '+(ok?'ok':'err')}
-
-function addHoliday(){
- var v=el('holidayDate').value;
- if(!v){setStatus('กรุณาเลือกวันที่ก่อน',false);return}
- state.holidays[v]={name:el('holidayName').value.trim()||'วันหยุด'};
- saveConfig();renderHolidays();renderSheet();setStatus('เพิ่มวันหยุด '+v+' แล้ว',true);
-}
-
-function renderHolidays(){
- var keys=Object.keys(state.holidays).sort(),h='';
- for(var i=0;i<keys.length;i++){
-   var k=keys[i],obj=state.holidays[k],nm=(obj&&obj.name)||'วันหยุด';
-   h+='<span class="chip">'+k+' '+escapeHtml(nm)+' <button class="smallbtn" type="button" data-holiday="'+k+'">×</button></span>';
- }
- el('chips').innerHTML=h;
- var btns=el('chips').querySelectorAll('button');
- for(i=0;i<btns.length;i++)btns[i].addEventListener('click',function(){
-   delete state.holidays[this.getAttribute('data-holiday')];
-   saveConfig();renderHolidays();renderSheet();
- });
-}
-
-var RULE_LABELS={
- uniqueDay:'ชื่อห้ามซ้ำในวัน/แถวเดียวกัน',
- postNightLock:'หลังเวร SDMC บ่าย–ดึก วันถัดไปพักเต็มวัน ห้ามเวร1–2, OT1–2, SDMC ทุกเวร และ EXTRA1–3 โดยไม่มีข้อยกเว้น',
- lastExtraOnly:'รายชื่อสุดท้ายขึ้นได้เฉพาะ EXTRA 1–3',
- balancePrevMonth:'เฉลี่ยแต่ละเวรแยกกัน โดยนับเวรชนิดเดียวกันจากเดือนก่อนหน้า + เดือนปัจจุบัน เพื่อให้แต่ละคนได้เวรนั้นใกล้เคียงกันที่สุด',
- rotateSameSlot:'วนเวรในแต่ละเดือน ไม่ให้คนเดิมขึ้นเวรเดิมซ้ำ ๆ'
 };
 
-function renderRules(){
- var h='';
- Object.keys(RULE_LABELS).forEach(function(k){
-   h+='<div class="rule-item"><label><input type="checkbox" data-rule="'+k+'" '+(state.rules[k]?'checked':'')+'> '+RULE_LABELS[k]+'</label></div>';
- });
- el('ruleList').innerHTML=h;
- var cbs=el('ruleList').querySelectorAll('input');
- for(var i=0;i<cbs.length;i++)cbs[i].addEventListener('change',function(){
-   state.rules[this.getAttribute('data-rule')]=this.checked;
-   saveConfig();renderSheet();
- });
- renderGlobalRules();
- renderCustomRules();
+var SLOT_GROUP={};
+
+Object.keys(GROUPS).forEach(function(g){
+
+GROUPS[g].slots.forEach(function(s){
+
+SLOT_GROUP[s]=g;
+
+});
+
+});
+
+var CORE_RULES=[
+
+'เวลาปฏิบัติงานในเวลาราชการ คือ วันจันทร์–ศุกร์ เวลา 08:00–16:00 น. โดยไม่รวมวันหยุดนักขัตฤกษ์ ส่วนวันและเวลาอื่นทั้งหมดถือเป็นเวรนอกเวลา',
+
+'ชื่อบุคลากรห้ามซ้ำในวันเดียวกันทุกประเภทเวร',
+
+'หลังจากขึ้นเวรบ่าย–ดึก วันถัดไปห้ามจัดเวรทุกประเภท ยกเว้นช่วงวันศุกร์ วันเสาร์ วันอาทิตย์ และวันหยุดนักขัตฤกษ์ สามารถจัดเวรบ่าย–ดึกต่อเนื่องกันได้',
+
+'รายชื่อบุคลากรคนสุดท้ายสามารถจัดได้เฉพาะ EXTRA1, EXTRA2 และ EXTRA3',
+
+'หลีกเลี่ยงการจัดเวรหนักติดต่อกันหลายวัน',
+
+'แยกค่าเฉลี่ยเป็น เวร1–2 / OT1–2 / SDMC เช้า1–4 / SDMC บ่าย–ดึก1–4 / SDMC เช้า–บ่าย5–6 / SDMC บ่าย7–8 / EXTRA1–3',
+
+'เวร1–2 จัดทุกวัน รวมวันหยุดนักขัตฤกษ์',
+
+'OT1–2 จัดเฉพาะจันทร์–ศุกร์ ไม่รวมวันหยุดนักขัตฤกษ์',
+
+'SDMC เช้า1–4 จัดเฉพาะเสาร์ อาทิตย์ และวันหยุดนักขัตฤกษ์',
+
+'SDMC บ่าย–ดึก1–4 จัดทุกวัน รวมวันหยุดนักขัตฤกษ์',
+
+'SDMC เช้า–บ่าย5–6 จัดเฉพาะเสาร์ อาทิตย์ และวันหยุดนักขัตฤกษ์',
+
+'SDMC บ่าย7–8 จัดเฉพาะจันทร์–ศุกร์ ไม่รวมวันหยุดนักขัตฤกษ์',
+
+'EXTRA1 จัดทุกวัน แต่ไม่จัดวันหยุดนักขัตฤกษ์',
+
+'EXTRA2 จัดเฉพาะ จันทร์ อังคาร พุธ พฤหัสบดี และอาทิตย์ ไม่จัดศุกร์ เสาร์ และวันหยุดนักขัตฤกษ์',
+
+'EXTRA3 จัดทุกวัน รวมวันหยุดนักขัตฤกษ์',
+
+'กระจายเวรแต่ละประเภทอย่างยุติธรรม และแยกภาระในเวลาราชการกับนอกเวลา',
+
+'ใช้ระบบหมุนเวียนตามลำดับรายชื่อ หากถึงคิวแต่ติดเงื่อนไขให้ข้ามชั่วคราว',
+
+'หมุนเวียนตำแหน่งภายในประเภท และหลีกเลี่ยงตำแหน่งเดิมหรือชื่อเดียวกันติดกันหลายวัน',
+
+'เดือนใหม่ต้องอ้างอิงจำนวนเวร คิว ประเภท และประวัติของเดือนก่อนหน้า',
+
+'ตรวจรอยต่อปลายเดือนก่อนกับวันที่ 1 ของเดือนใหม่ด้วยกฎเดียวกัน'
+
+];
+
+var state={
+
+people:[],
+
+assignments:{},
+
+holidays:{},
+
+customRules:[],
+
+pdfNote:'',
+
+rotation:{}
+
+};
+
+var cloud={
+ apiUrl:'',
+ token:'',
+ connected:false,
+ timer:null
+};
+
+function el(id){
+ return document.getElementById(id);
 }
 
-function buildCustomPersonOptions(){
- var h='';
- state.people.forEach(function(p,i){h+='<option value="'+p.id+'">'+(i+1)+'. '+escapeHtml(p.name)+'</option>'});
- el('customPerson').innerHTML=h;
- var s='';
- SLOTS.forEach(function(x){s+='<option value="'+x.id+'">'+x.group+(x.sub?' '+x.sub:'')+' '+x.time+'</option>'});
- el('customSlots').innerHTML=s;
- el('globalSlots').innerHTML=s;
+function pad(n){
+ return n<10?'0'+n:String(n);
 }
 
-function selectedValues(sel){var a=[];for(var i=0;i<sel.options.length;i++)if(sel.options[i].selected)a.push(sel.options[i].value);return a}
-function setSelectedValues(sel,vals){for(var i=0;i<sel.options.length;i++)sel.options[i].selected=vals.indexOf(sel.options[i].value)>=0}
+function py(){
+ return parseInt(el('year').value,10)||2569;
+}
 
-function cancelCustomEdit(){editingCustomRuleId=null;el('addCustomRuleBtn').textContent='+ เพิ่มกติกาเฉพาะบุคคล';el('cancelCustomEditBtn').style.display='none';setSelectedValues(el('customSlots'),[])}
+function gy(){
+ return py()-543;
+}
 
-function addCustomRule(){
- var pid=el('customPerson').value,slots=selectedValues(el('customSlots')),type=el('customRuleType').value;
- if(!pid||!slots.length){setStatus('เลือกบุคลากรและเวรอย่างน้อย 1 รายการ',false);return}
+function cm(){
+ return parseInt(el('month').value,10)||0;
+}
 
- if(editingCustomRuleId){
-   for(var i=0;i<state.customRules.length;i++)if(state.customRules[i].id===editingCustomRuleId){
-     state.customRules[i].personId=pid;
-     state.customRules[i].type=type;
-     state.customRules[i].slots=slots;
-     break;
-   }
-   saveConfig();cancelCustomEdit();renderCustomRules();renderSheet();setStatus('บันทึกการแก้ไขกติกาเฉพาะบุคคลแล้ว',true);return;
+function dim(){
+ return new Date(gy(),cm()+1,0).getDate();
+}
+
+function keyMonth(y,m){
+ return y+'-'+pad(m+1);
+}
+
+function currentKey(){
+ return keyMonth(gy(),cm());
+}
+
+function prevYM(){
+
+ var y=gy();
+ var m=cm()-1;
+
+ if(m<0){
+  m=11;
+  y--;
  }
 
- state.customRules.push({id:'r_'+Date.now(),type:type,personId:pid,slots:slots,enabled:true});
- saveConfig();renderCustomRules();setSelectedValues(el('customSlots'),[]);setStatus('เพิ่มกติกาเฉพาะบุคคลแล้ว',true);
+ return {y:y,m:m};
+
 }
 
-function editCustomRule(id){
- var r=null;
- for(var i=0;i<state.customRules.length;i++)if(state.customRules[i].id===id){r=state.customRules[i];break}
- if(!r)return;
- editingCustomRuleId=id;
- el('customPerson').value=r.personId;
- el('customRuleType').value=r.type;
- setSelectedValues(el('customSlots'),r.slots);
- el('addCustomRuleBtn').textContent='บันทึกการแก้ไข';
- el('cancelCustomEditBtn').style.display='inline-block';
- el('customPerson').scrollIntoView({behavior:'smooth',block:'center'});
+function prevKey(){
+
+ var p=prevYM();
+
+ return keyMonth(p.y,p.m);
+
+}
+
+function dayKey(y,m,d){
+ return keyMonth(y,m)+'-'+pad(d);
+}
+
+function dkey(d){
+ return dayKey(gy(),cm(),d);
+}
+
+function akey(d,s){
+ return d+'|'+s;
+}
+
+function dow(d){
+ return new Date(gy(),cm(),d).getDay();
+}
+
+function isHoliday(d){
+ return !!state.holidays[dkey(d)];
+}
+
+function isWeekend(d){
+
+ var w=dow(d);
+
+ return w===0||w===6;
+
+}
+
+function weekdayNoHoliday(d){
+
+ var w=dow(d);
+
+ return w>=1&&w<=5&&!isHoliday(d);
+
+}
+
+function slotById(id){
+
+ return SLOTS.find(function(s){
+  return s.id===id;
+ });
+
+}
+
+function active(slot,d){
+
+ var w=dow(d);
+
+ if(slot.id==='v1'||slot.id==='v2'){
+  return true;
+ }
+
+ if(slot.id==='ot1'||slot.id==='ot2'){
+  return weekdayNoHoliday(d);
+ }
+
+ if(slot.kind==='morning'){
+  return isWeekend(d)||isHoliday(d);
+ }
+
+ if(slot.kind==='night'){
+  return true;
+ }
+
+ if(slot.kind==='long'){
+  return isWeekend(d)||isHoliday(d);
+ }
+
+ if(slot.kind==='evening'){
+  return weekdayNoHoliday(d);
+ }
+
+ if(slot.id==='e1'){
+  return !isHoliday(d);
+ }
+
+ if(slot.id==='e2'){
+
+  return !isHoliday(d)&&(
+   w===0||
+   w===1||
+   w===2||
+   w===3||
+   w===4
+  );
+
+ }
+
+ if(slot.id==='e3'){
+  return true;
+ }
+
+ return false;
+
+}
+
+function defaultPeople(){
+
+ var a=[];
+
+ for(var i=1;i<=28;i++){
+
+  a.push({
+   id:'p'+i,
+   name:'บุคลากร '+i
+  });
+
+ }
+
+ return a;
+
+}
+
+function parseJSON(v,f){
+
+ try{
+  return JSON.parse(v);
+ }catch(e){
+  return f;
+ }
+
+}
+
+function loadConfig(){
+
+ var c=parseJSON(
+  localStorage.getItem('roster_config_v8'),
+  null
+ );
+
+ if(c){
+
+  state.people=
+   Array.isArray(c.people)&&c.people.length
+   ?c.people
+   :defaultPeople();
+
+  state.holidays=c.holidays||{};
+
+  state.customRules=c.customRules||[];
+
+  state.pdfNote=c.pdfNote||'';
+
+ }else{
+
+  state.people=defaultPeople();
+
+ }
+
+}
+
+function configPayload(){
+
+ return {
+  people:state.people,
+  holidays:state.holidays,
+  customRules:state.customRules,
+  pdfNote:state.pdfNote
+ };
+
+}
+
+function saveConfig(){
+
+ state.pdfNote=el('pdfNote').value;
+
+ var payload=configPayload();
+
+ localStorage.setItem(
+  'roster_config_v8',
+  JSON.stringify(payload)
+ );
+
+ scheduleCloudConfigSave(payload);
+
+}
+
+function storageKey(k){
+
+ return 'roster_month_v7_'+k;
+
+}
+
+function savedMonth(k){
+
+ return parseJSON(
+  localStorage.getItem(storageKey(k)),
+  null
+ );
+
+}
+
+function monthPayload(){
+
+ return {
+
+  version:20,
+
+  key:currentKey(),
+
+  year:gy(),
+
+  month:cm(),
+
+  savedAt:new Date().toISOString(),
+
+  assignments:state.assignments,
+
+  rotation:state.rotation,
+
+  peopleSnapshot:state.people,
+
+  holidaysSnapshot:state.holidays
+
+ };
+
+}
+
+function saveMonth(silent){
+
+ var data=monthPayload();
+
+ localStorage.setItem(
+  storageKey(currentKey()),
+  JSON.stringify(data)
+ );
+
+ cloudSaveMonth(data);
+
+ if(!silent){
+
+  setStatus(
+   'บันทึกเดือน '+MONTHS[cm()]+' '+py()+' แล้ว',
+   true
+  );
+
+ }
+
+ renderHistory();
+
+}
+
+function loadMonth(silent){
+
+ var data=savedMonth(currentKey());
+
+ state.assignments={};
+ state.rotation={};
+
+ if(data){
+
+  state.assignments=data.assignments||{};
+
+  state.rotation=data.rotation||{};
+
+  if(!silent){
+
+   setStatus(
+    'เปิดตารางที่บันทึกแล้ว',
+    true
+   );
+
+  }
+
+ }else if(!silent){
+
+  setStatus(
+   'เดือนนี้ยังไม่มีข้อมูลที่บันทึก',
+   false
+  );
+
+ }
+
+ renderSheet();
+ renderHistory();
+
+}
+
+function renderHistory(){
+
+ var cur=savedMonth(currentKey());
+
+ var prev=savedMonth(prevKey());
+
+ el('historyInfo').innerHTML=
+ 'เดือนนี้: <b>'+
+ (cur?'มีข้อมูลบันทึก':'ยังไม่บันทึก')+
+ '</b> | เดือนก่อน: <b>'+
+ (prev?'พบข้อมูล':'ไม่พบข้อมูล')+
+ '</b>';
+
+}
+
+function personName(pid){
+
+ var p=state.people.find(function(x){
+  return x.id===pid;
+ });
+
+ return p?p.name:pid;
+
+}
+
+function personIndex(pid){
+
+ return state.people.findIndex(function(p){
+  return p.id===pid;
+ });
+
+}
+
+function buildMonths(){
+
+ var h='';
+
+ MONTHS.forEach(function(m,i){
+
+  h+='<option value="'+i+'">'+m+'</option>';
+
+ });
+
+ el('month').innerHTML=h;
+
+}
+
+function escapeHtml(s){
+
+ return String(s).replace(/[&<>"']/g,function(c){
+
+  return {
+   '&':'&amp;',
+   '<':'&lt;',
+   '>':'&gt;',
+   '"':'&quot;',
+   "'":'&#39;'
+  }[c];
+
+ });
+
+}
+
+function buildNames(){
+
+ var h='';
+
+ state.people.forEach(function(p,i){
+
+  h+=
+  '<div class="name-row">'+
+  '<b>'+(i+1)+'.</b>'+
+  '<input data-pid="'+p.id+'" value="'+escapeHtml(p.name)+'">'+
+  '<span class="lastbadge" style="display:'+
+  (i===state.people.length-1?'inline-block':'none')+
+  '">EXTRA1–3 เท่านั้น</span>'+
+  '</div>';
+
+ });
+
+ el('names').innerHTML=h;
+
+ el('personCount').textContent=
+ 'จำนวน '+state.people.length+' รายชื่อ';
+
+ el('names')
+ .querySelectorAll('input')
+ .forEach(function(input){
+
+  input.addEventListener('change',function(){
+
+   var pid=this.dataset.pid;
+
+   var p=state.people.find(function(x){
+    return x.id===pid;
+   });
+
+   if(p){
+
+    p.name=this.value.trim()||p.name;
+
+   }
+
+   saveConfig();
+
+   buildCustomPerson();
+
+   renderSheet();
+
+  });
+
+ });
+
+ buildCustomPerson();
+
+}
+
+function addPerson(){
+
+ state.people.push({
+
+  id:'p_'+Date.now(),
+
+  name:'บุคลากร '+(state.people.length+1)
+
+ });
+
+ saveConfig();
+
+ buildNames();
+
+ renderSheet();
+
+}
+
+function removePerson(){
+
+ if(state.people.length<=1)return;
+
+ var removed=state.people.pop();
+
+ state.customRules=
+ state.customRules.filter(function(r){
+
+  return r.personId!==removed.id;
+
+ });
+
+ saveConfig();
+
+ buildNames();
+
+ renderCustomRules();
+
+ renderSheet();
+
+}
+
+function buildCustomPerson(){
+
+ var h='';
+
+ state.people.forEach(function(p,i){
+
+  h+=
+  '<option value="'+p.id+'">'+
+  (i+1)+'. '+
+  escapeHtml(p.name)+
+  '</option>';
+
+ });
+
+ el('customPerson').innerHTML=h;
+
+ var s='';
+
+ SLOTS.forEach(function(slot){
+
+  s+=
+  '<option value="'+slot.id+'">'+
+  slot.label+
+  '</option>';
+
+ });
+
+ el('customSlots').innerHTML=s;
+
+}
+
+function selectedValues(sel){
+
+ return Array.from(sel.options)
+ .filter(function(o){
+  return o.selected;
+ })
+ .map(function(o){
+  return o.value;
+ });
+
+}
+
+function customAllowed(pid,sid){
+
+ for(var i=0;i<state.customRules.length;i++){
+
+  var r=state.customRules[i];
+
+  if(r.personId!==pid)continue;
+
+  if(
+   r.type==='only'&&
+   r.slots.indexOf(sid)<0
+  ){
+   return false;
+  }
+
+  if(
+   r.type==='block'&&
+   r.slots.indexOf(sid)>=0
+  ){
+   return false;
+  }
+
+ }
+
+ return true;
+
+}
+
+function addCustomRule(){
+
+ var pid=el('customPerson').value;
+
+ var type=el('customRuleType').value;
+
+ var slots=selectedValues(el('customSlots'));
+
+ if(!pid||!slots.length)return;
+
+ state.customRules.push({
+
+  id:'r_'+Date.now(),
+
+  personId:pid,
+
+  type:type,
+
+  slots:slots
+
+ });
+
+ saveConfig();
+
+ renderCustomRules();
+
+ renderSheet();
+
 }
 
 function renderCustomRules(){
+
  var h='';
+
  state.customRules.forEach(function(r){
-   var labels=r.slots.map(function(id){for(var i=0;i<SLOTS.length;i++)if(SLOTS[i].id===id)return SLOTS[i].group+(SLOTS[i].sub?' '+SLOTS[i].sub:'');return id});
-   var action=r.type==='block'?'ห้าม':'เฉพาะ';
-   h+='<span class="chip">'+escapeHtml(personName(r.personId))+' → '+action+' '+escapeHtml(labels.join(', '))+' <button class="smallbtn" type="button" data-editrule="'+r.id+'">แก้ไข</button> <button class="smallbtn" type="button" data-ruleid="'+r.id+'">×</button></span>';
+
+  var labels=r.slots.map(function(id){
+
+   var s=slotById(id);
+
+   return s?s.label:id;
+
+  });
+
+  h+=
+  '<span class="chip">'+
+  escapeHtml(personName(r.personId))+
+  ' → '+
+  (r.type==='block'?'ห้าม ':'เฉพาะ ')+
+  escapeHtml(labels.join(', '))+
+  ' <button class="smallbtn" data-rid="'+r.id+'">×</button>'+
+  '</span>';
+
  });
+
  el('customRules').innerHTML=h;
 
- var es=el('customRules').querySelectorAll('[data-editrule]');
- for(var i=0;i<es.length;i++)es[i].addEventListener('click',function(){editCustomRule(this.getAttribute('data-editrule'))});
+ el('customRules')
+ .querySelectorAll('[data-rid]')
+ .forEach(function(btn){
 
- var bs=el('customRules').querySelectorAll('[data-ruleid]');
- for(i=0;i<bs.length;i++)bs[i].addEventListener('click',function(){
-   var id=this.getAttribute('data-ruleid');
-   state.customRules=state.customRules.filter(function(r){return r.id!==id});
-   if(editingCustomRuleId===id)cancelCustomEdit();
-   saveConfig();renderCustomRules();renderSheet();setStatus('ลบกติกาเฉพาะบุคคลแล้ว',true);
+  btn.onclick=function(){
+
+   var id=this.dataset.rid;
+
+   state.customRules=
+   state.customRules.filter(function(r){
+    return r.id!==id;
+   });
+
+   saveConfig();
+
+   renderCustomRules();
+
+   renderSheet();
+
+  };
+
  });
+
 }
 
-function cancelGlobalEdit(){editingGlobalRuleId=null;el('addGlobalRuleBtn').textContent='+ เพิ่มกติกา';el('cancelGlobalEditBtn').style.display='none';setSelectedValues(el('globalSlots'),[]);setSelectedValues(el('globalDayTypes'),[]);el('globalRuleDescription').value=''}
+function renderRules(){
 
-function addGlobalRule(){
- var slots=selectedValues(el('globalSlots')),dayTypes=selectedValues(el('globalDayTypes')),description=el('globalRuleDescription').value.trim();
- if(!slots.length){setStatus('เลือกเวรที่ต้องการรันอย่างน้อย 1 รายการ',false);return}
- if(!dayTypes.length){setStatus('เลือกวันที่ต้องการให้รันอย่างน้อย 1 ตัวเลือก',false);return}
+ var h='';
 
- if(editingGlobalRuleId){
-   for(var i=0;i<state.customGlobalRules.length;i++)if(state.customGlobalRules[i].id===editingGlobalRuleId){
-     state.customGlobalRules[i].slots=slots;
-     state.customGlobalRules[i].dayTypes=dayTypes;
-     state.customGlobalRules[i].description=description;
-     state.customGlobalRules[i].type='run';
-     delete state.customGlobalRules[i].dayType;
-     break;
+ CORE_RULES.forEach(function(rule,i){
+
+  h+=
+  '<div class="rule-item">'+
+  '<span class="rule-num">'+(i+1)+'</span>'+
+  escapeHtml(rule)+
+  '</div>';
+
+ });
+
+ el('ruleList').innerHTML=h;
+
+ renderCustomRules();
+
+}
+
+function optionHtml(selected){
+
+ var h='<option value=""></option>';
+
+ state.people.forEach(function(p,i){
+
+  h+=
+  '<option value="'+p.id+'" '+
+  (selected===p.id?'selected':'')+
+  '>'+
+  (i+1)+'. '+
+  escapeHtml(p.name)+
+  '</option>';
+
+ });
+
+ return h;
+
+}
+
+function header(){
+
+ return ''+
+
+ '<caption>'+
+ 'ตารางเวรผู้ช่วยพยาบาล เดือน'+
+ MONTHS[cm()]+' '+py()+
+ '</caption>'+
+
+ '<thead>'+
+
+ '<tr>'+
+ '<th class="date">วันที่</th>'+
+ '<th>เวร1</th>'+
+ '<th>เวร2</th>'+
+ '<th>OT1</th>'+
+ '<th>OT2</th>'+
+ '<th>SDMC1 เช้า</th>'+
+ '<th>SDMC1 บ่าย-ดึก</th>'+
+ '<th>SDMC2 เช้า</th>'+
+ '<th>SDMC2 บ่าย-ดึก</th>'+
+ '<th>SDMC3 เช้า</th>'+
+ '<th>SDMC3 บ่าย-ดึก</th>'+
+ '<th>SDMC4 เช้า</th>'+
+ '<th>SDMC4 บ่าย-ดึก</th>'+
+ '<th>SDMC5</th>'+
+ '<th>SDMC6</th>'+
+ '<th>SDMC7</th>'+
+ '<th>SDMC8</th>'+
+ '<th>EXTRA1</th>'+
+ '<th>EXTRA2</th>'+
+ '<th>EXTRA3</th>'+
+ '</tr>'+
+
+ '</thead>';
+
+}
+
+function renderSheet(){
+
+ var h=header()+'<tbody>';
+
+ for(var d=1;d<=dim();d++){
+
+  var cls=
+   isHoliday(d)
+   ?'holiday'
+   :(isWeekend(d)?'weekend':'');
+
+  h+='<tr class="'+cls+'">';
+
+  h+=
+  '<td class="date">'+
+  '<b>'+DAYS[dow(d)]+d+'</b>'+
+  (isHoliday(d)?'<br><small>นักขัตฯ</small>':'')+
+  '</td>';
+
+  SLOTS.forEach(function(slot){
+
+   if(!active(slot,d)){
+
+    h+='<td class="inactive"></td>';
+
+    return;
+
    }
-   saveConfig();cancelGlobalEdit();renderGlobalRules();renderSheet();setStatus('บันทึกการแก้ไขกติกาจัดเวรแล้ว',true);return;
+
+   var v=
+   state.assignments[
+    akey(d,slot.id)
+   ]||'';
+
+   h+=
+   '<td data-d="'+d+'" data-s="'+slot.id+'">'+
+   '<select data-d="'+d+'" data-s="'+slot.id+'">'+
+   optionHtml(v)+
+   '</select>'+
+   '</td>';
+
+  });
+
+  h+='</tr>';
+
  }
 
- state.customGlobalRules.push({id:'g_'+Date.now(),type:'run',slots:slots,dayTypes:dayTypes,description:description,enabled:true});
- saveConfig();renderGlobalRules();setSelectedValues(el('globalSlots'),[]);setSelectedValues(el('globalDayTypes'),[]);el('globalRuleDescription').value='';renderSheet();setStatus('เพิ่มกติกาจัดเวรแล้ว',true);
-}
+ h+='</tbody>';
 
-function editGlobalRule(id){
- var r=null;
- for(var i=0;i<state.customGlobalRules.length;i++)if(state.customGlobalRules[i].id===id){r=state.customGlobalRules[i];break}
- if(!r)return;
- editingGlobalRuleId=id;
- setSelectedValues(el('globalSlots'),r.slots);
- var types=Array.isArray(r.dayTypes)?r.dayTypes.slice():(r.dayType?[r.dayType]:[]);
- if(types.indexOf('weekend')>=0){types=types.filter(function(x){return x!=='weekend'}).concat(['saturday','sunday'])}
- setSelectedValues(el('globalDayTypes'),types);
- el('globalRuleDescription').value=r.description||'';
- el('addGlobalRuleBtn').textContent='บันทึกการแก้ไข';
- el('cancelGlobalEditBtn').style.display='inline-block';
- el('globalSlots').scrollIntoView({behavior:'smooth',block:'center'});
-}
+ el('sheet').innerHTML=h;
 
-function renderGlobalRules(){
- var dayNames={all:'ทุกวัน',all_no_holiday:'ทุกวัน (ไม่รวมนักขัตฤกษ์)',no_holiday:'ไม่รวมนักขัตฤกษ์',weekday:'จันทร์–ศุกร์',weekday_no_holiday:'จันทร์–ศุกร์ (ไม่รวมนักขัตฤกษ์)',saturday:'เสาร์',sunday:'อาทิตย์',weekend:'เสาร์–อาทิตย์',holiday:'นักขัตฤกษ์',monday:'จันทร์',tuesday:'อังคาร',wednesday:'พุธ',thursday:'พฤหัสบดี',friday:'ศุกร์'},h='';
+ el('sheet')
+ .querySelectorAll('select')
+ .forEach(function(s){
 
- state.customGlobalRules.forEach(function(r){
-   var labels=r.slots.map(function(id){for(var i=0;i<SLOTS.length;i++)if(SLOTS[i].id===id)return SLOTS[i].group+(SLOTS[i].sub?' '+SLOTS[i].sub:'');return id});
-   var types=Array.isArray(r.dayTypes)?r.dayTypes:(r.dayType?[r.dayType]:[]);
-   var desc=(r.description||'').trim();
-   h+='<span class="chip" style="align-items:flex-start"><span><b>รัน</b> '+escapeHtml(labels.join(', '))+' • '+escapeHtml(types.map(function(t){return dayNames[t]||t}).join(', '))+(desc?'<br><span class="muted">คำอธิบาย: '+escapeHtml(desc)+'</span>':'')+'</span> <button class="smallbtn" type="button" data-editglobal="'+r.id+'">แก้ไข</button> <button class="smallbtn" type="button" data-globalid="'+r.id+'">×</button></span>';
+  s.onchange=function(){
+
+   var d=parseInt(this.dataset.d,10);
+
+   var sid=this.dataset.s;
+
+   if(this.value){
+
+    state.assignments[
+     akey(d,sid)
+    ]=this.value;
+
+   }else{
+
+    delete state.assignments[
+     akey(d,sid)
+    ];
+
+   }
+
+   validate(false);
+
+   renderSummary();
+
+  };
+
  });
 
- el('globalRules').innerHTML=h;
+ validate(false);
 
- var es=el('globalRules').querySelectorAll('[data-editglobal]');
- for(var i=0;i<es.length;i++)es[i].addEventListener('click',function(){editGlobalRule(this.getAttribute('data-editglobal'))});
+ renderSummary();
 
- var bs=el('globalRules').querySelectorAll('[data-globalid]');
- for(i=0;i<bs.length;i++)bs[i].addEventListener('click',function(){
-   var id=this.getAttribute('data-globalid');
-   state.customGlobalRules=state.customGlobalRules.filter(function(r){return r.id!==id});
-   if(editingGlobalRuleId===id)cancelGlobalEdit();
-   saveConfig();renderGlobalRules();renderSheet();setStatus('ลบกติกาจัดเวรแล้ว',true);
- });
 }
 
-function slotLabel(sl){
- var label=sl.group+(sl.sub?' '+sl.sub:'');
- if(sl.id==='e1')label='EXTRA1';
- if(sl.id==='e2')label='EXTRA2';
- if(sl.id==='e3')label='EXTRA3';
- return label;
+function usedToday(pid,d){
+
+ return SLOTS.some(function(s){
+
+  return state.assignments[
+   akey(d,s.id)
+  ]===pid;
+
+ });
+
+}
+
+function hadNight(assign,pid,d){
+
+ return SLOTS.some(function(s){
+
+  return (
+   s.kind==='night'&&
+   assign[akey(d,s.id)]===pid
+  );
+
+ });
+
+}
+
+function holidayFor(y,m,d){
+
+ return !!state.holidays[
+  dayKey(y,m,d)
+ ];
+
+}
+
+function specialNightDay(y,m,d){
+
+ var w=new Date(y,m,d).getDay();
+
+ return (
+  w===5||
+  w===6||
+  w===0||
+  holidayFor(y,m,d)
+ );
+
+}
+
+function allowNightChain(
+ y1,m1,d1,
+ y2,m2,d2
+){
+
+ return (
+  specialNightDay(y1,m1,d1)&&
+  specialNightDay(y2,m2,d2)
+ );
+
+}
+
+function prevMonthNight(pid){
+
+ var p=prevYM();
+
+ var data=savedMonth(prevKey());
+
+ if(!data)return false;
+
+ var last=
+ new Date(p.y,p.m+1,0).getDate();
+
+ return hadNight(
+  data.assignments||{},
+  pid,
+  last
+ );
+
+}
+
+function eligible(pid,d,slot){
+
+ if(!active(slot,d))return false;
+
+ if(usedToday(pid,d))return false;
+
+ if(
+  pid===state.people[state.people.length-1].id&&
+  ['e1','e2','e3'].indexOf(slot.id)<0
+ ){
+  return false;
+ }
+
+ if(!customAllowed(pid,slot.id)){
+  return false;
+ }
+
+ if(d===1&&prevMonthNight(pid)){
+
+  var p=prevYM();
+
+  var last=
+  new Date(p.y,p.m+1,0).getDate();
+
+  if(
+   !(
+    slot.kind==='night'&&
+    allowNightChain(
+     p.y,p.m,last,
+     gy(),cm(),1
+    )
+   )
+  ){
+   return false;
+  }
+
+ }
+
+ if(
+  d>1&&
+  hadNight(
+   state.assignments,
+   pid,
+   d-1
+  )
+ ){
+
+  if(
+   !(
+    slot.kind==='night'&&
+    allowNightChain(
+     gy(),cm(),d-1,
+     gy(),cm(),d
+    )
+   )
+  ){
+   return false;
+  }
+
+ }
+
+ return true;
+
+}
+
+function emptyCounts(){
+
+ var c={
+  group:{},
+  slot:{},
+  total:{},
+  official:{},
+  off:{}
+ };
+
+ state.people.forEach(function(p){
+
+  c.total[p.id]=0;
+  c.official[p.id]=0;
+  c.off[p.id]=0;
+
+ });
+
+ Object.keys(GROUPS).forEach(function(g){
+
+  c.group[g]={};
+
+  state.people.forEach(function(p){
+
+   c.group[g][p.id]=0;
+
+  });
+
+ });
+
+ SLOTS.forEach(function(s){
+
+  c.slot[s.id]={};
+
+  state.people.forEach(function(p){
+
+   c.slot[s.id][p.id]=0;
+
+  });
+
+ });
+
+ return c;
+
+}
+
+function officialOccurrence(slot,d){
+
+ if(!weekdayNoHoliday(d)){
+  return false;
+ }
+
+ return (
+  slot.id==='v1'||
+  slot.id==='v2'||
+  slot.id==='ot1'||
+  slot.id==='ot2'
+ );
+
+}
+
+function addCounts(c,assign,y,m){
+
+ Object.keys(assign).forEach(function(k){
+
+  var pid=assign[k];
+
+  if(c.total[pid]===undefined)return;
+
+  var parts=k.split('|');
+
+  var d=parseInt(parts[0],10);
+
+  var sid=parts[1];
+
+  var slot=slotById(sid);
+
+  if(!slot)return;
+
+  var g=SLOT_GROUP[sid];
+
+  c.total[pid]++;
+
+  c.group[g][pid]++;
+
+  c.slot[sid][pid]++;
+
+  var w=
+  new Date(y,m,d).getDay();
+
+  var holiday=
+  holidayFor(y,m,d);
+
+  var official=
+  w>=1&&
+  w<=5&&
+  !holiday&&
+  (
+   sid==='v1'||
+   sid==='v2'||
+   sid==='ot1'||
+   sid==='ot2'
+  );
+
+  if(official){
+
+   c.official[pid]++;
+
+  }else{
+
+   c.off[pid]++;
+
+  }
+
+ });
+
+}
+
+function previousCounts(){
+
+ var c=emptyCounts();
+
+ var data=savedMonth(prevKey());
+
+ if(data){
+
+  var p=prevYM();
+
+  addCounts(
+   c,
+   data.assignments||{},
+   p.y,
+   p.m
+  );
+
+ }
+
+ return c;
+
+}
+
+function lastGroupPerson(group){
+
+ var data=savedMonth(prevKey());
+
+ if(!data)return '';
+
+ var best=-1;
+
+ var pid='';
+
+ Object.keys(data.assignments||{})
+ .forEach(function(k){
+
+  var parts=k.split('|');
+
+  var d=parseInt(parts[0],10);
+
+  var sid=parts[1];
+
+  if(
+   GROUPS[group].slots.indexOf(sid)<0
+  ){
+   return;
+  }
+
+  if(d>=best){
+
+   best=d;
+
+   pid=data.assignments[k];
+
+  }
+
+ });
+
+ return pid;
+
+}
+
+function initialCursor(group){
+
+ var data=savedMonth(prevKey());
+
+ if(
+  data&&
+  data.rotation&&
+  Number.isFinite(
+   data.rotation[group]
+  )
+ ){
+
+  return (
+   data.rotation[group]%
+   state.people.length
+  );
+
+ }
+
+ var pid=lastGroupPerson(group);
+
+ var idx=personIndex(pid);
+
+ return idx>=0
+ ?(idx+1)%state.people.length
+ :0;
+
+}
+
+function queueDistance(pid,cursor){
+
+ var i=personIndex(pid);
+
+ var n=state.people.length;
+
+ return (
+  i-cursor+n
+ )%n;
+
+}
+
+function previousAny(pid){
+
+ var data=savedMonth(prevKey());
+
+ if(!data)return false;
+
+ var p=prevYM();
+
+ var last=
+ new Date(p.y,p.m+1,0).getDate();
+
+ return SLOTS.some(function(s){
+
+  return (
+   data.assignments[
+    last+'|'+s.id
+   ]===pid
+  );
+
+ });
+
+}
+
+function previousHeavy(pid){
+
+ var data=savedMonth(prevKey());
+
+ if(!data)return false;
+
+ var p=prevYM();
+
+ var last=
+ new Date(p.y,p.m+1,0).getDate();
+
+ return SLOTS.some(function(s){
+
+  return (
+   (
+    s.kind==='night'||
+    s.kind==='long'
+   )&&
+   data.assignments[
+    last+'|'+s.id
+   ]===pid
+  );
+
+ });
+
+}
+
+function recentPenalty(pid,d){
+
+ if(d===1){
+
+  return previousAny(pid)?3:0;
+
+ }
+
+ return SLOTS.some(function(s){
+
+  return (
+   state.assignments[
+    akey(d-1,s.id)
+   ]===pid
+  );
+
+ })?3:0;
+
+}
+
+function heavyPenalty(pid,d,slot){
+
+ if(
+  slot.kind!=='night'&&
+  slot.kind!=='long'
+ ){
+  return 0;
+ }
+
+ if(d===1){
+
+  return previousHeavy(pid)?5:0;
+
+ }
+
+ return SLOTS.some(function(s){
+
+  return (
+   (
+    s.kind==='night'||
+    s.kind==='long'
+   )&&
+   state.assignments[
+    akey(d-1,s.id)
+   ]===pid
+  );
+
+ })?5:0;
+
+}
+
+function positionPenalty(pid,d,sid){
+
+ for(
+  var x=d-1;
+  x>=Math.max(1,d-7);
+  x--
+ ){
+
+  if(
+   state.assignments[
+    akey(x,sid)
+   ]===pid
+  ){
+   return 1;
+  }
+
+ }
+
+ return 0;
+
+}
+
+function choose(
+ candidates,
+ slot,
+ current,
+ previous,
+ d,
+ cursor
+){
+
+ var group=SLOT_GROUP[slot.id];
+
+ var best=null;
+
+ var bestKey=null;
+
+ candidates.forEach(function(pid){
+
+  var groupLoad=
+  current.group[group][pid]+
+  previous.group[group][pid];
+
+  var periodLoad=
+  officialOccurrence(slot,d)
+  ?current.official[pid]+previous.official[pid]
+  :current.off[pid]+previous.off[pid];
+
+  var slotLoad=
+  current.slot[slot.id][pid]+
+  previous.slot[slot.id][pid];
+
+  var key=[
+
+   groupLoad,
+
+   periodLoad,
+
+   heavyPenalty(pid,d,slot),
+
+   recentPenalty(pid,d),
+
+   slotLoad,
+
+   positionPenalty(
+    pid,
+    d,
+    slot.id
+   ),
+
+   queueDistance(
+    pid,
+    cursor[group]
+   )
+
+  ];
+
+  if(bestKey===null){
+
+   bestKey=key;
+
+   best=pid;
+
+   return;
+
+  }
+
+  for(var i=0;i<key.length;i++){
+
+   if(key[i]<bestKey[i]){
+
+    bestKey=key;
+
+    best=pid;
+
+    break;
+
+   }
+
+   if(key[i]>bestKey[i]){
+    break;
+   }
+
+  }
+
+ });
+
+ return best;
+
+}
+
+async function runSchedule(){
+
+ try{
+
+  if(cloud.connected){
+
+   await ensureCloudMonths([
+    prevKey(),
+    currentKey()
+   ]);
+
+  }
+
+  state.assignments={};
+
+  var previous=
+  previousCounts();
+
+  var current=
+  emptyCounts();
+
+  var cursor={};
+
+  Object.keys(GROUPS)
+  .forEach(function(g){
+
+   cursor[g]=
+   initialCursor(g);
+
+  });
+
+  var order=
+  SLOTS.filter(function(s){
+
+   return s.kind==='night';
+
+  }).concat(
+
+   SLOTS.filter(function(s){
+
+    return s.kind!=='night';
+
+   })
+
+  );
+
+  for(
+   var d=1;
+   d<=dim();
+   d++
+  ){
+
+   for(
+    var i=0;
+    i<order.length;
+    i++
+   ){
+
+    var slot=order[i];
+
+    if(!active(slot,d)){
+     continue;
+    }
+
+    var candidates=
+    state.people
+    .filter(function(p){
+
+     return eligible(
+      p.id,
+      d,
+      slot
+     );
+
+    })
+    .map(function(p){
+
+     return p.id;
+
+    });
+
+    if(!candidates.length){
+     continue;
+    }
+
+    var pid=
+    choose(
+     candidates,
+     slot,
+     current,
+     previous,
+     d,
+     cursor
+    );
+
+    state.assignments[
+     akey(d,slot.id)
+    ]=pid;
+
+    var group=
+    SLOT_GROUP[slot.id];
+
+    current.total[pid]++;
+
+    current.group[group][pid]++;
+
+    current.slot[slot.id][pid]++;
+
+    if(
+     officialOccurrence(
+      slot,
+      d
+     )
+    ){
+
+     current.official[pid]++;
+
+    }else{
+
+     current.off[pid]++;
+
+    }
+
+    cursor[group]=
+    (
+     personIndex(pid)+1
+    )%
+    state.people.length;
+
+   }
+
+  }
+
+  state.rotation=cursor;
+
+  renderSheet();
+
+  var errors=
+  validate(false);
+
+  saveMonth(true);
+
+  setStatus(
+   errors
+   ?'รันเสร็จ แต่พบข้อขัดแย้ง '+errors+' จุด'
+   :'รันตารางเวรเรียบร้อยแล้ว',
+   !errors
+  );
+
+ }catch(err){
+
+  setStatus(
+   'เกิดข้อผิดพลาด: '+err.message,
+   false
+  );
+
+ }
+
+}
+
+function mark(d,sid){
+
+ var td=
+ document.querySelector(
+  'td[data-d="'+d+'"][data-s="'+sid+'"]'
+ );
+
+ if(td){
+  td.classList.add('conflict');
+ }
+
+}
+
+function validate(show){
+
+ document
+ .querySelectorAll('.conflict')
+ .forEach(function(x){
+
+  x.classList.remove('conflict');
+
+ });
+
+ var errors=0;
+
+ for(var d=1;d<=dim();d++){
+
+  var used={};
+
+  SLOTS.forEach(function(slot){
+
+   var pid=
+   state.assignments[
+    akey(d,slot.id)
+   ];
+
+   if(!pid)return;
+
+   if(!active(slot,d)){
+
+    mark(d,slot.id);
+
+    errors++;
+
+   }
+
+   if(used[pid]){
+
+    mark(d,slot.id);
+
+    mark(d,used[pid]);
+
+    errors++;
+
+   }else{
+
+    used[pid]=slot.id;
+
+   }
+
+   if(
+    pid===
+    state.people[
+     state.people.length-1
+    ].id&&
+    ['e1','e2','e3']
+    .indexOf(slot.id)<0
+   ){
+
+    mark(d,slot.id);
+
+    errors++;
+
+   }
+
+   var blocked=false;
+
+   if(
+    d>1&&
+    hadNight(
+     state.assignments,
+     pid,
+     d-1
+    )
+   ){
+
+    blocked=
+    !(
+     slot.kind==='night'&&
+     allowNightChain(
+      gy(),cm(),d-1,
+      gy(),cm(),d
+     )
+    );
+
+   }
+
+   if(
+    d===1&&
+    prevMonthNight(pid)
+   ){
+
+    var p=prevYM();
+
+    var last=
+    new Date(
+     p.y,
+     p.m+1,
+     0
+    ).getDate();
+
+    blocked=
+    !(
+     slot.kind==='night'&&
+     allowNightChain(
+      p.y,p.m,last,
+      gy(),cm(),1
+     )
+    );
+
+   }
+
+   if(blocked){
+
+    mark(d,slot.id);
+
+    errors++;
+
+   }
+
+  });
+
+ }
+
+ if(show){
+
+  setStatus(
+   errors
+   ?'พบข้อขัดแย้ง '+errors+' จุด'
+   :'ไม่พบข้อขัดแย้ง',
+   !errors
+  );
+
+ }
+
+ return errors;
+
 }
 
 function renderSummary(){
- var current=initCounts();
- addCountsFromAssignments(current,state.assignments);
 
- var title='ตารางหลักการเฉลี่ยเวร เดือน'+MONTHS[cm()]+' พ.ศ. '+py();
- if(el('summaryTitle'))el('summaryTitle').textContent=title;
+ var c=emptyCounts();
 
- var h='<table id="summaryTable"><thead><tr><th colspan="'+(3+SLOTS.length)+'" style="font-size:16px;text-align:center">'+escapeHtml(title)+'</th></tr><tr><th>#</th><th>ชื่อ</th><th>รวมเดือนนี้</th>';
+ addCounts(
+  c,
+  state.assignments,
+  gy(),
+  cm()
+ );
 
- for(var si=0;si<SLOTS.length;si++)h+='<th>'+escapeHtml(slotLabel(SLOTS[si]))+'</th>';
+ var title=
+ 'ตารางหลักการเฉลี่ยเวร เดือน'+
+ MONTHS[cm()]+' พ.ศ. '+py();
+
+ el('summaryTitle').textContent=
+ title;
+
+ var h=
+ '<table id="summaryTable">'+
+ '<thead>'+
+ '<tr>'+
+ '<th>#</th>'+
+ '<th>ชื่อ</th>'+
+ '<th>รวม</th>'+
+ '<th>ในเวลาราชการ</th>'+
+ '<th>นอกเวลา</th>';
+
+ Object.keys(GROUPS)
+ .forEach(function(g){
+
+  h+='<th>'+
+  GROUPS[g].label+
+  '</th>';
+
+ });
+
+ SLOTS.forEach(function(s){
+
+  h+='<th>'+
+  s.label+
+  '</th>';
+
+ });
+
  h+='</tr></thead><tbody>';
 
- for(var i=0;i<state.people.length;i++){
-   var p=state.people[i];
-   h+='<tr><td>'+(i+1)+'</td><td>'+escapeHtml(p.name)+'</td><td><b>'+(current.total[p.id]||0)+'</b></td>';
-   for(var j=0;j<SLOTS.length;j++){
-     var sid=SLOTS[j].id;
-     h+='<td>'+(current.slot[sid][p.id]||0)+'</td>';
-   }
-   h+='</tr>';
- }
+ state.people.forEach(function(p,i){
 
- h+='</tbody><tfoot><tr><th colspan="2">ค่าเฉลี่ยต่อคน (เดือนนี้)</th>';
- var grandTotal=0;
- for(i=0;i<state.people.length;i++)grandTotal+=(current.total[state.people[i].id]||0);
- h+='<th>'+(state.people.length?(grandTotal/state.people.length).toFixed(2):'0.00')+'</th>';
+  h+=
+  '<tr>'+
+  '<td>'+(i+1)+'</td>'+
+  '<td>'+escapeHtml(p.name)+'</td>'+
+  '<td>'+c.total[p.id]+'</td>'+
+  '<td>'+c.official[p.id]+'</td>'+
+  '<td>'+c.off[p.id]+'</td>';
 
- for(j=0;j<SLOTS.length;j++){
-   sid=SLOTS[j].id;
-   var slotTotal=0;
-   for(i=0;i<state.people.length;i++)slotTotal+=(current.slot[sid][state.people[i].id]||0);
-   h+='<th>'+(state.people.length?(slotTotal/state.people.length).toFixed(2):'0.00')+'</th>';
- }
- h+='</tr></tfoot></table>';
+  Object.keys(GROUPS)
+  .forEach(function(g){
+
+   h+=
+   '<td>'+
+   c.group[g][p.id]+
+   '</td>';
+
+  });
+
+  SLOTS.forEach(function(s){
+
+   h+=
+   '<td>'+
+   c.slot[s.id][p.id]+
+   '</td>';
+
+  });
+
+  h+='</tr>';
+
+ });
+
+ h+='</tbody></table>';
 
  el('summary').innerHTML=h;
+
 }
 
-async function monthChanged(){
- if(cloud.connected)await ensureCloudMonths([prevKey(),currentKey()]);
- loadMonth(true);
+function clearSchedule(){
+
+ if(!confirm('ล้างตารางเดือนนี้หรือไม่?')){
+  return;
+ }
+
+ state.assignments={};
+
  renderSheet();
- renderHistoryInfo();
- setStatus(getSavedMonth(currentKey())?'เปิดข้อมูลเดือนที่บันทึกแล้ว':'เดือนนี้ยังไม่มีข้อมูล กด “รันตารางเวร” เพื่อสร้างใหม่',true);
+
+ setStatus(
+  'ล้างตารางแล้ว',
+  true
+ );
+
 }
 
-function prepareSchedulePdfClone(sheet){
- var clone=sheet.cloneNode(true);
- clone.style.minWidth='0';
- clone.style.width='1600px';
- clone.style.fontSize='11.5px';
- clone.style.tableLayout='fixed';
- clone.style.background='#fff';
- clone.style.borderCollapse='collapse';
+function setStatus(text,ok){
 
- var caption=clone.querySelector('caption');
- if(caption){caption.style.fontSize='18px';caption.style.fontWeight='800';caption.style.padding='10px 4px';caption.style.lineHeight='1.25'}
+ el('status').textContent=text;
 
- var allCells=clone.querySelectorAll('th,td');
- for(var ci=0;ci<allCells.length;ci++){
-   allCells[ci].style.minWidth='0';
-   allCells[ci].style.height='28px';
-   allCells[ci].style.padding='2px 2px';
-   allCells[ci].style.fontSize='11.5px';
-   allCells[ci].style.lineHeight='1.15';
-   allCells[ci].style.whiteSpace='nowrap';
-   allCells[ci].style.overflow='hidden';
-   allCells[ci].style.textOverflow='clip';
- }
+ el('status').className=
+ 'status '+(ok?'ok':'err');
 
- var headCells=clone.querySelectorAll('thead th');
- for(ci=0;ci<headCells.length;ci++){
-   headCells[ci].style.position='static';
-   headCells[ci].style.fontSize='12px';
-   headCells[ci].style.fontWeight='800';
-   headCells[ci].style.padding='3px 2px';
-   headCells[ci].style.background='#e7e7ea';
-   headCells[ci].style.color='#111';
- }
+}
 
- var dateCells=clone.querySelectorAll('.date');
- for(ci=0;ci<dateCells.length;ci++){
-   dateCells[ci].style.position='static';
-   dateCells[ci].style.left='auto';
-   dateCells[ci].style.width='66px';
-   dateCells[ci].style.minWidth='66px';
-   dateCells[ci].style.maxWidth='66px';
-   dateCells[ci].style.fontSize='11.5px';
- }
+function renderHolidays(){
 
- var bodyRows=clone.querySelectorAll('tbody tr');
- for(ci=0;ci<bodyRows.length;ci++){
-   var row=bodyRows[ci],cells=row.querySelectorAll('td');
-   var shade=row.classList.contains('weekend')||row.classList.contains('holiday');
-   for(var cj=0;cj<cells.length;cj++){
-     cells[cj].style.background=shade?'#e6e6e6':'#ffffff';
-     cells[cj].style.color=shade?'#111':(cells[cj].classList.contains('inactive')?'#888':'#111');
-   }
- }
+ var keys=
+ Object.keys(state.holidays).sort();
 
- var selects=clone.querySelectorAll('select');
- for(var i=0;i<selects.length;i++){
-   var sp=document.createElement('span');
-   sp.textContent=selects[i].options[selects[i].selectedIndex]?selects[i].options[selects[i].selectedIndex].text:'';
-   sp.style.display='block';
-   sp.style.width='100%';
-   sp.style.textAlign='center';
-   sp.style.fontSize='11.5px';
-   sp.style.lineHeight='1.1';
-   sp.style.whiteSpace='nowrap';
-   sp.style.overflow='hidden';
-   selects[i].parentNode.replaceChild(sp,selects[i]);
- }
+ var h='';
 
- return clone;
+ keys.forEach(function(k){
+
+  h+=
+  '<span class="chip">'+
+  k+' '+
+  escapeHtml(
+   state.holidays[k].name||
+   'วันหยุด'
+  )+
+  ' <button class="smallbtn" data-holiday="'+k+'">×</button>'+
+  '</span>';
+
+ });
+
+ el('chips').innerHTML=h;
+
+ el('chips')
+ .querySelectorAll(
+  '[data-holiday]'
+ )
+ .forEach(function(btn){
+
+  btn.onclick=function(){
+
+   delete state.holidays[
+    this.dataset.holiday
+   ];
+
+   saveConfig();
+
+   renderHolidays();
+
+   renderSheet();
+
+  };
+
+ });
+
+}
+
+function addHoliday(){
+
+ var date=
+ el('holidayDate').value;
+
+ if(!date)return;
+
+ state.holidays[date]={
+
+  name:
+  el('holidayName').value.trim()||
+  'วันหยุด'
+
+ };
+
+ saveConfig();
+
+ renderHolidays();
+
+ renderSheet();
+
 }
 
 function savePDF(){
- var sheet=document.querySelector('.sheet');
- if(!sheet){setStatus('ยังไม่มีตารางสำหรับบันทึก PDF',false);return}
- if(typeof html2canvas==='undefined'||!window.jspdf||!window.jspdf.jsPDF){setStatus('ไม่สามารถโหลดระบบ PDF ได้ กรุณาตรวจอินเทอร์เน็ตแล้วลองใหม่',false);return}
 
- state.pdfNote=el('pdfNote')?el('pdfNote').value:state.pdfNote;
- saveConfig();
- setStatus('กำลังสร้างไฟล์ PDF แนวนอน A4...',true);
+ var sheet=
+ document.querySelector('.sheet');
 
- var clone=prepareSchedulePdfClone(sheet);
+ if(!sheet)return;
 
- var wrap=document.createElement('div');
- wrap.style.position='fixed';
- wrap.style.left='-10000px';
- wrap.style.top='0';
- wrap.style.width='1600px';
- wrap.style.background='#fff';
- wrap.style.padding='0';
- wrap.style.zIndex='-1';
- wrap.appendChild(clone);
- document.body.appendChild(wrap);
+ html2canvas(
+  sheet,
+  {
+   scale:2,
+   backgroundColor:'#ffffff'
+  }
+ )
+ .then(function(canvas){
 
- var noteWrap=document.createElement('div');
- noteWrap.style.position='fixed';
- noteWrap.style.left='-10000px';
- noteWrap.style.top='0';
- noteWrap.style.width='1250px';
- noteWrap.style.background='#fff';
- noteWrap.style.padding='8px 0';
- noteWrap.style.fontFamily='-apple-system,BlinkMacSystemFont,"Noto Sans Thai",Tahoma,Arial,sans-serif';
- noteWrap.style.color='#111';
+  var jsPDF=
+  window.jspdf.jsPDF;
 
- var noteTitle=document.createElement('div');
- noteTitle.textContent='หมายเหตุ';
- noteTitle.style.fontWeight='800';
- noteTitle.style.fontSize='18px';
- noteTitle.style.marginBottom='5px';
+  var pdf=
+  new jsPDF({
+   orientation:'landscape',
+   unit:'mm',
+   format:'a4'
+  });
 
- var noteText=document.createElement('div');
- noteText.textContent=(state.pdfNote||'').trim()||'-';
- noteText.style.fontSize='16px';
- noteText.style.lineHeight='1.35';
- noteText.style.whiteSpace='pre-wrap';
- noteText.style.wordBreak='break-word';
+  var pw=
+  pdf.internal.pageSize.getWidth();
 
- noteWrap.appendChild(noteTitle);
- noteWrap.appendChild(noteText);
- document.body.appendChild(noteWrap);
+  var ph=
+  pdf.internal.pageSize.getHeight();
 
- Promise.all([
-   html2canvas(wrap,{scale:2,useCORS:true,backgroundColor:'#ffffff',logging:false,windowWidth:1600}),
-   html2canvas(noteWrap,{scale:2,useCORS:true,backgroundColor:'#ffffff',logging:false,windowWidth:1250})
- ]).then(function(canvases){
-   var canvas=canvases[0],noteCanvas=canvases[1];
-   var jsPDF=window.jspdf.jsPDF;
-   var pdf=new jsPDF({orientation:'landscape',unit:'mm',format:'a4',compress:true});
-   var pw=pdf.internal.pageSize.getWidth();
-   var ph=pdf.internal.pageSize.getHeight();
+  var left=10;
+  var right=10;
+  var top=20;
+  var bottom=10;
 
-   // บน 20 มม. / ซ้าย ขวา ล่าง 10 มม.
-   var top=20,left=10,right=10,bottom=10;
-   var noteAreaH=18;
-   var maxW=pw-left-right;
-   var maxH=ph-top-bottom-noteAreaH;
-   var ratio=Math.min(maxW/canvas.width,maxH/canvas.height);
-   var w=canvas.width*ratio,h=canvas.height*ratio,x=left+(maxW-w)/2,y=top;
+  var maxW=
+  pw-left-right;
 
-   pdf.addImage(canvas.toDataURL('image/jpeg',0.98),'JPEG',x,y,w,h,undefined,'FAST');
+  var maxH=
+  ph-top-bottom;
 
-   var noteMaxW=pw-left-right;
-   var noteRatio=Math.min(noteMaxW/noteCanvas.width,15/noteCanvas.height);
-   var nw=noteCanvas.width*noteRatio,nh=noteCanvas.height*noteRatio;
-   pdf.addImage(noteCanvas.toDataURL('image/png'),'PNG',left,ph-bottom-nh,nw,nh,undefined,'FAST');
+  var ratio=
+  Math.min(
+   maxW/canvas.width,
+   maxH/canvas.height
+  );
 
-   var filename='ตารางเวร_'+MONTHS[cm()]+'_'+py()+'.pdf';
-   pdf.save(filename);
+  pdf.addImage(
+   canvas.toDataURL(
+    'image/jpeg',
+    .98
+   ),
+   'JPEG',
+   left,
+   top,
+   canvas.width*ratio,
+   canvas.height*ratio
+  );
 
-   document.body.removeChild(wrap);
-   document.body.removeChild(noteWrap);
-   setStatus('บันทึก PDF ตารางเวร A4 แนวนอนเรียบร้อยแล้ว',true);
- }).catch(function(err){
-   try{document.body.removeChild(wrap)}catch(e){}
-   try{document.body.removeChild(noteWrap)}catch(e){}
-   setStatus('สร้าง PDF ไม่สำเร็จ: '+(err&&err.message?err.message:err),false);
+  pdf.save(
+   'ตารางเวร_'+
+   MONTHS[cm()]+'_'+
+   py()+'.pdf'
+  );
+
  });
+
 }
 
 function saveSummaryPDF(){
- var table=document.querySelector('#summary table');
- if(!table){setStatus('ยังไม่มีตารางหลักการเฉลี่ยเวร',false);return}
- if(typeof html2canvas==='undefined'||!window.jspdf||!window.jspdf.jsPDF){setStatus('ไม่สามารถโหลดระบบ PDF ได้ กรุณาตรวจอินเทอร์เน็ต',false);return}
 
- setStatus('กำลังสร้าง PDF หลักการเฉลี่ยเวร...',true);
+ var table=
+ document.querySelector(
+  '#summaryTable'
+ );
 
- var wrap=document.createElement('div');
- wrap.style.position='fixed';
- wrap.style.left='-12000px';
- wrap.style.top='0';
- wrap.style.width='3000px';
- wrap.style.background='#fff';
- wrap.style.padding='0';
- wrap.style.zIndex='-1';
+ if(!table)return;
 
- var clone=table.cloneNode(true);
- clone.style.width='3000px';
- clone.style.minWidth='0';
- clone.style.borderCollapse='collapse';
- clone.style.tableLayout='fixed';
- clone.style.background='#fff';
+ html2canvas(
+  table,
+  {
+   scale:2,
+   backgroundColor:'#fff'
+  }
+ )
+ .then(function(canvas){
 
- var cells=clone.querySelectorAll('th,td');
- for(var i=0;i<cells.length;i++){
-   cells[i].style.position='static';
-   cells[i].style.minWidth='0';
-   cells[i].style.height='26px';
-   cells[i].style.padding='2px';
-   cells[i].style.fontSize='15px';
-   cells[i].style.lineHeight='1.15';
-   cells[i].style.whiteSpace='nowrap';
-   cells[i].style.overflow='hidden';
-   cells[i].style.border='1px solid #cfd3dd';
-   cells[i].style.background='#fff';
-   cells[i].style.color='#111';
- }
+  var jsPDF=
+  window.jspdf.jsPDF;
 
- var heads=clone.querySelectorAll('th');
- for(i=0;i<heads.length;i++){
-   heads[i].style.background='#e7e7ea';
-   heads[i].style.fontWeight='800';
- }
+  var pdf=
+  new jsPDF({
+   orientation:'landscape',
+   unit:'mm',
+   format:'a4'
+  });
 
- wrap.appendChild(clone);
- document.body.appendChild(wrap);
+  var pw=
+  pdf.internal.pageSize.getWidth();
 
- html2canvas(wrap,{scale:2,useCORS:true,backgroundColor:'#ffffff',logging:false,windowWidth:3000}).then(function(canvas){
-   var jsPDF=window.jspdf.jsPDF;
-   var pdf=new jsPDF({orientation:'landscape',unit:'mm',format:'a4',compress:true});
-   var pw=pdf.internal.pageSize.getWidth();
-   var ph=pdf.internal.pageSize.getHeight();
-   var top=20,left=10,right=10,bottom=10;
-   var maxW=pw-left-right;
-   var maxH=ph-top-bottom;
-   var ratio=Math.min(maxW/canvas.width,maxH/canvas.height);
+  var ph=
+  pdf.internal.pageSize.getHeight();
 
-   var sw=canvas.width*ratio,sh=canvas.height*ratio,sx=left+(maxW-sw)/2;
-   pdf.addImage(canvas.toDataURL('image/jpeg',0.98),'JPEG',sx,top,sw,sh,undefined,'FAST');
-   pdf.save('หลักการเฉลี่ยเวร_'+MONTHS[cm()]+'_'+py()+'.pdf');
+  var ratio=
+  Math.min(
+   (pw-20)/canvas.width,
+   (ph-30)/canvas.height
+  );
 
-   document.body.removeChild(wrap);
-   setStatus('บันทึก PDF หลักการเฉลี่ยเวรเรียบร้อยแล้ว',true);
- }).catch(function(err){
-   try{document.body.removeChild(wrap)}catch(e){}
-   setStatus('สร้าง PDF หลักการเฉลี่ยเวรไม่สำเร็จ: '+(err&&err.message?err.message:err),false);
+  pdf.addImage(
+   canvas.toDataURL('image/jpeg',.98),
+   'JPEG',
+   10,
+   20,
+   canvas.width*ratio,
+   canvas.height*ratio
+  );
+
+  pdf.save(
+   'หลักการเฉลี่ยเวร_'+
+   MONTHS[cm()]+'_'+
+   py()+'.pdf'
+  );
+
  });
+
 }
 
 function printSummary(){
- var table=document.querySelector('#summary table');
- if(!table){setStatus('ยังไม่มีตารางหลักการเฉลี่ยเวร',false);return}
 
- var title='ตารางหลักการเฉลี่ยเวร เดือน'+MONTHS[cm()]+' พ.ศ. '+py();
- var w=window.open('','_blank');
-
- if(!w){setStatus('Safari บล็อกหน้าต่างพิมพ์ กรุณาอนุญาต Pop-up',false);return}
-
- w.document.open();
- w.document.write(
- '<!DOCTYPE html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>'+title+'</title>'+
- '<style>@page{size:A4 landscape;margin:20mm 10mm 10mm 10mm}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans Thai",Tahoma,Arial,sans-serif;color:#111}table{border-collapse:collapse;width:100%;table-layout:fixed;font-size:7px}th,td{border:1px solid #aaa;padding:2px;text-align:center;white-space:nowrap;overflow:hidden}th{background:#e7e7ea;font-weight:800;-webkit-print-color-adjust:exact;print-color-adjust:exact}</style>'+
- '</head><body>'+table.outerHTML+'<script>window.onload=function(){setTimeout(function(){window.print()},300)};<\/script></body></html>'
+ var table=
+ document.querySelector(
+  '#summaryTable'
  );
+
+ if(!table)return;
+
+ var w=
+ window.open('','_blank');
+
+ if(!w)return;
+
+ w.document.write(
+  '<html><head>'+
+  '<style>'+
+  '@page{size:A4 landscape;margin:20mm 10mm 10mm 10mm}'+
+  'table{border-collapse:collapse;width:100%;font-size:6px}'+
+  'td,th{border:1px solid #999;padding:2px;text-align:center}'+
+  '</style>'+
+  '</head><body>'+
+  table.outerHTML+
+  '<script>window.onload=function(){window.print()}<\/script>'+
+  '</body></html>'
+ );
+
  w.document.close();
+
 }
 
-function openOldSummaryPdf(){el('summaryPdfFile').click()}
+function openOldSummaryPdf(){
 
-function onOldSummaryPdfSelected(){
- var input=el('summaryPdfFile');
- if(!input.files||!input.files[0])return;
- var file=input.files[0];
- var url=URL.createObjectURL(file);
- window.open(url,'_blank');
- setStatus('เปิดไฟล์ PDF ย้อนหลังแล้ว',true);
- setTimeout(function(){URL.revokeObjectURL(url)},60000);
- input.value='';
+ el('summaryPdfFile').click();
+
 }
 
-function normalizeApiUrl(v){return String(v||'').trim().replace(/\/+$/,'')}
+function normalizeApiUrl(v){
+
+ return String(v||'')
+ .trim()
+ .replace(/\/+$/,'');
+
+}
 
 function loadCloudSettings(){
- cloud.apiUrl=normalizeApiUrl(
-   localStorage.getItem('roster_cloud_api') ||
-   'https://roster-scheduler-api.supaporn-gf.workers.dev'
- );
- cloud.token=localStorage.getItem('roster_cloud_token')||'';
 
- if(el('cloudApiUrl'))el('cloudApiUrl').value=cloud.apiUrl;
- if(el('cloudToken'))el('cloudToken').value=cloud.token;
+ cloud.apiUrl=
+ normalizeApiUrl(
+  localStorage.getItem(
+   'roster_cloud_api'
+  )||
+  'https://roster-scheduler-api.supaporn-gf.workers.dev'
+ );
+
+ cloud.token=
+ localStorage.getItem(
+  'roster_cloud_token'
+ )||'';
+
+ el('cloudApiUrl').value=
+ cloud.apiUrl;
+
+ el('cloudToken').value=
+ cloud.token;
+
 }
 
 function saveCloudSettings(){
- cloud.apiUrl=normalizeApiUrl(el('cloudApiUrl').value);
- cloud.token=el('cloudToken').value.trim();
- localStorage.setItem('roster_cloud_api',cloud.apiUrl);
- localStorage.setItem('roster_cloud_token',cloud.token);
-}
 
-function setCloudStatus(t,ok){var x=el('cloudStatus');if(!x)return;x.textContent=t;x.style.color=ok?'#067647':'#b42318'}
+ cloud.apiUrl=
+ normalizeApiUrl(
+  el('cloudApiUrl').value
+ );
+
+ cloud.token=
+ el('cloudToken').value.trim();
+
+ localStorage.setItem(
+  'roster_cloud_api',
+  cloud.apiUrl
+ );
+
+ localStorage.setItem(
+  'roster_cloud_token',
+  cloud.token
+ );
+
+}
 
 async function cloudRequest(path,opts){
- if(!cloud.apiUrl||!cloud.token)throw new Error('ยังไม่ได้ตั้งค่า Cloud API URL และ Sync PIN');
+
+ if(
+  !cloud.apiUrl||
+  !cloud.token
+ ){
+  throw new Error(
+   'ยังไม่ได้ตั้งค่า Cloud'
+  );
+ }
+
  opts=opts||{};
- opts.headers=Object.assign({'Content-Type':'application/json','X-Sync-Token':cloud.token},opts.headers||{});
- var r=await fetch(cloud.apiUrl+path,opts);
+
+ opts.headers=
+ Object.assign(
+  {
+   'Content-Type':'application/json',
+   'X-Sync-Token':cloud.token
+  },
+  opts.headers||{}
+ );
+
+ var r=
+ await fetch(
+  cloud.apiUrl+path,
+  opts
+ );
+
  var data=null;
- try{data=await r.json()}catch(e){}
- if(!r.ok)throw new Error((data&&data.error)||('HTTP '+r.status));
+
+ try{
+  data=await r.json();
+ }catch(e){}
+
+ if(!r.ok){
+
+  throw new Error(
+   data&&data.error
+   ?data.error
+   :'HTTP '+r.status
+  );
+
+ }
+
  return data;
+
 }
 
-async function connectCloud(showMessage){
+async function connectCloud(show){
+
  saveCloudSettings();
- if(!cloud.apiUrl||cloud.token.length<8){
-   cloud.connected=false;
-   setCloudStatus('กรอก Cloud API URL และ Sync PIN อย่างน้อย 8 ตัวอักษร',false);
-   return false;
- }
+
  try{
-   var data=await cloudRequest('/api/health',{method:'GET'});
-   if(!data||!data.ok)throw new Error('ฐานข้อมูลไม่พร้อม');
-   await cloudRequest('/api/config',{method:'GET'});
-   cloud.connected=true;
-   setCloudStatus('เชื่อมฐานข้อมูลออนไลน์แล้ว • ซิงก์อัตโนมัติเปิดอยู่',true);
-   if(showMessage)setStatus('เชื่อม Cloudflare D1 สำเร็จ',true);
-   return true;
+
+  await cloudRequest(
+   '/api/health',
+   {method:'GET'}
+  );
+
+  await cloudRequest(
+   '/api/config',
+   {method:'GET'}
+  );
+
+  cloud.connected=true;
+
+  el('cloudStatus').textContent=
+  'เชื่อมฐานข้อมูลออนไลน์แล้ว • ซิงก์อัตโนมัติเปิดอยู่';
+
+  el('cloudStatus').style.color=
+  '#067647';
+
+  if(show){
+
+   setStatus(
+    'เชื่อมฐานข้อมูลสำเร็จ',
+    true
+   );
+
+  }
+
+  return true;
+
  }catch(err){
-   cloud.connected=false;
-   setCloudStatus('เชื่อมไม่สำเร็จ: '+err.message,false);
-   if(showMessage)setStatus('เชื่อมฐานข้อมูลออนไลน์ไม่สำเร็จ: '+err.message,false);
-   return false;
+
+  cloud.connected=false;
+
+  el('cloudStatus').textContent=
+  'เชื่อมไม่สำเร็จ: '+
+  err.message;
+
+  el('cloudStatus').style.color=
+  '#b42318';
+
+  return false;
+
  }
+
 }
 
 function scheduleCloudConfigSave(payload){
+
  if(!cloud.connected)return;
- clearTimeout(cloud.savingConfigTimer);
- cloud.savingConfigTimer=setTimeout(function(){
-   cloudRequest('/api/config',{method:'PUT',body:JSON.stringify(payload)})
-   .then(function(){setCloudStatus('ซิงก์การตั้งค่าออนไลน์ล่าสุดแล้ว',true)})
-   .catch(function(err){setCloudStatus('ซิงก์การตั้งค่าไม่สำเร็จ: '+err.message,false)});
- },450);
+
+ clearTimeout(cloud.timer);
+
+ cloud.timer=
+ setTimeout(function(){
+
+  cloudRequest(
+   '/api/config',
+   {
+    method:'PUT',
+    body:JSON.stringify(payload)
+   }
+  );
+
+ },500);
+
 }
 
 async function cloudSaveMonth(data){
- if(!cloud.connected)return false;
- try{
-   await cloudRequest('/api/month/'+encodeURIComponent(data.key),{method:'PUT',body:JSON.stringify(data)});
-   setCloudStatus('ซิงก์ตาราง '+data.key+' ออนไลน์แล้ว',true);
-   return true;
- }catch(err){
-   setCloudStatus('ซิงก์ตารางไม่สำเร็จ: '+err.message,false);
-   return false;
- }
+
+ if(!cloud.connected)return;
+
+ await cloudRequest(
+  '/api/month/'+
+  encodeURIComponent(data.key),
+  {
+   method:'PUT',
+   body:JSON.stringify(data)
+  }
+ );
+
 }
 
-async function fetchCloudConfig(apply){
- if(!cloud.connected)return null;
- var r=await cloudRequest('/api/config',{method:'GET'});
- if(r&&r.found&&r.data){
-   localStorage.setItem('roster_config_v8',JSON.stringify(r.data));
-   if(apply){
-     var c=r.data;
-     state.people=Array.isArray(c.people)&&c.people.length?c.people:defaultPeople();
-     state.holidays=c.holidays||{};
-     state.customRules=c.customRules||[];
-     state.customGlobalRules=c.customGlobalRules||[];
-     state.pdfNote=c.pdfNote||'';
-     state.rules=Object.assign(state.rules,c.rules||{});
-     state.rules.allowWeekendNightChain=false;
-     el('pdfNote').value=state.pdfNote||'';
-     buildNames();
-     renderHolidays();
-     renderRules();
-     renderSheet();
-   }
-   return r.data;
- }
- return null;
-}
+async function fetchCloudMonth(k){
 
-async function fetchCloudMonth(key){
  if(!cloud.connected)return null;
- var r=await cloudRequest('/api/month/'+encodeURIComponent(key),{method:'GET'});
- if(r&&r.found&&r.data){
-   localStorage.setItem(scheduleStorageKey(key),JSON.stringify(r.data));
-   return r.data;
+
+ var r=
+ await cloudRequest(
+  '/api/month/'+
+  encodeURIComponent(k),
+  {method:'GET'}
+ );
+
+ if(
+  r&&
+  r.found&&
+  r.data
+ ){
+
+  localStorage.setItem(
+   storageKey(k),
+   JSON.stringify(r.data)
+  );
+
+  return r.data;
+
  }
+
  return null;
+
 }
 
 async function ensureCloudMonths(keys){
- if(!cloud.connected)return;
+
  for(var i=0;i<keys.length;i++){
-   try{await fetchCloudMonth(keys[i])}
-   catch(err){setCloudStatus('โหลดเดือน '+keys[i]+' ไม่สำเร็จ: '+err.message,false)}
+
+  try{
+
+   await fetchCloudMonth(
+    keys[i]
+   );
+
+  }catch(e){}
+
  }
+
 }
 
-async function uploadAllLocalToCloud(){
- if(!cloud.connected&&!(await connectCloud(false)))return;
- try{
-   await cloudRequest('/api/config',{method:'PUT',body:JSON.stringify(configPayload())});
-   var uploaded=0;
-   for(var i=0;i<localStorage.length;i++){
-     var k=localStorage.key(i);
-     if(k&&k.indexOf('roster_month_v7_')===0){
-       var mk=k.replace('roster_month_v7_',''),data=safeParse(localStorage.getItem(k),null);
-       if(data){
-         await cloudRequest('/api/month/'+encodeURIComponent(mk),{method:'PUT',body:JSON.stringify(data)});
-         uploaded++;
-       }
+async function uploadCloud(){
+
+ if(
+  !cloud.connected&&
+  !(await connectCloud(false))
+ ){
+  return;
+ }
+
+ await cloudRequest(
+  '/api/config',
+  {
+   method:'PUT',
+   body:JSON.stringify(
+    configPayload()
+   )
+  }
+ );
+
+ for(
+  var i=0;
+  i<localStorage.length;
+  i++
+ ){
+
+  var k=
+  localStorage.key(i);
+
+  if(
+   k&&
+   k.indexOf(
+    'roster_month_v7_'
+   )===0
+  ){
+
+   var key=
+   k.replace(
+    'roster_month_v7_',
+    ''
+   );
+
+   var data=
+   parseJSON(
+    localStorage.getItem(k),
+    null
+   );
+
+   if(data){
+
+    await cloudRequest(
+     '/api/month/'+
+     encodeURIComponent(key),
+     {
+      method:'PUT',
+      body:JSON.stringify(data)
      }
+    );
+
    }
-   setCloudStatus('อัปโหลดข้อมูลเครื่องนี้แล้ว • '+uploaded+' เดือน',true);
-   setStatus('ย้ายข้อมูลจากเครื่องนี้ขึ้นฐานข้อมูลออนไลน์สำเร็จ',true);
- }catch(err){
-   setCloudStatus('อัปโหลดไม่สำเร็จ: '+err.message,false);
-   setStatus('อัปโหลดข้อมูลออนไลน์ไม่สำเร็จ: '+err.message,false);
+
+  }
+
  }
+
+ setStatus(
+  'อัปโหลดข้อมูลออนไลน์แล้ว',
+  true
+ );
+
 }
 
-async function downloadAllFromCloud(){
- if(!cloud.connected&&!(await connectCloud(false)))return;
- try{
-   await fetchCloudConfig(true);
-   var list=await cloudRequest('/api/months',{method:'GET'}),months=(list&&list.months)||[];
-   for(var i=0;i<months.length;i++)await fetchCloudMonth(months[i].key);
-   loadMonth(true);
-   renderSheet();
-   renderHistoryInfo();
-   setCloudStatus('โหลดข้อมูลออนไลน์แล้ว • '+months.length+' เดือน',true);
-   setStatus('โหลดข้อมูลจากฐานข้อมูลออนไลน์สำเร็จ',true);
- }catch(err){
-   setCloudStatus('โหลดข้อมูลไม่สำเร็จ: '+err.message,false);
-   setStatus('โหลดข้อมูลออนไลน์ไม่สำเร็จ: '+err.message,false);
+async function downloadCloud(){
+
+ if(
+  !cloud.connected&&
+  !(await connectCloud(false))
+ ){
+  return;
  }
+
+ var config=
+ await cloudRequest(
+  '/api/config',
+  {method:'GET'}
+ );
+
+ if(
+  config&&
+  config.found&&
+  config.data
+ ){
+
+  localStorage.setItem(
+   'roster_config_v8',
+   JSON.stringify(config.data)
+  );
+
+  loadConfig();
+
+  buildNames();
+
+  renderHolidays();
+
+  renderRules();
+
+ }
+
+ var list=
+ await cloudRequest(
+  '/api/months',
+  {method:'GET'}
+ );
+
+ var months=
+ list.months||[];
+
+ for(var i=0;i<months.length;i++){
+
+  await fetchCloudMonth(
+   months[i].key
+  );
+
+ }
+
+ loadMonth(true);
+
+ setStatus(
+  'โหลดข้อมูลออนไลน์แล้ว',
+  true
+ );
+
 }
 
-async function initCloudSync(){
+async function initCloud(){
+
  loadCloudSettings();
- if(!cloud.apiUrl||!cloud.token){
-   setCloudStatus('ยังไม่ได้เชื่อมฐานข้อมูลออนไลน์ — ข้อมูลยังอยู่เฉพาะเครื่องนี้',false);
-   return;
+
+ if(
+  !cloud.apiUrl||
+  !cloud.token
+ ){
+  return;
  }
- if(await connectCloud(false)){
-   try{
-     await fetchCloudConfig(true);
-     await ensureCloudMonths([prevKey(),currentKey()]);
-     loadMonth(true);
-     renderSheet();
-     renderHistoryInfo();
-     setStatus('ระบบพร้อมใช้งาน — โหลดข้อมูลออนไลน์และเดือนก่อนหน้าแล้ว',true);
-   }catch(err){
-     setCloudStatus('เชื่อมได้ แต่โหลดข้อมูลไม่สำเร็จ: '+err.message,false);
-   }
+
+ if(
+  await connectCloud(false)
+ ){
+
+  await ensureCloudMonths([
+   prevKey(),
+   currentKey()
+  ]);
+
+  loadMonth(true);
+
  }
+
 }
 
 function bind(){
- el('runBtn').addEventListener('click',runSchedule);
- el('cloudConnectBtn').addEventListener('click',function(){connectCloud(true)});
- el('cloudUploadBtn').addEventListener('click',uploadAllLocalToCloud);
- el('cloudDownloadBtn').addEventListener('click',downloadAllFromCloud);
- el('saveBtn').addEventListener('click',function(){saveMonth(false)});
- el('loadBtn').addEventListener('click',function(){loadMonth(false)});
- el('validateBtn').addEventListener('click',function(){validateSchedule(true)});
- el('printBtn').addEventListener('click',function(){window.print()});
- el('pdfBtn').addEventListener('click',savePDF);
- el('clearBtn').addEventListener('click',clearSchedule);
- el('addPersonBtn').addEventListener('click',addPerson);
- el('removePersonBtn').addEventListener('click',removePerson);
- el('addHolidayBtn').addEventListener('click',addHoliday);
- el('addGlobalRuleBtn').addEventListener('click',addGlobalRule);
- el('addCustomRuleBtn').addEventListener('click',addCustomRule);
- el('cancelCustomEditBtn').addEventListener('click',cancelCustomEdit);
- el('cancelGlobalEditBtn').addEventListener('click',cancelGlobalEdit);
- el('month').addEventListener('change',monthChanged);
- el('year').addEventListener('change',monthChanged);
- el('pdfNote').addEventListener('change',saveConfig);
- el('pdfNote').addEventListener('input',function(){state.pdfNote=this.value});
 
- el('summaryPdfBtn').addEventListener('click',saveSummaryPDF);
- el('summaryPrintBtn').addEventListener('click',printSummary);
- el('summaryOpenPdfBtn').addEventListener('click',openOldSummaryPdf);
- el('summaryPdfFile').addEventListener('change',onOldSummaryPdfSelected);
+ el('runBtn').onclick=
+ runSchedule;
+
+ el('saveBtn').onclick=
+ function(){
+  saveMonth(false);
+ };
+
+ el('loadBtn').onclick=
+ function(){
+  loadMonth(false);
+ };
+
+ el('validateBtn').onclick=
+ function(){
+  validate(true);
+ };
+
+ el('printBtn').onclick=
+ function(){
+  window.print();
+ };
+
+ el('pdfBtn').onclick=
+ savePDF;
+
+ el('clearBtn').onclick=
+ clearSchedule;
+
+ el('addPersonBtn').onclick=
+ addPerson;
+
+ el('removePersonBtn').onclick=
+ removePerson;
+
+ el('addHolidayBtn').onclick=
+ addHoliday;
+
+ el('addCustomRuleBtn').onclick=
+ addCustomRule;
+
+ el('cloudConnectBtn').onclick=
+ function(){
+  connectCloud(true);
+ };
+
+ el('cloudUploadBtn').onclick=
+ uploadCloud;
+
+ el('cloudDownloadBtn').onclick=
+ downloadCloud;
+
+ el('summaryPdfBtn').onclick=
+ saveSummaryPDF;
+
+ el('summaryPrintBtn').onclick=
+ printSummary;
+
+ el('summaryOpenPdfBtn').onclick=
+ openOldSummaryPdf;
+
+ el('summaryPdfFile').onchange=
+ function(){
+
+  if(!this.files[0])return;
+
+  var url=
+  URL.createObjectURL(
+   this.files[0]
+  );
+
+  window.open(
+   url,
+   '_blank'
+  );
+
+ };
+
+ el('month').onchange=
+ async function(){
+
+  if(cloud.connected){
+
+   await ensureCloudMonths([
+    prevKey(),
+    currentKey()
+   ]);
+
+  }
+
+  loadMonth(true);
+
+ };
+
+ el('year').onchange=
+ el('month').onchange;
+
+ el('pdfNote').onchange=
+ saveConfig;
+
 }
 
 function init(){
+
  buildMonths();
+
  loadConfig();
+
  var now=new Date();
- el('month').value=String(now.getMonth());
- el('year').value=String(now.getFullYear()+543);
- el('pdfNote').value=state.pdfNote||'';
+
+ el('month').value=
+ String(now.getMonth());
+
+ el('year').value=
+ String(
+  now.getFullYear()+543
+ );
+
+ el('pdfNote').value=
+ state.pdfNote||'';
+
  bind();
+
  buildNames();
+
  renderHolidays();
+
  renderRules();
+
  loadMonth(true);
+
  renderSheet();
- renderHistoryInfo();
- setStatus('ระบบพร้อมใช้งาน — ถ้ายังไม่เชื่อม Cloud ข้อมูลจะอยู่เฉพาะเครื่องนี้',true);
- initCloudSync();
+
+ renderHistory();
+
+ setStatus(
+  'ระบบพร้อมใช้งาน',
+  true
+ );
+
+ initCloud();
+
 }
 
-window.addEventListener('error',function(e){setStatus('JavaScript error: '+e.message,false)});
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+window.addEventListener(
+ 'error',
+ function(e){
+
+  setStatus(
+   'JavaScript error: '+
+   e.message,
+   false
+  );
+
+ }
+);
+
+if(
+ document.readyState==='loading'
+){
+
+ document.addEventListener(
+  'DOMContentLoaded',
+  init
+ );
+
+}else{
+
+ init();
+
+}
+
 })();
 </script>
+
 </body>
 </html>
