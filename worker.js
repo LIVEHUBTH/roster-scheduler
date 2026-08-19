@@ -2,7 +2,7 @@ const JSON_HEADERS = { 'content-type': 'application/json; charset=utf-8' };
 
 const AUTH = {
   SESSION_HOURS: 12,
-  PBKDF2_ITERATIONS: 120000,
+  PBKDF2_ITERATIONS: 100000,
   PASSWORD_MIN: 8,
   ROLES: ['admin', 'scheduler', 'approver', 'viewer'],
 };
