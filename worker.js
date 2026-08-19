@@ -393,8 +393,18 @@ async function logout(request, env) {
   return json(request, env, { ok: true });
 }
 
+function bootstrapAuthorized(request, env) {
+  const actual = request.headers.get('X-Sync-Token') || '';
+  const bootstrap = env.BOOTSTRAP_TOKEN || '';
+  const sync = env.SYNC_TOKEN || '';
+
+  if (bootstrap.length >= 8 && actual === bootstrap) return true;
+  if (sync.length >= 8 && actual === sync) return true;
+  return false;
+}
+
 async function bootstrapAdmin(request, env) {
-  if (!legacyAuthorized(request, env)) {
+  if (!bootstrapAuthorized(request, env)) {
     return json(request, env, { ok: false, error: 'unauthorized' }, 401);
   }
 
@@ -577,7 +587,7 @@ export default {
           ok: true,
           database: true,
           auth: true,
-          version: '22.0-auth',
+          version: '22.0-auth-bootstrap',
           time: new Date().toISOString(),
         });
       } catch (error) {
