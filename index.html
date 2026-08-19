@@ -47,7 +47,7 @@ button{min-height:43px;border:0;border-radius:11px;background:#edeef3;color:var(
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 </head>
 <body>
-<header><div class="header-wrap"><div><h1>โปรแกรมรันตารางเวร</h1><div class="header-sub">จัดเวรอัตโนมัติ • อ้างอิงเดือนก่อน • หมุนคิว • เฉลี่ยวันธรรมดา/เสาร์อาทิตย์/นักขัตฤกษ์</div></div><div class="version">V20.6 • Cloud Sync</div></div></header>
+<header><div class="header-wrap"><div><h1>โปรแกรมรันตารางเวร</h1><div class="header-sub">จัดเวรอัตโนมัติ • อ้างอิงเดือนก่อน • หมุนคิว • เฉลี่ยวันธรรมดา/เสาร์อาทิตย์/นักขัตฤกษ์</div></div><div class="version">V20.7 • Cloud Sync</div></div></header>
 <div class="app">
 <div class="panel no-print"><div class="toolbar">
 <label class="field">เดือน<select id="month"></select></label><label class="field">ปี พ.ศ.<input id="year" type="number" min="2500" max="2700"></label>
@@ -131,7 +131,7 @@ function loadConfig(){
   state.pdfNote=c&&c.pdfNote?c.pdfNote:'';
   state.rules=c&&Array.isArray(c.rules)&&c.rules.length?c.rules:DEFAULT_RULES.map(function(r){return {id:r.id,text:r.text}});
 
-  /* V20.6:
+  /* V20.7:
      - คงกฎข้อ 1-20 ที่ผู้ใช้แก้ไว้
      - ใช้กฎข้อ 21 ฉบับล่าสุดเพียงข้อเดียว
      - ลบกฎซ้ำเดิมที่พูดเรื่องค่าเฉลี่ยรายประเภท + เวรรวมทั้งเดือน
@@ -154,7 +154,7 @@ function loadConfig(){
 }
 function configPayload(){return {people:state.people,holidays:state.holidays,customRules:state.customRules,pdfNote:state.pdfNote,rules:state.rules}}
 function saveConfig(){state.pdfNote=el('pdfNote').value;var p=configPayload();localStorage.setItem('roster_config_v8',JSON.stringify(p));scheduleCloudConfigSave(p)}
-function monthPayload(){return {version:'20.6',key:currentKey(),year:gy(),month:cm(),savedAt:new Date().toISOString(),assignments:state.assignments,rotation:state.rotation,peopleSnapshot:state.people}}
+function monthPayload(){return {version:'20.7',key:currentKey(),year:gy(),month:cm(),savedAt:new Date().toISOString(),assignments:state.assignments,rotation:state.rotation,peopleSnapshot:state.people}}
 function saveMonth(silent){var d=monthPayload();localStorage.setItem(storageKey(currentKey()),JSON.stringify(d));cloudSaveMonth(d);if(!silent)setStatus('บันทึกเดือน '+MONTHS[cm()]+' '+py()+' แล้ว',true);renderHistory()}
 function loadMonth(silent){var d=savedMonth(currentKey());state.assignments=d&&d.assignments?d.assignments:{};state.rotation=d&&d.rotation?d.rotation:{};if(!silent)setStatus(d?'เปิดตารางที่บันทึกแล้ว':'เดือนนี้ยังไม่มีข้อมูลที่บันทึก',!!d);renderSheet();renderHistory()}
 function renderHistory(){el('historyInfo').innerHTML='เดือนนี้: <b>'+(savedMonth(currentKey())?'มีข้อมูลบันทึก':'ยังไม่บันทึก')+'</b> | เดือนก่อน: <b>'+(savedMonth(prevKey())?'พบข้อมูล':'ไม่พบข้อมูล')+'</b>'}
@@ -178,6 +178,80 @@ function sameSlotPenalty(pid,d,sid){if(!hasRule(18))return 0;for(var x=d-1;x>=Ma
 function choose(candidates,slot,current,previous,d,cursor){
   var g=SLOT_GROUP[slot.id],off=isOffDay(d),best=null,bestKey=null;
 
+  /* V20.7:
+     EXTRA-only ต้องถูกนำมาหมุนคิว EXTRA จริง
+     - ไม่เอาไปหารค่ากลางคนทั่วไป
+     - แต่ไม่ให้ถูกลดลำดับจนได้ 0 เวร
+     - พยายามให้ยอดรวม EXTRA-only ไล่ตามภาระรวมของคนทั่วไป
+       และสามารถมากกว่าค่ากลางคนทั่วไปได้
+  */
+  if(hasRule(21)&&isExtraSlot(slot)){
+    var extraOnlyCandidates=candidates.filter(function(pid){
+      return isExtraOnlyPerson(pid);
+    });
+
+    var normalCandidates=candidates.filter(function(pid){
+      return !isExtraOnlyPerson(pid);
+    });
+
+    if(extraOnlyCandidates.length){
+      var normalIds=normalFairnessPeople();
+      var normalTotalSum=0;
+
+      normalIds.forEach(function(pid){
+        normalTotalSum+=(current.total[pid]||0);
+      });
+
+      var normalTotalAvg=normalIds.length
+        ?normalTotalSum/normalIds.length
+        :0;
+
+      /* ถ้า EXTRA-only ยังมีภาระรวมน้อยกว่าหรือใกล้เคียงคนทั่วไป
+         ให้เลือกจาก EXTRA-only ก่อน เพื่อไม่ให้ตกหล่นเป็น 0 เวร */
+      var extraNeed=extraOnlyCandidates.some(function(pid){
+        return (current.total[pid]||0)<=normalTotalAvg+0.5;
+      });
+
+      if(extraNeed){
+        var extraBest=null;
+        var extraKey=null;
+
+        extraOnlyCandidates.forEach(function(pid){
+          var key=[
+            current.total[pid]||0,
+            current.slot[slot.id][pid]||0,
+            previous.total[pid]||0,
+            previous.slot[slot.id][pid]||0,
+            queueDistance(pid,cursor[g]||0)
+          ];
+
+          if(extraKey===null){
+            extraKey=key;
+            extraBest=pid;
+            return;
+          }
+
+          for(var i=0;i<key.length;i++){
+            if(key[i]<extraKey[i]){
+              extraKey=key;
+              extraBest=pid;
+              break;
+            }
+            if(key[i]>extraKey[i])break;
+          }
+        });
+
+        if(extraBest!==null)return extraBest;
+      }
+
+      /* เมื่อ EXTRA-only มีภาระเพียงพอแล้ว
+         ให้คนทั่วไปเฉลี่ยรายประเภทตามปกติ */
+      if(normalCandidates.length){
+        candidates=normalCandidates;
+      }
+    }
+  }
+
   candidates.forEach(function(pid){
     var currentSlot=current.slot[slot.id][pid]||0;
     var currentTotal=current.total[pid]||0;
@@ -189,79 +263,43 @@ function choose(candidates,slot,current,previous,d,cursor){
       :((current.groupWeekday[g][pid]||0)+(previous.groupWeekday[g][pid]||0));
     var slotLoad=currentSlot+previousSlot;
 
-    if(hasRule(21)){
-      var extraExempt=isExtraSlot(slot)&&isExtraOnlyPerson(pid);
-
-      /* คนทั่วไป:
-         1) ค่าเฉลี่ยประเภทเดือนนี้
-         2) ค่าเฉลี่ยรวมเดือนนี้
-         3) เดือนก่อน/ประเภทเดิม เพื่อหมุนคิว
-         EXTRA-only เป็นข้อยกเว้น จึงไม่ถูกบังคับค่ากลางทั่วไป */
-      var key=extraExempt
-        ?[
-            1,
-            currentTotal,
-            currentSlot,
-            previousTotal,
-            previousSlot,
-            queueDistance(pid,cursor[g]||0)
-          ]
-        :[
-            0,
-            currentSlot,
-            currentTotal,
-            previousSlot,
-            previousTotal,
-            groupLoad,
-            classLoad,
-            heavyPenalty(pid,d,slot),
-            recentPenalty(pid,d),
-            slotLoad,
-            sameSlotPenalty(pid,d,slot.id),
-            queueDistance(pid,cursor[g]||0)
-          ];
-
-      if(bestKey===null){
-        bestKey=key;
-        best=pid;
-        return;
-      }
-
-      for(var i=0;i<key.length;i++){
-        if(key[i]<bestKey[i]){
-          bestKey=key;
-          best=pid;
-          break;
-        }
-        if(key[i]>bestKey[i])break;
-      }
-
-      return;
-    }
-
-    var normalKey=[
-      groupLoad,
-      classLoad,
-      heavyPenalty(pid,d,slot),
-      recentPenalty(pid,d),
-      slotLoad,
-      sameSlotPenalty(pid,d,slot.id),
-      queueDistance(pid,cursor[g]||0)
-    ];
+    var key=hasRule(21)
+      ?[
+          currentSlot,
+          currentTotal,
+          previousSlot,
+          previousTotal,
+          groupLoad,
+          classLoad,
+          heavyPenalty(pid,d,slot),
+          recentPenalty(pid,d),
+          slotLoad,
+          sameSlotPenalty(pid,d,slot.id),
+          queueDistance(pid,cursor[g]||0)
+        ]
+      :[
+          groupLoad,
+          classLoad,
+          heavyPenalty(pid,d,slot),
+          recentPenalty(pid,d),
+          slotLoad,
+          sameSlotPenalty(pid,d,slot.id),
+          queueDistance(pid,cursor[g]||0)
+        ];
 
     if(bestKey===null){
-      bestKey=normalKey;
+      bestKey=key;
       best=pid;
       return;
     }
 
-    for(var j=0;j<normalKey.length;j++){
-      if(normalKey[j]<bestKey[j]){
-        bestKey=normalKey;
+    for(var j=0;j<key.length;j++){
+      if(key[j]<bestKey[j]){
+        bestKey=key;
         best=pid;
         break;
       }
-      if(normalKey[j]>bestKey[j])break;
+      if(key[j]>bestKey[j])break;
     }
   });
 
@@ -269,7 +307,7 @@ function choose(candidates,slot,current,previous,d,cursor){
 }
 
 /* =========================
-   V20.6 - กฎข้อ 21
+   V20.7 - กฎข้อ 21
 
    ค่ากลางที่ต้องตรวจ:
    1) ค่ากลางรายประเภทเวรของเดือนปัจจุบัน
@@ -719,6 +757,52 @@ function rule21Report(){
   };
 }
 
+
+function ensureExtraOnlyGetsExtra(){
+  var moved=0;
+
+  var extraOnlyIds=state.people.filter(function(p){
+    return isExtraOnlyPerson(p.id);
+  }).map(function(p){
+    return p.id;
+  });
+
+  if(!extraOnlyIds.length)return 0;
+
+  var counts=currentCounts();
+
+  extraOnlyIds.forEach(function(pid){
+    var extraTotal=0;
+
+    EXTRA_IDS.forEach(function(sid){
+      extraTotal+=counts.slot[sid][pid]||0;
+    });
+
+    if(extraTotal>0)return;
+
+    outer:
+    for(var si=0;si<EXTRA_IDS.length;si++){
+      var sid=EXTRA_IDS[si];
+      var slot=slotById(sid);
+
+      for(var d=1;d<=dim();d++){
+        var donor=state.assignments[akey(d,sid)];
+
+        if(!donor||isExtraOnlyPerson(donor))continue;
+
+        if(moveAssignment(d,sid,donor,pid)){
+          moved++;
+          break outer;
+        }
+      }
+    }
+
+    counts=currentCounts();
+  });
+
+  return moved;
+}
+
 function rebalanceRule21(){
   if(!hasRule(21)){
     return {
@@ -729,6 +813,9 @@ function rebalanceRule21(){
   }
 
   var moved=0;
+
+  /* รับรองว่า EXTRA-only ไม่ตกหล่นเป็น 0 เวร */
+  moved+=ensureExtraOnlyGetsExtra();
 
   /* ทำหลายรอบเพราะการแก้ยอดรวมอาจกระทบโอกาสสลับบางช่อง */
   for(var round=0;round<4;round++){
@@ -861,7 +948,7 @@ function renderSummary(){
        '</div>';
 
     h+='<div class="muted" style="margin:0 0 8px 0">'+
-       'ค่ากลางคำนวณจากเดือนปัจจุบัน • รายประเภทคิดเฉพาะผู้มีสิทธิ์ขึ้นเวรนั้น • EXTRA-only ไม่นำมาหารค่ากลางบุคลากรทั่วไปและสามารถรับ EXTRA มากกว่าได้'+
+       'ค่ากลางคำนวณจากเดือนปัจจุบัน • รายประเภทคิดเฉพาะผู้มีสิทธิ์ขึ้นเวรนั้น • EXTRA-only ไม่นำมาหารค่ากลางบุคลากรทั่วไป ต้องถูกนำมาหมุนคิว EXTRA จริง และสามารถรับ EXTRA มากกว่าคนทั่วไปได้'+
        '</div>';
   }
 
@@ -910,7 +997,7 @@ function renderSummary(){
 }
 
 
-/* V20.6: fit-to-page + auto-fill แนวตั้ง โดยใช้พื้นที่ A4 หลังหัก margin */
+/* V20.7: fit-to-page + auto-fill แนวตั้ง โดยใช้พื้นที่ A4 หลังหัก margin */
 function fitCanvasToA4(canvas,pdf,left,top,right,bottom){
   var pw=pdf.internal.pageSize.getWidth(),ph=pdf.internal.pageSize.getHeight();
   var maxW=pw-left-right,maxH=ph-top-bottom;
