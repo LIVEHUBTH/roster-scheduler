@@ -47,7 +47,7 @@ button{min-height:43px;border:0;border-radius:11px;background:#edeef3;color:var(
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 </head>
 <body>
-<header><div class="header-wrap"><div><h1>โปรแกรมรันตารางเวร</h1><div class="header-sub">จัดเวรอัตโนมัติ • อ้างอิงเดือนก่อน • หมุนคิว • เฉลี่ยวันธรรมดา/เสาร์อาทิตย์/นักขัตฤกษ์</div></div><div class="version">V20.5 • Cloud Sync</div></div></header>
+<header><div class="header-wrap"><div><h1>โปรแกรมรันตารางเวร</h1><div class="header-sub">จัดเวรอัตโนมัติ • อ้างอิงเดือนก่อน • หมุนคิว • เฉลี่ยวันธรรมดา/เสาร์อาทิตย์/นักขัตฤกษ์</div></div><div class="version">V20.6 • Cloud Sync</div></div></header>
 <div class="app">
 <div class="panel no-print"><div class="toolbar">
 <label class="field">เดือน<select id="month"></select></label><label class="field">ปี พ.ศ.<input id="year" type="number" min="2500" max="2700"></label>
@@ -105,7 +105,7 @@ var DEFAULT_RULES=[
 {id:'r18',text:'ต้องหมุนเวียนตำแหน่งภายในแต่ละประเภทเวร และไม่ให้บุคคลเดิมอยู่ในเวรหรือตำแหน่งเดิมซ้ำ ๆ รวมถึงหลีกเลี่ยงชื่อเดียวกันติดต่อกันหลายวัน'},
 {id:'r19',text:'การจัดตารางเดือนใหม่ต้องอ้างอิงตารางเวรของเดือนก่อนหน้า โดยนำข้อมูลการหมุนคิว จำนวนเวรสะสม ประเภทเวร และประวัติการขึ้นเวรมาประกอบการจัดเดือนใหม่'},
 {id:'r20',text:'ต้องตรวจสอบรอยต่อระหว่างปลายเดือนก่อนหน้ากับต้นเดือนใหม่ โดยใช้กฎทั้งหมดเหมือนเป็นตารางต่อเนื่องกัน'},
-{id:'r21',text:'การเฉลี่ยเวรต้องตรวจ 2 ค่า ได้แก่ (1) ค่าเฉลี่ยรายประเภทเวร: จำนวนเวรของบุคลากรที่มีสิทธิ์ขึ้นเวรประเภทนั้น ต้องแตกต่างจากค่ากลางไม่เกิน ±1 เวร และ (2) ค่าเฉลี่ยเวรรวมทั้งเดือน: จำนวนเวรรวมทุกประเภทของบุคลากรแต่ละคนในเดือนที่จัด ต้องแตกต่างจากค่ากลางไม่เกิน ±1 เวร หากยังเกิน ±1 ให้ระบบปรับสมดุลอัตโนมัติโดยห้ามทำให้ผิดกฎข้อ 1–20 และหากไม่สามารถปรับได้ให้แจ้งว่าไม่สามารถปรับสมดุลได้เนื่องจากติดเงื่อนไข'}
+{id:'r21',text:'การเฉลี่ยเวรต้องตรวจ 2 ค่า ได้แก่ (1) รายประเภทเวร — เวร1, เวร2, OT1, OT2, SDMC แต่ละช่อง, EXTRA1, EXTRA2 และ EXTRA3 ต้องเฉลี่ยเฉพาะบุคลากรที่มีสิทธิ์ขึ้นเวรประเภทนั้น โดยจำนวนของแต่ละคนต้องแตกต่างจากค่ากลางไม่เกิน ±1 เวร และ (2) เวรรวมทั้งเดือน — จำนวนเวรรวมทุกประเภทของบุคลากรแต่ละคนในเดือนปัจจุบันต้องแตกต่างจากค่ากลางไม่เกิน ±1 เวร หากยังเกิน ±1 ให้ระบบปรับสมดุลอัตโนมัติโดยห้ามทำให้ผิดกฎข้อ 1–20 ข้อยกเว้น: บุคลากรที่กำหนดให้ขึ้นได้เฉพาะ EXTRA1–3 สามารถมีจำนวน EXTRA มากกว่าค่ากลางของบุคลากรทั่วไปได้'}
 ];
 var state={people:[],assignments:{},holidays:{},rules:[],customRules:[],pdfNote:'',rotation:{}};
 var cloud={apiUrl:'',token:'',connected:false,timer:null};
@@ -130,15 +130,31 @@ function loadConfig(){
   state.customRules=c&&c.customRules?c.customRules:[];
   state.pdfNote=c&&c.pdfNote?c.pdfNote:'';
   state.rules=c&&Array.isArray(c.rules)&&c.rules.length?c.rules:DEFAULT_RULES.map(function(r){return {id:r.id,text:r.text}});
-  /* V20.5: เพิ่มเฉพาะข้อ 21 โดยไม่เขียนทับข้อ 1-20 ที่ผู้ใช้เคยแก้ */
-  if(!state.rules.some(function(r){return r.id==='r21'})){
-    var r21=DEFAULT_RULES.find(function(r){return r.id==='r21'});
-    if(r21)state.rules.push({id:r21.id,text:r21.text});
-  }
+
+  /* V20.6:
+     - คงกฎข้อ 1-20 ที่ผู้ใช้แก้ไว้
+     - ใช้กฎข้อ 21 ฉบับล่าสุดเพียงข้อเดียว
+     - ลบกฎซ้ำเดิมที่พูดเรื่องค่าเฉลี่ยรายประเภท + เวรรวมทั้งเดือน
+  */
+  var latest21=DEFAULT_RULES.find(function(r){return r.id==='r21'});
+  state.rules=state.rules.filter(function(r){
+    if(r.id==='r21')return false;
+    if(/^r(?:[1-9]|1[0-9]|20)$/.test(r.id))return true;
+
+    var t=String(r.text||'');
+    var duplicateAverage=
+      (t.indexOf('รายประเภทเวร')>=0&&t.indexOf('เวรรวมทั้งเดือน')>=0)||
+      (t.indexOf('ค่าเฉลี่ยรายประเภท')>=0&&t.indexOf('เวรรวมทั้งเดือน')>=0)||
+      (t.indexOf('ค่ากลาง')>=0&&t.indexOf('±1')>=0&&t.indexOf('เวรรวม')>=0);
+
+    return !duplicateAverage;
+  });
+
+  if(latest21)state.rules.push({id:'r21',text:latest21.text});
 }
 function configPayload(){return {people:state.people,holidays:state.holidays,customRules:state.customRules,pdfNote:state.pdfNote,rules:state.rules}}
 function saveConfig(){state.pdfNote=el('pdfNote').value;var p=configPayload();localStorage.setItem('roster_config_v8',JSON.stringify(p));scheduleCloudConfigSave(p)}
-function monthPayload(){return {version:'20.5',key:currentKey(),year:gy(),month:cm(),savedAt:new Date().toISOString(),assignments:state.assignments,rotation:state.rotation,peopleSnapshot:state.people}}
+function monthPayload(){return {version:'20.6',key:currentKey(),year:gy(),month:cm(),savedAt:new Date().toISOString(),assignments:state.assignments,rotation:state.rotation,peopleSnapshot:state.people}}
 function saveMonth(silent){var d=monthPayload();localStorage.setItem(storageKey(currentKey()),JSON.stringify(d));cloudSaveMonth(d);if(!silent)setStatus('บันทึกเดือน '+MONTHS[cm()]+' '+py()+' แล้ว',true);renderHistory()}
 function loadMonth(silent){var d=savedMonth(currentKey());state.assignments=d&&d.assignments?d.assignments:{};state.rotation=d&&d.rotation?d.rotation:{};if(!silent)setStatus(d?'เปิดตารางที่บันทึกแล้ว':'เดือนนี้ยังไม่มีข้อมูลที่บันทึก',!!d);renderSheet();renderHistory()}
 function renderHistory(){el('historyInfo').innerHTML='เดือนนี้: <b>'+(savedMonth(currentKey())?'มีข้อมูลบันทึก':'ยังไม่บันทึก')+'</b> | เดือนก่อน: <b>'+(savedMonth(prevKey())?'พบข้อมูล':'ไม่พบข้อมูล')+'</b>'}
@@ -161,86 +177,291 @@ function heavyPenalty(pid,d,slot){if(!hasRule(5)||(slot.kind!=='night'&&slot.kin
 function sameSlotPenalty(pid,d,sid){if(!hasRule(18))return 0;for(var x=d-1;x>=Math.max(1,d-7);x--)if(state.assignments[akey(x,sid)]===pid)return 1;return 0}
 function choose(candidates,slot,current,previous,d,cursor){
   var g=SLOT_GROUP[slot.id],off=isOffDay(d),best=null,bestKey=null;
+
   candidates.forEach(function(pid){
     var currentSlot=current.slot[slot.id][pid]||0;
     var currentTotal=current.total[pid]||0;
+    var previousSlot=previous.slot[slot.id][pid]||0;
+    var previousTotal=previous.total[pid]||0;
     var groupLoad=(current.group[g][pid]||0)+(previous.group[g][pid]||0);
-    var classLoad=off?((current.groupOff[g][pid]||0)+(previous.groupOff[g][pid]||0)):((current.groupWeekday[g][pid]||0)+(previous.groupWeekday[g][pid]||0));
-    var slotLoad=(current.slot[slot.id][pid]||0)+(previous.slot[slot.id][pid]||0);
-    var key=hasRule(21)
-      ?[currentSlot,currentTotal,groupLoad,classLoad,heavyPenalty(pid,d,slot),recentPenalty(pid,d),slotLoad,sameSlotPenalty(pid,d,slot.id),queueDistance(pid,cursor[g]||0)]
-      :[groupLoad,classLoad,heavyPenalty(pid,d,slot),recentPenalty(pid,d),slotLoad,sameSlotPenalty(pid,d,slot.id),queueDistance(pid,cursor[g]||0)];
-    if(bestKey===null){bestKey=key;best=pid;return}
-    for(var i=0;i<key.length;i++){
-      if(key[i]<bestKey[i]){bestKey=key;best=pid;break}
-      if(key[i]>bestKey[i])break;
+    var classLoad=off
+      ?((current.groupOff[g][pid]||0)+(previous.groupOff[g][pid]||0))
+      :((current.groupWeekday[g][pid]||0)+(previous.groupWeekday[g][pid]||0));
+    var slotLoad=currentSlot+previousSlot;
+
+    if(hasRule(21)){
+      var extraExempt=isExtraSlot(slot)&&isExtraOnlyPerson(pid);
+
+      /* คนทั่วไป:
+         1) ค่าเฉลี่ยประเภทเดือนนี้
+         2) ค่าเฉลี่ยรวมเดือนนี้
+         3) เดือนก่อน/ประเภทเดิม เพื่อหมุนคิว
+         EXTRA-only เป็นข้อยกเว้น จึงไม่ถูกบังคับค่ากลางทั่วไป */
+      var key=extraExempt
+        ?[
+            1,
+            currentTotal,
+            currentSlot,
+            previousTotal,
+            previousSlot,
+            queueDistance(pid,cursor[g]||0)
+          ]
+        :[
+            0,
+            currentSlot,
+            currentTotal,
+            previousSlot,
+            previousTotal,
+            groupLoad,
+            classLoad,
+            heavyPenalty(pid,d,slot),
+            recentPenalty(pid,d),
+            slotLoad,
+            sameSlotPenalty(pid,d,slot.id),
+            queueDistance(pid,cursor[g]||0)
+          ];
+
+      if(bestKey===null){
+        bestKey=key;
+        best=pid;
+        return;
+      }
+
+      for(var i=0;i<key.length;i++){
+        if(key[i]<bestKey[i]){
+          bestKey=key;
+          best=pid;
+          break;
+        }
+        if(key[i]>bestKey[i])break;
+      }
+
+      return;
+    }
+
+    var normalKey=[
+      groupLoad,
+      classLoad,
+      heavyPenalty(pid,d,slot),
+      recentPenalty(pid,d),
+      slotLoad,
+      sameSlotPenalty(pid,d,slot.id),
+      queueDistance(pid,cursor[g]||0)
+    ];
+
+    if(bestKey===null){
+      bestKey=normalKey;
+      best=pid;
+      return;
+    }
+
+    for(var j=0;j<normalKey.length;j++){
+      if(normalKey[j]<bestKey[j]){
+        bestKey=normalKey;
+        best=pid;
+        break;
+      }
+      if(normalKey[j]>bestKey[j])break;
     }
   });
+
   return best;
 }
 
 /* =========================
-   V20.5 - กฎข้อ 21
-   สมดุล 2 ค่า:
-   1) รายประเภทเวร ±1 จากค่ากลาง
-   2) เวรรวมทั้งเดือน ±1 จากค่ากลาง
+   V20.6 - กฎข้อ 21
+
+   ค่ากลางที่ต้องตรวจ:
+   1) ค่ากลางรายประเภทเวรของเดือนปัจจุบัน
+   2) ค่ากลางเวรรวมทั้งเดือนปัจจุบัน
+
+   ประวัติเดือนก่อน + ประเภทเวรเดือนก่อน
+   ยังคงใช้เป็นตัวช่วยหมุนคิวตามกฎข้อ 19
+
+   EXTRA-only:
+   - ไม่นำมาหารค่ากลางของบุคลากรทั่วไป
+   - สามารถรับ EXTRA มากกว่าค่ากลางทั่วไปได้
 ========================= */
 
+var EXTRA_IDS=['e1','e2','e3'];
+
+function isExtraSlot(slot){
+  return !!slot&&EXTRA_IDS.indexOf(slot.id)>=0;
+}
+
+function isExtraOnlyPerson(pid){
+  /* คนสุดท้ายตามกฎข้อ 4 */
+  if(
+    hasRule(4)&&
+    state.people.length&&
+    pid===state.people[state.people.length-1].id
+  ){
+    return true;
+  }
+
+  /* กติกาเฉพาะบุคคล: อนุญาตเฉพาะ EXTRA1-3 */
+  for(var i=0;i<state.customRules.length;i++){
+    var r=state.customRules[i];
+    if(r.personId!==pid||r.type!=='only'||!Array.isArray(r.slots)||!r.slots.length)continue;
+
+    var onlyExtra=r.slots.every(function(sid){
+      return EXTRA_IDS.indexOf(sid)>=0;
+    });
+
+    if(onlyExtra)return true;
+  }
+
+  return false;
+}
+
 function basePersonCanSlot(pid,slot){
-  if(hasRule(4)&&pid===state.people[state.people.length-1].id&&['e1','e2','e3'].indexOf(slot.id)<0)return false;
+  if(
+    hasRule(4)&&
+    state.people.length&&
+    pid===state.people[state.people.length-1].id&&
+    !isExtraSlot(slot)
+  ){
+    return false;
+  }
+
   if(!customAllowed(pid,slot.id))return false;
   return true;
 }
 
+function personHasAnyActiveDayForSlot(pid,slot){
+  if(!basePersonCanSlot(pid,slot))return false;
+
+  for(var d=1;d<=dim();d++){
+    if(active(slot,d))return true;
+  }
+
+  return false;
+}
+
+/* ผู้มีสิทธิ์จริงของเวรชนิดนั้น */
 function eligiblePeopleForSlot(slot){
   return state.people.filter(function(p){
-    if(!basePersonCanSlot(p.id,slot))return false;
-    for(var d=1;d<=dim();d++)if(active(slot,d))return true;
-    return false;
-  }).map(function(p){return p.id});
+    return personHasAnyActiveDayForSlot(p.id,slot);
+  }).map(function(p){
+    return p.id;
+  });
+}
+
+/* กลุ่มที่ใช้หารค่ากลาง:
+   EXTRA ตัด EXTRA-only ออกจากค่ากลางของคนทั่วไป */
+function fairnessPeopleForSlot(slot){
+  var ids=eligiblePeopleForSlot(slot);
+
+  if(isExtraSlot(slot)){
+    ids=ids.filter(function(pid){
+      return !isExtraOnlyPerson(pid);
+    });
+  }
+
+  return ids;
+}
+
+function extraOnlyEligibleForSlot(slot){
+  if(!isExtraSlot(slot))return [];
+
+  return eligiblePeopleForSlot(slot).filter(function(pid){
+    return isExtraOnlyPerson(pid);
+  });
+}
+
+function normalFairnessPeople(){
+  return state.people.filter(function(p){
+    return !isExtraOnlyPerson(p.id);
+  }).map(function(p){
+    return p.id;
+  });
 }
 
 function assignmentListForPerson(pid){
   var list=[];
+
   for(var d=1;d<=dim();d++){
     for(var i=0;i<SLOTS.length;i++){
       var sid=SLOTS[i].id;
-      if(state.assignments[akey(d,sid)]===pid)list.push({d:d,sid:sid});
+
+      if(state.assignments[akey(d,sid)]===pid){
+        list.push({d:d,sid:sid});
+      }
     }
   }
+
   return list;
 }
 
 function canAssignWithForward(pid,d,slot){
   if(!eligible(pid,d,slot))return false;
 
-  /* ถ้าเพิ่มบ่าย-ดึก ต้องตรวจเวรที่ถูกจัดไว้วันถัดไปด้วย */
+  /* เพิ่มบ่าย-ดึกแล้วต้องไม่ทำให้วันถัดไปผิดกฎข้อ 3 */
   if(hasRule(3)&&slot.kind==='night'&&d<dim()){
-    var hasNext=false;
     for(var i=0;i<SLOTS.length;i++){
       var nextSlot=SLOTS[i];
+
       if(state.assignments[akey(d+1,nextSlot.id)]===pid){
-        hasNext=true;
-        if(!(nextSlot.kind==='night'&&allowNightChain(gy(),cm(),d,gy(),cm(),d+1)))return false;
+        if(
+          !(
+            nextSlot.kind==='night'&&
+            allowNightChain(gy(),cm(),d,gy(),cm(),d+1)
+          )
+        ){
+          return false;
+        }
       }
     }
   }
+
   return true;
 }
 
+/* ค่ากลางรายประเภทเวร — เดือนปัจจุบันเท่านั้น */
 function slotAverageInfo(slotId){
   var slot=slotById(slotId);
-  var eligibleIds=eligiblePeopleForSlot(slot);
+  var fairnessIds=fairnessPeopleForSlot(slot);
+  var exemptIds=extraOnlyEligibleForSlot(slot);
   var counts=currentCounts();
   var total=0;
-  eligibleIds.forEach(function(pid){total+=counts.slot[slotId][pid]||0});
-  return {slot:slot,eligible:eligibleIds,counts:counts,avg:eligibleIds.length?total/eligibleIds.length:0,total:total};
+
+  fairnessIds.forEach(function(pid){
+    total+=counts.slot[slotId][pid]||0;
+  });
+
+  return {
+    slot:slot,
+    fairness:fairnessIds,
+    exempt:exemptIds,
+    counts:counts,
+    avg:fairnessIds.length?total/fairnessIds.length:0,
+    total:total
+  };
 }
 
+/* ค่ากลางเวรรวมทั้งเดือน — เดือนปัจจุบันเท่านั้น
+   EXTRA-only เป็นข้อยกเว้น จึงไม่นำมาหารค่ากลางทั่วไป */
 function totalAverageInfo(){
-  var counts=currentCounts(),ids=state.people.map(function(p){return p.id}),total=0;
-  ids.forEach(function(pid){total+=counts.total[pid]||0});
-  return {ids:ids,counts:counts,avg:ids.length?total/ids.length:0,total:total};
+  var counts=currentCounts();
+  var ids=normalFairnessPeople();
+  var exempt=state.people.filter(function(p){
+    return isExtraOnlyPerson(p.id);
+  }).map(function(p){
+    return p.id;
+  });
+  var total=0;
+
+  ids.forEach(function(pid){
+    total+=counts.total[pid]||0;
+  });
+
+  return {
+    ids:ids,
+    exempt:exempt,
+    counts:counts,
+    avg:ids.length?total/ids.length:0,
+    total:total
+  };
 }
 
 function withinOne(value,avg){
@@ -249,43 +470,131 @@ function withinOne(value,avg){
 
 function moveAssignment(d,sid,fromPid,toPid){
   var key=akey(d,sid);
+
   if(state.assignments[key]!==fromPid)return false;
+
   delete state.assignments[key];
+
   var slot=slotById(sid);
+
   if(canAssignWithForward(toPid,d,slot)){
     state.assignments[key]=toPid;
     return true;
   }
+
   state.assignments[key]=fromPid;
   return false;
 }
 
+/* จำลองหลังย้าย เพื่อรับรองว่าค่ารายประเภทที่สมดุลแล้วจะไม่เสีย */
+function slotDistributionValidAfterMove(slotId,donor,recv){
+  var info=slotAverageInfo(slotId);
+  var ids=info.fairness;
+
+  if(!ids.length)return true;
+
+  var sum=0;
+  var after={};
+
+  ids.forEach(function(pid){
+    var n=info.counts.slot[slotId][pid]||0;
+
+    if(pid===donor)n--;
+    if(pid===recv)n++;
+
+    after[pid]=n;
+    sum+=n;
+  });
+
+  var avg=sum/ids.length;
+
+  for(var i=0;i<ids.length;i++){
+    if(!withinOne(after[ids[i]],avg))return false;
+  }
+
+  return true;
+}
+
+/* รอบที่ 1: ปรับรายประเภทเวร */
 function rebalanceEachSlot(){
-  var moved=0,guard=0,maxGuard=3000;
+  var moved=0;
+  var guard=0;
+  var maxGuard=5000;
 
   while(guard++<maxGuard){
     var changed=false;
 
     for(var s=0;s<SLOTS.length;s++){
-      var slot=SLOTS[s],info=slotAverageInfo(slot.id),avg=info.avg,counts=info.counts.slot[slot.id];
-      if(!info.eligible.length)continue;
+      var slot=SLOTS[s];
+      var info=slotAverageInfo(slot.id);
+      var avg=info.avg;
+      var counts=info.counts.slot[slot.id];
 
-      var over=info.eligible.filter(function(pid){return (counts[pid]||0)>avg+1.0000001})
-                            .sort(function(a,b){return (counts[b]||0)-(counts[a]||0)});
-      var under=info.eligible.filter(function(pid){return (counts[pid]||0)<avg-1.0000001})
-                             .sort(function(a,b){return (counts[a]||0)-(counts[b]||0)});
+      if(!info.fairness.length)continue;
 
-      if(!over.length||!under.length)continue;
+      var over=info.fairness.filter(function(pid){
+        return (counts[pid]||0)>avg+1.0000001;
+      }).sort(function(a,b){
+        return (counts[b]||0)-(counts[a]||0);
+      });
 
-      outer:
-      for(var oi=0;oi<over.length;oi++){
-        var donor=over[oi];
-        for(var d=1;d<=dim();d++){
-          if(state.assignments[akey(d,slot.id)]!==donor)continue;
-          for(var ui=0;ui<under.length;ui++){
-            var recv=under[ui];
-            if(moveAssignment(d,slot.id,donor,recv)){
-              moved++;changed=true;break outer;
+      var under=info.fairness.filter(function(pid){
+        return (counts[pid]||0)<avg-1.0000001;
+      }).sort(function(a,b){
+        return (counts[a]||0)-(counts[b]||0);
+      });
+
+      /* 1A. เติมคนทั่วไปที่ต่ำกว่าค่ากลาง
+         donor ใช้คนทั่วไปที่เกินก่อน แล้วค่อยใช้ EXTRA-only หากเป็น EXTRA */
+      if(under.length){
+        var donors=over.slice();
+
+        if(isExtraSlot(slot)){
+          info.exempt.forEach(function(pid){
+            if((counts[pid]||0)>0)donors.push(pid);
+          });
+        }
+
+        outerFill:
+        for(var di=0;di<donors.length;di++){
+          var donor=donors[di];
+
+          for(var d=1;d<=dim();d++){
+            if(state.assignments[akey(d,slot.id)]!==donor)continue;
+
+            for(var ui=0;ui<under.length;ui++){
+              var recv=under[ui];
+
+              if(moveAssignment(d,slot.id,donor,recv)){
+                moved++;
+                changed=true;
+                break outerFill;
+              }
+            }
+          }
+        }
+      }
+
+      if(changed)break;
+
+      /* 1B. EXTRA: ถ้าคนทั่วไปยังเกินค่ากลาง แต่ไม่มีคนทั่วไปที่ต่ำพอ
+         ให้ EXTRA-only รับส่วนเกินได้ */
+      if(isExtraSlot(slot)&&over.length&&info.exempt.length){
+        outerExempt:
+        for(var oi=0;oi<over.length;oi++){
+          var overPid=over[oi];
+
+          for(var day=1;day<=dim();day++){
+            if(state.assignments[akey(day,slot.id)]!==overPid)continue;
+
+            for(var ei=0;ei<info.exempt.length;ei++){
+              var extraPid=info.exempt[ei];
+
+              if(moveAssignment(day,slot.id,overPid,extraPid)){
+                moved++;
+                changed=true;
+                break outerExempt;
+              }
             }
           }
         }
@@ -300,41 +609,55 @@ function rebalanceEachSlot(){
   return moved;
 }
 
-function slotMoveKeepsRule21(slotId,donor,recv){
-  var info=slotAverageInfo(slotId),avg=info.avg,c=info.counts.slot[slotId];
-  if(info.eligible.indexOf(recv)<0)return false;
-  var donorAfter=(c[donor]||0)-1,recvAfter=(c[recv]||0)+1;
-  return withinOne(donorAfter,avg)&&withinOne(recvAfter,avg);
-}
-
+/* รอบที่ 2: ปรับยอดรวมทั้งเดือน
+   ต้องไม่ทำให้รายประเภทเวรหลุดจาก ±1 */
 function rebalanceTotal(){
-  var moved=0,guard=0,maxGuard=3000;
+  var moved=0;
+  var guard=0;
+  var maxGuard=5000;
 
   while(guard++<maxGuard){
-    var info=totalAverageInfo(),avg=info.avg,c=info.counts.total;
-    var over=info.ids.filter(function(pid){return (c[pid]||0)>avg+1.0000001})
-                     .sort(function(a,b){return (c[b]||0)-(c[a]||0)});
-    var under=info.ids.filter(function(pid){return (c[pid]||0)<avg-1.0000001})
-                      .sort(function(a,b){return (c[a]||0)-(c[b]||0)});
+    var info=totalAverageInfo();
+    var avg=info.avg;
+    var c=info.counts.total;
+
+    if(!info.ids.length)break;
+
+    var over=info.ids.filter(function(pid){
+      return (c[pid]||0)>avg+1.0000001;
+    }).sort(function(a,b){
+      return (c[b]||0)-(c[a]||0);
+    });
+
+    var under=info.ids.filter(function(pid){
+      return (c[pid]||0)<avg-1.0000001;
+    }).sort(function(a,b){
+      return (c[a]||0)-(c[b]||0);
+    });
 
     if(!over.length||!under.length)break;
 
     var changed=false;
 
-    outer:
+    outerTotal:
     for(var oi=0;oi<over.length;oi++){
-      var donor=over[oi],list=assignmentListForPerson(donor);
+      var donor=over[oi];
+      var list=assignmentListForPerson(donor);
 
       for(var li=0;li<list.length;li++){
-        var item=list[li],slot=slotById(item.sid);
+        var item=list[li];
+        var slot=slotById(item.sid);
 
         for(var ui=0;ui<under.length;ui++){
           var recv=under[ui];
+
           if(!basePersonCanSlot(recv,slot))continue;
-          if(!slotMoveKeepsRule21(item.sid,donor,recv))continue;
+          if(!slotDistributionValidAfterMove(item.sid,donor,recv))continue;
 
           if(moveAssignment(item.d,item.sid,donor,recv)){
-            moved++;changed=true;break outer;
+            moved++;
+            changed=true;
+            break outerTotal;
           }
         }
       }
@@ -347,52 +670,88 @@ function rebalanceTotal(){
 }
 
 function rule21Report(){
-  var problems=[],slotDetails=[];
+  var slotProblems=[];
+  var slotDetails=[];
 
   SLOTS.forEach(function(slot){
     var info=slotAverageInfo(slot.id);
-    if(!info.eligible.length)return;
+
+    if(!info.fairness.length)return;
+
     var bad=[];
-    info.eligible.forEach(function(pid){
+
+    info.fairness.forEach(function(pid){
       var n=info.counts.slot[slot.id][pid]||0;
-      if(!withinOne(n,info.avg))bad.push(pid);
+
+      if(!withinOne(n,info.avg)){
+        bad.push(pid);
+      }
     });
+
     if(bad.length){
-      problems.push(slot.label);
-      slotDetails.push({slot:slot.label,avg:info.avg,bad:bad});
+      slotProblems.push(slot.label);
+      slotDetails.push({
+        slot:slot.label,
+        avg:info.avg,
+        bad:bad
+      });
     }
   });
 
-  var totalInfo=totalAverageInfo(),totalBad=[];
+  var totalInfo=totalAverageInfo();
+  var totalBad=[];
+
   totalInfo.ids.forEach(function(pid){
     var n=totalInfo.counts.total[pid]||0;
-    if(!withinOne(n,totalInfo.avg))totalBad.push(pid);
+
+    if(!withinOne(n,totalInfo.avg)){
+      totalBad.push(pid);
+    }
   });
 
   return {
-    ok:problems.length===0&&totalBad.length===0,
-    slotProblems:problems,
+    ok:slotProblems.length===0&&totalBad.length===0,
+    slotProblems:slotProblems,
     totalBad:totalBad,
     slotDetails:slotDetails,
-    totalAvg:totalInfo.avg
+    totalAvg:totalInfo.avg,
+    exemptTotal:totalInfo.exempt
   };
 }
 
 function rebalanceRule21(){
-  if(!hasRule(21))return {ok:true,moved:0,report:rule21Report()};
+  if(!hasRule(21)){
+    return {
+      ok:true,
+      moved:0,
+      report:rule21Report()
+    };
+  }
 
   var moved=0;
-  /* รอบ 1: บังคับรายประเภท */
-  moved+=rebalanceEachSlot();
 
-  /* รอบ 2: บังคับยอดรวม โดยไม่ทำให้รายประเภทหลุด ±1 */
-  moved+=rebalanceTotal();
+  /* ทำหลายรอบเพราะการแก้ยอดรวมอาจกระทบโอกาสสลับบางช่อง */
+  for(var round=0;round<4;round++){
+    moved+=rebalanceEachSlot();
+    moved+=rebalanceTotal();
 
-  /* รอบ 3: ตรวจรายประเภทซ้ำ เผื่อมีช่องที่ยังแก้ได้ */
-  moved+=rebalanceEachSlot();
+    var check=rule21Report();
+    if(check.ok){
+      return {
+        ok:true,
+        moved:moved,
+        report:check
+      };
+    }
+  }
 
   var report=rule21Report();
-  return {ok:report.ok,moved:moved,report:report};
+
+  return {
+    ok:report.ok,
+    moved:moved,
+    report:report
+  };
 }
 
 async function runSchedule(){
@@ -442,7 +801,7 @@ async function runSchedule(){
       if(balance.report.totalBad.length)parts.push('เวรรวมทั้งเดือนยังเกิน ±1');
       setStatus('รันเสร็จ แต่กฎข้อ 21 ยังปรับให้ ±1 ไม่ได้ทั้งหมด เนื่องจากติดเงื่อนไข • '+parts.join(' • '),false);
     }else if(hasRule(21)){
-      setStatus('รันและบันทึกเรียบร้อย • กฎข้อ 21 ผ่านทั้งค่าเฉลี่ยรายประเภทและเวรรวมทั้งเดือน (±1)',true);
+      setStatus('รันและบันทึกเรียบร้อย • กฎข้อ 21 ผ่าน: ค่าเฉลี่ยรายประเภทเวร + เวรรวมเดือนปัจจุบัน อยู่ในช่วงค่ากลาง ±1',true);
     }else{
       setStatus('รันและบันทึกตารางเวรเรียบร้อยแล้ว',true);
     }
@@ -471,40 +830,87 @@ function selectedValues(s){return Array.from(s.options).filter(function(o){retur
 function addCustomRule(){var pid=el('customPerson').value,type=el('customRuleType').value,slots=selectedValues(el('customSlots'));if(!pid||!slots.length)return;state.customRules.push({id:'cr_'+Date.now(),personId:pid,type:type,slots:slots});saveConfig();renderCustomRules()}
 function renderCustomRules(){el('customRules').innerHTML=state.customRules.map(function(r){var p=state.people.find(function(x){return x.id===r.personId})||{name:r.personId};var labels=r.slots.map(function(id){var s=slotById(id);return s?s.label:id});return '<span class="chip">'+esc(p.name)+' → '+(r.type==='block'?'ห้าม ':'เฉพาะ ')+esc(labels.join(', '))+' <button class="smallbtn" data-custom-rule="'+r.id+'">×</button></span>'}).join('');el('customRules').querySelectorAll('[data-custom-rule]').forEach(function(b){b.onclick=function(){var id=this.dataset.customRule;state.customRules=state.customRules.filter(function(r){return r.id!==id});saveConfig();renderCustomRules();renderSheet()}})}
 function renderSummary(){
-  var current=currentCounts(),previous=previousCounts(),title='ตารางหลักการเฉลี่ยเวร เดือน'+MONTHS[cm()]+' พ.ศ. '+py();
+  var current=currentCounts();
+  var previous=previousCounts();
+  var title='ตารางหลักการเฉลี่ยเวร เดือน'+MONTHS[cm()]+' พ.ศ. '+py();
   el('summaryTitle').textContent=title;
-  var columns=['v1','v2','ot1','ot2','s1d','s1n','s2d','s2n','s3d','s3n','s4d','s4n','s5','s6','s7','s8','e1','e2','e3'];
+
+  var columns=[
+    'v1','v2','ot1','ot2',
+    's1d','s1n','s2d','s2n',
+    's3d','s3n','s4d','s4n',
+    's5','s6','s7','s8',
+    'e1','e2','e3'
+  ];
+
   var report=rule21Report();
+  var totalInfo=totalAverageInfo();
 
   var h='';
+
   if(hasRule(21)){
     h+='<div style="padding:8px 10px;margin-bottom:8px;border-radius:10px;font-weight:800;font-size:12px;background:'+
        (report.ok?'#ecfdf3;color:#067647':'#fff1f0;color:#b42318')+'">'+
-       (report.ok
-        ?'✓ กฎข้อ 21: ค่าเฉลี่ยรายประเภทและเวรรวมทั้งเดือนอยู่ในช่วงค่ากลาง ±1'
-        :'⚠ กฎข้อ 21: ยังมีค่าที่เกินช่วง ±1'+
+       (
+         report.ok
+         ?'✓ กฎข้อ 21 ผ่าน: ค่าเฉลี่ยรายประเภทเวรและเวรรวมเดือนปัจจุบันอยู่ในช่วงค่ากลาง ±1'
+         :'⚠ กฎข้อ 21 ยังไม่ผ่านทั้งหมด'+
           (report.slotProblems.length?' • รายประเภท: '+esc(report.slotProblems.join(', ')):'')+
-          (report.totalBad.length?' • เวรรวมทั้งเดือนยังไม่สมดุล':'')
+          (report.totalBad.length?' • เวรรวมทั้งเดือนยังเกิน ±1':'')
        )+
+       '</div>';
+
+    h+='<div class="muted" style="margin:0 0 8px 0">'+
+       'ค่ากลางคำนวณจากเดือนปัจจุบัน • รายประเภทคิดเฉพาะผู้มีสิทธิ์ขึ้นเวรนั้น • EXTRA-only ไม่นำมาหารค่ากลางบุคลากรทั่วไปและสามารถรับ EXTRA มากกว่าได้'+
        '</div>';
   }
 
-  h+='<table id="summaryTable"><thead><tr><th>ลำดับ</th><th>ชื่อ</th><th>รวมเวรทั้งหมดเดือนก่อนหน้า</th><th>รวมเวรทั้งหมดเดือนนี้</th>';
-  columns.forEach(function(id){h+='<th>'+slotById(id).label+'</th>'});
+  h+='<table id="summaryTable"><thead><tr>'+
+     '<th>ลำดับ</th>'+
+     '<th>ชื่อ</th>'+
+     '<th>รวมเวรทั้งหมดเดือนก่อนหน้า</th>'+
+     '<th>รวมเวรทั้งหมดเดือนนี้</th>';
+
+  columns.forEach(function(id){
+    h+='<th>'+slotById(id).label+'</th>';
+  });
+
   h+='</tr></thead><tbody>';
 
   state.people.forEach(function(p,i){
-    h+='<tr><td>'+(i+1)+'</td><td>'+esc(p.name)+'</td><td>'+previous.total[p.id]+'</td><td>'+current.total[p.id]+'</td>';
-    columns.forEach(function(id){h+='<td>'+current.slot[id][p.id]+'</td>'});
+    h+='<tr>'+
+       '<td>'+(i+1)+'</td>'+
+       '<td>'+esc(p.name)+(isExtraOnlyPerson(p.id)?' <small>(EXTRA-only)</small>':'')+'</td>'+
+       '<td>'+previous.total[p.id]+'</td>'+
+       '<td>'+current.total[p.id]+'</td>';
+
+    columns.forEach(function(id){
+      h+='<td>'+current.slot[id][p.id]+'</td>';
+    });
+
     h+='</tr>';
   });
 
-  h+='</tbody></table>';
+  h+='</tbody>';
+
+  /* แถวค่ากลางของเดือนปัจจุบัน */
+  h+='<tfoot><tr style="font-weight:800;background:#f7f7fb">'+
+     '<td></td>'+
+     '<td>ค่ากลางเดือนปัจจุบัน</td>'+
+     '<td>–</td>'+
+     '<td>'+totalInfo.avg.toFixed(2)+'</td>';
+
+  columns.forEach(function(id){
+    h+='<td>'+slotAverageInfo(id).avg.toFixed(2)+'</td>';
+  });
+
+  h+='</tr></tfoot></table>';
+
   el('summary').innerHTML=h;
 }
 
 
-/* V20.5: fit-to-page + auto-fill แนวตั้ง โดยใช้พื้นที่ A4 หลังหัก margin */
+/* V20.6: fit-to-page + auto-fill แนวตั้ง โดยใช้พื้นที่ A4 หลังหัก margin */
 function fitCanvasToA4(canvas,pdf,left,top,right,bottom){
   var pw=pdf.internal.pageSize.getWidth(),ph=pdf.internal.pageSize.getHeight();
   var maxW=pw-left-right,maxH=ph-top-bottom;
