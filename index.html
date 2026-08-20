@@ -1200,6 +1200,61 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 }
 @media(max-width:520px){.v24-stat-grid,.v24-stat-grid.five,.v24-stat-grid.four{grid-template-columns:1fr}.v24-quick-grid{grid-template-columns:1fr}.v24-summary-toolbar{align-items:stretch;flex-direction:column}}
 
+
+/* ===== V24.1 targeted fixes ===== */
+#page-home .v24-hero{
+  display:grid!important;
+  visibility:visible!important;
+  opacity:1!important;
+  margin-bottom:14px!important;
+}
+#page-home .v24-home{display:block!important}
+#page-home .v24-calendar-card{min-height:300px}
+#page-home .v24-mini-month{min-height:220px;align-content:start}
+#page-holidays #holidayCalendarV24{min-height:390px;align-content:start}
+#page-holidays .v24-big-calendar{padding:6px 4px}
+#page-holidays .v24-big-calendar>div:not(.head){border:1px solid transparent}
+#page-rules .v24-rule-list{display:grid!important;gap:7px!important;min-height:80px}
+#page-rules .v24-rule-list .rule-item{
+  grid-template-columns:42px minmax(0,1fr) auto!important;
+  min-height:62px!important;
+}
+.v241-rule-copy{display:flex;align-items:flex-start;gap:10px;min-width:0}
+.v241-rule-copy>i{font-style:normal;font-size:20px;line-height:1.2}
+.v241-rule-copy>span{font-size:10.5px;line-height:1.5;color:#465269}
+.v241-rule-on{display:inline-flex;align-items:center;padding:5px 9px;border-radius:999px;background:#e9f8f1;color:#258363;font-size:8px;font-weight:900;white-space:nowrap}
+#page-settings .v24-switch-row{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  align-items:center!important;
+  column-gap:14px!important;
+}
+#page-settings .v24-switch-row>span{
+  min-width:0!important;
+  width:auto!important;
+  white-space:normal!important;
+  word-break:normal!important;
+  line-height:1.45!important;
+}
+#page-settings .v24-switch-row>select,
+#page-settings .v24-switch-row>input{
+  width:auto!important;
+  min-width:118px!important;
+  max-width:155px!important;
+  justify-self:end!important;
+}
+#page-settings .v24-settings-grid>.v24-card{overflow:visible!important}
+@media (min-width:1101px){
+  #page-settings .v24-settings-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  }
+}
+@media (max-width:1100px){
+  #page-settings .v24-settings-grid{
+    grid-template-columns:1fr 1fr!important;
+  }
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
@@ -1211,7 +1266,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
     <div class="auth-head">
       <div class="auth-logo">🗓️</div>
       <h2>เข้าสู่ระบบจัดตารางเวร</h2>
-      <p>V24.0 • Full UI Redesign • สิทธิ์ผู้ใช้งานจากเซิร์ฟเวอร์</p>
+      <p>V24.1 • Full UI Redesign • สิทธิ์ผู้ใช้งานจากเซิร์ฟเวอร์</p>
     </div>
     <div class="auth-body">
       <label>Username</label>
@@ -1350,7 +1405,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
     <div id="homeAlertsCard" style="display:none"><span id="dashWarn">0</span><span id="dashError">0</span></div>
     <div id="homeFullRoster" style="display:none"></div>
     <div style="display:none"><span id="dashV"></span><span id="dashOT"></span><span id="dashMorning"></span><span id="dashNight"></span><span id="dashLong"></span><span id="dashEvening"></span><span id="dashExtra"></span><span id="dashTotal"></span><span id="dashBalance"></span><span id="dashBalanceText"></span></div>
-    <div class="home-version-footer">V24.0 • Home</div>
+    <div class="home-version-footer">V24.1 • Home</div>
   </div>
 </section>
 
@@ -1771,7 +1826,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
     </div>
   </div>
 
-  <div class="unit-page-version">V24.0 • Full UI Redesign</div>
+  <div class="unit-page-version">V24.1 • Full UI Redesign</div>
 </section>
 
 
@@ -1833,7 +1888,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
       <div class="v24-manage-grid"><button id="settingsClearV24">🗑 ล้างตารางเดือนนี้</button><button id="settingsResetV24">↻ รีเซ็ตค่าหน้าจอ</button><button id="settingsPeopleV24">👥 จัดการข้อมูลพนักงาน</button><button id="settingsValidateV24">🔗 ตรวจสอบความสมบูรณ์ข้อมูล</button></div>
     </div>
     <div class="v24-card v24-about">
-      <h3>ⓘ เกี่ยวกับโปรแกรม</h3><b>รับตารางเวร</b><p>ระบบจัดตารางเวรอัตโนมัติ พร้อม Workflow และ Cloud Sync</p><small>V24.0 • Full UI Redesign</small>
+      <h3>ⓘ เกี่ยวกับโปรแกรม</h3><b>รับตารางเวร</b><p>ระบบจัดตารางเวรอัตโนมัติ พร้อม Workflow และ Cloud Sync</p><small>V24.1 • Full UI Redesign</small>
     </div>
   </div>
 </section>
@@ -1882,7 +1937,7 @@ var DEFAULT_RULES=[
 {id:'r18',text:'ต้องหมุนเวียนตำแหน่งภายในแต่ละประเภทเวร และไม่ให้บุคคลเดิมอยู่ในเวรหรือตำแหน่งเดิมซ้ำ ๆ รวมถึงหลีกเลี่ยงชื่อเดียวกันติดต่อกันหลายวัน'},
 {id:'r19',text:'การจัดตารางเดือนใหม่ต้องอ้างอิงตารางเวรของเดือนก่อนหน้า โดยนำข้อมูลการหมุนคิว จำนวนเวรสะสม ประเภทเวร และประวัติการขึ้นเวรมาประกอบการจัดเดือนใหม่'},
 {id:'r20',text:'ต้องตรวจสอบรอยต่อระหว่างปลายเดือนก่อนหน้ากับต้นเดือนใหม่ โดยใช้กฎทั้งหมดเหมือนเป็นตารางต่อเนื่องกัน'},
-{id:'r21',text:'การเฉลี่ยเวรของเดือนปัจจุบันให้คิดเป็น 7 กลุ่มประเภทเวร ได้แก่ เวร1–2, OT1–2, SDMC เช้า1–4, SDMC บ่าย–ดึก1–4, SDMC เช้า–บ่าย5–6, SDMC บ่าย7–8 และ EXTRA1–3 โดยยอดรวมของแต่ละคนภายในแต่ละกลุ่มต้องแตกต่างจากค่ากลางไม่เกิน ±1 เวร และภายในกลุ่มเดียวกันต้องหมุนตำแหน่งย่อย หลีกเลี่ยงการจัดบุคคลเดิมลงเวรช่องเดิมซ้ำ ๆ หลายวัน หากยังเกิน ±1 ให้ระบบปรับสมดุลอัตโนมัติโดยห้ามทำให้ผิดกฎข้อ 1–20 นอกจากนี้ยอดเวรรวมทั้งเดือนของบุคลากรทั่วไปต้องแตกต่างจากค่ากลางไม่เกิน ±1 เวร ข้อยกเว้น: บุคลากรที่กำหนดให้ขึ้นได้เฉพาะ EXTRA1–3 ไม่นำมาหารค่ากลางของบุคลากรทั่วไป และยอดรวม EXTRA1–3 สามารถสูงกว่าค่ากลางกลุ่ม EXTRA ของบุคลากรทั่วไปได้ แต่ต้องไม่เกินค่ากลาง +3 เวร'}
+{id:'r21',text:'การเฉลี่ยเวรของเดือนปัจจุบันให้คิดเป็น 7 กลุ่มประเภทเวร ได้แก่ เวร1–2, OT1–2, SDMC เช้า1–4, SDMC บ่าย–ดึก1–4, SDMC เช้า–บ่าย5–6, SDMC บ่าย7–8 และ EXTRA1–3 โดยยอดรวมของแต่ละคนภายในแต่ละกลุ่มต้องแตกต่างจากค่ากลางไม่เกิน ±1 เวร และภายในกลุ่มเดียวกันต้องหมุนตำแหน่งย่อย หลีกเลี่ยงการจัดบุคคลเดิมลงเวรช่องเดิมซ้ำ ๆ หลายวัน หากยังเกิน ±1 ให้ระบบปรับสมดุลอัตโนมัติโดยห้ามทำให้ผิดกฎข้อ 1–20 นอกจากนี้ยอดเวรรวมทั้งเดือนของบุคลากรทั่วไปต้องแตกต่างจากค่ากลางไม่เกิน ±1 เวร สำหรับกลุ่ม EXTRA ให้บุคลากรที่กำหนดให้ขึ้นเฉพาะ EXTRA1–3 นำมาร่วมเป็นตัวหารค่ากลางของกลุ่ม EXTRA ด้วย แต่ยังยกเว้นจากค่ากลางเวรรวมทั้งเดือนของบุคลากรทั่วไป และยอดรวม EXTRA1–3 ของบุคลากรกลุ่มนี้สามารถสูงกว่าค่ากลางกลุ่ม EXTRA ได้ไม่เกิน +3 เวร'}
 ];
 var state={people:[],assignments:{},holidays:{},rules:[],customRules:[],pdfNote:'',rotation:{},unitInfo:{}};
 var unitUser={name:'-',role:'viewer',username:'',id:null};
@@ -1930,6 +1985,19 @@ function loadConfig(){
   });
 
   if(latest21)state.rules.push({id:'r21',text:latest21.text});
+
+  /* V24.1: ซ่อมกฎหลักที่หายไปจาก config เก่าโดยไม่ทับข้อความที่ผู้ใช้แก้ไว้ */
+  DEFAULT_RULES.forEach(function(def){
+    if(!state.rules.some(function(r){return r.id===def.id})){
+      state.rules.push({id:def.id,text:def.text});
+    }
+  });
+  state.rules.sort(function(a,b){
+    var na=parseInt(String(a.id||'').replace(/\D/g,''),10);
+    var nb=parseInt(String(b.id||'').replace(/\D/g,''),10);
+    if(Number.isFinite(na)&&Number.isFinite(nb))return na-nb;
+    return String(a.id).localeCompare(String(b.id));
+  });
 }
 function configPayload(){return {people:state.people,holidays:state.holidays,customRules:state.customRules,pdfNote:state.pdfNote,rules:state.rules,unitInfo:state.unitInfo||{}}}
 function saveConfig(){state.pdfNote=el('pdfNote').value;var p=configPayload();localStorage.setItem('roster_config_v8',JSON.stringify(p));scheduleCloudConfigSave(p)}
@@ -2141,6 +2209,22 @@ async function afterAuthenticated(){
   renderUnitInfo();
   if(unitUser.role==='admin')await loadAdminUsers();
   await initCloud();
+
+  /* V24.1: หลัง Cloud โหลดข้อมูลแล้วให้ Dashboard ทุกหน้ารับข้อมูลล่าสุด */
+  buildNames();
+  renderHolidays();
+  renderRules();
+  renderCustomRules();
+  renderHistory();
+  renderSummary();
+  renderHomeV24();
+  renderPeopleV24();
+  renderRulesV24();
+  renderHolidayV24();
+  renderUnitWorkflow();
+  renderUnitInfo();
+  loadV24Settings();
+
   setStatus('เข้าสู่ระบบแล้ว • '+unitUser.name+' ('+roleLabel(unitUser.role)+')',true);
 }
 async function initAuth(){
@@ -2227,7 +2311,7 @@ function auditWorkflow(action){
   workflow.audit.unshift({at:new Date().toISOString(),user:unitUser.name,role:unitUser.role,action:action});
   if(workflow.audit.length>100)workflow.audit=workflow.audit.slice(0,100);
 }
-function monthPayload(){return {version:'24.0-full-ui-redesign',key:currentKey(),year:gy(),month:cm(),savedAt:new Date().toISOString(),assignments:state.assignments,rotation:state.rotation,peopleSnapshot:state.people,workflow:normalizeWorkflow(workflow)}}
+function monthPayload(){return {version:'24.1-ui-render-fix',key:currentKey(),year:gy(),month:cm(),savedAt:new Date().toISOString(),assignments:state.assignments,rotation:state.rotation,peopleSnapshot:state.people,workflow:normalizeWorkflow(workflow)}}
 function saveMonth(silent){
   if(!workflow)workflow=defaultWorkflow();
   var d=monthPayload();
@@ -2249,6 +2333,7 @@ function loadMonth(silent){clearActionFeedback();hideAutoFixSummary();
   workflowEditLogged=false;
   if(!silent)setStatus(d?'เปิดตารางที่บันทึกแล้ว':'เดือนนี้ยังไม่มีข้อมูลที่บันทึก',!!d);
   renderSheet();renderHistory();renderUnitWorkflow();
+  renderHomeV24();renderPeopleV24();renderHolidayV24();renderSummaryV24();
 }
 function historyKeyFromThaiYear(yThai,m){
   var y=parseInt(yThai,10)-543;
@@ -3331,17 +3416,52 @@ function addPerson(){if(!(unitUser.role==='scheduler'||unitUser.role==='admin'))
 function removePerson(){if(!(unitUser.role==='scheduler'||unitUser.role==='admin'))return;if(state.people.length<=1)return;var removed=state.people.pop();state.customRules=state.customRules.filter(function(r){return r.personId!==removed.id});saveConfig();buildNames();renderCustomRules();renderSheet()}
 function renderHolidays(){var h='';Object.keys(state.holidays).sort().forEach(function(k){h+='<span class="chip">'+k+' '+esc(state.holidays[k].name||'วันหยุด')+' <button class="smallbtn" data-holiday="'+k+'">×</button></span>'});el('chips').innerHTML=h;el('chips').querySelectorAll('[data-holiday]').forEach(function(b){b.onclick=function(){delete state.holidays[this.dataset.holiday];saveConfig();renderHolidays();renderSheet();applyUnitPermissions();renderHolidayV24()}});renderHolidayV24()}
 function addHoliday(){if(!(unitUser.role==='scheduler'||unitUser.role==='admin'))return;var d=el('holidayDate').value;if(!d)return;state.holidays[d]={name:el('holidayName').value.trim()||'วันหยุด',type:(el('holidayTypeV24')?el('holidayTypeV24').value:'official')};saveConfig();renderHolidays();renderSheet();applyUnitPermissions();renderHolidayV24()}
-function renderRules(){el('ruleList').innerHTML=state.rules.map(function(r,i){return '<div class="rule-item"><b>'+(i+1)+'.</b> <span>'+esc(r.text)+'</span><div class="rule-actions"><button class="smallbtn" data-edit-rule="'+r.id+'">แก้ไข</button><button class="smallbtn danger" data-delete-rule="'+r.id+'">ลบ</button></div></div>'}).join('');el('ruleList').querySelectorAll('[data-edit-rule]').forEach(function(b){b.onclick=function(){var id=this.dataset.editRule,r=state.rules.find(function(x){return x.id===id});if(!r)return;var t=prompt('แก้ไขกติกา',r.text);if(t!==null&&t.trim()){r.text=t.trim();saveConfig();renderRules()}}});el('ruleList').querySelectorAll('[data-delete-rule]').forEach(function(b){b.onclick=function(){var id=this.dataset.deleteRule;if(!confirm('ลบกติกาข้อนี้หรือไม่?'))return;state.rules=state.rules.filter(function(r){return r.id!==id});saveConfig();renderRules();renderSheet();applyUnitPermissions()}});renderRulesV24()}
-function addRule(){if(unitUser.role!=='admin'){setStatus('แก้กฎหลักได้เฉพาะ Admin',false);return}var t=el('newRuleText').value.trim();if(!t)return;state.rules.push({id:'custom_'+Date.now(),text:t});el('newRuleText').value='';saveConfig();renderRules()}
-function buildCustomOptions(){el('customPerson').innerHTML=state.people.map(function(p,i){return '<option value="'+p.id+'">'+(i+1)+'. '+esc(p.name)+'</option>'}).join('');el('customSlots').innerHTML=SLOTS.map(function(s){return '<option value="'+s.id+'">'+s.label+'</option>'}).join('')}
-function selectedValues(s){return Array.from(s.options).filter(function(o){return o.selected}).map(function(o){return o.value})}
-function addCustomRule(){if(!(unitUser.role==='scheduler'||unitUser.role==='admin'))return;var pid=el('customPerson').value,type=el('customRuleType').value,slots=selectedValues(el('customSlots'));if(!pid||!slots.length)return;state.customRules.push({id:'cr_'+Date.now(),personId:pid,type:type,slots:slots});saveConfig();renderCustomRules()}
-function renderCustomRules(){el('customRules').innerHTML=state.customRules.map(function(r){var p=state.people.find(function(x){return x.id===r.personId})||{name:r.personId};var labels=r.slots.map(function(id){var s=slotById(id);return s?s.label:id});return '<span class="chip">'+esc(p.name)+' → '+(r.type==='block'?'ห้าม ':'เฉพาะ ')+esc(labels.join(', '))+' <button class="smallbtn" data-custom-rule="'+r.id+'">×</button></span>'}).join('');el('customRules').querySelectorAll('[data-custom-rule]').forEach(function(b){b.onclick=function(){var id=this.dataset.customRule;state.customRules=state.customRules.filter(function(r){return r.id!==id});saveConfig();renderCustomRules();renderSheet()}})}
+function renderRules(){
+  var host=el('ruleList');
+  if(!host)return;
 
-function shortName(pid){
-  if(!pid)return '–';
-  var p=state.people.find(function(x){return x.id===pid});
-  return p?p.name:'–';
+  var icons=['👥','🌙','🗓️','⭐','⚖️','🗂️','🕒','📊','☀️','🌃','🕗','🌆','1️⃣','2️⃣','3️⃣','⚖️','↻','🔄','🗓️','🔗','⭐'];
+  host.innerHTML=(state.rules||[]).map(function(r,i){
+    return '<div class="rule-item">'+
+      '<b>'+(i+1)+'</b>'+
+      '<span class="v241-rule-copy"><i>'+icons[i%icons.length]+'</i><span>'+esc(r.text)+'</span></span>'+
+      '<div class="rule-actions">'+
+        '<span class="v241-rule-on">เปิดใช้งาน</span>'+
+        '<button class="smallbtn" data-edit-rule="'+r.id+'">แก้ไข</button>'+
+        '<button class="smallbtn danger" data-delete-rule="'+r.id+'">ลบ</button>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+
+  host.querySelectorAll('[data-edit-rule]').forEach(function(b){
+    b.onclick=function(){
+      if(unitUser.role!=='admin'){setStatus('แก้กฎหลักได้เฉพาะ Admin',false);return}
+      var id=this.dataset.editRule,r=state.rules.find(function(x){return x.id===id});
+      if(!r)return;
+      var t=prompt('แก้ไขกติกา',r.text);
+      if(t!==null&&t.trim()){
+        r.text=t.trim();
+        saveConfig();
+        renderRules();
+        renderSheet();
+      }
+    };
+  });
+
+  host.querySelectorAll('[data-delete-rule]').forEach(function(b){
+    b.onclick=function(){
+      if(unitUser.role!=='admin'){setStatus('ลบกฎหลักได้เฉพาะ Admin',false);return}
+      var id=this.dataset.deleteRule;
+      if(!confirm('ลบกติกาข้อนี้หรือไม่?'))return;
+      state.rules=state.rules.filter(function(r){return r.id!==id});
+      saveConfig();
+      renderRules();
+      renderSheet();
+      applyUnitPermissions();
+    };
+  });
+
+  renderRulesV24();
 }
 function renderHomePreview(){
   var host=el('homeFullRoster');
@@ -3366,16 +3486,44 @@ function showPage(page,updateHash){
   var allowed=['home','roster','people','rules','holidays','history','summary','internal','settings'];
   if(allowed.indexOf(page)<0)page='home';
 
-  document.querySelectorAll('.page-view').forEach(function(v){v.classList.toggle('active',v.dataset.view===page)});
-  document.querySelectorAll('.side-nav a[data-page]').forEach(function(a){a.classList.toggle('active',a.dataset.page===page)});
+  document.querySelectorAll('.page-view').forEach(function(v){
+    v.classList.toggle('active',v.dataset.view===page);
+  });
+  document.querySelectorAll('.side-nav a[data-page]').forEach(function(a){
+    a.classList.toggle('active',a.dataset.page===page);
+  });
 
   if(updateHash&&location.hash!=='#'+page)history.replaceState(null,'','#'+page);
   document.body.classList.remove('menu-open');
 
-  if(page==='summary')renderSummary();
-  if(page==='history')renderHistory();
-  if(page==='roster')renderSheet();
-  if(page==='internal')renderUnitWorkflow();
+  /* เปิดแต่ละหน้าให้เริ่มจากด้านบนเสมอ */
+  try{window.scrollTo({top:0,left:0,behavior:'auto'})}catch(e){window.scrollTo(0,0)}
+
+  if(page==='home'){
+    renderHomeV24();
+  }else if(page==='roster'){
+    renderSheet();
+  }else if(page==='people'){
+    renderPeopleV24();
+  }else if(page==='rules'){
+    renderRules();
+    renderCustomRules();
+    renderRulesV24();
+  }else if(page==='holidays'){
+    renderHolidays();
+    renderHolidayV24();
+  }else if(page==='history'){
+    renderHistory();
+  }else if(page==='summary'){
+    renderSummary();
+    renderSummaryV24();
+  }else if(page==='internal'){
+    renderUnitWorkflow();
+    renderUnitInfo();
+    renderAudit();
+  }else if(page==='settings'){
+    loadV24Settings();
+  }
 }
 function initPageNavigation(){
   document.querySelectorAll('.side-nav a[data-page]').forEach(function(a){
@@ -4093,15 +4241,27 @@ function v24MonthLabel(){
 }
 function renderHomeV24(){
   try{
-    if(el('homePeopleCount'))el('homePeopleCount').textContent=state.people.length;
+    if(el('homePeopleCount'))el('homePeopleCount').textContent=(state.people||[]).length;
     if(el('homeAssignmentCount'))el('homeAssignmentCount').textContent=assignmentsCount();
     var monthPrefix=currentKey()+'-';
-    var holidays=Object.keys(state.holidays||{}).filter(function(k){return k.indexOf(monthPrefix)===0});
+    var holidays=Object.keys(state.holidays||{}).filter(function(k){
+      return k.indexOf(monthPrefix)===0;
+    });
     if(el('homeHolidayCount'))el('homeHolidayCount').textContent=holidays.length;
-    if(el('homeRuleCount'))el('homeRuleCount').textContent=state.rules.length;
+    if(el('homeRuleCount'))el('homeRuleCount').textContent=(state.rules||[]).length;
     if(el('homeCalendarMonth'))el('homeCalendarMonth').textContent=v24MonthLabel();
     renderV24Calendar(el('homeMiniCalendar'),cy(),cm(),false);
-  }catch(e){}
+
+    /* ป้องกัน Hero ถูกซ่อนจาก style/cache รุ่นก่อน */
+    var hero=document.querySelector('#page-home .v24-hero');
+    if(hero){
+      hero.style.display='grid';
+      hero.style.visibility='visible';
+      hero.style.opacity='1';
+    }
+  }catch(e){
+    console.warn('renderHomeV24',e);
+  }
 }
 function renderV24Calendar(host,y,m,big){
   if(!host)return;
@@ -4143,18 +4303,46 @@ function renderRulesV24(){
   if(el('rulePercentV24'))el('rulePercentV24').textContent=state.rules.length?'100%':'0%';
 }
 function renderHolidayV24(){
-  if(!el('holidayCalendarV24'))return;
+  var calendar=el('holidayCalendarV24');
+  if(!calendar)return;
+
   if(el('holidayMonthTitleV24'))el('holidayMonthTitleV24').textContent=v24MonthLabel();
-  renderV24Calendar(el('holidayCalendarV24'),cy(),cm(),true);
-  var prefix=currentKey()+'-',monthKeys=Object.keys(state.holidays||{}).filter(function(k){return k.indexOf(prefix)===0});
-  var official=0,special=0;
-  monthKeys.forEach(function(k){var t=(state.holidays[k]&&state.holidays[k].type)||'official';if(t==='official')official++;else special++});
-  var weekend=0;for(var d=1;d<=dim();d++){var wd=new Date(cy(),cm(),d).getDay();if(wd===0||wd===6)weekend++}
+  renderV24Calendar(calendar,cy(),cm(),true);
+
+  var prefix=currentKey()+'-';
+  var monthKeys=Object.keys(state.holidays||{}).filter(function(k){
+    return k.indexOf(prefix)===0;
+  }).sort();
+
+  var official=0,substitute=0,special=0;
+  monthKeys.forEach(function(k){
+    var t=(state.holidays[k]&&state.holidays[k].type)||'official';
+    if(t==='official')official++;
+    else if(t==='substitute')substitute++;
+    else special++;
+  });
+
+  var weekend=0;
+  for(var d=1;d<=dim();d++){
+    var wd=new Date(cy(),cm(),d).getDay();
+    if(wd===0||wd===6)weekend++;
+  }
+
   if(el('holidayTotalV24'))el('holidayTotalV24').textContent=monthKeys.length;
   if(el('holidayOfficialV24'))el('holidayOfficialV24').textContent=official;
   if(el('holidayWeekendV24'))el('holidayWeekendV24').textContent=weekend;
-  if(el('holidaySpecialV24'))el('holidaySpecialV24').textContent=special;
-  var up=el('holidayUpcomingV24');if(up){var arr=monthKeys.sort().slice(0,6);up.innerHTML=arr.length?arr.map(function(k){return '<div><span>'+esc(state.holidays[k].name||'วันหยุด')+'</span><b>'+k.slice(8,10)+'/'+k.slice(5,7)+'</b></div>'}).join(''):'<div>ยังไม่มีวันหยุดในเดือนนี้</div>'}
+  if(el('holidaySpecialV24'))el('holidaySpecialV24').textContent=special+substitute;
+
+  var up=el('holidayUpcomingV24');
+  if(up){
+    up.innerHTML=monthKeys.length
+      ? monthKeys.slice(0,8).map(function(k){
+          var item=state.holidays[k]||{};
+          var type=item.type==='substitute'?'วันหยุดชดเชย':(item.type==='special'?'วันหยุดพิเศษ':'นักขัตฤกษ์');
+          return '<div><span><b>'+esc(item.name||'วันหยุด')+'</b><small style="display:block;color:#9299a8">'+type+'</small></span><b>'+k.slice(8,10)+'/'+k.slice(5,7)+'</b></div>';
+        }).join('')
+      : '<div><span>เดือนนี้ยังไม่มีวันหยุดที่เพิ่มไว้</span><small>สามารถเพิ่มจากแบบฟอร์มด้านล่าง</small></div>';
+  }
 }
 function renderHistoryV24(){
   var year=parseInt(el('historyYear')&&el('historyYear').value||py(),10),total=0,approved=0,locked=0,last='';
