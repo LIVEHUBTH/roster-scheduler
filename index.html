@@ -1742,7 +1742,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 }
 </style>
 <link rel="stylesheet" href="style.css?v=29.0">
-<link rel="stylesheet" href="roster-v29.css?v=29.1">
+<link rel="stylesheet" href="roster-v29.css?v=29.2">
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 </head>
@@ -1842,7 +1842,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
       <article class="v244-stat pink"><div class="v244-stat-icon">👥</div><div><small>บุคลากรทั้งหมด</small><strong id="homePeopleCount">0</strong><em>คน</em><span id="homePeopleDelta">ข้อมูลปัจจุบัน</span></div></article>
       <article class="v244-stat mint"><div class="v244-stat-icon">🗓️</div><div><small>เวรเดือนนี้</small><strong id="homeAssignmentCount">0</strong><em>เวร</em><span id="homeDutyProgress">พร้อมจัดตาราง</span></div></article>
       <article class="v244-stat yellow"><div class="v244-stat-icon">🏖️</div><div><small>วันหยุดเดือนนี้</small><strong id="homeHolidayCount">0</strong><em>วัน</em><span id="homeHolidayNote">รวมวันหยุดที่บันทึก</span></div></article>
-      <article class="v244-stat purple"><div class="v244-stat-icon">🛡️</div><div><small>กฎสำคัญ</small><strong id="homeRuleCount">0</strong><em>ข้อ</em><span id="homeRuleNote">กฎที่ใช้งานอยู่</span></div></article>
+      <article class="v244-stat purple"><div class="v244-stat-icon">🛡️</div><div><small>กฎการจัดเวร</small><strong id="homeRuleCount">0</strong><em>ข้อ</em><span id="homeRuleNote">กฎที่ใช้งานอยู่</span></div></article>
     </div>
 
     <div class="v244-middle">
@@ -1919,7 +1919,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
           <p>ระบบจัดการเวรอย่างเป็นระบบ</p>
         </div>
       </div>
-      <div class="r29-version">V29.1 • Roster</div>
+      <div class="r29-version">V29.2 • Roster</div>
     </div>
 
     <section class="r29-toolbar-card no-print">
@@ -1944,20 +1944,20 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 
     <section class="r29-stats no-print">
       <button class="r29-stat r29-stat-pink" type="button" data-r29-go="people">
-        <span class="r29-stat-icon">👥</span>
+        <span class="r29-stat-icon"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="25" cy="22" r="10" fill="#f45f97"/><circle cx="42" cy="24" r="8" fill="#ff9ec0"/><path d="M10 51c1-13 8-19 16-19s16 6 17 19" fill="#f45f97"/><path d="M34 51c1-10 6-15 12-15 7 0 11 5 12 15" fill="#ff9ec0"/></svg></span>
         <span class="r29-stat-copy"><small>บุคลากรทั้งหมด</small><strong id="r29People">0 <em>คน</em></strong><i>ข้อมูลผู้ใช้งานปัจจุบัน</i></span>
       </button>
       <button class="r29-stat r29-stat-mint" type="button" data-r29-focus="table">
-        <span class="r29-stat-icon">🗓️</span>
+        <span class="r29-stat-icon"><svg viewBox="0 0 64 64" aria-hidden="true"><rect x="10" y="14" width="44" height="40" rx="8" fill="#74d9c6"/><rect x="10" y="20" width="44" height="9" fill="#54c7b2"/><rect x="18" y="9" width="5" height="12" rx="2.5" fill="#358f82"/><rect x="41" y="9" width="5" height="12" rx="2.5" fill="#358f82"/><g fill="#fff"><rect x="17" y="34" width="7" height="6" rx="2"/><rect x="28" y="34" width="7" height="6" rx="2"/><rect x="39" y="34" width="7" height="6" rx="2"/><rect x="17" y="43" width="7" height="6" rx="2"/><rect x="28" y="43" width="7" height="6" rx="2"/></g></svg></span>
         <span class="r29-stat-copy"><small>เวรเดือนนี้</small><strong id="r29Duty">0 <em>เวร</em></strong><i>จำนวนเวรที่จัดในเดือนนี้</i></span>
       </button>
       <button class="r29-stat r29-stat-yellow" type="button" data-r29-go="holidays">
-        <span class="r29-stat-icon">🏖️</span>
+        <span class="r29-stat-icon"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M10 31C13 16 24 9 32 9s19 7 22 22c-5-4-9-4-13 0-4-4-8-4-13 0-4-4-9-4-18 0z" fill="#f0b74d"/><path d="M32 31v17c0 6 8 7 10 1" fill="none" stroke="#d68c35" stroke-width="4" stroke-linecap="round"/></svg></span>
         <span class="r29-stat-copy"><small>วันหยุดเดือนนี้</small><strong id="r29Holiday">0 <em>วัน</em></strong><i>รวมเสาร์–อาทิตย์/นักขัตฤกษ์</i></span>
       </button>
       <button class="r29-stat r29-stat-purple" type="button" data-r29-go="rules">
-        <span class="r29-stat-icon">🛡️</span>
-        <span class="r29-stat-copy"><small>กฎสำคัญ</small><strong id="r29Rules">21 <em>ข้อ</em></strong><i>กฎที่ใช้งานอยู่</i></span>
+        <span class="r29-stat-icon"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 7l20 8v14c0 14-9 23-20 29C21 52 12 43 12 29V15z" fill="#9a7be2"/><path d="M32 17l4 8 9 1-7 6 2 9-8-5-8 5 2-9-7-6 9-1z" fill="#ffe48b"/></svg></span>
+        <span class="r29-stat-copy"><small>กฎการจัดเวร</small><strong id="r29Rules">21 <em>ข้อ</em></strong><i>กฎที่ใช้งานอยู่</i></span>
       </button>
     </section>
 
@@ -5297,7 +5297,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 })();
 </script>
 
-<script src="roster-v29.js?v=29.1"></script>
+<script src="roster-v29.js?v=29.2"></script>
 <script src="login-fix-v26-1.js?v=29.0"></script>
 <script src="home-v26.js?v=29.0"></script>
 </body>

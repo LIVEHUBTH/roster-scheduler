@@ -264,3 +264,163 @@ body.r29-fullscreen-open{overflow:hidden}
 /* V29.1 — each command uses its own task color */
 #page-roster .r29-action{border:1px solid rgba(255,255,255,.5);box-shadow:0 5px 12px rgba(72,72,96,.07)}
 #page-roster .r29-action:hover{filter:saturate(1.06) brightness(1.01)}
+
+
+/* =========================================================
+   V29.2 — WIDTH / HOME ICONS / DAY-COLOR MATCH / ALIGNMENT
+   IMPORTANT: no roster table structure or roster logic changed.
+   ========================================================= */
+
+/* Same content width behavior as Home */
+#page-roster{
+  width:100%!important;
+  max-width:1480px!important;
+  min-width:0!important;
+  margin:0 auto!important;
+  padding:0!important;
+  overflow-x:hidden!important;
+}
+#page-roster .r29-shell{
+  width:100%!important;
+  max-width:1480px!important;
+  min-width:0!important;
+  margin:0 auto!important;
+  padding:12px 14px 18px!important;
+  gap:12px!important;
+  overflow-x:hidden!important;
+}
+#page-roster .r29-page-title,
+#page-roster .r29-toolbar-card,
+#page-roster .r29-stats,
+#page-roster .r29-table-card,
+#page-roster .r29-bottom{
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+}
+
+/* Prevent any outer control/card from forcing the page wider than Home */
+#page-roster .r29-toolbar,
+#page-roster .r29-stat,
+#page-roster .r29-table-toolbar,
+#page-roster .r29-workflow-row,
+#page-roster .r29-panel,
+#page-roster .r29-type-list,
+#page-roster .r29-notes-panel{
+  min-width:0!important;
+}
+
+/* Desktop: one command row. Height may grow on smaller screens instead of overflowing. */
+@media (min-width:1367px){
+  #page-roster .r29-toolbar{
+    grid-template-columns:minmax(150px,1.15fr) minmax(120px,.85fr) repeat(7,minmax(0,1fr))!important;
+    gap:9px!important;
+  }
+}
+
+/* iPad / tablet: wrap controls inside available content width */
+@media (min-width:821px) and (max-width:1366px){
+  #page-roster .r29-shell{padding:9px 10px 14px!important;gap:9px!important}
+  #page-roster .r29-toolbar{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    gap:8px!important;
+  }
+  #page-roster .r29-field{grid-column:auto!important}
+  #page-roster .r29-action{width:100%!important;min-width:0!important}
+  #page-roster .r29-stats{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:8px!important}
+  #page-roster .r29-stat{min-height:88px!important;padding:9px!important;grid-template-columns:44px minmax(0,1fr)!important;gap:8px!important}
+  #page-roster .r29-stat-icon{width:42px!important;height:42px!important}
+  #page-roster .r29-stat-icon svg{width:28px!important;height:28px!important}
+  #page-roster .r29-stat-copy small{font-size:9.5px!important}
+  #page-roster .r29-stat-copy strong{font-size:21px!important}
+  #page-roster .r29-stat-copy i{font-size:7.8px!important;line-height:1.35!important}
+  #page-roster .r29-bottom{grid-template-columns:1fr 1fr!important;gap:9px!important}
+  #page-roster .r29-summary-panel{grid-column:1/-1!important}
+}
+
+/* Mobile: everything remains inside viewport; allow vertical growth */
+@media (max-width:820px){
+  #page-roster .r29-shell{padding:8px!important;gap:9px!important}
+  #page-roster .r29-toolbar{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
+  #page-roster .r29-field{grid-column:auto!important}
+  #page-roster .r29-action{width:100%!important;min-width:0!important;white-space:normal!important;line-height:1.2!important;padding:7px 8px!important}
+  #page-roster .r29-stats{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
+  #page-roster .r29-bottom{grid-template-columns:1fr!important}
+  #page-roster .r29-summary-panel{grid-column:auto!important}
+  #page-roster .r29-table-toolbar{grid-template-columns:1fr!important;gap:8px!important}
+  #page-roster .r29-day-legend{justify-content:flex-start!important;gap:10px!important}
+  #page-roster .r29-view-tools{justify-content:flex-start!important;flex-wrap:wrap!important}
+}
+@media (max-width:480px){
+  #page-roster .r29-toolbar{grid-template-columns:1fr!important}
+  #page-roster .r29-stats{grid-template-columns:1fr!important}
+}
+
+/* Stat cards: exact Home palette + Home SVG icons */
+#page-roster .r29-stat{
+  text-align:left!important;
+  align-items:center!important;
+  overflow:hidden!important;
+}
+#page-roster .r29-stat-pink{background:linear-gradient(135deg,#fff9fb,#fff0f6)!important}
+#page-roster .r29-stat-mint{background:linear-gradient(135deg,#fbfffe,#eefbf8)!important}
+#page-roster .r29-stat-yellow{background:linear-gradient(135deg,#fffef9,#fff8e5)!important}
+#page-roster .r29-stat-purple{background:linear-gradient(135deg,#fdfcff,#f4f0ff)!important}
+#page-roster .r29-stat-icon{
+  width:52px;height:52px;border-radius:50%;display:grid;place-items:center;
+  background:rgba(255,255,255,.68)!important;flex:none!important;
+}
+#page-roster .r29-stat-icon svg{width:42px;height:42px;display:block}
+#page-roster .r29-stat-copy{min-width:0!important;text-align:left!important}
+#page-roster .r29-stat-copy small{line-height:1.3!important}
+#page-roster .r29-stat-copy strong{white-space:nowrap!important}
+#page-roster .r29-stat-copy i{white-space:normal!important;line-height:1.4!important}
+
+/* Day legend must match the actual roster row colors exactly */
+#page-roster .r29-day-legend span{
+  min-height:24px;padding:4px 7px;border-radius:999px;
+  font-weight:800;line-height:1.2;white-space:nowrap;
+}
+#page-roster .r29-day-legend i{
+  width:16px!important;height:9px!important;border-radius:999px!important;
+  border:1px solid rgba(60,65,80,.10)!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.35)
+}
+#page-roster .r29-day-legend .work i{background:#ffffff!important;border-color:#dfe2e8!important}
+#page-roster .r29-day-legend .sat i{background:#ece3ff!important}
+#page-roster .r29-day-legend .sun i{background:#ffdfe3!important}
+#page-roster .r29-day-legend .hol i{background:#fff0b8!important}
+
+/* Consistent alignment / readable text in every surrounding card */
+#page-roster .r29-page-title{padding:0 2px!important}
+#page-roster .r29-title-copy>div:last-child{min-width:0}
+#page-roster .r29-title-copy h2{line-height:1.2!important}
+#page-roster .r29-title-copy p{line-height:1.4!important}
+#page-roster .r29-toolbar-card{padding:12px 14px!important}
+#page-roster .r29-field>span{line-height:1.25!important}
+#page-roster .r29-action{justify-content:center!important;text-align:center!important}
+#page-roster .r29-table-toolbar{align-items:center!important}
+#page-roster .r29-month-nav{min-width:0!important}
+#page-roster .r29-month-nav b{line-height:1.3!important}
+#page-roster .r29-workflow-row{line-height:1.35!important}
+#page-roster .r29-panel{display:flex;flex-direction:column!important}
+#page-roster .r29-panel-head{align-items:flex-start!important;margin-bottom:10px!important}
+#page-roster .r29-panel-head h3{line-height:1.35!important}
+#page-roster .r29-panel-head small{line-height:1.45!important}
+#page-roster .r29-type-list>div{align-items:flex-start!important;line-height:1.4!important}
+#page-roster .r29-type-list b{line-height:1.35!important}
+#page-roster .r29-type-list span{line-height:1.45!important;white-space:normal!important}
+#page-roster .r29-note-list{line-height:1.6!important}
+#page-roster .r29-note-list li{margin-bottom:7px!important}
+#page-roster .r29-pdf-note-label{line-height:1.35!important}
+#page-roster .r29-notes-panel textarea{width:100%!important;max-width:100%!important}
+
+/* Keep only inner data areas scrollable. The page itself must not be wider. */
+#page-roster .sheet-wrap,
+#page-roster .r29-summary-scroll{
+  max-width:100%!important;
+  min-width:0!important;
+  overflow:auto!important;
+  -webkit-overflow-scrolling:touch!important;
+}
+
+/* DO NOT change the original roster table structure, column order or render logic. */
