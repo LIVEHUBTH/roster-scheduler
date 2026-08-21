@@ -1742,7 +1742,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 }
 </style>
 <link rel="stylesheet" href="style.css?v=29.0">
-<link rel="stylesheet" href="roster-v29.css?v=29.2">
+<link rel="stylesheet" href="roster-v29.css?v=29.3">
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 </head>
@@ -1913,13 +1913,26 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 
     <div class="r29-page-title no-print">
       <div class="r29-title-copy">
-        <div class="r29-title-icon">☰</div>
+        <div class="r29-title-icon" aria-hidden="true">
+          <svg viewBox="0 0 64 64" focusable="false">
+            <rect x="9" y="12" width="46" height="42" rx="10" fill="#ffd7e6"/>
+            <rect x="9" y="12" width="46" height="12" rx="10" fill="#f6a9c7"/>
+            <rect x="17" y="29" width="8" height="7" rx="2" fill="#fff"/>
+            <rect x="28" y="29" width="8" height="7" rx="2" fill="#fff"/>
+            <rect x="39" y="29" width="8" height="7" rx="2" fill="#fff"/>
+            <rect x="17" y="40" width="8" height="7" rx="2" fill="#fff"/>
+            <rect x="28" y="40" width="8" height="7" rx="2" fill="#fff"/>
+            <path d="M39 43l4 4 7-9" fill="none" stroke="#d85d8e" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <rect x="18" y="8" width="4" height="11" rx="2" fill="#d85d8e"/>
+            <rect x="42" y="8" width="4" height="11" rx="2" fill="#d85d8e"/>
+          </svg>
+        </div>
         <div>
           <h2>จัดตารางเวร</h2>
           <p>ระบบจัดการเวรอย่างเป็นระบบ</p>
         </div>
       </div>
-      <div class="r29-version">V29.2 • Roster</div>
+      <div class="r29-version">V29.3 • Roster</div>
     </div>
 
     <section class="r29-toolbar-card no-print">
@@ -1964,7 +1977,19 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
     <section class="r29-table-card" id="r29TableCard">
       <div class="r29-table-toolbar no-print">
         <div class="r29-month-nav">
-          <span class="r29-calendar-icon">▣</span>
+          <span class="r29-calendar-icon" aria-hidden="true">
+            <svg viewBox="0 0 64 64" focusable="false">
+              <rect x="9" y="13" width="46" height="41" rx="10" fill="#e7f7ff"/>
+              <rect x="9" y="13" width="46" height="12" rx="10" fill="#a9dff2"/>
+              <rect x="17" y="8" width="4" height="11" rx="2" fill="#66b8da"/>
+              <rect x="43" y="8" width="4" height="11" rx="2" fill="#66b8da"/>
+              <g fill="#fff">
+                <rect x="17" y="31" width="7" height="6" rx="2"/><rect x="28" y="31" width="7" height="6" rx="2"/><rect x="39" y="31" width="7" height="6" rx="2"/>
+                <rect x="17" y="41" width="7" height="6" rx="2"/><rect x="28" y="41" width="7" height="6" rx="2"/>
+              </g>
+              <rect x="39" y="41" width="7" height="6" rx="2" fill="#ffd0df"/>
+            </svg>
+          </span>
           <b id="r29MonthTitle">เดือนปัจจุบัน</b>
           <button type="button" id="r29PrevMonth" aria-label="เดือนก่อนหน้า">‹</button>
           <button type="button" id="r29NextMonth" aria-label="เดือนถัดไป">›</button>
@@ -2016,7 +2041,19 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
     <section class="r29-bottom no-print" id="r29RosterSummary">
       <article class="r29-panel r29-summary-panel">
         <div class="r29-panel-head">
-          <div><h3>▣ สรุปจำนวนเวรของบุคลากร</h3><small>สรุปตาม 7 กลุ่มประเภทเวรของเดือนปัจจุบัน</small></div>
+          <div class="r29-panel-title-group"><span class="r29-panel-icon r29-bunny-pink" aria-hidden="true">
+              <svg viewBox="0 0 64 64" focusable="false">
+                <ellipse cx="22" cy="14" rx="7" ry="14" transform="rotate(-14 22 14)" fill="#ffd3e3"/>
+                <ellipse cx="42" cy="14" rx="7" ry="14" transform="rotate(14 42 14)" fill="#ffd3e3"/>
+                <ellipse cx="22" cy="14" rx="3" ry="9" transform="rotate(-14 22 14)" fill="#f2a4c2"/>
+                <ellipse cx="42" cy="14" rx="3" ry="9" transform="rotate(14 42 14)" fill="#f2a4c2"/>
+                <circle cx="32" cy="37" r="19" fill="#fff5f9" stroke="#f4bad0" stroke-width="2"/>
+                <circle cx="25" cy="34" r="2.4" fill="#665565"/><circle cx="39" cy="34" r="2.4" fill="#665565"/>
+                <path d="M29 41c2 2 4 2 6 0" fill="none" stroke="#d46d95" stroke-width="2.5" stroke-linecap="round"/>
+                <path d="M31 38h2" stroke="#d46d95" stroke-width="3" stroke-linecap="round"/>
+                <circle cx="20" cy="39" r="3" fill="#ffd0df"/><circle cx="44" cy="39" r="3" fill="#ffd0df"/>
+              </svg>
+            </span><div><h3>สรุปจำนวนเวรของบุคลากร</h3><small>สรุปตาม 7 กลุ่มประเภทเวรของเดือนปัจจุบัน</small></div></div>
           <span class="r29-count-badge" id="r29SummaryBadge">0 คน</span>
         </div>
         <div class="r29-summary-scroll">
@@ -2033,7 +2070,19 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
       </article>
 
       <article class="r29-panel r29-types-panel">
-        <div class="r29-panel-head"><div><h3>▦ คำอธิบายประเภทเวร</h3><small>ประเภท เวลา และเงื่อนไขหลัก</small></div></div>
+        <div class="r29-panel-head"><div class="r29-panel-title-group"><span class="r29-panel-icon r29-bunny-purple" aria-hidden="true">
+              <svg viewBox="0 0 64 64" focusable="false">
+                <ellipse cx="22" cy="14" rx="7" ry="14" transform="rotate(-14 22 14)" fill="#e7dcff"/>
+                <ellipse cx="42" cy="14" rx="7" ry="14" transform="rotate(14 42 14)" fill="#e7dcff"/>
+                <ellipse cx="22" cy="14" rx="3" ry="9" transform="rotate(-14 22 14)" fill="#bca6ee"/>
+                <ellipse cx="42" cy="14" rx="3" ry="9" transform="rotate(14 42 14)" fill="#bca6ee"/>
+                <circle cx="32" cy="37" r="19" fill="#faf8ff" stroke="#d6c8f8" stroke-width="2"/>
+                <circle cx="25" cy="34" r="2.4" fill="#60536f"/><circle cx="39" cy="34" r="2.4" fill="#60536f"/>
+                <path d="M29 41c2 2 4 2 6 0" fill="none" stroke="#8267c7" stroke-width="2.5" stroke-linecap="round"/>
+                <path d="M31 38h2" stroke="#8267c7" stroke-width="3" stroke-linecap="round"/>
+                <circle cx="20" cy="39" r="3" fill="#e8defe"/><circle cx="44" cy="39" r="3" fill="#e8defe"/>
+              </svg>
+            </span><div><h3>คำอธิบายประเภทเวร</h3><small>ประเภท เวลา และเงื่อนไขหลัก</small></div></div></div>
         <div class="r29-type-list">
           <div><i class="v"></i><b>เวร1, เวร2</b><span>เวรหลัก • จัดทุกวัน</span></div>
           <div><i class="ot"></i><b>OT1, OT2</b><span>จันทร์–ศุกร์ • ไม่รวมวันหยุด</span></div>
@@ -5297,7 +5346,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 })();
 </script>
 
-<script src="roster-v29.js?v=29.2"></script>
+<script src="roster-v29.js?v=29.3"></script>
 <script src="login-fix-v26-1.js?v=29.0"></script>
 <script src="home-v26.js?v=29.0"></script>
 </body>
