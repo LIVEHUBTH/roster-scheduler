@@ -1743,7 +1743,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 </style>
 <link rel="stylesheet" href="style.css?v=30.0">
 <link rel="stylesheet" href="roster-v29.css?v=29.3">
-<link rel="stylesheet" href="people-v30.css?v=30.0">
+<link rel="stylesheet" href="people-v30.css?v=30.1">
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 </head>
@@ -2194,9 +2194,9 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
       </article>
       <article class="p30-card p30-bottom-card">
         <h3>ข้อมูลเพิ่มเติม</h3>
-        <div class="p30-info-row"><span class="pink">♙</span><label>วันเริ่มงานเฉลี่ย</label><b id="peopleAvgTenureV30">-</b></div>
-        <div class="p30-info-row"><span class="blue">▣</span><label>อายุเฉลี่ย</label><b id="peopleAvgAgeV30">-</b></div>
-        <div class="p30-info-row"><span class="purple">♧</span><label>อัตราการเข้าเวร</label><b id="peopleDutyRateV30">-</b></div>
+        <div class="p30-info-row"><span class="p30-bunny pink" aria-hidden="true"><svg viewBox="0 0 64 64" focusable="false"><ellipse cx="22" cy="14" rx="7" ry="14" transform="rotate(-14 22 14)" fill="#ffd3e3"/><ellipse cx="42" cy="14" rx="7" ry="14" transform="rotate(14 42 14)" fill="#ffd3e3"/><ellipse cx="22" cy="14" rx="3" ry="9" transform="rotate(-14 22 14)" fill="#f2a4c2"/><ellipse cx="42" cy="14" rx="3" ry="9" transform="rotate(14 42 14)" fill="#f2a4c2"/><circle cx="32" cy="37" r="19" fill="#fff5f9" stroke="#f4bad0" stroke-width="2"/><circle cx="25" cy="34" r="2.4" fill="#665565"/><circle cx="39" cy="34" r="2.4" fill="#665565"/><path d="M29 41c2 2 4 2 6 0" fill="none" stroke="#d46d95" stroke-width="2.5" stroke-linecap="round"/><path d="M31 38h2" stroke="#d46d95" stroke-width="3" stroke-linecap="round"/><circle cx="20" cy="39" r="3" fill="#ffd0df"/><circle cx="44" cy="39" r="3" fill="#ffd0df"/></svg></span><label>วันเริ่มงานเฉลี่ย</label><b id="peopleAvgTenureV30">-</b></div>
+        <div class="p30-info-row"><span class="p30-bunny mint" aria-hidden="true"><svg viewBox="0 0 64 64" focusable="false"><ellipse cx="22" cy="14" rx="7" ry="14" transform="rotate(-14 22 14)" fill="#d8f7ee"/><ellipse cx="42" cy="14" rx="7" ry="14" transform="rotate(14 42 14)" fill="#d8f7ee"/><ellipse cx="22" cy="14" rx="3" ry="9" transform="rotate(-14 22 14)" fill="#8fd7c5"/><ellipse cx="42" cy="14" rx="3" ry="9" transform="rotate(14 42 14)" fill="#8fd7c5"/><circle cx="32" cy="37" r="19" fill="#f6fffc" stroke="#bfeadd" stroke-width="2"/><circle cx="25" cy="34" r="2.4" fill="#665565"/><circle cx="39" cy="34" r="2.4" fill="#665565"/><path d="M29 41c2 2 4 2 6 0" fill="none" stroke="#3c9b82" stroke-width="2.5" stroke-linecap="round"/><path d="M31 38h2" stroke="#3c9b82" stroke-width="3" stroke-linecap="round"/><circle cx="20" cy="39" r="3" fill="#c8f3e7"/><circle cx="44" cy="39" r="3" fill="#c8f3e7"/></svg></span><label>อายุเฉลี่ย</label><b id="peopleAvgAgeV30">-</b></div>
+        <div class="p30-info-row"><span class="p30-bunny purple" aria-hidden="true"><svg viewBox="0 0 64 64" focusable="false"><ellipse cx="22" cy="14" rx="7" ry="14" transform="rotate(-14 22 14)" fill="#e7dcff"/><ellipse cx="42" cy="14" rx="7" ry="14" transform="rotate(14 42 14)" fill="#e7dcff"/><ellipse cx="22" cy="14" rx="3" ry="9" transform="rotate(-14 22 14)" fill="#bca6ee"/><ellipse cx="42" cy="14" rx="3" ry="9" transform="rotate(14 42 14)" fill="#bca6ee"/><circle cx="32" cy="37" r="19" fill="#faf8ff" stroke="#d6c8f8" stroke-width="2"/><circle cx="25" cy="34" r="2.4" fill="#665565"/><circle cx="39" cy="34" r="2.4" fill="#665565"/><path d="M29 41c2 2 4 2 6 0" fill="none" stroke="#8267c7" stroke-width="2.5" stroke-linecap="round"/><path d="M31 38h2" stroke="#8267c7" stroke-width="3" stroke-linecap="round"/><circle cx="20" cy="39" r="3" fill="#e8defe"/><circle cx="44" cy="39" r="3" fill="#e8defe"/></svg></span><label>อัตราการเข้าเวร</label><b id="peopleDutyRateV30">-</b></div>
         <span id="peopleActiveV24" hidden>0</span><span id="peopleCustomRulesV24" hidden>0</span>
       </article>
       <article class="p30-card p30-bottom-card p30-quick">
@@ -5154,6 +5154,55 @@ function importPeopleCsvV30(file){
   if(!(unitUser.role==='scheduler'||unitUser.role==='admin'))return;var r=new FileReader();r.onload=function(){try{var lines=String(r.result||'').replace(/^\uFEFF/,'').split(/\r?\n/).filter(Boolean);if(lines.length<2)throw new Error('ไม่มีข้อมูล');var headers=parseCsvLineV30(lines[0]).map(function(x){return x.trim().toLowerCase()});var map={code:['รหัสพนักงาน','รหัส','code','employee code'],name:['ชื่อ-นามสกุล','ชื่อ','name'],position:['ตำแหน่ง','position'],department:['แผนก','หน่วยงาน','department'],type:['ประเภท','type'],status:['สถานะ','status'],startDate:['วันเริ่มงาน','startdate','start date'],birthDate:['วันเกิด','birthdate','birth date']};function col(k){for(var i=0;i<headers.length;i++)if(map[k].indexOf(headers[i])>=0)return i;return -1}var ni=col('name');if(ni<0)throw new Error('ไม่พบคอลัมน์ชื่อ');var added=0;for(var li=1;li<lines.length;li++){var c=parseCsvLineV30(lines[li]);var nm=String(c[ni]||'').trim();if(!nm)continue;var p={id:'p_'+Date.now()+'_'+li,name:nm,code:col('code')>=0?String(c[col('code')]||'').trim():nextPersonCodeV30(),position:col('position')>=0?String(c[col('position')]||'').trim():'',department:col('department')>=0?String(c[col('department')]||'').trim():'',active:!(col('status')>=0&&/ปิด|inactive|0/i.test(String(c[col('status')]||''))),startDate:col('startDate')>=0?String(c[col('startDate')]||'').trim():'',birthDate:col('birthDate')>=0?String(c[col('birthDate')]||'').trim():''};state.people.push(p);if(col('type')>=0&&/extra/i.test(String(c[col('type')]||'')))setPersonExtraRuleV30(p.id,true);added++}saveConfig();buildNames();renderCustomRules();renderSheet();renderPeopleV24();alert('นำเข้าข้อมูล '+added+' รายการแล้ว')}catch(e){alert('นำเข้าไม่สำเร็จ: '+e.message)}};r.readAsText(file,'utf-8')
 }
 function exportPeopleV30(){var rows=[['ลำดับ','รหัสพนักงาน','ชื่อ-นามสกุล','ตำแหน่ง','แผนก','ประเภท','สถานะ','วันเริ่มงาน','วันเกิด']];state.people.forEach(function(p,i){rows.push([i+1,p.code||'',p.name||'',p.position||'',p.department||'',isExtraOnlyPerson(p.id)?'EXTRA1-3':'ปกติ',p.active===false?'ปิดใช้งาน':'ใช้งาน',p.startDate||'',p.birthDate||''])});var csv=rows.map(function(r){return r.map(function(v){return '"'+String(v).replace(/"/g,'""')+'"'}).join(',')}).join('\n');var a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}));a.download='บุคลากร.csv';a.click();setTimeout(function(){URL.revokeObjectURL(a.href)},1000)}
+
+/* ===== V30.1 PEOPLE SEARCH — independent binding ===== */
+function bindPeopleSearchV301(){
+  var input=el('peopleSearchV24');
+  var searchBtn=el('peopleSearchBtnV24');
+  var clearBtn=el('peopleClearBtnV24');
+  if(!input)return;
+
+  function apply(){
+    peopleV30Page=1;
+    renderPeopleV24();
+    input.setAttribute('aria-label','ค้นหาพนักงาน');
+  }
+
+  if(input.dataset.v301SearchBound!=='1'){
+    input.dataset.v301SearchBound='1';
+    input.addEventListener('input',apply);
+    input.addEventListener('search',apply);
+    input.addEventListener('change',apply);
+    input.addEventListener('keydown',function(ev){
+      if(ev.key==='Enter'){
+        ev.preventDefault();
+        apply();
+      }
+    });
+  }
+  if(searchBtn&&searchBtn.dataset.v301SearchBound!=='1'){
+    searchBtn.dataset.v301SearchBound='1';
+    searchBtn.addEventListener('click',function(ev){ev.preventDefault();apply()});
+  }
+  if(clearBtn&&clearBtn.dataset.v301SearchBound!=='1'){
+    clearBtn.dataset.v301SearchBound='1';
+    clearBtn.addEventListener('click',function(ev){
+      ev.preventDefault();
+      input.value='';
+      if(el('peopleTypeFilterV24'))el('peopleTypeFilterV24').value='all';
+      if(el('peopleDeptFilterV30'))el('peopleDeptFilterV30').value='all';
+      if(el('peopleStatusFilterV30'))el('peopleStatusFilterV30').value='all';
+      apply();
+      input.focus();
+    });
+  }
+}
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded',bindPeopleSearchV301,{once:true});
+}else{
+  bindPeopleSearchV301();
+}
+
 function renderRulesV24(){
   if(el('ruleTotalV24'))el('ruleTotalV24').textContent=state.rules.length+' ข้อ';
   if(el('ruleActiveV24'))el('ruleActiveV24').textContent=state.rules.length+' ข้อ';
