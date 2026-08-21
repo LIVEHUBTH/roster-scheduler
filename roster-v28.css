@@ -1,101 +1,118 @@
-/* ROSTER SCHEDULER — ROSTER PAGE REDESIGN V28.0 */
-#page-roster{
-  max-width:1480px!important;
-  margin:0 auto!important;
-  padding:0 0 10px!important;
+/* =========================================================
+   ROSTER SCHEDULER — ROSTER PAGE V28.2
+   รอบนอกตามตัวอย่าง / ตารางเดิม 100%
+   สีอิงหน้า Home: pink / mint / yellow / violet / blue
+   ========================================================= */
+#page-roster{max-width:1480px!important;margin:0 auto!important;padding:0!important}
+#page-roster .r282-shell{display:grid;gap:12px;color:#344055}
+
+#page-roster .r282-titlebar{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding:2px 3px 0}
+#page-roster .r282-titlebar h2{margin:0;color:#28354d;font-size:clamp(24px,2.7vw,34px);font-weight:950;letter-spacing:-.4px}
+#page-roster .r282-titlebar p{margin:4px 0 0;color:#7d8494;font-size:11px}
+#page-roster .r282-version{font-size:9px;color:#a3a7b1;font-weight:800}
+
+#page-roster .r282-toolbar-card{background:#fff;border:1px solid #ece9ef;border-radius:19px;padding:12px 14px;box-shadow:0 7px 22px rgba(64,63,83,.055)}
+#page-roster .r282-toolbar{display:grid!important;grid-template-columns:1.25fr 1fr repeat(7,minmax(112px,.9fr));gap:9px!important;align-items:end!important}
+#page-roster .r282-field{min-width:0!important}
+#page-roster .r282-field select,#page-roster .r282-field input{width:100%;min-height:41px!important;border-radius:11px!important;border:1px solid #dddfe7!important;background:#fff!important;font-size:13px!important}
+#page-roster .r282-toolbar button{width:100%;min-height:41px!important;padding:8px 10px!important;border-radius:11px!important;font-size:11.5px!important;font-weight:900!important;white-space:nowrap;box-shadow:none!important}
+#page-roster .r282-toolbar .run{background:linear-gradient(135deg,#ff6ea3,#f04f8c)!important;color:#fff!important}
+#page-roster .r282-toolbar .save{background:linear-gradient(135deg,#59d59e,#32b978)!important;color:#fff!important}
+#page-roster .r282-open{background:linear-gradient(135deg,#9984e8,#745ed0)!important;color:#fff!important}
+#page-roster .r282-check{background:#fff3c9!important;color:#9b7217!important}
+#page-roster .r282-print{background:linear-gradient(135deg,#ffe69c,#ffd673)!important;color:#72581b!important}
+#page-roster .r282-pdf{background:linear-gradient(135deg,#e4f5ff,#cfeaff)!important;color:#2e7198!important}
+#page-roster .r282-clear{background:#fff0f2!important;color:#bd5570!important}
+
+#page-roster .r282-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:11px}
+#page-roster .r282-stat{min-height:96px;border:1px solid #ece9ef;border-radius:18px;padding:12px 15px;display:grid;grid-template-columns:58px 1fr;gap:11px;align-items:center;box-shadow:0 6px 20px rgba(64,63,83,.045);background:#fff}
+#page-roster .r282-stat.pink{background:linear-gradient(135deg,#fffafa,#fff0f6)}
+#page-roster .r282-stat.mint{background:linear-gradient(135deg,#fbfffe,#eefbf7)}
+#page-roster .r282-stat.yellow{background:linear-gradient(135deg,#fffef9,#fff8e7)}
+#page-roster .r282-stat.purple{background:linear-gradient(135deg,#fdfcff,#f4f0ff)}
+#page-roster .r282-stat-icon{width:53px;height:53px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.75);font-size:27px}
+#page-roster .r282-stat small{display:block;font-size:10px;color:#505a6f;font-weight:900}
+#page-roster .r282-stat strong{font-size:27px;line-height:1.05;color:#222f46;margin-right:4px}
+#page-roster .r282-stat em{font-size:9px;color:#767e90;font-style:normal;font-weight:800}
+#page-roster .r282-stat span{display:block;font-size:8.5px;color:#8b92a1;margin-top:4px}
+
+#page-roster .r282-table-card{background:#fff;border:1px solid #ece9ef;border-radius:20px;padding:10px 10px 12px;box-shadow:0 8px 24px rgba(64,63,83,.05);min-width:0}
+#page-roster .r282-table-top{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;padding:0 4px 9px}
+#page-roster .r282-month-nav{display:flex;align-items:center;gap:8px}
+#page-roster .r282-month-nav>div{display:flex;align-items:center;gap:7px;min-width:150px}
+#page-roster .r282-month-nav b{font-size:15px;color:#2e3b53;white-space:nowrap}
+#page-roster .r282-month-nav button{width:31px;height:31px;min-height:31px;padding:0;border-radius:9px;background:#fff;border:1px solid #e5e2ea;box-shadow:none;font-size:20px;color:#5e6678}
+#page-roster .r282-day-legend{display:flex;justify-content:center;gap:17px;flex-wrap:wrap;font-size:10px;color:#687185}
+#page-roster .r282-day-legend span:before{content:"";display:inline-block;width:11px;height:8px;border-radius:3px;margin-right:5px;vertical-align:0}
+#page-roster .r282-day-legend .work:before{background:#bce8ff}
+#page-roster .r282-day-legend .sat:before{background:#f8b6cf}
+#page-roster .r282-day-legend .sun:before{background:#ffe18b}
+#page-roster .r282-day-legend .hol:before{width:8px;height:8px;border-radius:50%;background:#5dcc9b}
+#page-roster .r282-view-tag{padding:8px 12px;border-radius:10px;background:#fff4fa;border:1px solid #f1cade;color:#dc598e;font-size:10px;font-weight:900;white-space:nowrap}
+
+#page-roster .roster-workflow-strip{margin:0 3px 9px!important;padding:7px 9px!important;border-radius:11px!important;background:#fcfbff!important;border:1px solid #eee9f5!important}
+#page-roster .sheet-wrap{margin:0!important;border:1px solid #ece9ef!important;border-radius:13px!important;max-height:70vh!important;background:#fff!important;box-shadow:none!important;overflow:auto!important;-webkit-overflow-scrolling:touch}
+/* IMPORTANT: ไม่เปลี่ยน width/column/table structure เดิม */
+#page-roster .sheet{margin:0!important}
+#page-roster .sheet caption{padding:8px!important;font-size:13px!important}
+
+#page-roster .r282-bottom{display:grid;grid-template-columns:1.2fr .9fr .9fr;gap:11px}
+#page-roster .r282-note-card,#page-roster .r282-info-card{margin:0!important;background:#fff;border:1px solid #ece9ef;border-radius:18px;padding:12px 14px;box-shadow:0 6px 20px rgba(64,63,83,.04)}
+#page-roster .r282-note-card .section-title,#page-roster .r282-info-card h3{margin:0 0 7px;font-size:13px;color:#3b465b}
+#page-roster .r282-note-card textarea{min-height:70px!important;border-radius:11px!important;margin-top:7px}
+#page-roster .r282-info-card ul{margin:0;padding-left:18px}
+#page-roster .r282-info-card li{font-size:9.5px;line-height:1.55;color:#6e7688;margin:0 0 5px}
+
+/* iPad landscape: ให้ส่วนรอบตารางกระชับเหมือนตัวอย่าง */
+@media (min-width:821px) and (max-width:1366px){
+  #page-roster .r282-shell{gap:8px}
+  #page-roster .r282-titlebar h2{font-size:21px}
+  #page-roster .r282-titlebar p{font-size:9px}
+  #page-roster .r282-toolbar-card{padding:8px 10px;border-radius:16px}
+  #page-roster .r282-toolbar{gap:6px!important;grid-template-columns:1.15fr .9fr repeat(7,minmax(88px,.85fr))}
+  #page-roster .r282-field select,#page-roster .r282-field input,#page-roster .r282-toolbar button{min-height:34px!important;font-size:9.5px!important;padding:5px 7px!important}
+  #page-roster .r282-stats{gap:7px}
+  #page-roster .r282-stat{min-height:70px;padding:7px 9px;grid-template-columns:39px 1fr;gap:7px;border-radius:14px}
+  #page-roster .r282-stat-icon{width:36px;height:36px;font-size:19px}
+  #page-roster .r282-stat small{font-size:8px}
+  #page-roster .r282-stat strong{font-size:20px}
+  #page-roster .r282-stat em,#page-roster .r282-stat span{font-size:7px}
+  #page-roster .r282-table-card{padding:7px;border-radius:16px}
+  #page-roster .r282-table-top{padding-bottom:6px}
+  #page-roster .r282-month-nav b{font-size:11.5px}
+  #page-roster .r282-month-nav button{width:25px;height:25px;min-height:25px;font-size:16px}
+  #page-roster .r282-day-legend{font-size:8px;gap:11px}
+  #page-roster .r282-view-tag{font-size:8px;padding:6px 8px}
+  #page-roster .roster-workflow-strip{padding:5px 7px!important;margin-bottom:6px!important}
+  #page-roster .sheet-wrap{max-height:66vh!important}
+  #page-roster .r282-bottom{gap:7px}
+  #page-roster .r282-note-card,#page-roster .r282-info-card{padding:9px 10px;border-radius:14px}
 }
-#page-roster .roster-v28-shell{display:grid;gap:14px}
-#page-roster .roster-v28-hero{
-  display:grid;
-  grid-template-columns:minmax(0,1.45fr) minmax(280px,.9fr);
-  gap:14px;
-  align-items:stretch;
-  padding:20px;
-  border:1px solid #f2dce7;
-  border-radius:24px;
-  background:linear-gradient(135deg,#fff9fc 0%,#ffeef5 45%,#f5fffc 100%);
-  box-shadow:0 8px 24px rgba(86,71,96,.06);
+
+@media (max-width:1000px){
+  #page-roster .r282-toolbar{grid-template-columns:repeat(4,minmax(120px,1fr))!important}
+  #page-roster .r282-stats{grid-template-columns:1fr 1fr}
+  #page-roster .r282-bottom{grid-template-columns:1fr 1fr}
+  #page-roster .r282-note-card{grid-column:1/-1}
 }
-#page-roster .roster-v28-eyebrow{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.7);color:#cf5d8c;font-weight:900;font-size:12px;border:1px solid #f0ccdb;margin-bottom:10px}
-#page-roster .roster-v28-hero-copy h2{margin:0 0 10px;font-size:clamp(26px,3.2vw,40px);line-height:1.18;color:#314055}
-#page-roster .roster-v28-hero-copy p{margin:0;font-size:13px;line-height:1.75;color:#6d7284;max-width:860px}
-#page-roster .roster-v28-chip-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
-#page-roster .roster-v28-chip{display:inline-flex;align-items:center;padding:8px 11px;border-radius:999px;font-size:11px;font-weight:800;border:1px solid transparent;background:#fff}
-#page-roster .roster-v28-chip.pink{color:#db5d8f;border-color:#f0cada;background:#fff7fb}
-#page-roster .roster-v28-chip.mint{color:#209883;border-color:#b8ebe0;background:#f4fffc}
-#page-roster .roster-v28-chip.yellow{color:#c58c17;border-color:#f4dfac;background:#fffdf4}
-#page-roster .roster-v28-chip.purple{color:#7a64cb;border-color:#ddd3ff;background:#faf7ff}
-#page-roster .roster-v28-hero-side{display:grid;gap:10px}
-#page-roster .roster-v28-info-card{border-radius:18px;padding:14px 15px;border:1px solid #ece6f0;background:#fff;box-shadow:0 5px 16px rgba(85,76,98,.04)}
-#page-roster .roster-v28-info-card b{display:block;font-size:14px;color:#354159;margin-bottom:5px}
-#page-roster .roster-v28-info-card small{display:block;font-size:12px;line-height:1.6;color:#70798b}
-#page-roster .roster-v28-info-card.pink{background:linear-gradient(135deg,#fffafd,#fff1f6)}
-#page-roster .roster-v28-info-card.mint{background:linear-gradient(135deg,#ffffff,#effcf8)}
-#page-roster .roster-v28-info-card.yellow{background:linear-gradient(135deg,#fffefb,#fff9ea)}
-#page-roster .roster-v28-grid{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:14px;align-items:start}
-#page-roster .roster-v28-main{min-width:0}
-#page-roster .roster-v28-control-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px}
-#page-roster .roster-v28-control-head h3{margin:0;font-size:18px;color:#364257}
-#page-roster .roster-v28-control-head p{margin:4px 0 0;font-size:12px;color:#7b8395}
-#page-roster .roster-v28-control-badge{padding:8px 12px;border-radius:999px;background:#fff5fa;border:1px solid #f0d0de;color:#d55c8d;font-size:11px;font-weight:900;white-space:nowrap}
-#page-roster .roster-control-card{border-radius:22px;padding:16px 16px 14px;box-shadow:0 8px 24px rgba(74,69,90,.05)}
-#page-roster .roster-v28-toolbar{display:grid;grid-template-columns:repeat(8,minmax(120px,1fr));gap:10px}
-#page-roster .roster-v28-toolbar .field{min-width:0}
-#page-roster .roster-v28-toolbar .field:first-child,#page-roster .roster-v28-toolbar .field:nth-child(2){grid-column:span 1}
-#page-roster .roster-v28-toolbar button{width:100%;border-radius:14px;font-weight:800;min-height:42px}
-#page-roster .roster-v28-toolbar .run{background:linear-gradient(135deg,#fa6ca0,#ec4e88);color:#fff}
-#page-roster .roster-v28-toolbar .save{background:linear-gradient(135deg,#eafff7,#d7f8ee);color:#1d7f63}
-#page-roster .roster-control-card .field select,#page-roster .roster-control-card .field input{min-height:42px;border-radius:13px;background:#fff}
-#page-roster .roster-workflow-strip{margin-top:12px;border-radius:16px;padding:10px 12px;background:linear-gradient(135deg,#f9fbff,#fffafc);border:1px solid #ebe7f3}
-#page-roster .roster-v28-table-card{background:#fff;border:1px solid #ece8f1;border-radius:22px;padding:14px;box-shadow:0 8px 24px rgba(74,69,90,.05)}
-#page-roster .roster-v28-table-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin:0 2px 12px}
-#page-roster .roster-v28-table-head h3{margin:0;font-size:18px;color:#354259}
-#page-roster .roster-v28-table-head p{margin:4px 0 0;font-size:12px;line-height:1.6;color:#7a8293}
-#page-roster .roster-v28-table-legend{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
-#page-roster .roster-v28-table-legend span{padding:7px 10px;border-radius:999px;font-size:11px;font-weight:800;border:1px solid transparent}
-#page-roster .roster-v28-table-legend .sat{background:#f0eaff;color:#6f57c7;border-color:#ddd0ff}
-#page-roster .roster-v28-table-legend .sun{background:#ffedf1;color:#d85e8b;border-color:#f5ced9}
-#page-roster .roster-v28-table-legend .hol{background:#fff8dc;color:#b47f14;border-color:#eedfa7}
-#page-roster .sheet-wrap{border-radius:18px;border:1px solid #ebe7ef;max-height:68vh;box-shadow:inset 0 0 0 1px rgba(255,255,255,.4)}
-#page-roster .sheet caption{font-size:16px;padding:12px}
-#page-roster .sheet th,#page-roster .sheet td{font-size:11px}
-#page-roster .roster-note-card{margin-top:14px;border-radius:20px;padding:14px}
-#page-roster .roster-note-card textarea{border-radius:14px;min-height:88px}
-#page-roster .roster-v28-side{display:grid;gap:12px;position:sticky;top:88px}
-#page-roster .roster-v28-side-card{background:#fff;border:1px solid #ece8f1;border-radius:20px;padding:14px 15px;box-shadow:0 8px 24px rgba(74,69,90,.04)}
-#page-roster .roster-v28-side-card.soft{background:linear-gradient(135deg,#fff9fc,#f8fffd)}
-#page-roster .roster-v28-side-card h3{margin:0 0 9px;font-size:15px;color:#354259}
-#page-roster .roster-v28-side-card p{margin:0;font-size:12px;line-height:1.7;color:#71798b}
-#page-roster .roster-v28-side-card ol,#page-roster .roster-v28-side-card ul{margin:0;padding-left:18px;color:#636d81}
-#page-roster .roster-v28-side-card li{margin:0 0 8px;font-size:12px;line-height:1.6}
-#page-roster .conflict-detail-panel,#page-roster .fix-choice-wrap,#page-roster .auto-fix-summary,#page-roster .action-feedback{margin-top:12px}
-@media (max-width:1200px){
-  #page-roster .roster-v28-grid{grid-template-columns:1fr}
-  #page-roster .roster-v28-side{position:static;grid-template-columns:repeat(3,minmax(0,1fr))}
-  #page-roster .roster-v28-toolbar{grid-template-columns:repeat(4,minmax(120px,1fr))}
+@media (max-width:700px){
+  #page-roster .r282-titlebar{align-items:flex-start}
+  #page-roster .r282-toolbar{grid-template-columns:1fr 1fr!important}
+  #page-roster .r282-stats{grid-template-columns:1fr 1fr}
+  #page-roster .r282-table-top{grid-template-columns:1fr;align-items:start}
+  #page-roster .r282-day-legend{justify-content:flex-start}
+  #page-roster .r282-view-tag{justify-self:start}
+  #page-roster .r282-bottom{grid-template-columns:1fr}
+  #page-roster .r282-note-card{grid-column:auto}
+  #page-roster .sheet-wrap{max-height:58vh!important}
 }
-@media (max-width:900px){
-  #page-roster .roster-v28-hero{grid-template-columns:1fr;padding:16px}
-  #page-roster .roster-v28-toolbar{grid-template-columns:repeat(2,minmax(140px,1fr))}
-  #page-roster .roster-v28-side{grid-template-columns:1fr}
-  #page-roster .roster-v28-table-head{flex-direction:column}
+@media (max-width:420px){
+  #page-roster .r282-toolbar{grid-template-columns:1fr!important}
+  #page-roster .r282-stats{grid-template-columns:1fr}
 }
-@media (max-width:640px){
-  #page-roster{padding:0!important}
-  #page-roster .roster-v28-shell{gap:12px}
-  #page-roster .roster-v28-hero-copy h2{font-size:24px}
-  #page-roster .roster-v28-control-head{flex-direction:column}
-  #page-roster .roster-v28-toolbar{grid-template-columns:1fr}
-  #page-roster .roster-control-card{padding:14px}
-  #page-roster .roster-v28-table-card{padding:10px}
-  #page-roster .sheet-wrap{max-height:60vh}
-}
+
 @media print{
-  #page-roster .roster-v28-hero,
-  #page-roster .roster-v28-side,
-  #page-roster .roster-v28-table-head,
-  #page-roster .roster-control-card,
-  #page-roster .roster-note-card{display:none!important}
-  #page-roster .roster-v28-table-card{border:0;box-shadow:none;padding:0}
-  #page-roster .sheet-wrap{border:0;box-shadow:none;max-height:none}
+  #page-roster .r282-titlebar,#page-roster .r282-toolbar-card,#page-roster .r282-stats,#page-roster .r282-table-top,#page-roster .roster-workflow-strip,#page-roster .r282-bottom{display:none!important}
+  #page-roster .r282-table-card{border:0!important;box-shadow:none!important;padding:0!important}
+  #page-roster .sheet-wrap{border:0!important;border-radius:0!important;max-height:none!important;overflow:visible!important}
 }
