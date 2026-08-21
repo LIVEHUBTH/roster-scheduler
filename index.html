@@ -1744,6 +1744,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 <link rel="stylesheet" href="style.css?v=30.0">
 <link rel="stylesheet" href="roster-v29.css?v=29.3">
 <link rel="stylesheet" href="people-v30.css?v=30.4">
+<link rel="stylesheet" href="rules-v31.css?v=31.0">
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 </head>
@@ -2230,39 +2231,123 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 </section>
 
 <section class="page-view" id="page-rules" data-view="rules">
-  <div class="v24-page-title"><div><h2>🛡️ กฎการจัดเวร</h2><p>กำหนดกฎและเงื่อนไขการจัดเวรให้เป็นไปตามนโยบาย</p></div></div>
-  <div class="v24-rule-tabs">
-    <button class="active">🛡 กฎทั่วไป</button><button>👥 กฎรายบุคคล</button><button>⚙ ข้อจำกัดเวร</button><button>↻ การหมุนเวร</button><button>☝ การพักผ่อน</button><button>⚙ อื่นๆ</button>
-  </div>
-  <div class="v24-card">
-    <div class="v24-card-head"><div><h3>กฎการจัดเวรทั้งหมด</h3><small>กฎหลักที่ใช้กับระบบ</small></div>
-      <div class="v24-head-actions"><button id="rulesResetBtnV24">↻ ตั้งค่ามาตรฐาน</button><button id="rulesSaveBtnV24" class="mint-btn">⇩ บันทึกกฎทั้งหมด</button><button id="rulesCheckBtnV24">⊙ ตรวจสอบกฎ</button></div>
-    </div>
-    <div id="ruleList" class="rule-list v24-rule-list"></div>
-    <div class="rulebar v24-add-rule">
-      <label class="field" style="flex:1">เพิ่มกติกา<textarea id="newRuleText" rows="2" placeholder="พิมพ์กติกาใหม่"></textarea></label>
-      <button id="addRuleBtn">＋ เพิ่มกติกา</button>
-    </div>
-  </div>
-  <div class="v24-four-grid">
-    <div class="v24-card"><h3>ประเภทเวรในระบบ</h3><div class="v24-slot-pills"><span>เวรปกติ</span><span>OT</span><span>SDMC เช้า</span><span>SDMC บ่าย-ดึก</span><span>SDMC เช้า-บ่าย</span><span>SDMC บ่าย</span><span>EXTRA</span></div></div>
-    <div class="v24-card"><h3>ข้อยกเว้นที่อนุญาต</h3><div class="v24-tip-list"><div>📅 ศุกร์–เสาร์–อาทิตย์</div><div>🏛 วันนักขัตฤกษ์</div><div>💜 หมายเหตุเฉพาะบุคคล</div></div></div>
-    <div class="v24-card"><h3>สรุปผลการตรวจสอบกฎ</h3><div class="v24-ring"><b id="rulePercentV24">100%</b></div><div class="v24-info-mini"><span>กฎทั้งหมด</span><b id="ruleTotalV24">0 ข้อ</b></div></div>
-    <div class="v24-card"><h3>ภาพรวมการทำงาน</h3><div class="v24-info-mini"><span>กฎที่เปิดใช้งาน</span><b id="ruleActiveV24">0 ข้อ</b></div><div class="v24-info-mini"><span>กฎเฉพาะบุคคล</span><b id="ruleCustomV24">0 ข้อ</b></div></div>
-  </div>
-  <div class="v24-card">
-    <h3>กติกาเฉพาะบุคคล</h3>
-    <div class="rulebar">
-      <label class="field">บุคลากร<select id="customPerson"></select></label>
-      <label class="field">ประเภท<select id="customRuleType"><option value="only">อนุญาตเฉพาะเวรที่เลือก</option><option value="block">ห้ามเวรที่เลือก</option></select></label>
-      <label class="field">เลือกเวร<select id="customSlots" multiple size="5"></select></label>
-      <button id="addCustomRuleBtn">＋ เพิ่มกติกาเฉพาะบุคคล</button>
-    </div>
-    <div id="customRules" class="chips"></div>
+  <div class="r31-shell">
+    <section class="r31-page-head">
+      <div class="r31-heading">
+        <span class="r31-heading-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M12 3 19 6v5c0 4.5-2.8 7.7-7 10-4.2-2.3-7-5.5-7-10V6l7-3Z"/><path d="m9.5 12 1.7 1.7 3.7-4"/></svg>
+        </span>
+        <div><h2>กฎการจัดเวร</h2><p>กำหนดกฎและเงื่อนไขการจัดเวรให้เป็นไปตามนโยบาย</p></div>
+      </div>
+      <span class="r31-version">V31.0 • Rules</span>
+    </section>
+
+    <nav class="r31-tabs" aria-label="หมวดกฎการจัดเวร">
+      <button type="button" class="active" data-r31-tab="general"><span>♢</span>กฎทั่วไป</button>
+      <button type="button" data-r31-tab="personal"><span>♧</span>กฎรายบุคคล</button>
+      <button type="button" data-r31-tab="constraints"><span>⚙</span>ข้อจำกัดเวร</button>
+      <button type="button" data-r31-tab="rotation"><span>↻</span>การหมุนเวร</button>
+      <button type="button" data-r31-tab="rest"><span>◷</span>การพักผ่อน</button>
+      <button type="button" data-r31-tab="other"><span>⚙</span>อื่นๆ</button>
+    </nav>
+
+    <section class="r31-card r31-main-card">
+      <div class="r31-card-head">
+        <div>
+          <h3 id="rulesSectionTitleV31">กฎการจัดเวรทั่วไป</h3>
+          <p id="rulesSectionSubV31">กำหนดกฎหลักที่ใช้กับทุกคนในระบบ</p>
+        </div>
+        <div class="r31-head-actions">
+          <button type="button" id="rulesResetBtnV24" class="r31-btn lavender"><span>↻</span> ตั้งค่ามาตรฐาน</button>
+          <button type="button" id="rulesSaveBtnV24" class="r31-btn mint"><span>⇩</span> บันทึกกฎทั้งหมด</button>
+          <button type="button" id="rulesCheckBtnV24" class="r31-btn pink"><span>⊕</span> ตรวจสอบกฎ</button>
+        </div>
+      </div>
+
+      <div id="ruleList" class="rule-list v24-rule-list r31-rule-list"></div>
+
+      <div id="rulesPersonalPanelV31" class="r31-tab-panel" hidden>
+        <div class="r31-personal-intro">
+          <div class="r31-mini-icon purple">🐰</div>
+          <div><b>กฎรายบุคคล</b><span>กำหนดเวรที่อนุญาตหรือเวรที่ห้ามสำหรับบุคลากรแต่ละคน</span></div>
+        </div>
+        <div class="r31-custom-form">
+          <label>บุคลากร<select id="customPerson"></select></label>
+          <label>ประเภท<select id="customRuleType"><option value="only">อนุญาตเฉพาะเวรที่เลือก</option><option value="block">ห้ามเวรที่เลือก</option></select></label>
+          <label class="wide">เลือกเวร<select id="customSlots" multiple size="5"></select></label>
+          <button type="button" id="addCustomRuleBtn" class="r31-btn purple">＋ เพิ่มกฎรายบุคคล</button>
+        </div>
+        <div id="customRules" class="r31-custom-rules"></div>
+      </div>
+
+      <div id="rulesOtherPanelV31" class="r31-tab-panel" hidden>
+        <div class="r31-personal-intro">
+          <div class="r31-mini-icon blue">＋</div>
+          <div><b>เพิ่มกฎอื่น ๆ</b><span>เพิ่มเงื่อนไขเพิ่มเติมที่นอกเหนือจากกฎมาตรฐานของระบบ</span></div>
+        </div>
+        <div class="r31-add-rule-form">
+          <label>ข้อความกฎใหม่<textarea id="newRuleText" rows="3" placeholder="พิมพ์กติกาใหม่..."></textarea></label>
+          <button type="button" id="addRuleBtn" class="r31-btn blue">＋ เพิ่มกติกา</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="r31-bottom-grid">
+      <article class="r31-card r31-types-card">
+        <div class="r31-small-head"><h3>ประเภทเวรในระบบ</h3><p>เวรทั้งหมดที่ใช้ในการจัดตาราง</p></div>
+        <div class="r31-type-list">
+          <div class="mint"><b>เวรปกติ</b><span>เวร1, เวร2</span></div>
+          <div class="purple"><b>OT</b><span>OT1, OT2</span></div>
+          <div class="blue"><b>SDMC เช้า</b><span>เช้า1, เช้า2, เช้า3, เช้า4</span></div>
+          <div class="pink"><b>SDMC บ่าย-ดึก</b><span>บ่าย-ดึก1, บ่าย-ดึก2, บ่าย-ดึก3, บ่าย-ดึก4</span></div>
+          <div class="blue2"><b>SDMC เช้า-บ่าย</b><span>เช้า-บ่าย5, เช้า-บ่าย6</span></div>
+          <div class="purple2"><b>SDMC บ่าย</b><span>บ่าย7, บ่าย8</span></div>
+          <div class="yellow"><b>EXTRA</b><span>EXTRA1, EXTRA2, EXTRA3</span></div>
+        </div>
+      </article>
+
+      <article class="r31-card r31-allowed-card">
+        <div class="r31-small-head"><h3>ข้อมูลวันที่อนุญาต</h3><p>กรณีที่สามารถผ่อนกฎได้</p></div>
+        <div class="r31-allow-item pink">
+          <span class="r31-allow-icon">▦</span><div><b>ศุกร์ - เสาร์ - อาทิตย์</b><p>สามารถต่อเวรบ่าย-ดึกได้ในวันศุกร์ เสาร์ และอาทิตย์ ตามเงื่อนไขของระบบ</p></div>
+        </div>
+        <div class="r31-allow-item blue">
+          <span class="r31-allow-icon">♜</span><div><b>วันนักขัตฤกษ์</b><p>สามารถต่อเวรบ่าย-ดึกได้ในวันนักขัตฤกษ์ และตรวจรอยต่อวันถัดไป</p></div>
+        </div>
+        <div class="r31-allow-item purple">
+          <span class="r31-allow-icon">●</span><div><b>หมายเหตุ</b><p>ระบบจะตรวจสอบเงื่อนไขอื่นประกอบเสมอ เพื่อให้การจัดเวรเหมาะสมและไม่ชนกฎสำคัญ</p></div>
+        </div>
+      </article>
+
+      <article class="r31-card r31-check-card">
+        <div class="r31-small-head"><h3>สรุปผลการตรวจสอบกฎ</h3><p>สถานะการตั้งค่าปัจจุบัน</p></div>
+        <div class="r31-ring-wrap">
+          <div class="r31-ring" id="ruleRingV31" style="--pct:100"><div><b id="rulePercentV24">100%</b></div></div>
+          <strong id="ruleHealthLabelV31">ตั้งค่ากฎครบถ้วน</strong>
+          <span id="ruleHealthSubV31">21 / 21 กฎเปิดใช้งาน</span>
+        </div>
+        <div class="r31-check-mini">
+          <div class="mint"><span>กฎที่เปิดใช้งาน</span><b id="ruleActiveV24">0 ข้อ</b></div>
+          <div class="yellow"><span>กฎที่ต้องตรวจสอบ</span><b id="ruleNeedCheckV31">0 ข้อ</b></div>
+        </div>
+        <button type="button" id="rulesReportBtnV31" class="r31-wide-report">▱ ดูรายงานการตรวจสอบ</button>
+      </article>
+
+      <article class="r31-card r31-overview-card">
+        <div class="r31-small-head"><h3>ภาพรวมการทำงาน</h3><p>ข้อมูลจำนวนกฎ</p></div>
+        <div class="r31-overview-list">
+          <div><span class="ico purple">♢</span><span>กฎทั้งหมด</span><b id="ruleTotalV24">0 ข้อ</b></div>
+          <div><span class="ico green">★</span><span>กฎที่เปิดใช้งาน</span><b id="ruleActiveOverviewV31">0 ข้อ</b></div>
+          <div><span class="ico orange">◷</span><span>กฎที่ปิดใช้งาน</span><b id="ruleDisabledV31">0 ข้อ</b></div>
+        </div>
+        <div class="r31-updated"><span>◴</span><b>อัปเดตล่าสุด</b><em id="ruleUpdatedV31">-</em></div>
+        <button type="button" id="rulesSaveBottomV31" class="r31-save-bottom">⇩ บันทึกกฎทั้งหมด</button>
+      </article>
+    </section>
+
+    <span id="ruleCustomV24" hidden>0 ข้อ</span>
   </div>
 </section>
-
-
 
 <section class="page-view" id="page-holidays" data-view="holidays">
   <div class="v24-page-title"><div><h2>🎁 วันหยุด/นักขัตฤกษ์</h2><p>จัดการวันหยุดประจำปีและวันนักขัตฤกษ์</p></div></div>
@@ -4183,6 +4268,7 @@ function removePerson(){if(!(unitUser.role==='scheduler'||unitUser.role==='admin
 function renderHolidays(){var h='';Object.keys(state.holidays).sort().forEach(function(k){h+='<span class="chip">'+k+' '+esc(state.holidays[k].name||'วันหยุด')+' <button class="smallbtn" data-holiday="'+k+'">×</button></span>'});el('chips').innerHTML=h;el('chips').querySelectorAll('[data-holiday]').forEach(function(b){b.onclick=function(){delete state.holidays[this.dataset.holiday];saveConfig();renderHolidays();renderSheet();applyUnitPermissions();renderHolidayV24()}});renderHolidayV24()}
 function addHoliday(){if(!(unitUser.role==='scheduler'||unitUser.role==='admin'))return;var d=el('holidayDate').value;if(!d)return;state.holidays[d]={name:el('holidayName').value.trim()||'วันหยุด',type:(el('holidayTypeV24')?el('holidayTypeV24').value:'official')};saveConfig();renderHolidays();renderSheet();applyUnitPermissions();renderHolidayV24()}
 function renderRules(){
+  if(window.RulesV31&&typeof window.RulesV31.renderRules==='function'){window.RulesV31.renderRules();return}
   var host=el('ruleList');
   if(!host)return;
 
@@ -5361,6 +5447,7 @@ if(document.readyState==='loading'){
 }
 
 function renderRulesV24(){
+  if(window.RulesV31&&typeof window.RulesV31.refreshSummary==='function'){window.RulesV31.refreshSummary();return}
   if(el('ruleTotalV24'))el('ruleTotalV24').textContent=state.rules.length+' ข้อ';
   if(el('ruleActiveV24'))el('ruleActiveV24').textContent=state.rules.length+' ข้อ';
   if(el('ruleCustomV24'))el('ruleCustomV24').textContent=state.customRules.length+' ข้อ';
@@ -5705,6 +5792,21 @@ async function init(){
   }
 })();
 
+
+/* V31 rules-page bridge: lets the isolated V31 UI call the existing scheduler engine safely. */
+window.__ROSTER_RULES_V31__={
+  getState:function(){return state},
+  defaults:DEFAULT_RULES.map(function(r){return {id:r.id,text:r.text}}),
+  slots:SLOTS.map(function(x){return {id:x.id,label:x.label,kind:x.kind,time:x.time}}),
+  saveConfig:saveConfig,
+  renderSheet:renderSheet,
+  validate:validate,
+  setStatus:setStatus,
+  applyPermissions:applyUnitPermissions,
+  getUser:function(){return {role:unitUser.role,name:unitUser.name,username:unitUser.username}},
+  escape:esc
+};
+
 window.addEventListener('error',function(e){setStatus('JavaScript error: '+e.message,false)});
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 
@@ -5732,6 +5834,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   window.addEventListener('pageshow',wirePersonSaveV304);
 })();
 </script>
+<script src="rules-v31.js?v=31.0"></script>
 <script src="roster-v29.js?v=29.3"></script>
 <script src="login-fix-v26-1.js?v=30.0"></script>
 <script src="home-v26.js?v=30.0"></script>
