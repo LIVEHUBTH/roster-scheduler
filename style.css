@@ -363,3 +363,169 @@
   #page-home .v244-middle,
   #page-home .v244-bottom{grid-template-columns:1fr !important}
 }
+
+/* =========================================================
+   HOME V25.1 — FINAL iPad REFINEMENTS
+   ========================================================= */
+
+/* เพิ่มระยะหายใจระหว่าง Hero กับการ์ดสถิติ */
+#page-home .v244-stat-grid{
+  margin-top:4px !important;
+}
+
+/* ขยายพื้นที่ส่วนล่างให้สมดุลขึ้น */
+#page-home .v244-bottom{
+  align-items:stretch !important;
+  margin-top:2px !important;
+}
+
+#page-home .v244-bottom > .v244-card{
+  min-height:172px !important;
+}
+
+/* ประกาศ / แจ้งเตือน */
+#page-home .v244-news{
+  min-height:118px !important;
+}
+
+#page-home .v244-news button{
+  font-size:11.2px !important;
+  line-height:1.35 !important;
+}
+
+/* ตัวอักษรปฏิทินให้อ่านง่ายขึ้น */
+#page-home .v244-calendar > div{
+  font-size:11.7px !important;
+}
+
+#page-home .v244-calendar > .head{
+  font-size:11px !important;
+}
+
+/* ทางลัด */
+#page-home .v244-shortcut-grid button strong,
+#page-home .v244-shortcut-grid button b{
+  font-size:12.2px !important;
+}
+
+#page-home .v244-shortcut-grid button small{
+  font-size:10px !important;
+  line-height:1.3 !important;
+}
+
+/* ขั้นตอนการทำงาน */
+#page-home .v244-flow button{
+  min-height:92px !important;
+}
+
+#page-home .v244-flow button span:not(.n),
+#page-home .v244-flow button strong,
+#page-home .v244-flow button small{
+  font-size:10.4px !important;
+  line-height:1.25 !important;
+}
+
+/* ป้องกันส่วนล่างซ้อน */
+#page-home .v244-middle,
+#page-home .v244-bottom{
+  position:relative !important;
+  z-index:1 !important;
+}
+
+#page-home .v244-card{
+  overflow:hidden !important;
+}
+
+/* Hero spacing refinement */
+#page-home .v244-hero{
+  margin-bottom:2px !important;
+}
+
+#page-home .v244-hero-copy{
+  padding-right:8px !important;
+}
+
+#page-home .v244-hero h1{
+  max-width:100% !important;
+}
+
+/* ทำให้ปุ่มและการ์ดแตะง่ายขึ้นบน iPad */
+#page-home button,
+#page-home .v244-stat{
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:rgba(255,99,156,.08);
+}
+
+/* iPad landscape — final balance */
+@media (min-width:900px) and (max-width:1366px) and (orientation:landscape){
+  #page-home{
+    padding-bottom:26px !important;
+  }
+
+  #page-home .v244-home-shell{
+    gap:11px !important;
+    padding-bottom:22px !important;
+  }
+
+  #page-home .v244-hero{
+    min-height:220px !important;
+  }
+
+  #page-home .v244-stat-grid{
+    margin-top:5px !important;
+  }
+
+  #page-home .v244-stat{
+    min-height:96px !important;
+  }
+
+  #page-home .v244-middle{
+    grid-template-columns:minmax(300px,.82fr) minmax(0,2fr) !important;
+  }
+
+  #page-home .v244-calendar-card{
+    min-height:252px !important;
+  }
+
+  #page-home .v244-shortcut-grid button{
+    min-height:128px !important;
+  }
+
+  #page-home .v244-bottom > .v244-card{
+    min-height:184px !important;
+  }
+
+  #page-home .v244-flow button .n{
+    width:52px !important;
+    height:52px !important;
+  }
+
+  #page-home .v244-flow button .n::after{
+    font-size:26px !important;
+  }
+}
+
+/* จอ iPad ที่ความสูงค่อนข้างจำกัด */
+@media (min-width:900px) and (max-width:1366px) and (max-height:900px) and (orientation:landscape){
+  #page-home .v244-hero{
+    min-height:205px !important;
+    padding-top:18px !important;
+    padding-bottom:18px !important;
+  }
+
+  #page-home .v244-stat{
+    min-height:90px !important;
+  }
+
+  #page-home .v244-shortcut-grid button{
+    min-height:118px !important;
+  }
+
+  #page-home .v244-bottom > .v244-card{
+    min-height:168px !important;
+  }
+
+  #page-home .v244-calendar-card{
+    min-height:238px !important;
+  }
+}
