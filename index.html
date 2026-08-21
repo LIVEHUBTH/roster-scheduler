@@ -5268,7 +5268,7 @@ function savePersonModalV30(ev){
 
     return false;
   }catch(err){
-    console.error('[V30.4] save employee failed',err);
+    console.error('[V30.5] save employee failed',err);
     var message='บันทึกข้อมูลไม่สำเร็จ: '+(err&&err.message?err.message:String(err));
     setPersonModalFeedbackV304(message,false);
     alert(message);
@@ -5281,6 +5281,11 @@ function savePersonModalV30(ev){
     }
   }
 }
+/* V30.5: expose the employee save handler to inline/global Safari events. */
+window.savePersonModalV30=savePersonModalV30;
+window.openPersonModalV30=openPersonModalV30;
+window.closePersonModalV30=closePersonModalV30;
+
 function parseCsvLineV30(line){var a=[],cur='',q=false;for(var i=0;i<line.length;i++){var c=line[i];if(c==='"'){if(q&&line[i+1]==='"'){cur+='"';i++}else q=!q}else if(c===','&&!q){a.push(cur);cur=''}else cur+=c}a.push(cur);return a}
 function importPeopleCsvV30(file){
   if(!(unitUser.role==='scheduler'||unitUser.role==='admin'))return;var r=new FileReader();r.onload=function(){try{var lines=String(r.result||'').replace(/^\uFEFF/,'').split(/\r?\n/).filter(Boolean);if(lines.length<2)throw new Error('ไม่มีข้อมูล');var headers=parseCsvLineV30(lines[0]).map(function(x){return x.trim().toLowerCase()});var map={code:['รหัสพนักงาน','รหัส','code','employee code'],name:['ชื่อ-นามสกุล','ชื่อ','name'],position:['ตำแหน่ง','position'],department:['แผนก','หน่วยงาน','department'],type:['ประเภท','type'],status:['สถานะ','status'],startDate:['วันเริ่มงาน','startdate','start date'],birthDate:['วันเกิด','birthdate','birth date']};function col(k){for(var i=0;i<headers.length;i++)if(map[k].indexOf(headers[i])>=0)return i;return -1}var ni=col('name');if(ni<0)throw new Error('ไม่พบคอลัมน์ชื่อ');var added=0;for(var li=1;li<lines.length;li++){var c=parseCsvLineV30(lines[li]);var nm=String(c[ni]||'').trim();if(!nm)continue;var p={id:'p_'+Date.now()+'_'+li,name:nm,code:col('code')>=0?String(c[col('code')]||'').trim():nextPersonCodeV30(),position:col('position')>=0?String(c[col('position')]||'').trim():'',department:col('department')>=0?String(c[col('department')]||'').trim():'',active:!(col('status')>=0&&/ปิด|inactive|0/i.test(String(c[col('status')]||''))),startDate:col('startDate')>=0?String(c[col('startDate')]||'').trim():'',birthDate:col('birthDate')>=0?String(c[col('birthDate')]||'').trim():''};state.people.push(p);if(col('type')>=0&&/extra/i.test(String(c[col('type')]||'')))setPersonExtraRuleV30(p.id,true);added++}saveConfig();buildNames();renderCustomRules();renderSheet();renderPeopleV24();alert('นำเข้าข้อมูล '+added+' รายการแล้ว')}catch(e){alert('นำเข้าไม่สำเร็จ: '+e.message)}};r.readAsText(file,'utf-8')
@@ -5707,7 +5712,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 </script>
 
 <script>
-/* V30.4 critical person-save binding: independent from the large bind() routine. */
+/* V30.5 critical person-save binding: exported global handler + independent binding. */
 (function(){
   function wirePersonSaveV304(){
     var btn=document.getElementById('personSaveV30');
@@ -5718,7 +5723,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
     btn.style.touchAction='manipulation';
     btn.onclick=function(ev){
       if(typeof window.savePersonModalV30==='function')return window.savePersonModalV30(ev);
-      alert('ไม่พบฟังก์ชันบันทึกข้อมูล กรุณารีเฟรชหน้าอีกครั้ง');
+      alert('ไม่พบฟังก์ชันบันทึกข้อมูล V30.5 — โปรดปิดแท็บแล้วเปิดใหม่อีกครั้ง');
       return false;
     };
   }
