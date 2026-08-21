@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>โปรแกรมจัดตารางเวร</title>
-<link rel="stylesheet" href="style.css?v=26.2">
+<link rel="stylesheet" href="style.css?v=28.0">
 <style>
 :root{--bg:#f6f7fb;--card:#fff;--text:#202534;--muted:#6b7280;--line:#d9dce6;--accent:#6d5dfc;--danger:#b42318;--ok:#067647;--weekend:#ececf0}
 *{box-sizing:border-box} html{-webkit-text-size-adjust:100%}
@@ -1742,6 +1742,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
   .v244-shortcut-grid span{font-size:24px}
 }
 </style>
+<link rel="stylesheet" href="roster-v28.css?v=28.0">
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 </head>
@@ -1908,54 +1909,135 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 
 
 <section class="page-view" id="page-roster" data-view="roster">
-  <div class="page-head">
-    <div><h2>ตารางเวร</h2><p>เลือกเดือน รัน บันทึก ตรวจสอบ พิมพ์ และบันทึก PDF ได้จากหน้านี้</p></div>
-  </div>
-
-  <div class="roster-control-card no-print">
-    <div class="toolbar">
-      <label class="field">เดือน<select id="month"></select></label>
-      <label class="field">ปี พ.ศ.<input id="year" type="number" min="2500" max="2700"></label>
-      <button class="run" id="runBtn">✨ รันตารางเวร</button>
-      <button class="save" id="saveBtn">💾 บันทึก</button>
-      <button id="loadBtn">📂 เปิดตารางเดิม</button>
-      <button id="validateBtn">🛡️ ตรวจสอบ</button>
-      <button id="printBtn">🖨️ พิมพ์</button>
-      <button id="pdfBtn">📄 บันทึก PDF</button>
-      <button class="danger" id="clearBtn">ล้างตาราง</button>
-    </div>
-    <div class="roster-workflow-strip">
-      <span class="wf-label">สถานะเดือนนี้</span>
-      <span id="rosterWorkflowStatus" class="status-pill status-draft">ร่างตาราง</span>
-      <span id="rosterWorkflowLock" class="locked-tag">ยังไม่ล็อก</span>
-      <span id="rosterWorkflowActor" class="wf-actor"></span>
-      <button id="rosterGoWorkflowBtn">🏥 จัดการอนุมัติ</button>
-    </div>
-    <div id="rosterActionFeedback" class="action-feedback"></div>
-    <div id="rosterConflictPanel" class="conflict-detail-panel">
-      <div class="conflict-detail-head"><b>รายละเอียดข้อขัดแย้ง</b><span id="rosterConflictCount"></span></div>
-      <div id="rosterConflictList" class="conflict-list"></div>
-    </div>
-    <div id="fixChoiceWrap" class="fix-choice-wrap">
-      <div class="fix-choice-title">เลือกวิธีแก้ไขข้อขัดแย้ง</div>
-      <div class="fix-choice-actions">
-        <button id="manualFixBtn" class="manual-fix-btn">✏️ แก้ไขเอง</button>
-        <button id="autoFixConflictsBtn" class="auto-fix-btn">🪄 แก้ไขอัตโนมัติ</button>
+  <div class="roster-v28-shell">
+    <section class="roster-v28-hero">
+      <div class="roster-v28-hero-copy">
+        <div class="roster-v28-eyebrow">🗓 หน้าจัดตารางเวร</div>
+        <h2>คงตารางเวรเดิมไว้เหมือนเดิม<br>และปรับเฉพาะหน้าตารอบนอกให้อ่านง่ายขึ้น</h2>
+        <p>หน้านี้ยังใช้ตารางเดิม ปุ่มเดิม และฟังก์ชันเดิมทั้งหมด แต่จัดโครงใหม่ให้ดูเป็นระเบียบขึ้น ใช้งานง่ายขึ้น และเหมาะกับ iPad / มือถือ / Desktop มากขึ้น</p>
+        <div class="roster-v28-chip-row no-print">
+          <span class="roster-v28-chip pink">เลือกเดือนและปี</span>
+          <span class="roster-v28-chip mint">รัน / บันทึก / เปิดเดิม</span>
+          <span class="roster-v28-chip yellow">ตรวจสอบ / พิมพ์ / PDF</span>
+          <span class="roster-v28-chip purple">ติดตามสถานะอนุมัติ</span>
+        </div>
       </div>
-      <div id="manualModeNote" class="manual-mode-note">
-        โหมดแก้ไขเอง: ให้แก้ชื่อในช่องเวรที่ระบุไว้ใน “รายละเอียดข้อขัดแย้ง” ด้านบน
-        เมื่อแก้เสร็จให้กด “ตรวจสอบ” อีกครั้ง ระบบจะตรวจใหม่ทันที
+      <div class="roster-v28-hero-side no-print">
+        <div class="roster-v28-info-card pink">
+          <b>1. เตรียมข้อมูล</b>
+          <small>เลือกเดือน ปี และตรวจสอบข้อมูลก่อนเริ่ม</small>
+        </div>
+        <div class="roster-v28-info-card mint">
+          <b>2. จัดตาราง</b>
+          <small>รันตาราง จากนั้นแก้ไขเพิ่มเติมได้ในตารางเดิม</small>
+        </div>
+        <div class="roster-v28-info-card yellow">
+          <b>3. ตรวจและส่งต่อ</b>
+          <small>เช็กข้อขัดแย้ง พิมพ์ หรือบันทึก PDF ได้ทันที</small>
+        </div>
       </div>
+    </section>
+
+    <div class="roster-v28-grid">
+      <div class="roster-v28-main">
+        <div class="roster-control-card no-print">
+          <div class="roster-v28-control-head">
+            <div>
+              <h3>เครื่องมือจัดตารางเวร</h3>
+              <p>จัดกลุ่มปุ่มสำคัญไว้ในจุดเดียว ใช้งานต่อเนื่องได้ง่ายขึ้น</p>
+            </div>
+            <div class="roster-v28-control-badge">หน้าตารางเวรหลัก</div>
+          </div>
+
+          <div class="toolbar roster-v28-toolbar">
+            <label class="field">เดือน<select id="month"></select></label>
+            <label class="field">ปี พ.ศ.<input id="year" type="number" min="2500" max="2700"></label>
+            <button class="run" id="runBtn">✨ รันตารางเวร</button>
+            <button class="save" id="saveBtn">💾 บันทึก</button>
+            <button id="loadBtn">📂 เปิดตารางเดิม</button>
+            <button id="validateBtn">🛡️ ตรวจสอบ</button>
+            <button id="printBtn">🖨️ พิมพ์</button>
+            <button id="pdfBtn">📄 บันทึก PDF</button>
+            <button class="danger" id="clearBtn">ล้างตาราง</button>
+          </div>
+
+          <div class="roster-workflow-strip">
+            <span class="wf-label">สถานะเดือนนี้</span>
+            <span id="rosterWorkflowStatus" class="status-pill status-draft">ร่างตาราง</span>
+            <span id="rosterWorkflowLock" class="locked-tag">ยังไม่ล็อก</span>
+            <span id="rosterWorkflowActor" class="wf-actor"></span>
+            <button id="rosterGoWorkflowBtn">🏥 จัดการอนุมัติ</button>
+          </div>
+
+          <div id="rosterActionFeedback" class="action-feedback"></div>
+          <div id="rosterConflictPanel" class="conflict-detail-panel">
+            <div class="conflict-detail-head"><b>รายละเอียดข้อขัดแย้ง</b><span id="rosterConflictCount"></span></div>
+            <div id="rosterConflictList" class="conflict-list"></div>
+          </div>
+          <div id="fixChoiceWrap" class="fix-choice-wrap">
+            <div class="fix-choice-title">เลือกวิธีแก้ไขข้อขัดแย้ง</div>
+            <div class="fix-choice-actions">
+              <button id="manualFixBtn" class="manual-fix-btn">✏️ แก้ไขเอง</button>
+              <button id="autoFixConflictsBtn" class="auto-fix-btn">🪄 แก้ไขอัตโนมัติ</button>
+            </div>
+            <div id="manualModeNote" class="manual-mode-note">
+              โหมดแก้ไขเอง: ให้แก้ชื่อในช่องเวรที่ระบุไว้ใน “รายละเอียดข้อขัดแย้ง” ด้านบน
+              เมื่อแก้เสร็จให้กด “ตรวจสอบ” อีกครั้ง ระบบจะตรวจใหม่ทันที
+            </div>
+          </div>
+          <div id="autoFixSummary" class="auto-fix-summary"></div>
+        </div>
+
+        <div class="roster-v28-table-card">
+          <div class="roster-v28-table-head no-print">
+            <div>
+              <h3>ตารางเวรประจำเดือน</h3>
+              <p>คงรูปแบบตารางเดิมทุกคอลัมน์ไว้เหมือนเดิม เน้นเปลี่ยนเฉพาะกรอบและการจัดวางให้ดูสบายตาขึ้น</p>
+            </div>
+            <div class="roster-v28-table-legend">
+              <span class="sat">เสาร์</span>
+              <span class="sun">อาทิตย์</span>
+              <span class="hol">นักขัตฤกษ์</span>
+            </div>
+          </div>
+          <div class="sheet-wrap"><table id="sheet" class="sheet"></table></div>
+        </div>
+
+        <div class="roster-note-card no-print">
+          <div class="section-title" style="font-size:13px">หมายเหตุท้ายตาราง PDF</div>
+          <div class="muted" style="font-size:10px;margin:3px 0 7px">ข้อความนี้จะอยู่ใต้ตารางเมื่อบันทึก PDF</div>
+          <textarea id="pdfNote" rows="3" placeholder="หมายเหตุ: ..."></textarea>
+        </div>
+      </div>
+
+      <aside class="roster-v28-side no-print">
+        <div class="roster-v28-side-card">
+          <h3>ลำดับการใช้งาน</h3>
+          <ol>
+            <li>เลือกเดือนและปี</li>
+            <li>กด “รันตารางเวร” เพื่อสร้างตาราง</li>
+            <li>แก้ไขรายชื่อในตารางได้ตามเดิม</li>
+            <li>กด “ตรวจสอบ” เพื่อเช็กข้อขัดแย้ง</li>
+            <li>บันทึก พิมพ์ หรือบันทึก PDF ได้ทันที</li>
+          </ol>
+        </div>
+
+        <div class="roster-v28-side-card">
+          <h3>สิ่งที่ยังคงเดิม</h3>
+          <ul>
+            <li>รูปแบบตารางเวรเดิม</li>
+            <li>คอลัมน์เวรและการเลือกชื่อเดิม</li>
+            <li>ปุ่มหลักและฟังก์ชันเดิม</li>
+            <li>การตรวจสอบข้อขัดแย้งและสรุปผลเดิม</li>
+          </ul>
+        </div>
+
+        <div class="roster-v28-side-card soft">
+          <h3>หมายเหตุการใช้งาน</h3>
+          <p>ถ้าตารางยาว ให้เลื่อนในกรอบตารางด้านล่างได้ตามเดิม และหัวตารางยังคงติดด้านบนเพื่อช่วยให้ดูข้อมูลง่ายขึ้น</p>
+        </div>
+      </aside>
     </div>
-    <div id="autoFixSummary" class="auto-fix-summary"></div>
-  </div>
-
-  <div class="sheet-wrap"><table id="sheet" class="sheet"></table></div>
-
-  <div class="roster-note-card no-print">
-    <div class="section-title" style="font-size:13px">หมายเหตุท้ายตาราง PDF</div>
-    <div class="muted" style="font-size:10px;margin:3px 0 7px">ข้อความนี้จะอยู่ใต้ตารางเมื่อบันทึก PDF</div>
-    <textarea id="pdfNote" rows="3" placeholder="หมายเหตุ: ..."></textarea>
   </div>
 </section>
 
@@ -5195,7 +5277,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 
 })();
 </script>
-<script src="login-fix-v26-1.js?v=26.2"></script>
-<script src="home-v26.js?v=26.2"></script>
+<script src="login-fix-v26-1.js?v=28.0"></script>
+<script src="home-v26.js?v=28.0"></script>
 </body>
 </html>
