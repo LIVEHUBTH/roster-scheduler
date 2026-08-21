@@ -1,4 +1,4 @@
-/* ROSTER SCHEDULER — ROSTER PAGE V29.0 */
+/* ROSTER SCHEDULER — ROSTER PAGE V29.1 */
 (function(){
   'use strict';
 
@@ -23,54 +23,74 @@
     refreshTimer=setTimeout(refresh,delay||60);
   }
 
+  function displayNameFromOption(text){
+    return clean(text).replace(/^\\d+\\.\\s*/, '');
+  }
+
   function readPeople(){
-    var names=[],seen={};
+    var people=[],seen={};
+
+    function addPerson(id,name){
+      id=clean(id);name=clean(name);
+      if(!id||seen[id])return;
+      seen[id]=1;
+      people.push({id:id,name:name||id});
+    }
+
+    /* Primary source: the real personnel editor. This keeps the exact
+       names that the scheduler uses while preserving p1/p2/... as IDs. */
+    document.querySelectorAll('#names .name-row input[data-pid]').forEach(function(input){
+      addPerson(input.dataset.pid,input.value);
+    });
+
+    /* Fallback: read ID + visible name from roster select options. */
     var first=document.querySelector('#sheet tbody select');
     if(first){
       Array.prototype.forEach.call(first.options,function(o){
-        var n=clean(o.value||o.textContent);
-        if(n&&!seen[n]){seen[n]=1;names.push(n)}
+        var id=clean(o.value);
+        if(id)addPerson(id,displayNameFromOption(o.textContent));
       });
     }
-    if(!names.length){
-      document.querySelectorAll('#names .name-row input').forEach(function(input){
-        var n=clean(input.value);if(n&&!seen[n]){seen[n]=1;names.push(n)}
-      });
-    }
+
+    /* Last fallback for any ID that appears in assignments but is not
+       currently in the personnel list. */
     document.querySelectorAll('#sheet tbody select').forEach(function(sel){
-      var n=clean(sel.value);if(n&&!seen[n]){seen[n]=1;names.push(n)}
+      var id=clean(sel.value);
+      if(!id||seen[id])return;
+      var opt=sel.options[sel.selectedIndex];
+      addPerson(id,opt?displayNameFromOption(opt.textContent):id);
     });
-    return names;
+    return people;
   }
 
   function buildSummary(){
     var body=q('r29SummaryBody'),foot=q('r29SummaryFoot');
     if(!body||!foot)return;
-    var names=readPeople();
+    var people=readPeople();
     var counts={};
-    names.forEach(function(n){counts[n]={v:0,ot:0,morning:0,night:0,long:0,evening:0,extra:0,total:0}});
+    people.forEach(function(p){counts[p.id]={v:0,ot:0,morning:0,night:0,long:0,evening:0,extra:0,total:0}});
 
     document.querySelectorAll('#sheet tbody select').forEach(function(sel){
-      var n=clean(sel.value);if(!n)return;
-      if(!counts[n])counts[n]={v:0,ot:0,morning:0,night:0,long:0,evening:0,extra:0,total:0};
+      var id=clean(sel.value);if(!id)return;
+      if(!counts[id])counts[id]={v:0,ot:0,morning:0,night:0,long:0,evening:0,extra:0,total:0};
       var g=GROUP_MAP[sel.dataset.s]||'';
-      if(g)counts[n][g]++;
-      counts[n].total++;
+      if(g)counts[id][g]++;
+      counts[id].total++;
     });
 
     var totals={v:0,ot:0,morning:0,night:0,long:0,evening:0,extra:0,total:0};
     var rows=[];
-    Object.keys(counts).forEach(function(n){
-      var c=counts[n];
+    people.forEach(function(person){
+      var c=counts[person.id]||{v:0,ot:0,morning:0,night:0,long:0,evening:0,extra:0,total:0};
       GROUP_KEYS.forEach(function(g){totals[g]+=c[g]});
       totals.total+=c.total;
-      rows.push('<tr><td>'+escapeHtml(n)+'</td><td>'+c.v+'</td><td>'+c.ot+'</td><td>'+c.morning+'</td><td>'+c.night+'</td><td>'+c.long+'</td><td>'+c.evening+'</td><td>'+c.extra+'</td><td><b>'+c.total+'</b></td><td>'+((c.total/7)||0).toFixed(1)+'</td></tr>');
+      rows.push('<tr><td>'+escapeHtml(person.name)+'</td><td>'+c.v+'</td><td>'+c.ot+'</td><td>'+c.morning+'</td><td>'+c.night+'</td><td>'+c.long+'</td><td>'+c.evening+'</td><td>'+c.extra+'</td><td><b>'+c.total+'</b></td><td>'+((c.total/7)||0).toFixed(1)+'</td></tr>');
     });
     body.innerHTML=rows.join('')||'<tr><td colspan="10" class="r29-empty">ยังไม่มีข้อมูลเวรในเดือนนี้</td></tr>';
 
-    var peopleCount=Math.max(1,Object.keys(counts).length);
+    var peopleCount=Math.max(1,people.length);
     foot.innerHTML='<tr><th>เฉลี่ยรวม</th><th>'+(totals.v/peopleCount).toFixed(1)+'</th><th>'+(totals.ot/peopleCount).toFixed(1)+'</th><th>'+(totals.morning/peopleCount).toFixed(1)+'</th><th>'+(totals.night/peopleCount).toFixed(1)+'</th><th>'+(totals.long/peopleCount).toFixed(1)+'</th><th>'+(totals.evening/peopleCount).toFixed(1)+'</th><th>'+(totals.extra/peopleCount).toFixed(1)+'</th><th>'+(totals.total/peopleCount).toFixed(1)+'</th><th>'+(totals.total/peopleCount/7).toFixed(1)+'</th></tr>';
-    setText('r29SummaryBadge',Object.keys(counts).length+' คน');
+    setText('r29SummaryBadge',people.length+' คน');
   }
 
   function refresh(){

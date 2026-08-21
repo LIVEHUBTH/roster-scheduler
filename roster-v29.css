@@ -1,5 +1,5 @@
 /* =========================================================
-   ROSTER SCHEDULER — ROSTER PAGE V29.0
+   ROSTER SCHEDULER — ROSTER PAGE V29.1
    Reference layout: toolbar → 4 stats → original roster table →
    personnel summary / duty types / notes
    ========================================================= */
@@ -55,13 +55,13 @@
 }
 #page-roster .r29-action:active{transform:scale(.985)}
 #page-roster .r29-action span{font-size:14px}
-#page-roster .r29-run{background:linear-gradient(135deg,#ff6ca0,#f34d8d);color:#fff}
-#page-roster .r29-save{background:linear-gradient(135deg,#58d09b,#26b878);color:#fff}
-#page-roster .r29-open{background:linear-gradient(135deg,#8e75df,#6856c9);color:#fff}
-#page-roster .r29-check{background:linear-gradient(135deg,#ffdf7b,#f6c653);color:#6e5814}
-#page-roster .r29-print{background:linear-gradient(135deg,#ffd978,#ffc653);color:#665111}
-#page-roster .r29-pdf{background:linear-gradient(135deg,#d9efff,#c7e7fa);color:#246a91}
-#page-roster .r29-clear{background:#fff1f2;color:#c45669;border:1px solid #f4d5db}
+#page-roster .r29-run{background:linear-gradient(135deg,#ff6aa1,#ee3f83);color:#fff}
+#page-roster .r29-save{background:linear-gradient(135deg,#57d6a3,#20b878);color:#fff}
+#page-roster .r29-open{background:linear-gradient(135deg,#8f78e8,#6652cc);color:#fff}
+#page-roster .r29-check{background:linear-gradient(135deg,#ffbd67,#f39b37);color:#70420b}
+#page-roster .r29-print{background:linear-gradient(135deg,#ffe27a,#f5c842);color:#66520c}
+#page-roster .r29-pdf{background:linear-gradient(135deg,#78c9f2,#4aaee3);color:#fff}
+#page-roster .r29-clear{background:linear-gradient(135deg,#ff8b96,#ea6472);color:#fff;border:1px solid #e95c6a}
 
 /* stats */
 #page-roster .r29-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
@@ -260,3 +260,7 @@ body.r29-fullscreen-open{overflow:hidden}
   #page-roster .r29-table-card{border:0;box-shadow:none;padding:0}
   #page-roster .sheet-wrap{max-height:none;border:0!important;border-radius:0!important;overflow:visible}
 }
+
+/* V29.1 — each command uses its own task color */
+#page-roster .r29-action{border:1px solid rgba(255,255,255,.5);box-shadow:0 5px 12px rgba(72,72,96,.07)}
+#page-roster .r29-action:hover{filter:saturate(1.06) brightness(1.01)}
