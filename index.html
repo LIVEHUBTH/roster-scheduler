@@ -1743,7 +1743,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 </style>
 <link rel="stylesheet" href="style.css?v=30.0">
 <link rel="stylesheet" href="roster-v29.css?v=29.3">
-<link rel="stylesheet" href="people-v30.css?v=30.3">
+<link rel="stylesheet" href="people-v30.css?v=30.4">
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 </head>
@@ -2223,7 +2223,8 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
         <label>ประเภท<select id="personTypeV30"><option value="general">ปกติ</option><option value="extra">EXTRA1–3</option></select></label>
         <label>สถานะ<select id="personStatusV30"><option value="active">ใช้งาน</option><option value="inactive">ปิดใช้งาน</option></select></label>
       </div>
-      <div class="p30-modal-foot"><button type="button" data-person-close class="cancel">ยกเลิก</button><button type="button" id="personSaveV30" class="save">บันทึกข้อมูล</button></div>
+      <div id="personModalFeedbackV30" aria-live="polite" style="display:none;margin:0 0 10px;padding:10px 12px;border-radius:12px;font-size:13px;font-weight:700"></div>
+      <div class="p30-modal-foot"><button type="button" data-person-close class="cancel">ยกเลิก</button><button type="button" id="personSaveV30" class="save" onclick="return savePersonModalV30(event)">บันทึกข้อมูล</button></div>
     </div>
   </div>
 </section>
@@ -5203,27 +5204,38 @@ function persistPeopleConfigV303(){
   localStorage.setItem('roster_config_v8',JSON.stringify(payload));
   try{scheduleCloudConfigSave(payload)}catch(e){console.warn('[V30.3] cloud config save skipped',e)}
 }
+function setPersonModalFeedbackV304(msg,ok){
+  var box=el('personModalFeedbackV30');if(!box)return;
+  box.style.display=msg?'block':'none';
+  box.style.background=ok?'#eefbf5':'#fff1f3';
+  box.style.border='1px solid '+(ok?'#bfead6':'#f3c1cb');
+  box.style.color=ok?'#2f8b68':'#bf5570';
+  box.textContent=msg||'';
+}
 function savePersonModalV30(ev){
+  setPersonModalFeedbackV304('',true);
   if(ev){try{ev.preventDefault()}catch(e){} try{ev.stopPropagation()}catch(e){}}
   var btn=el('personSaveV30');
   if(btn&&btn.dataset.saving==='1')return false;
   if(!canManagePeopleV302()){
+    setPersonModalFeedbackV304('บัญชีนี้ไม่มีสิทธิ์แก้ไขข้อมูลพนักงาน',false);
     alert('บัญชีนี้ไม่มีสิทธิ์แก้ไขข้อมูลพนักงาน');
     return false;
   }
 
   try{
     var name=String(el('personNameV30')&&el('personNameV30').value||'').trim();
-    if(!name){alert('กรุณากรอกชื่อ-นามสกุล');if(el('personNameV30'))el('personNameV30').focus();return false}
+    if(!name){setPersonModalFeedbackV304('กรุณากรอกชื่อ-นามสกุล',false);alert('กรุณากรอกชื่อ-นามสกุล');if(el('personNameV30'))el('personNameV30').focus();return false}
 
     var code=String(el('personCodeV30')&&el('personCodeV30').value||'').trim()||nextPersonCodeV30();
     var id=String(el('personEditIdV30')&&el('personEditIdV30').value||'');
     var duplicate=state.people.find(function(x){
       return String(x.code||'').toLowerCase()===code.toLowerCase()&&String(x.id)!==id;
     });
-    if(duplicate){alert('รหัสพนักงาน '+code+' ถูกใช้งานแล้ว');if(el('personCodeV30'))el('personCodeV30').focus();return false}
+    if(duplicate){setPersonModalFeedbackV304('รหัสพนักงาน '+code+' ถูกใช้งานแล้ว',false);alert('รหัสพนักงาน '+code+' ถูกใช้งานแล้ว');if(el('personCodeV30'))el('personCodeV30').focus();return false}
 
     if(btn){btn.dataset.saving='1';btn.disabled=true;btn.dataset.oldText=btn.textContent;btn.textContent='กำลังบันทึก...'}
+    setPersonModalFeedbackV304('กำลังบันทึกข้อมูล...',true);
 
     var p=id?state.people.find(function(x){return String(x.id)===id}):null;
     if(!p){p={id:'p_'+Date.now(),name:name};state.people.push(p)}
@@ -5241,8 +5253,10 @@ function savePersonModalV30(ev){
     /* Persist before any UI rebuild. */
     persistPeopleConfigV303();
 
-    /* Close first so Safari/iPad gives immediate feedback. */
-    closePersonModalV30();
+    setPersonModalFeedbackV304('บันทึกข้อมูลเรียบร้อยแล้ว',true);
+
+    /* Give iPad/Safari one paint frame so the user sees success, then close. */
+    setTimeout(function(){closePersonModalV30()},180);
 
     /* Rebuild each view independently; one optional view must not cancel the save. */
     try{buildNames()}catch(e){console.warn('[V30.3] buildNames',e)}
@@ -5254,8 +5268,10 @@ function savePersonModalV30(ev){
 
     return false;
   }catch(err){
-    console.error('[V30.3] save employee failed',err);
-    alert('บันทึกข้อมูลไม่สำเร็จ: '+(err&&err.message?err.message:String(err)));
+    console.error('[V30.4] save employee failed',err);
+    var message='บันทึกข้อมูลไม่สำเร็จ: '+(err&&err.message?err.message:String(err));
+    setPersonModalFeedbackV304(message,false);
+    alert(message);
     return false;
   }finally{
     if(btn){
@@ -5690,6 +5706,27 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 })();
 </script>
 
+<script>
+/* V30.4 critical person-save binding: independent from the large bind() routine. */
+(function(){
+  function wirePersonSaveV304(){
+    var btn=document.getElementById('personSaveV30');
+    if(!btn)return;
+    btn.disabled=false;
+    btn.removeAttribute('disabled');
+    btn.style.pointerEvents='auto';
+    btn.style.touchAction='manipulation';
+    btn.onclick=function(ev){
+      if(typeof window.savePersonModalV30==='function')return window.savePersonModalV30(ev);
+      alert('ไม่พบฟังก์ชันบันทึกข้อมูล กรุณารีเฟรชหน้าอีกครั้ง');
+      return false;
+    };
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',wirePersonSaveV304,{once:true});
+  else wirePersonSaveV304();
+  window.addEventListener('pageshow',wirePersonSaveV304);
+})();
+</script>
 <script src="roster-v29.js?v=29.3"></script>
 <script src="login-fix-v26-1.js?v=30.0"></script>
 <script src="home-v26.js?v=30.0"></script>
