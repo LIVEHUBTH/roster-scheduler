@@ -102,7 +102,7 @@
 
 
 /* =========================================================
-   PEOPLE V30.1 — FULL WIDTH / SEARCH / BUNNY INFO
+   PEOPLE V30.2 — FULL WIDTH / SEARCH / BUNNY INFO / EDIT FIX
    ========================================================= */
 #page-people{
   width:100%!important;
@@ -207,3 +207,54 @@
   #page-people .p30-head-actions{grid-template-columns:1fr!important}
   #page-people .p30-head-actions .p30-action{grid-column:auto!important;width:100%!important}
 }
+
+
+/* =========================================================
+   V30.2 — EMPLOYEE DETAIL / EDIT INTERACTION FIX
+   ========================================================= */
+#page-people .p30-modal{isolation:isolate}
+#page-people .p30-modal-backdrop{z-index:1!important;pointer-events:auto!important}
+#page-people .p30-modal-card{z-index:2!important;pointer-events:auto!important}
+#page-people .p30-modal-card *,
+#page-people .p30-modal-body,
+#page-people .p30-modal-body label,
+#page-people .p30-modal-body input,
+#page-people .p30-modal-body select,
+#page-people .p30-modal-foot button{pointer-events:auto!important}
+#page-people .p30-modal.is-edit .p30-modal-body input:not([type="hidden"]),
+#page-people .p30-modal.is-edit .p30-modal-body select{
+  opacity:1!important;
+  cursor:text!important;
+  background:#fff!important;
+  color:#303849!important;
+  -webkit-user-select:text!important;
+  user-select:text!important;
+  touch-action:manipulation!important;
+}
+#page-people .p30-modal.is-edit .p30-modal-body select{cursor:pointer!important}
+#page-people .p30-modal.is-edit .p30-modal-body input:focus,
+#page-people .p30-modal.is-edit .p30-modal-body select:focus{
+  outline:none!important;
+  border-color:#e8b8cf!important;
+  box-shadow:0 0 0 3px rgba(238,160,194,.14)!important;
+}
+#page-people .p30-modal.is-view .p30-modal-body input,
+#page-people .p30-modal.is-view .p30-modal-body select{
+  background:#f7f7fa!important;
+  color:#555e70!important;
+  cursor:default!important;
+}
+#page-people .p30-modal-foot .save:not(:disabled){
+  background:linear-gradient(135deg,#f7dff0,#e8dcff)!important;
+  color:#7658b6!important;
+  border:1px solid #dcccf1!important;
+  cursor:pointer!important;
+}
+#page-people .p30-modal-foot .save:disabled{
+  background:#f1f2f5!important;
+  color:#a2a8b3!important;
+  border:1px dashed #d6d9e0!important;
+  cursor:not-allowed!important;
+}
+#page-people .p30-row-actions button:not(:disabled){cursor:pointer!important;pointer-events:auto!important}
+#page-people .p30-row-actions button:active{transform:scale(.94)}

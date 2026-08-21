@@ -1743,7 +1743,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 </style>
 <link rel="stylesheet" href="style.css?v=30.0">
 <link rel="stylesheet" href="roster-v29.css?v=29.3">
-<link rel="stylesheet" href="people-v30.css?v=30.1">
+<link rel="stylesheet" href="people-v30.css?v=30.2">
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 </head>
@@ -4177,7 +4177,7 @@ function validate(show){
 }
 function buildMonths(){el('month').innerHTML=MONTHS.map(function(m,i){return '<option value="'+i+'">'+m+'</option>'}).join('')}
 function buildNames(){el('names').innerHTML=state.people.map(function(p,i){return '<div class="name-row"><b>'+(i+1)+'.</b><input data-pid="'+p.id+'" value="'+esc(p.name)+'"><span class="lastbadge" style="display:'+(i===state.people.length-1?'inline-block':'none')+'">EXTRA1–3 เท่านั้น</span></div>'}).join('');el('personCount').textContent='จำนวน '+state.people.length+' รายชื่อ';el('names').querySelectorAll('input').forEach(function(input){input.onchange=function(){var pid=this.dataset.pid;state.people.forEach(function(p){if(p.id===pid)p.name=input.value.trim()||p.name});saveConfig();buildCustomOptions();renderSheet()}});buildCustomOptions();applyUnitPermissions();renderPeopleV24()}
-function addPerson(){if(!(unitUser.role==='scheduler'||unitUser.role==='admin'))return;openPersonModalV30(null,'edit')}
+function addPerson(){if(!canManagePeopleV302())return;openPersonModalV30(null,'edit')}
 function removePerson(){if(!(unitUser.role==='scheduler'||unitUser.role==='admin'))return;if(state.people.length<=1)return;var removed=state.people.pop();state.customRules=state.customRules.filter(function(r){return r.personId!==removed.id});saveConfig();buildNames();renderCustomRules();renderSheet()}
 function renderHolidays(){var h='';Object.keys(state.holidays).sort().forEach(function(k){h+='<span class="chip">'+k+' '+esc(state.holidays[k].name||'วันหยุด')+' <button class="smallbtn" data-holiday="'+k+'">×</button></span>'});el('chips').innerHTML=h;el('chips').querySelectorAll('[data-holiday]').forEach(function(b){b.onclick=function(){delete state.holidays[this.dataset.holiday];saveConfig();renderHolidays();renderSheet();applyUnitPermissions();renderHolidayV24()}});renderHolidayV24()}
 function addHoliday(){if(!(unitUser.role==='scheduler'||unitUser.role==='admin'))return;var d=el('holidayDate').value;if(!d)return;state.holidays[d]={name:el('holidayName').value.trim()||'วันหยุด',type:(el('holidayTypeV24')?el('holidayTypeV24').value:'official')};saveConfig();renderHolidays();renderSheet();applyUnitPermissions();renderHolidayV24()}
@@ -5118,6 +5118,7 @@ function renderPeopleV24(){
     rows.push('<tr><td>'+(start+idx+1)+'</td><td class="code">'+esc(p.code||'')+'</td><td><div class="p30-person">'+personAvatarV30(p,realIndex)+'<b>'+esc(p.name)+'</b></div></td><td>'+esc(p.position||'ไม่ระบุ')+'</td><td>'+esc(p.department||'ไม่ระบุ')+'</td><td><span class="p30-badge '+(extra?'extra':'general')+'">'+(extra?'EXTRA1–3':'ปกติ')+'</span></td><td><span class="p30-badge '+(p.active===false?'inactive':'active')+'">● '+(p.active===false?'ปิดใช้งาน':'ใช้งาน')+'</span></td><td>'+Number(duty||0).toFixed(1)+' เวร</td><td><div class="p30-row-actions"><button title="ดู" data-person-view="'+p.id+'">◉</button><button title="แก้ไข" data-person-edit="'+p.id+'">✎</button><button title="ลบ" class="danger" data-delete-person="'+p.id+'" '+((unitUser.role==='scheduler'||unitUser.role==='admin')?'':'disabled')+'>♲</button></div></td></tr>');
   });
   body.innerHTML=rows.join('')||'<tr><td colspan="9" class="p30-empty">ไม่พบข้อมูลพนักงาน</td></tr>';
+  body.setAttribute('data-v302-actions','1');
   body.querySelectorAll('[data-person-view]').forEach(function(btn){btn.onclick=function(){openPersonModalV30(this.dataset.personView,'view')}});
   body.querySelectorAll('[data-person-edit]').forEach(function(btn){btn.onclick=function(){openPersonModalV30(this.dataset.personEdit,'edit')}});
   body.querySelectorAll('[data-delete-person]').forEach(function(btn){btn.onclick=function(){if(!(unitUser.role==='scheduler'||unitUser.role==='admin'))return;var pid=this.dataset.deletePerson,p=state.people.find(function(x){return x.id===pid});if(!p||!confirm('ลบ '+p.name+' หรือไม่?'))return;state.people=state.people.filter(function(x){return x.id!==pid});state.customRules=state.customRules.filter(function(r){return r.personId!==pid});saveConfig();buildNames();renderCustomRules();renderSheet();renderPeopleV24()}});
@@ -5133,27 +5134,119 @@ function renderPeopleV24(){
   if(el('peopleDutyRateV30'))el('peopleDutyRateV30').textContent=activeIds.length?((hasDuty/activeIds.length)*100).toFixed(1)+'%':'-';
 }
 function nextPersonCodeV30(){var max=0;state.people.forEach(function(p){var m=String(p.code||'').match(/(\d+)/);if(m)max=Math.max(max,parseInt(m[1],10)||0)});return 'EMP'+String(max+1).padStart(3,'0')}
-function openPersonModalV30(pid,mode){
-  var m=el('personModalV30');if(!m)return;var p=pid?state.people.find(function(x){return x.id===pid}):null,isView=mode==='view';
-  el('personEditIdV30').value=p?p.id:'';el('personCodeV30').value=p?(p.code||''):nextPersonCodeV30();el('personNameV30').value=p?(p.name||''):'';el('personPositionV30').value=p?(p.position||''):'';el('personDeptV30').value=p?(p.department||''):'';el('personStartV30').value=p?(p.startDate||''):'';el('personBirthV30').value=p?(p.birthDate||''):'';el('personTypeV30').value=p&&isExtraOnlyPerson(p.id)?'extra':'general';el('personStatusV30').value=p&&p.active===false?'inactive':'active';
-  el('personModalTitleV30').textContent=isView?'รายละเอียดพนักงาน':(p?'แก้ไขข้อมูลพนักงาน':'เพิ่มพนักงาน');el('personModalSubV30').textContent=isView?'ข้อมูลบุคลากรในระบบ':'กรอกข้อมูลให้ครบแล้วกดบันทึก';
-  m.classList.add('show');m.setAttribute('aria-hidden','false');m.querySelectorAll('input,select').forEach(function(x){if(x.type!=='hidden')x.disabled=isView});el('personSaveV30').style.display=isView?'none':'';
+
+/* ===== V30.2 PEOPLE EDIT / VIEW RELIABILITY FIX ===== */
+function canManagePeopleV302(){
+  var role=String(unitUser&&unitUser.role||'').toLowerCase();
+  var username=String(unitUser&&unitUser.username||'').toLowerCase();
+  return role==='admin'||role==='scheduler'||username==='admin';
 }
-function closePersonModalV30(){var m=el('personModalV30');if(m){m.classList.remove('show');m.setAttribute('aria-hidden','true')}}
+function normalizePersonDateV302(v){
+  if(!v)return '';
+  var s=String(v).trim();
+  if(/^\d{4}-\d{2}-\d{2}$/.test(s))return s;
+  var d=new Date(s);
+  if(isNaN(d.getTime()))return '';
+  var y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0');
+  return y+'-'+m+'-'+day;
+}
+function setPersonModalModeV302(isView){
+  var m=el('personModalV30');if(!m)return;
+  m.dataset.mode=isView?'view':'edit';
+  m.classList.toggle('is-view',!!isView);
+  m.classList.toggle('is-edit',!isView);
+  m.querySelectorAll('.p30-modal-body input,.p30-modal-body select').forEach(function(x){
+    if(x.type==='hidden')return;
+    x.disabled=!!isView;
+    x.readOnly=!!isView;
+    if(isView){x.setAttribute('aria-readonly','true')}else{x.removeAttribute('disabled');x.removeAttribute('readonly');x.removeAttribute('aria-readonly')}
+  });
+  var save=el('personSaveV30');
+  if(save){save.style.display=isView?'none':'';save.disabled=isView||!canManagePeopleV302()}
+}
+function openPersonModalV30(pid,mode){
+  var m=el('personModalV30');if(!m)return;
+  var p=pid?state.people.find(function(x){return String(x.id)===String(pid)}):null;
+  var isView=mode==='view';
+  if(!isView&&!canManagePeopleV302()){
+    alert('บัญชีนี้ไม่มีสิทธิ์แก้ไขข้อมูลพนักงาน');
+    return;
+  }
+  el('personEditIdV30').value=p?p.id:'';
+  el('personCodeV30').value=p?(p.code||''):nextPersonCodeV30();
+  el('personNameV30').value=p?(p.name||''):'';
+  el('personPositionV30').value=p?(p.position||''):'';
+  el('personDeptV30').value=p?(p.department||''):'';
+  el('personStartV30').value=p?normalizePersonDateV302(p.startDate):'';
+  el('personBirthV30').value=p?normalizePersonDateV302(p.birthDate):'';
+  el('personTypeV30').value=p&&isExtraOnlyPerson(p.id)?'extra':'general';
+  el('personStatusV30').value=p&&p.active===false?'inactive':'active';
+  el('personModalTitleV30').textContent=isView?'รายละเอียดพนักงาน':(p?'แก้ไขข้อมูลพนักงาน':'เพิ่มพนักงาน');
+  el('personModalSubV30').textContent=isView?'ข้อมูลบุคลากรในระบบ — กดปิดเมื่อดูเสร็จ':'แก้ไขข้อมูลแล้วกด “บันทึกข้อมูล”';
+  setPersonModalModeV302(isView);
+  m.classList.add('show');m.setAttribute('aria-hidden','false');
+  requestAnimationFrame(function(){
+    if(!isView){var first=el('personNameV30');if(first){first.disabled=false;first.readOnly=false;try{first.focus({preventScroll:true})}catch(e){first.focus()}}}
+  });
+}
+function closePersonModalV30(){
+  var m=el('personModalV30');if(m){m.classList.remove('show');m.setAttribute('aria-hidden','true');m.dataset.mode=''}
+}
 function setPersonExtraRuleV30(pid,wantExtra){
   state.customRules=state.customRules.filter(function(r){if(r.personId!==pid||r.type!=='only'||!Array.isArray(r.slots)||!r.slots.length)return true;return !r.slots.every(function(sid){return EXTRA_IDS.indexOf(sid)>=0})});
   if(wantExtra)state.customRules.push({id:'cr_'+Date.now(),personId:pid,type:'only',slots:['e1','e2','e3']});
 }
 function savePersonModalV30(){
-  if(!(unitUser.role==='scheduler'||unitUser.role==='admin'))return;var name=el('personNameV30').value.trim();if(!name){alert('กรุณากรอกชื่อ-นามสกุล');return}var id=el('personEditIdV30').value,p=id?state.people.find(function(x){return x.id===id}):null;if(!p){p={id:'p_'+Date.now(),name:name};state.people.push(p)}
-  p.name=name;p.code=el('personCodeV30').value.trim()||nextPersonCodeV30();p.position=el('personPositionV30').value.trim();p.department=el('personDeptV30').value.trim();p.startDate=el('personStartV30').value;p.birthDate=el('personBirthV30').value;p.active=el('personStatusV30').value!=='inactive';
-  setPersonExtraRuleV30(p.id,el('personTypeV30').value==='extra');saveConfig();buildNames();renderCustomRules();renderSheet();renderPeopleV24();closePersonModalV30();
+  if(!canManagePeopleV302()){alert('บัญชีนี้ไม่มีสิทธิ์แก้ไขข้อมูลพนักงาน');return}
+  var name=String(el('personNameV30').value||'').trim();
+  if(!name){alert('กรุณากรอกชื่อ-นามสกุล');el('personNameV30').focus();return}
+  var code=String(el('personCodeV30').value||'').trim()||nextPersonCodeV30();
+  var id=String(el('personEditIdV30').value||'');
+  var duplicate=state.people.find(function(x){return String(x.code||'').toLowerCase()===code.toLowerCase()&&String(x.id)!==id});
+  if(duplicate){alert('รหัสพนักงาน '+code+' ถูกใช้งานแล้ว');el('personCodeV30').focus();return}
+  var p=id?state.people.find(function(x){return String(x.id)===id}):null;
+  if(!p){p={id:'p_'+Date.now(),name:name};state.people.push(p)}
+  p.name=name;
+  p.code=code;
+  p.position=String(el('personPositionV30').value||'').trim();
+  p.department=String(el('personDeptV30').value||'').trim();
+  p.startDate=el('personStartV30').value||'';
+  p.birthDate=el('personBirthV30').value||'';
+  p.active=el('personStatusV30').value!=='inactive';
+  setPersonExtraRuleV30(p.id,el('personTypeV30').value==='extra');
+  saveConfig();
+  buildNames();
+  renderCustomRules();
+  renderSheet();
+  renderPeopleV24();
+  closePersonModalV30();
+  setStatus('บันทึกข้อมูลพนักงาน '+p.name+' แล้ว',true);
 }
 function parseCsvLineV30(line){var a=[],cur='',q=false;for(var i=0;i<line.length;i++){var c=line[i];if(c==='"'){if(q&&line[i+1]==='"'){cur+='"';i++}else q=!q}else if(c===','&&!q){a.push(cur);cur=''}else cur+=c}a.push(cur);return a}
 function importPeopleCsvV30(file){
   if(!(unitUser.role==='scheduler'||unitUser.role==='admin'))return;var r=new FileReader();r.onload=function(){try{var lines=String(r.result||'').replace(/^\uFEFF/,'').split(/\r?\n/).filter(Boolean);if(lines.length<2)throw new Error('ไม่มีข้อมูล');var headers=parseCsvLineV30(lines[0]).map(function(x){return x.trim().toLowerCase()});var map={code:['รหัสพนักงาน','รหัส','code','employee code'],name:['ชื่อ-นามสกุล','ชื่อ','name'],position:['ตำแหน่ง','position'],department:['แผนก','หน่วยงาน','department'],type:['ประเภท','type'],status:['สถานะ','status'],startDate:['วันเริ่มงาน','startdate','start date'],birthDate:['วันเกิด','birthdate','birth date']};function col(k){for(var i=0;i<headers.length;i++)if(map[k].indexOf(headers[i])>=0)return i;return -1}var ni=col('name');if(ni<0)throw new Error('ไม่พบคอลัมน์ชื่อ');var added=0;for(var li=1;li<lines.length;li++){var c=parseCsvLineV30(lines[li]);var nm=String(c[ni]||'').trim();if(!nm)continue;var p={id:'p_'+Date.now()+'_'+li,name:nm,code:col('code')>=0?String(c[col('code')]||'').trim():nextPersonCodeV30(),position:col('position')>=0?String(c[col('position')]||'').trim():'',department:col('department')>=0?String(c[col('department')]||'').trim():'',active:!(col('status')>=0&&/ปิด|inactive|0/i.test(String(c[col('status')]||''))),startDate:col('startDate')>=0?String(c[col('startDate')]||'').trim():'',birthDate:col('birthDate')>=0?String(c[col('birthDate')]||'').trim():''};state.people.push(p);if(col('type')>=0&&/extra/i.test(String(c[col('type')]||'')))setPersonExtraRuleV30(p.id,true);added++}saveConfig();buildNames();renderCustomRules();renderSheet();renderPeopleV24();alert('นำเข้าข้อมูล '+added+' รายการแล้ว')}catch(e){alert('นำเข้าไม่สำเร็จ: '+e.message)}};r.readAsText(file,'utf-8')
 }
 function exportPeopleV30(){var rows=[['ลำดับ','รหัสพนักงาน','ชื่อ-นามสกุล','ตำแหน่ง','แผนก','ประเภท','สถานะ','วันเริ่มงาน','วันเกิด']];state.people.forEach(function(p,i){rows.push([i+1,p.code||'',p.name||'',p.position||'',p.department||'',isExtraOnlyPerson(p.id)?'EXTRA1-3':'ปกติ',p.active===false?'ปิดใช้งาน':'ใช้งาน',p.startDate||'',p.birthDate||''])});var csv=rows.map(function(r){return r.map(function(v){return '"'+String(v).replace(/"/g,'""')+'"'}).join(',')}).join('\n');var a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}));a.download='บุคลากร.csv';a.click();setTimeout(function(){URL.revokeObjectURL(a.href)},1000)}
+
+/* ===== V30.2 ROW ACTIONS — delegated, works after every re-render ===== */
+function bindPeopleActionsV302(){
+  var body=el('peopleTableBodyV24');if(!body||body.dataset.v302Bound==='1')return;
+  body.dataset.v302Bound='1';
+  body.addEventListener('click',function(ev){
+    var btn=ev.target.closest('button');if(!btn||!body.contains(btn))return;
+    ev.preventDefault();ev.stopPropagation();
+    if(btn.hasAttribute('data-person-view')){openPersonModalV30(btn.getAttribute('data-person-view'),'view');return}
+    if(btn.hasAttribute('data-person-edit')){openPersonModalV30(btn.getAttribute('data-person-edit'),'edit');return}
+    if(btn.hasAttribute('data-delete-person')){
+      if(!canManagePeopleV302()){alert('บัญชีนี้ไม่มีสิทธิ์ลบข้อมูลพนักงาน');return}
+      var pid=btn.getAttribute('data-delete-person'),p=state.people.find(function(x){return String(x.id)===String(pid)});
+      if(!p||!confirm('ลบ '+p.name+' หรือไม่?'))return;
+      state.people=state.people.filter(function(x){return String(x.id)!==String(pid)});
+      state.customRules=state.customRules.filter(function(r){return String(r.personId)!==String(pid)});
+      saveConfig();buildNames();renderCustomRules();renderSheet();renderPeopleV24();setStatus('ลบข้อมูลพนักงานแล้ว',true);return;
+    }
+  });
+}
 
 /* ===== V30.1 PEOPLE SEARCH — independent binding ===== */
 function bindPeopleSearchV301(){
@@ -5374,10 +5467,11 @@ if(el('peopleGoRulesBtn'))el('peopleGoRulesBtn').onclick=function(){showPage('ru
 if(el('peopleGoHistoryBtn'))el('peopleGoHistoryBtn').onclick=function(){showPage('history',true)};
 if(el('peopleGroupDeptBtnV30'))el('peopleGroupDeptBtnV30').onclick=function(){peopleV30SortDept=!peopleV30SortDept;this.classList.toggle('active',peopleV30SortDept);renderPeopleV24()};
 if(el('peopleExportBtn'))el('peopleExportBtn').onclick=exportPeopleV30;
-if(el('peopleImportBtnV30'))el('peopleImportBtnV30').onclick=function(){if(!(unitUser.role==='scheduler'||unitUser.role==='admin'))return;el('peopleImportFileV30').click()};
+if(el('peopleImportBtnV30'))el('peopleImportBtnV30').onclick=function(){if(!canManagePeopleV302())return;el('peopleImportFileV30').click()};
 if(el('peopleImportFileV30'))el('peopleImportFileV30').onchange=function(){if(this.files&&this.files[0])importPeopleCsvV30(this.files[0]);this.value=''};
 if(el('personSaveV30'))el('personSaveV30').onclick=savePersonModalV30;
 document.querySelectorAll('[data-person-close]').forEach(function(b){b.onclick=closePersonModalV30});
+bindPeopleActionsV302();
 document.querySelectorAll('#page-people [data-people-filter]').forEach(function(b){b.onclick=function(){el('peopleTypeFilterV24').value=this.dataset.peopleFilter;peopleV30Page=1;renderPeopleV24()}});
 if(el('rulesSaveBtnV24'))el('rulesSaveBtnV24').onclick=function(){saveConfig();setStatus('บันทึกกฎทั้งหมดแล้ว',true)};
 if(el('rulesCheckBtnV24'))el('rulesCheckBtnV24').onclick=function(){validate(true)};
