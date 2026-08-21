@@ -4,7 +4,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>โปรแกรมจัดตารางเวร</title>
-<link rel="stylesheet" href="style.css?v=28.2">
 <style>
 :root{--bg:#f6f7fb;--card:#fff;--text:#202534;--muted:#6b7280;--line:#d9dce6;--accent:#6d5dfc;--danger:#b42318;--ok:#067647;--weekend:#ececf0}
 *{box-sizing:border-box} html{-webkit-text-size-adjust:100%}
@@ -1742,7 +1741,8 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
   .v244-shortcut-grid span{font-size:24px}
 }
 </style>
-<link rel="stylesheet" href="roster-v28.css?v=28.2">
+<link rel="stylesheet" href="style.css?v=29.0">
+<link rel="stylesheet" href="roster-v29.css?v=29.0">
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 </head>
@@ -1909,66 +1909,83 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 
 
 <section class="page-view" id="page-roster" data-view="roster">
-  <div class="r282-shell">
-    <div class="r282-titlebar no-print">
-      <div>
-        <h2>จัดตารางเวร</h2>
-        <p>วางแผน จัดการ และติดตามตารางเวรของบุคลากร</p>
+  <div class="r29-shell">
+
+    <div class="r29-page-title no-print">
+      <div class="r29-title-copy">
+        <div class="r29-title-icon">☰</div>
+        <div>
+          <h2>จัดตารางเวร</h2>
+          <p>ระบบจัดการเวรอย่างเป็นระบบ</p>
+        </div>
       </div>
-      <div class="r282-version">V28.2 • Roster</div>
+      <div class="r29-version">V29.0 • Roster</div>
     </div>
 
-    <section class="r282-toolbar-card no-print">
-      <div class="toolbar r282-toolbar">
-        <label class="field r282-field">เดือน<select id="month"></select></label>
-        <label class="field r282-field">ปี พ.ศ.<input id="year" type="number" min="2500" max="2700"></label>
-        <button class="run" id="runBtn">↻ รันตารางเวร</button>
-        <button class="save" id="saveBtn">💾 บันทึกตาราง</button>
-        <button id="loadBtn" class="r282-open">📂 เปิดตารางเดิม</button>
-        <button id="validateBtn" class="r282-check">🛡 ตรวจสอบ</button>
-        <button id="printBtn" class="r282-print">🖨 พิมพ์</button>
-        <button id="pdfBtn" class="r282-pdf">⇩ บันทึก PDF</button>
-        <button class="danger r282-clear" id="clearBtn">ล้างตาราง</button>
+    <section class="r29-toolbar-card no-print">
+      <div class="r29-toolbar">
+        <label class="r29-field">
+          <span>เดือน</span>
+          <select id="month"></select>
+        </label>
+        <label class="r29-field">
+          <span>ปี พ.ศ.</span>
+          <input id="year" type="number" min="2500" max="2700">
+        </label>
+        <button class="r29-action r29-run" id="runBtn"><span>↻</span><b>รันตารางเวร</b></button>
+        <button class="r29-action r29-save" id="saveBtn"><span>▣</span><b>บันทึกตาราง</b></button>
+        <button class="r29-action r29-open" id="loadBtn"><span>📂</span><b>เปิดตารางเดิม</b></button>
+        <button class="r29-action r29-check" id="validateBtn"><span>🛡</span><b>ตรวจสอบ</b></button>
+        <button class="r29-action r29-print" id="printBtn"><span>▣</span><b>พิมพ์</b></button>
+        <button class="r29-action r29-pdf" id="pdfBtn"><span>⇩</span><b>บันทึก PDF</b></button>
+        <button class="r29-action r29-clear" id="clearBtn"><span>⌫</span><b>ล้างตาราง</b></button>
       </div>
     </section>
 
-    <section class="r282-stats no-print">
-      <article class="r282-stat pink">
-        <div class="r282-stat-icon">👥</div>
-        <div><small>บุคลากรทั้งหมด</small><strong id="r282People">—</strong><em>คน</em><span>ข้อมูลผู้ใช้งานปัจจุบัน</span></div>
-      </article>
-      <article class="r282-stat mint">
-        <div class="r282-stat-icon">🗓️</div>
-        <div><small>เวรเดือนนี้</small><strong id="r282Duty">—</strong><em>เวร</em><span>จำนวนเวรที่จัดในตาราง</span></div>
-      </article>
-      <article class="r282-stat yellow">
-        <div class="r282-stat-icon">🏖️</div>
-        <div><small>วันหยุดเดือนนี้</small><strong id="r282Holiday">—</strong><em>วัน</em><span>รวมวันหยุด/นักขัตฤกษ์</span></div>
-      </article>
-      <article class="r282-stat purple">
-        <div class="r282-stat-icon">🛡️</div>
-        <div><small>กฎสำคัญ</small><strong id="r282Rules">—</strong><em>ข้อ</em><span>กฎที่ใช้ตรวจสอบตาราง</span></div>
-      </article>
+    <section class="r29-stats no-print">
+      <button class="r29-stat r29-stat-pink" type="button" data-r29-go="people">
+        <span class="r29-stat-icon">👥</span>
+        <span class="r29-stat-copy"><small>บุคลากรทั้งหมด</small><strong id="r29People">0 <em>คน</em></strong><i>ข้อมูลผู้ใช้งานปัจจุบัน</i></span>
+      </button>
+      <button class="r29-stat r29-stat-mint" type="button" data-r29-focus="table">
+        <span class="r29-stat-icon">🗓️</span>
+        <span class="r29-stat-copy"><small>เวรเดือนนี้</small><strong id="r29Duty">0 <em>เวร</em></strong><i>จำนวนเวรที่จัดในเดือนนี้</i></span>
+      </button>
+      <button class="r29-stat r29-stat-yellow" type="button" data-r29-go="holidays">
+        <span class="r29-stat-icon">🏖️</span>
+        <span class="r29-stat-copy"><small>วันหยุดเดือนนี้</small><strong id="r29Holiday">0 <em>วัน</em></strong><i>รวมเสาร์–อาทิตย์/นักขัตฤกษ์</i></span>
+      </button>
+      <button class="r29-stat r29-stat-purple" type="button" data-r29-go="rules">
+        <span class="r29-stat-icon">🛡️</span>
+        <span class="r29-stat-copy"><small>กฎสำคัญ</small><strong id="r29Rules">21 <em>ข้อ</em></strong><i>กฎที่ใช้งานอยู่</i></span>
+      </button>
     </section>
 
-    <section class="r282-table-card">
-      <div class="r282-table-top no-print">
-        <div class="r282-month-nav">
-          <button type="button" id="r282PrevMonth" aria-label="เดือนก่อนหน้า">‹</button>
-          <div><span>🗓</span><b id="r282MonthTitle">เดือนปัจจุบัน</b></div>
-          <button type="button" id="r282NextMonth" aria-label="เดือนถัดไป">›</button>
+    <section class="r29-table-card" id="r29TableCard">
+      <div class="r29-table-toolbar no-print">
+        <div class="r29-month-nav">
+          <span class="r29-calendar-icon">▣</span>
+          <b id="r29MonthTitle">เดือนปัจจุบัน</b>
+          <button type="button" id="r29PrevMonth" aria-label="เดือนก่อนหน้า">‹</button>
+          <button type="button" id="r29NextMonth" aria-label="เดือนถัดไป">›</button>
         </div>
-        <div class="r282-day-legend">
-          <span class="work">วันทำการ</span>
-          <span class="sat">เสาร์</span>
-          <span class="sun">อาทิตย์</span>
-          <span class="hol">นักขัตฤกษ์</span>
+
+        <div class="r29-day-legend" aria-label="คำอธิบายสีวัน">
+          <span class="work"><i></i>วันทำการ</span>
+          <span class="sat"><i></i>เสาร์</span>
+          <span class="sun"><i></i>อาทิตย์</span>
+          <span class="hol"><i></i>นักขัตฤกษ์</span>
         </div>
-        <div class="r282-view-tag">▦ มุมมองตาราง</div>
+
+        <div class="r29-view-tools">
+          <button type="button" class="active" id="r29TableViewBtn">▦ มุมมองตาราง</button>
+          <button type="button" id="r29ListViewBtn">☷ มุมมองรายชื่อ</button>
+          <button type="button" class="r29-icon-btn" id="r29FullscreenBtn" aria-label="ขยายตารางเต็มจอ">⛶</button>
+        </div>
       </div>
 
-      <div class="roster-workflow-strip no-print">
-        <span class="wf-label">สถานะเดือนนี้</span>
+      <div class="r29-workflow-row no-print">
+        <span class="r29-workflow-label">สถานะเดือนนี้</span>
         <span id="rosterWorkflowStatus" class="status-pill status-draft">ร่างตาราง</span>
         <span id="rosterWorkflowLock" class="locked-tag">ยังไม่ล็อก</span>
         <span id="rosterWorkflowActor" class="wf-actor"></span>
@@ -1992,37 +2009,57 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
       </div>
       <div id="autoFixSummary" class="auto-fix-summary no-print"></div>
 
-      <!-- ตารางเดิม: ID/class เดิมทั้งหมด -->
+      <!-- ตารางเวรเดิม: คง ID/class/ระบบ renderSheet เดิมทั้งหมด -->
       <div class="sheet-wrap"><table id="sheet" class="sheet"></table></div>
     </section>
 
-    <section class="r282-bottom no-print">
-      <div class="roster-note-card r282-note-card">
-        <div class="section-title">📝 หมายเหตุท้ายตาราง PDF</div>
-        <div class="muted">ข้อความนี้จะอยู่ใต้ตารางเมื่อบันทึก PDF</div>
+    <section class="r29-bottom no-print" id="r29RosterSummary">
+      <article class="r29-panel r29-summary-panel">
+        <div class="r29-panel-head">
+          <div><h3>▣ สรุปจำนวนเวรของบุคลากร</h3><small>สรุปตาม 7 กลุ่มประเภทเวรของเดือนปัจจุบัน</small></div>
+          <span class="r29-count-badge" id="r29SummaryBadge">0 คน</span>
+        </div>
+        <div class="r29-summary-scroll">
+          <table class="r29-summary-table">
+            <thead>
+              <tr>
+                <th>ชื่อ-นามสกุล</th><th>เวร1–2</th><th>OT1–2</th><th>SDMC<br>เช้า1–4</th><th>SDMC<br>บ่าย-ดึก1–4</th><th>SDMC<br>5–6</th><th>SDMC<br>7–8</th><th>EXTRA</th><th>รวม</th><th>เฉลี่ย/กลุ่ม</th>
+              </tr>
+            </thead>
+            <tbody id="r29SummaryBody"></tbody>
+            <tfoot id="r29SummaryFoot"></tfoot>
+          </table>
+        </div>
+      </article>
+
+      <article class="r29-panel r29-types-panel">
+        <div class="r29-panel-head"><div><h3>▦ คำอธิบายประเภทเวร</h3><small>ประเภท เวลา และเงื่อนไขหลัก</small></div></div>
+        <div class="r29-type-list">
+          <div><i class="v"></i><b>เวร1, เวร2</b><span>เวรหลัก • จัดทุกวัน</span></div>
+          <div><i class="ot"></i><b>OT1, OT2</b><span>จันทร์–ศุกร์ • ไม่รวมวันหยุด</span></div>
+          <div><i class="morning"></i><b>SDMC เช้า 1–4</b><span>08:00–16:00 • เสาร์/อาทิตย์/นักขัตฤกษ์</span></div>
+          <div><i class="night"></i><b>SDMC บ่าย-ดึก 1–4</b><span>16:00–08:00 • จัดทุกวัน</span></div>
+          <div><i class="long"></i><b>SDMC เช้า-บ่าย 5–6</b><span>07:00–23:00 • เสาร์/อาทิตย์/นักขัตฤกษ์</span></div>
+          <div><i class="evening"></i><b>SDMC บ่าย 7–8</b><span>16:00–24:00 • จันทร์–ศุกร์</span></div>
+          <div><i class="extra"></i><b>EXTRA1–3</b><span>เวรพิเศษ • ใช้ตามกฎ EXTRA</span></div>
+        </div>
+      </article>
+
+      <article class="r29-panel r29-notes-panel">
+        <div class="r29-panel-head"><div><h3>หมายเหตุ</h3><small>กฎสำคัญที่ควรตรวจสอบก่อนบันทึก</small></div></div>
+        <ul class="r29-note-list">
+          <li>ชื่อบุคลากรห้ามซ้ำในวันเดียวกันทุกประเภทเวร</li>
+          <li>หลังขึ้นเวรบ่าย-ดึก วันถัดไปห้ามต่อเวรตามเงื่อนไขของระบบ</li>
+          <li>รายชื่อสุดท้ายจัดได้เฉพาะ EXTRA1–EXTRA3</li>
+          <li>EXTRA2 ไม่จัดวันศุกร์ วันเสาร์ และวันนักขัตฤกษ์</li>
+        </ul>
+        <label class="r29-pdf-note-label" for="pdfNote">หมายเหตุท้ายตาราง PDF</label>
         <textarea id="pdfNote" rows="3" placeholder="หมายเหตุ: ..."></textarea>
-      </div>
-
-      <div class="r282-info-card">
-        <h3>💡 การใช้งานตารางเดิม</h3>
-        <ul>
-          <li>เลือกชื่อในช่องเวรได้เหมือนเดิม</li>
-          <li>หัวตารางและสีวันเสาร์/อาทิตย์/นักขัตฤกษ์ยังคงเดิม</li>
-          <li>เลื่อนตารางซ้าย–ขวาได้บน iPad และมือถือ</li>
-        </ul>
-      </div>
-
-      <div class="r282-info-card">
-        <h3>🛡 ก่อนบันทึก</h3>
-        <ul>
-          <li>กดตรวจสอบเพื่อดูข้อขัดแย้ง</li>
-          <li>ตรวจสถานะอนุมัติและการล็อกตาราง</li>
-          <li>พิมพ์หรือบันทึก PDF ได้จากปุ่มด้านบน</li>
-        </ul>
-      </div>
+      </article>
     </section>
   </div>
 </section>
+
 
 <section class="page-view" id="page-people" data-view="people">
   <div class="v24-page-title"><div><h2>👥 ข้อมูลพนักงาน</h2><p>จัดการข้อมูลบุคลากรทั้งหมดในระบบ</p></div></div>
@@ -5260,58 +5297,8 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 })();
 </script>
 
-<script>
-(function(){
-  'use strict';
-  var MONTHS282=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
-  function q(id){return document.getElementById(id)}
-  function set(id,val){var e=q(id);if(e)e.textContent=String(val)}
-  function refreshRoster282(){
-    try{
-      var month=q('month'), year=q('year');
-      if(month&&year){
-        var m=parseInt(month.value,10)||0;
-        set('r282MonthTitle',MONTHS282[m]+' '+(year.value||''));
-      }
-      var nameInputs=document.querySelectorAll('#names .name-row input');
-      var people=0;
-      nameInputs.forEach(function(i){if((i.value||'').trim())people++});
-      if(!people){
-        var first=document.querySelector('#sheet tbody select');
-        if(first) people=Math.max(0,first.options.length-1);
-      }
-      set('r282People',people||0);
-      var duty=0;
-      document.querySelectorAll('#sheet tbody select').forEach(function(s){if(s.value)duty++});
-      set('r282Duty',duty);
-      set('r282Holiday',document.querySelectorAll('#sheet tbody tr.holiday').length);
-      set('r282Rules',document.querySelectorAll('#ruleList .rule-item').length||21);
-    }catch(e){}
-  }
-  function moveMonth(delta){
-    var month=q('month'), year=q('year');
-    if(!month||!year)return;
-    var m=parseInt(month.value,10)||0, y=parseInt(year.value,10)||2569;
-    m+=delta;
-    if(m<0){m=11;y--} if(m>11){m=0;y++}
-    month.value=String(m);year.value=String(y);
-    month.dispatchEvent(new Event('change',{bubbles:true}));
-    setTimeout(refreshRoster282,250);
-  }
-  function wire(){
-    var p=q('r282PrevMonth'),n=q('r282NextMonth');
-    if(p&&!p.dataset.bound282){p.dataset.bound282='1';p.addEventListener('click',function(){moveMonth(-1)})}
-    if(n&&!n.dataset.bound282){n.dataset.bound282='1';n.addEventListener('click',function(){moveMonth(1)})}
-    ['month','year','runBtn','saveBtn','loadBtn','validateBtn','clearBtn'].forEach(function(id){
-      var e=q(id);if(e&&!e.dataset.refresh282){e.dataset.refresh282='1';e.addEventListener('click',function(){setTimeout(refreshRoster282,250);setTimeout(refreshRoster282,900)});e.addEventListener('change',function(){setTimeout(refreshRoster282,250)})}
-    });
-    refreshRoster282();
-  }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(wire,300)});else setTimeout(wire,300);
-  window.addEventListener('hashchange',function(){setTimeout(refreshRoster282,250)});
-})();
-</script>
-<script src="login-fix-v26-1.js?v=28.2"></script>
-<script src="home-v26.js?v=28.2"></script>
+<script src="roster-v29.js?v=29.0"></script>
+<script src="login-fix-v26-1.js?v=29.0"></script>
+<script src="home-v26.js?v=29.0"></script>
 </body>
 </html>

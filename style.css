@@ -1,3 +1,23 @@
+/* ROSTER SCHEDULER — V29.0 SHARED THEME
+   Shared palette for Home + Roster.
+*/
+:root{
+  --app-pink:#f75f95;
+  --app-pink-soft:#fff0f6;
+  --app-mint:#54cdb2;
+  --app-mint-soft:#eefbf7;
+  --app-purple:#8d71db;
+  --app-purple-soft:#f3efff;
+  --app-yellow:#f4bd43;
+  --app-yellow-soft:#fff8e2;
+  --app-blue:#63b4df;
+  --app-blue-soft:#eef8ff;
+  --app-text:#344055;
+  --app-muted:#7a8394;
+  --app-line:#ece9f0;
+  --app-shadow:0 8px 26px rgba(64,63,83,.065);
+}
+
 /* ROSTER SCHEDULER — V27.0 CLEAN RESPONSIVE */
 /* =========================================================
    ROSTER SCHEDULER — HOME V26 RESPONSIVE

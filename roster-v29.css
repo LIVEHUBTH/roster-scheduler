@@ -1,0 +1,262 @@
+/* =========================================================
+   ROSTER SCHEDULER — ROSTER PAGE V29.0
+   Reference layout: toolbar → 4 stats → original roster table →
+   personnel summary / duty types / notes
+   ========================================================= */
+
+#page-roster{
+  width:100%;
+  max-width:1540px;
+  margin:0 auto;
+  padding:0 0 18px;
+  color:var(--app-text,#344055);
+}
+#page-roster *{box-sizing:border-box}
+#page-roster .r29-shell{display:grid;gap:12px;min-width:0}
+
+/* title */
+#page-roster .r29-page-title{
+  min-height:54px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:0 3px;
+}
+#page-roster .r29-title-copy{display:flex;align-items:center;gap:12px;min-width:0}
+#page-roster .r29-title-icon{
+  width:40px;height:40px;border-radius:50%;display:grid;place-items:center;
+  color:#fff;background:linear-gradient(135deg,#ff6ca0,#f34d8d);
+  font-size:15px;font-weight:900;box-shadow:0 7px 16px rgba(244,83,143,.18)
+}
+#page-roster .r29-title-copy h2{margin:0;font-size:25px;line-height:1.05;color:#283449;letter-spacing:-.2px}
+#page-roster .r29-title-copy p{margin:4px 0 0;font-size:10px;color:#8991a0}
+#page-roster .r29-version{font-size:9px;color:#9aa1ad;font-weight:800}
+
+/* main command bar */
+#page-roster .r29-toolbar-card{
+  padding:13px 15px;
+  border:1px solid var(--app-line,#ece9f0);
+  border-radius:18px;background:#fff;box-shadow:var(--app-shadow);
+}
+#page-roster .r29-toolbar{
+  display:grid;
+  grid-template-columns:minmax(150px,1.05fr) minmax(130px,.8fr) repeat(7,minmax(108px,.88fr));
+  gap:10px;align-items:end;
+}
+#page-roster .r29-field{display:grid;gap:5px;min-width:0}
+#page-roster .r29-field>span{font-size:10px;font-weight:900;color:#48536a}
+#page-roster .r29-field select,#page-roster .r29-field input{
+  width:100%;height:40px;min-height:40px;padding:7px 11px;border:1px solid #e5e6ed;
+  border-radius:10px;background:#fff;color:#333f54;font-size:12px;outline:0;box-shadow:none
+}
+#page-roster .r29-field select:focus,#page-roster .r29-field input:focus{border-color:#f3a9c5;box-shadow:0 0 0 3px rgba(247,95,149,.08)}
+#page-roster .r29-action{
+  min-height:40px;height:40px;padding:0 10px;border:0;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  font-size:11px;font-weight:900;white-space:nowrap;box-shadow:none;transition:transform .12s ease,filter .12s ease
+}
+#page-roster .r29-action:active{transform:scale(.985)}
+#page-roster .r29-action span{font-size:14px}
+#page-roster .r29-run{background:linear-gradient(135deg,#ff6ca0,#f34d8d);color:#fff}
+#page-roster .r29-save{background:linear-gradient(135deg,#58d09b,#26b878);color:#fff}
+#page-roster .r29-open{background:linear-gradient(135deg,#8e75df,#6856c9);color:#fff}
+#page-roster .r29-check{background:linear-gradient(135deg,#ffdf7b,#f6c653);color:#6e5814}
+#page-roster .r29-print{background:linear-gradient(135deg,#ffd978,#ffc653);color:#665111}
+#page-roster .r29-pdf{background:linear-gradient(135deg,#d9efff,#c7e7fa);color:#246a91}
+#page-roster .r29-clear{background:#fff1f2;color:#c45669;border:1px solid #f4d5db}
+
+/* stats */
+#page-roster .r29-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+#page-roster .r29-stat{
+  min-height:92px;border:1px solid var(--app-line);border-radius:18px;padding:13px 16px;
+  display:grid;grid-template-columns:56px 1fr;gap:13px;align-items:center;text-align:left;
+  box-shadow:0 5px 17px rgba(64,63,83,.045);cursor:pointer
+}
+#page-roster .r29-stat:active{transform:scale(.99)}
+#page-roster .r29-stat-pink{background:linear-gradient(135deg,#fff9fb,#fff0f6)}
+#page-roster .r29-stat-mint{background:linear-gradient(135deg,#fbfffd,#eefbf7)}
+#page-roster .r29-stat-yellow{background:linear-gradient(135deg,#fffef9,#fff8e2)}
+#page-roster .r29-stat-purple{background:linear-gradient(135deg,#fdfcff,#f3efff)}
+#page-roster .r29-stat-icon{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.72);font-size:25px}
+#page-roster .r29-stat-copy{display:block;min-width:0}
+#page-roster .r29-stat-copy small{display:block;font-size:10px;font-weight:900;color:#4b566a;margin-bottom:2px}
+#page-roster .r29-stat-copy strong{display:block;font-size:24px;line-height:1;color:#273247}
+#page-roster .r29-stat-copy strong em{font-size:9px;font-style:normal;font-weight:800;color:#6f788a;margin-left:3px}
+#page-roster .r29-stat-copy i{display:block;margin-top:6px;font-style:normal;font-size:8.5px;color:#9097a4}
+
+/* table card */
+#page-roster .r29-table-card{
+  background:#fff;border:1px solid var(--app-line);border-radius:18px;padding:10px;
+  box-shadow:var(--app-shadow);min-width:0;position:relative
+}
+#page-roster .r29-table-toolbar{
+  min-height:42px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;padding:0 2px 9px;
+}
+#page-roster .r29-month-nav{display:flex;align-items:center;gap:7px;white-space:nowrap}
+#page-roster .r29-calendar-icon{color:#68b7e1;font-size:17px}
+#page-roster .r29-month-nav b{font-size:14px;color:#303c52;margin-right:4px}
+#page-roster .r29-month-nav button{
+  width:29px;height:29px;min-height:29px;padding:0;border:1px solid #e4e5eb;border-radius:8px;background:#fff;color:#4a566a;font-size:18px;box-shadow:none
+}
+#page-roster .r29-day-legend{display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;font-size:9px;color:#6e7788}
+#page-roster .r29-day-legend span{display:flex;align-items:center;gap:5px}
+#page-roster .r29-day-legend i{width:15px;height:7px;border-radius:999px;display:inline-block}
+#page-roster .r29-day-legend .work i{background:#89caf0}
+#page-roster .r29-day-legend .sat i{background:#f88eb3}
+#page-roster .r29-day-legend .sun i{background:#ffd877}
+#page-roster .r29-day-legend .hol i{background:#38bd8a}
+#page-roster .r29-view-tools{display:flex;justify-content:flex-end;gap:7px;white-space:nowrap}
+#page-roster .r29-view-tools button{
+  min-height:30px;height:30px;padding:0 10px;border:1px solid #e6e5eb;border-radius:8px;background:#fff;color:#4b5668;font-size:9px;font-weight:900;box-shadow:none
+}
+#page-roster .r29-view-tools button.active{border-color:#f3b6cb;background:#fff5f9;color:#e3578a}
+#page-roster .r29-view-tools .r29-icon-btn{width:32px;padding:0;font-size:14px}
+
+#page-roster .r29-workflow-row{
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 10px;margin:0 0 8px;
+  border:1px solid #eee9f0;border-radius:11px;background:#fffdfd
+}
+#page-roster .r29-workflow-label{font-size:9px;color:#7a8394}
+#page-roster .r29-workflow-row #rosterGoWorkflowBtn{min-height:29px;height:29px;padding:0 9px;border-radius:8px;font-size:9px;background:#f3f1ff;color:#6f5db8;box-shadow:none}
+
+/* IMPORTANT: original table structure stays unchanged */
+#page-roster .sheet-wrap{
+  width:100%;overflow:auto;-webkit-overflow-scrolling:touch;max-height:62vh;margin:0!important;
+  border:1px solid #ece9ef!important;border-radius:12px!important;background:#fff;box-shadow:none!important
+}
+#page-roster .sheet{min-width:1900px;width:100%;margin:0}
+#page-roster .sheet caption{font-size:12px;padding:7px 9px;text-align:right;color:#697184;background:#fff}
+#page-roster .sheet th,#page-roster .sheet td{height:31px}
+#page-roster .sheet select{min-height:24px}
+
+/* Full-screen table is useful on iPad without changing the table itself */
+body.r29-fullscreen-open{overflow:hidden}
+#page-roster .r29-table-card.is-fullscreen{
+  position:fixed;inset:8px;z-index:99990;border-radius:18px;padding:12px;background:#fff;
+  display:flex;flex-direction:column;box-shadow:0 24px 80px rgba(40,40,60,.25)
+}
+#page-roster .r29-table-card.is-fullscreen .sheet-wrap{max-height:none;height:calc(100dvh - 120px);flex:1}
+#page-roster .r29-table-card.is-fullscreen .r29-table-toolbar{flex:none}
+#page-roster .r29-table-card.is-fullscreen #r29FullscreenBtn{background:#fff0f5;color:#d94f83}
+
+/* bottom reference-like cards */
+#page-roster .r29-bottom{display:grid;grid-template-columns:minmax(0,1.85fr) minmax(250px,.95fr) minmax(250px,.95fr);gap:12px;align-items:stretch}
+#page-roster .r29-panel{background:#fff;border:1px solid var(--app-line);border-radius:18px;padding:12px;box-shadow:0 5px 18px rgba(64,63,83,.045);min-width:0}
+#page-roster .r29-panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:9px}
+#page-roster .r29-panel-head h3{margin:0;font-size:12px;color:#39455a}
+#page-roster .r29-panel-head small{display:block;margin-top:3px;font-size:8.5px;color:#8b92a1}
+#page-roster .r29-count-badge{padding:5px 8px;border-radius:999px;background:#fff1f6;color:#df5b8d;font-size:8.5px;font-weight:900;white-space:nowrap}
+
+#page-roster .r29-summary-scroll{overflow:auto;max-height:300px;border:1px solid #efedf2;border-radius:10px;-webkit-overflow-scrolling:touch}
+#page-roster .r29-summary-table{border-collapse:separate;border-spacing:0;min-width:780px;width:100%;font-size:8px}
+#page-roster .r29-summary-table th,#page-roster .r29-summary-table td{padding:6px 5px;border-right:1px solid #efedf2;border-bottom:1px solid #efedf2;text-align:center;white-space:nowrap}
+#page-roster .r29-summary-table th{position:sticky;top:0;z-index:2;background:#fbfbfd;color:#536078;font-weight:900}
+#page-roster .r29-summary-table th:first-child,#page-roster .r29-summary-table td:first-child{position:sticky;left:0;z-index:3;text-align:left;min-width:140px;background:#fff}
+#page-roster .r29-summary-table thead th:first-child{z-index:4;background:#fbfbfd}
+#page-roster .r29-summary-table thead th:nth-child(2){background:#eef6ff;color:#406f9b}
+#page-roster .r29-summary-table thead th:nth-child(3){background:#f2efff;color:#6652ad}
+#page-roster .r29-summary-table thead th:nth-child(4){background:#effbf3;color:#397a4e}
+#page-roster .r29-summary-table thead th:nth-child(5){background:#eefaf7;color:#27806d}
+#page-roster .r29-summary-table thead th:nth-child(6){background:#fff8dd;color:#8b6a11}
+#page-roster .r29-summary-table thead th:nth-child(7){background:#fff2dd;color:#a56520}
+#page-roster .r29-summary-table thead th:nth-child(8){background:#fff0f5;color:#b64b74}
+#page-roster .r29-summary-table tfoot th{background:#f7f7fa!important;font-weight:900}
+#page-roster .r29-empty{text-align:center!important;color:#9aa1ad!important;padding:18px!important}
+
+#page-roster .r29-type-list{display:grid;gap:7px}
+#page-roster .r29-type-list>div{display:grid;grid-template-columns:10px minmax(70px,.62fr) 1.38fr;gap:7px;align-items:start;font-size:8.5px;line-height:1.45}
+#page-roster .r29-type-list i{width:8px;height:8px;border-radius:50%;margin-top:2px}
+#page-roster .r29-type-list b{color:#465268}.r29-type-list span{color:#7e8798}
+#page-roster .r29-type-list i.v{background:#69b6ee}
+#page-roster .r29-type-list i.ot{background:#7456d5}
+#page-roster .r29-type-list i.morning{background:#4daf74}
+#page-roster .r29-type-list i.night{background:#25ad86}
+#page-roster .r29-type-list i.long{background:#f3b518}
+#page-roster .r29-type-list i.evening{background:#f1902d}
+#page-roster .r29-type-list i.extra{background:#ef5b91}
+
+#page-roster .r29-note-list{margin:0 0 10px;padding-left:15px;color:#6d7789;font-size:8.8px;line-height:1.65}
+#page-roster .r29-note-list li{margin-bottom:5px}
+#page-roster .r29-pdf-note-label{display:block;font-size:8.5px;font-weight:900;color:#566176;margin-bottom:5px}
+#page-roster #pdfNote{width:100%;min-height:70px;border:1px solid #e8e5eb;border-radius:10px;padding:8px 9px;background:#fff;font-size:10px;resize:vertical}
+
+/* feedback panels */
+#page-roster .action-feedback,#page-roster .conflict-detail-panel,#page-roster .fix-choice-wrap,#page-roster .auto-fix-summary{margin:8px 0}
+
+/* Desktop: keep reference-like single-screen density */
+@media (min-width:1367px){
+  #page-roster .sheet-wrap{max-height:54vh}
+}
+
+/* iPad landscape / medium desktop */
+@media (min-width:821px) and (max-width:1366px){
+  #page-roster{padding-bottom:12px}
+  #page-roster .r29-shell{gap:9px}
+  #page-roster .r29-page-title{min-height:43px}
+  #page-roster .r29-title-icon{width:34px;height:34px;font-size:13px}
+  #page-roster .r29-title-copy h2{font-size:19px}
+  #page-roster .r29-title-copy p{font-size:8.5px}
+  #page-roster .r29-toolbar-card{padding:9px 10px;border-radius:15px}
+  #page-roster .r29-toolbar{grid-template-columns:130px 110px repeat(7,minmax(88px,1fr));gap:6px}
+  #page-roster .r29-field select,#page-roster .r29-field input,#page-roster .r29-action{height:35px;min-height:35px;font-size:9px}
+  #page-roster .r29-action{padding:0 6px;gap:4px}
+  #page-roster .r29-action span{font-size:11px}
+  #page-roster .r29-stats{gap:8px}
+  #page-roster .r29-stat{min-height:72px;padding:9px 10px;grid-template-columns:42px 1fr;gap:8px;border-radius:14px}
+  #page-roster .r29-stat-icon{width:40px;height:40px;font-size:19px}
+  #page-roster .r29-stat-copy small{font-size:8px}
+  #page-roster .r29-stat-copy strong{font-size:19px}
+  #page-roster .r29-stat-copy i{font-size:7px;margin-top:3px}
+  #page-roster .r29-table-card{padding:8px;border-radius:15px}
+  #page-roster .r29-table-toolbar{min-height:34px;padding-bottom:6px}
+  #page-roster .r29-month-nav b{font-size:11px}
+  #page-roster .r29-day-legend{gap:10px;font-size:7.5px}
+  #page-roster .r29-view-tools button{height:27px;min-height:27px;font-size:7.5px;padding:0 7px}
+  #page-roster .r29-workflow-row{padding:6px 8px;margin-bottom:6px}
+  #page-roster .sheet-wrap{max-height:52vh}
+  #page-roster .r29-bottom{grid-template-columns:minmax(0,1.7fr) minmax(215px,.9fr) minmax(215px,.9fr);gap:8px}
+  #page-roster .r29-panel{padding:9px;border-radius:14px}
+  #page-roster .r29-summary-scroll{max-height:230px}
+}
+
+/* Tablet portrait / narrow desktop */
+@media (max-width:1050px){
+  #page-roster .r29-toolbar{grid-template-columns:repeat(4,minmax(0,1fr))}
+  #page-roster .r29-field{grid-column:span 2}
+  #page-roster .r29-stats{grid-template-columns:1fr 1fr}
+  #page-roster .r29-bottom{grid-template-columns:1fr 1fr}
+  #page-roster .r29-summary-panel{grid-column:1/-1}
+  #page-roster .r29-table-toolbar{grid-template-columns:1fr auto}
+  #page-roster .r29-day-legend{grid-column:1/-1;grid-row:2;justify-content:flex-start}
+}
+
+/* Phones */
+@media (max-width:640px){
+  #page-roster .r29-page-title{align-items:flex-start}
+  #page-roster .r29-version{display:none}
+  #page-roster .r29-toolbar{grid-template-columns:1fr 1fr}
+  #page-roster .r29-field{grid-column:auto}
+  #page-roster .r29-action{min-height:42px;height:42px}
+  #page-roster .r29-stats{grid-template-columns:1fr}
+  #page-roster .r29-table-toolbar{display:flex;flex-wrap:wrap}
+  #page-roster .r29-month-nav{width:100%}
+  #page-roster .r29-day-legend{order:3;width:100%;justify-content:flex-start}
+  #page-roster .r29-view-tools{margin-left:auto}
+  #page-roster .r29-view-tools #r29ListViewBtn{display:none}
+  #page-roster .r29-bottom{grid-template-columns:1fr}
+  #page-roster .r29-summary-panel{grid-column:auto}
+  #page-roster .sheet-wrap{max-height:58vh}
+}
+
+@media print{
+  #page-roster .r29-page-title,
+  #page-roster .r29-toolbar-card,
+  #page-roster .r29-stats,
+  #page-roster .r29-table-toolbar,
+  #page-roster .r29-workflow-row,
+  #page-roster .r29-bottom,
+  #page-roster .action-feedback,
+  #page-roster .conflict-detail-panel,
+  #page-roster .fix-choice-wrap,
+  #page-roster .auto-fix-summary{display:none!important}
+  #page-roster .r29-table-card{border:0;box-shadow:none;padding:0}
+  #page-roster .sheet-wrap{max-height:none;border:0!important;border-radius:0!important;overflow:visible}
+}
