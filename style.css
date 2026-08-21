@@ -1,531 +1,310 @@
 /* =========================================================
-   ROSTER SCHEDULER — HOME UI V25
-   ใช้เป็น CSS เพิ่มเติมต่อจาก style เดิมใน index.html
+   ROSTER SCHEDULER — HOME V26 RESPONSIVE
+   Desktop / iPad / Mobile
    ========================================================= */
 
 :root{
-  --v25-pink:#ff639c;
-  --v25-mint:#65d7c1;
-  --v25-purple:#9d86e8;
-  --v25-yellow:#f3c85d;
-  --v25-blue:#71bee9;
-  --v25-ink:#344055;
-  --v25-muted:#7b8496;
-  --v25-line:#ebe9ef;
-  --v25-shadow:0 7px 24px rgba(70,65,95,.08);
+  --h26-bg:#fffefe;
+  --h26-card:#ffffff;
+  --h26-text:#344055;
+  --h26-muted:#7f8798;
+  --h26-line:#ece9ef;
+  --h26-pink:#f45f97;
+  --h26-pink-soft:#fff0f6;
+  --h26-mint:#5ccdb9;
+  --h26-mint-soft:#eefbf8;
+  --h26-violet:#9a7be2;
+  --h26-violet-soft:#f4f0ff;
+  --h26-yellow:#f1bd4d;
+  --h26-yellow-soft:#fff9e8;
+  --h26-blue:#61b6df;
+  --h26-shadow:0 8px 26px rgba(64,63,83,.075);
 }
 
+/* only Home is replaced; other pages keep current styles */
 #page-home{
-  padding-bottom:22px !important;
+  max-width:1480px!important;
+  margin:0 auto!important;
+  padding:0!important;
 }
 
-#page-home .v244-home-shell{
+#page-home .h26{
+  min-height:calc(100dvh - 78px);
+  padding:12px 14px 18px;
   display:grid;
+  grid-template-rows:auto auto auto auto;
   gap:12px;
-  min-height:calc(100vh - 110px);
-  padding-bottom:20px;
+  color:var(--h26-text);
+}
+
+#page-home .h26-card{
+  background:var(--h26-card);
+  border:1px solid var(--h26-line);
+  border-radius:20px;
+  box-shadow:var(--h26-shadow);
 }
 
 /* HERO */
-#page-home .v244-hero{
+#page-home .h26-hero{
+  min-height:264px;
   position:relative;
   overflow:hidden;
-  min-height:230px !important;
-  border:1px solid #f1d8e3 !important;
-  border-radius:24px !important;
-  padding:25px 34px !important;
-  display:grid !important;
-  grid-template-columns:minmax(0,1.05fr) minmax(310px,.95fr) !important;
-  align-items:center !important;
-  background:
-    radial-gradient(circle at 75% 18%,rgba(255,255,255,.95) 0 3px,transparent 4px),
-    radial-gradient(circle at 91% 27%,rgba(255,255,255,.95) 0 4px,transparent 5px),
-    radial-gradient(circle at 65% 70%,rgba(255,255,255,.85) 0 2px,transparent 3px),
-    linear-gradient(135deg,#fff9fc 0%,#ffeaf3 52%,#fff8fb 100%) !important;
-  box-shadow:var(--v25-shadow) !important;
-}
-
-#page-home .v244-hero::before{
-  content:"";
-  position:absolute;
-  right:5.5%;
-  top:18%;
-  width:245px;
-  height:132px;
-  border-radius:145px 145px 0 0;
-  border:17px solid rgba(255,150,185,.23);
-  border-bottom:0;
-  box-shadow:
-    inset 0 0 0 14px rgba(255,216,128,.35),
-    inset 0 0 0 28px rgba(102,211,195,.23),
-    inset 0 0 0 42px rgba(155,133,233,.18);
-  transform:rotate(5deg);
-  pointer-events:none;
-}
-
-#page-home .v244-hero::after{
-  content:"☁   ✦   ☁";
-  position:absolute;
-  right:4%;
-  bottom:8%;
-  font-size:38px;
-  color:rgba(255,255,255,.92);
-  letter-spacing:8px;
-  pointer-events:none;
-}
-
-#page-home .v244-hero-copy{
-  position:relative;
-  z-index:3;
-}
-
-#page-home .v244-hello{
-  font-size:26px !important;
-  line-height:1.08 !important;
-  font-weight:900 !important;
-  color:#3e485d !important;
-}
-
-#page-home .v244-hero h1{
-  margin:7px 0 10px !important;
-  font-size:clamp(38px,4vw,58px) !important;
-  line-height:1.02 !important;
-  color:var(--v25-pink) !important;
-  letter-spacing:-1.2px !important;
-}
-
-#page-home .v244-hero h2{
-  margin:0 0 4px !important;
-  font-size:17px !important;
-  color:#3b4659 !important;
-}
-
-#page-home .v244-hero p{
-  margin:0 0 14px !important;
-  color:#697487 !important;
-  font-size:13px !important;
-}
-
-#page-home .v244-start-btn{
-  min-height:38px !important;
-  padding:7px 15px !important;
-  border:1px solid #f3c2d4 !important;
-  background:rgba(255,255,255,.72) !important;
-  color:#dd5f91 !important;
-  box-shadow:none !important;
-}
-
-#page-home .v244-hero-art{
-  position:relative !important;
-  z-index:2 !important;
-  min-height:185px !important;
-  display:grid !important;
-  place-items:center !important;
-}
-
-#page-home .v244-hero-art::before{
-  content:"🗓️";
   display:grid;
-  place-items:center;
-  width:185px;
-  height:165px;
-  font-size:132px;
-  filter:drop-shadow(0 15px 11px rgba(168,91,124,.17));
-  transform:rotate(3deg);
+  grid-template-columns:1.05fr .95fr;
+  align-items:center;
+  padding:28px 40px;
+  border:1px solid #f3dbe5;
+  border-radius:24px;
+  background:
+    radial-gradient(circle at 13% 19%,rgba(255,255,255,.92) 0 3px,transparent 4px),
+    radial-gradient(circle at 25% 76%,rgba(255,255,255,.9) 0 2px,transparent 3px),
+    radial-gradient(circle at 86% 15%,rgba(255,255,255,.95) 0 3px,transparent 4px),
+    linear-gradient(135deg,#fff9fc 0%,#ffeaf3 52%,#fff7fb 100%);
+  box-shadow:var(--h26-shadow);
 }
-
-#page-home .v244-hero-art::after{
-  content:"🕒";
-  position:absolute;
-  right:13%;
-  bottom:1%;
-  font-size:72px;
-  filter:drop-shadow(0 10px 8px rgba(168,91,124,.15));
+#page-home .h26-hero-copy{position:relative;z-index:2}
+#page-home .h26-eyebrow{font-weight:900;font-size:28px;line-height:1.1;color:#3b465b}
+#page-home .h26-title{
+  margin:7px 0 12px;
+  font-weight:950;
+  font-size:clamp(42px,4.5vw,66px);
+  line-height:.98;
+  letter-spacing:-1.4px;
+  color:var(--h26-pink);
 }
-
-#page-home .v244-spark{
-  position:absolute !important;
-  z-index:4 !important;
-  color:#fff !important;
-  font-size:22px !important;
-  text-shadow:0 2px 8px rgba(255,90,150,.15);
+#page-home .h26-sub{font-weight:800;font-size:18px;margin-bottom:5px;color:#3d4658}
+#page-home .h26-desc{font-size:13px;color:#6f788d;margin-bottom:17px}
+#page-home .h26-start{
+  min-height:40px;
+  border-radius:13px;
+  border:1px solid #f3bfd2;
+  color:#de5c8d;
+  background:rgba(255,255,255,.75);
+  padding:8px 16px;
+  box-shadow:none;
 }
+#page-home .h26-hero-art{display:grid;place-items:center;position:relative;z-index:1}
+#page-home .h26-hero-svg{width:min(100%,520px);height:auto;display:block}
+#page-home .h26-spark{position:absolute;color:white;font-size:25px;opacity:.95}
+#page-home .h26-spark.a{left:8%;top:14%}
+#page-home .h26-spark.b{right:7%;top:9%}
+#page-home .h26-spark.c{left:31%;bottom:10%}
 
-/* STAT CARDS */
-#page-home .v244-stat-grid{gap:12px !important}
-
-#page-home .v244-stat{
-  min-height:102px !important;
-  border-radius:20px !important;
-  border:1px solid var(--v25-line) !important;
-  box-shadow:var(--v25-shadow) !important;
+/* STATS */
+#page-home .h26-stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+}
+#page-home .h26-stat{
+  min-height:112px;
+  display:grid;
+  grid-template-columns:68px 1fr;
+  align-items:center;
+  gap:12px;
+  padding:14px 18px;
   cursor:pointer;
-  transition:transform .15s ease;
-  -webkit-tap-highlight-color:transparent;
+  transition:transform .15s ease,box-shadow .15s ease;
+}
+#page-home .h26-stat:active{transform:scale(.985)}
+#page-home .h26-stat.pink{background:linear-gradient(135deg,#fff9fb,#fff0f6)}
+#page-home .h26-stat.mint{background:linear-gradient(135deg,#fbfffe,#eefbf8)}
+#page-home .h26-stat.yellow{background:linear-gradient(135deg,#fffef9,#fff8e5)}
+#page-home .h26-stat.violet{background:linear-gradient(135deg,#fdfcff,#f4f0ff)}
+#page-home .h26-stat-icon{
+  width:62px;height:62px;border-radius:50%;
+  display:grid;place-items:center;
+  background:rgba(255,255,255,.68);
+}
+#page-home .h26-stat-icon svg{width:42px;height:42px}
+#page-home .h26-stat-label{font-size:13px;font-weight:800;color:#4e576b}
+#page-home .h26-stat-value{font-size:30px;font-weight:950;line-height:1.05;margin-top:2px}
+#page-home .h26-stat-value small{font-size:11px;font-weight:700;margin-left:4px;color:#70798c}
+#page-home .h26-stat-note{font-size:10px;color:#7c8597;margin-top:5px}
+
+/* MIDDLE */
+#page-home .h26-middle{
+  display:grid;
+  grid-template-columns:minmax(300px,.82fr) minmax(0,2.18fr);
+  gap:12px;
+}
+#page-home .h26-section{padding:14px 16px}
+#page-home .h26-head{
+  display:flex;justify-content:space-between;align-items:center;gap:8px;
+  margin-bottom:9px;
+}
+#page-home .h26-head h3{margin:0;font-size:16px;color:#3b4559}
+#page-home .h26-monthnav{display:flex;align-items:center;gap:7px;font-size:11px;color:#626c80}
+#page-home .h26-monthnav button{
+  width:28px;height:28px;min-height:28px;padding:0;border-radius:9px;
+  background:transparent;box-shadow:none;
 }
 
-#page-home .v244-stat:active{transform:scale(.985)}
+/* calendar */
+#page-home .h26-calendar{
+  display:grid;grid-template-columns:repeat(7,1fr);gap:4px;
+}
+#page-home .h26-day{
+  min-height:28px;border-radius:9px;display:grid;place-items:center;
+  font-size:11px;color:#3f4859;
+}
+#page-home .h26-day.hd{font-weight:900;color:#6c7485;min-height:23px}
+#page-home .h26-day.weekend{color:#ea6695}
+#page-home .h26-day.today{background:#dff8f3;color:#148a75;outline:1px solid #8edfd0;font-weight:900}
+#page-home .h26-day.holiday{background:#ffe7ef;color:#da5b89;font-weight:900}
+#page-home .h26-legends{display:flex;gap:13px;flex-wrap:wrap;font-size:9.5px;color:#7b8393;margin-top:7px}
+#page-home .h26-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:4px;vertical-align:-1px}
+#page-home .h26-dot.p{background:#ffc6d9}.h26-dot.m{background:#74d9c6}
 
-#page-home .v244-stat-icon{
-  width:58px !important;
-  height:58px !important;
-  border-radius:50% !important;
-  display:grid !important;
-  place-items:center !important;
-  font-size:31px !important;
+/* shortcuts */
+#page-home .h26-shortcuts-wrap{padding:14px 16px}
+#page-home .h26-shortcuts{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:12px;
+}
+#page-home .h26-shortcut{
+  min-height:172px;border-radius:18px;border:1px solid rgba(70,70,90,.08);
+  padding:16px 8px;display:grid;place-items:center;text-align:center;
+  box-shadow:none;
+}
+#page-home .h26-shortcut.pink{background:linear-gradient(145deg,#fff8fb,#ffeef5)}
+#page-home .h26-shortcut.mint{background:linear-gradient(145deg,#fbfffe,#eafaf6)}
+#page-home .h26-shortcut.violet{background:linear-gradient(145deg,#fdfcff,#f2edff)}
+#page-home .h26-shortcut.yellow{background:linear-gradient(145deg,#fffefa,#fff7df)}
+#page-home .h26-shortcut-icon{
+  width:72px;height:72px;border-radius:21px;background:rgba(255,255,255,.72);
+  display:grid;place-items:center;box-shadow:0 8px 18px rgba(79,66,105,.08);margin-bottom:5px
+}
+#page-home .h26-shortcut-icon svg{width:48px;height:48px}
+#page-home .h26-shortcut b{font-size:13px}
+#page-home .h26-shortcut small{display:block;font-size:10px;line-height:1.35;color:#7d8494;margin-top:3px}
+
+/* bottom */
+#page-home .h26-bottom{
+  display:grid;grid-template-columns:1.03fr 1.55fr 1fr;gap:12px;
+}
+#page-home .h26-bottom>.h26-card{min-height:205px}
+#page-home .h26-more{
+  border:0;background:transparent;color:#5ca1b6;box-shadow:none;
+  min-height:28px;padding:2px 5px;font-size:10px
+}
+#page-home .h26-news{display:grid;gap:1px}
+#page-home .h26-news-item{
+  min-height:34px;display:grid;grid-template-columns:12px 1fr auto;gap:7px;align-items:center;
+  border-bottom:1px solid #f0eef3;font-size:10px;color:#535d70
+}
+#page-home .h26-news-item:last-child{border-bottom:0}
+#page-home .h26-news-dot{width:8px;height:8px;border-radius:50%}
+#page-home .h26-news-time{font-size:8.5px;color:#a0a6b1}
+
+/* workflow */
+#page-home .h26-flow{
+  display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr auto 1fr;
+  align-items:start;gap:4px;margin-top:14px
+}
+#page-home .h26-step{text-align:center;min-width:0}
+#page-home .h26-num{
+  width:24px;height:24px;border-radius:50%;display:grid;place-items:center;
+  margin:0 auto 8px;color:white;font-size:10px;font-weight:900
+}
+#page-home .h26-step-icon{
+  width:62px;height:62px;border-radius:50%;display:grid;place-items:center;
+  margin:0 auto 7px;box-shadow:0 7px 15px rgba(72,67,91,.08)
+}
+#page-home .h26-step-icon svg{width:37px;height:37px}
+#page-home .h26-step b{display:block;font-size:10px}
+#page-home .h26-step small{font-size:8.3px;color:#8b92a2;line-height:1.25}
+#page-home .h26-arrow{padding-top:48px;color:#b9bec8;font-size:16px}
+#page-home .h26-n1{background:#f46899}.h26-n2{background:#55cdb8}.h26-n3{background:#9a7be2}.h26-n4{background:#efbc4d}.h26-n5{background:#5bb4df}
+#page-home .h26-i1{background:#ffdbe8}.h26-i2{background:#dff8f2}.h26-i3{background:#ece4ff}.h26-i4{background:#fff1c9}.h26-i5{background:#e0f3fd}
+
+/* tips */
+#page-home .h26-tips{display:grid;gap:8px;margin-top:7px}
+#page-home .h26-tip{display:flex;align-items:flex-start;gap:8px;font-size:10px;line-height:1.35;color:#536076}
+#page-home .h26-check{
+  width:17px;height:17px;flex:0 0 17px;border-radius:50%;display:grid;place-items:center;
+  color:#fff;font-size:10px;font-weight:900
+}
+#page-home .h26-tip:nth-child(1) .h26-check{background:#67d0c0}
+#page-home .h26-tip:nth-child(2) .h26-check{background:#59b8de}
+#page-home .h26-tip:nth-child(3) .h26-check{background:#9b80df}
+#page-home .h26-tip:nth-child(4) .h26-check{background:#efbe54}
+#page-home .h26-tip:nth-child(5) .h26-check{background:#ef7ca6}
+
+#page-home .h26-watermark{
+  text-align:right;color:#f0a8c4;font-size:10px;font-style:italic;opacity:.72;margin-top:7px
+}
+#page-home .h26-version{text-align:right;color:#a0a5b1;font-size:8px;padding:1px 2px}
+
+/* TABLET / iPad landscape */
+@media (min-width:821px) and (max-width:1366px){
+  #page-home .h26{padding:9px 10px 14px;gap:9px}
+  #page-home .h26-hero{min-height:215px;padding:20px 28px}
+  #page-home .h26-eyebrow{font-size:22px}
+  #page-home .h26-title{font-size:clamp(36px,4.2vw,50px);margin:5px 0 8px}
+  #page-home .h26-sub{font-size:14px}
+  #page-home .h26-desc{font-size:10.5px;margin-bottom:10px}
+  #page-home .h26-hero-svg{max-height:185px}
+  #page-home .h26-stat{min-height:89px;padding:9px 12px;grid-template-columns:52px 1fr}
+  #page-home .h26-stat-icon{width:48px;height:48px}
+  #page-home .h26-stat-icon svg{width:33px;height:33px}
+  #page-home .h26-stat-value{font-size:24px}
+  #page-home .h26-stat-label{font-size:10.5px}
+  #page-home .h26-stat-note{font-size:8.4px}
+  #page-home .h26-section,#page-home .h26-shortcuts-wrap{padding:10px 12px}
+  #page-home .h26-shortcut{min-height:128px;padding:10px 5px}
+  #page-home .h26-shortcut-icon{width:52px;height:52px;border-radius:16px}
+  #page-home .h26-shortcut-icon svg{width:35px;height:35px}
+  #page-home .h26-shortcut b{font-size:10.5px}
+  #page-home .h26-shortcut small{font-size:8.5px}
+  #page-home .h26-bottom>.h26-card{min-height:174px}
+  #page-home .h26-step-icon{width:50px;height:50px}
+  #page-home .h26-step-icon svg{width:30px;height:30px}
+  #page-home .h26-flow{margin-top:8px}
+  #page-home .h26-arrow{padding-top:39px}
 }
 
-#page-home .v244-stat strong{
-  font-size:27px !important;
-  line-height:1 !important;
+/* iPad portrait */
+@media (min-width:641px) and (max-width:900px){
+  #page-home .h26-middle{grid-template-columns:1fr}
+  #page-home .h26-bottom{grid-template-columns:1fr 1fr}
+  #page-home .h26-bottom>.h26-card:nth-child(2){grid-column:1/-1;order:-1}
+  #page-home .h26-shortcuts{grid-template-columns:repeat(4,1fr)}
 }
 
-/* MAIN CARDS */
-#page-home .v244-card{
-  border-radius:20px !important;
-  border:1px solid var(--v25-line) !important;
-  background:rgba(255,255,255,.98) !important;
-  box-shadow:var(--v25-shadow) !important;
-}
-
-#page-home .v244-middle{
-  display:grid !important;
-  grid-template-columns:minmax(285px,.78fr) minmax(0,2fr) !important;
-  gap:12px !important;
-}
-
-#page-home .v244-bottom{
-  display:grid !important;
-  grid-template-columns:1.05fr 1.48fr 1fr !important;
-  gap:12px !important;
-}
-
-#page-home .v244-card-title h3{
-  color:#3e485b !important;
-  font-size:15px !important;
-}
-
-/* CALENDAR */
-#page-home .v244-calendar-card{
-  min-height:245px !important;
-}
-
-#page-home .v244-calendar{
-  display:grid !important;
-  grid-template-columns:repeat(7,1fr) !important;
-  gap:4px !important;
-  padding-top:7px !important;
-}
-
-#page-home .v244-calendar > div{
-  min-width:0;
-  min-height:26px !important;
-  display:grid !important;
-  place-items:center !important;
-  border-radius:9px !important;
-  font-size:11px !important;
-  color:#40495c;
-}
-
-#page-home .v244-calendar > .head{
-  min-height:22px !important;
-  font-weight:900 !important;
-  color:#687287 !important;
-}
-
-#page-home .v244-calendar > .weekend{color:#e96393 !important}
-
-#page-home .v244-calendar > .holiday{
-  background:#ffe7ef !important;
-  color:#d95588 !important;
-  font-weight:900 !important;
-}
-
-#page-home .v244-calendar > .today{
-  background:#def7f2 !important;
-  color:#198d79 !important;
-  outline:1px solid #8bdccc !important;
-  font-weight:900 !important;
-}
-
-#page-home .v244-calendar-nav button{
-  min-height:28px !important;
-  width:30px !important;
-  padding:0 !important;
-  background:transparent !important;
-  box-shadow:none !important;
-}
-
-/* QUICK ACTIONS */
-#page-home .v244-shortcut-grid{gap:11px !important}
-
-#page-home .v244-shortcut-grid button{
-  min-height:140px !important;
-  border-radius:18px !important;
-  border:1px solid rgba(70,75,95,.08) !important;
-  box-shadow:none !important;
-  transition:transform .15s ease;
-  -webkit-tap-highlight-color:transparent;
-}
-
-#page-home .v244-shortcut-grid button:active{transform:scale(.98)}
-
-#page-home .v244-shortcut-grid button > span{
-  width:58px !important;
-  height:58px !important;
-  display:grid !important;
-  place-items:center !important;
-  margin:0 auto 8px !important;
-  border-radius:18px !important;
-  font-size:32px !important;
-  background:rgba(255,255,255,.72) !important;
-  box-shadow:0 7px 16px rgba(75,65,100,.08) !important;
-}
-
-/* NEWS */
-#page-home .v244-link{
-  min-height:28px !important;
-  padding:3px 7px !important;
-  color:#5b9eb2 !important;
-  background:transparent !important;
-  box-shadow:none !important;
-}
-
-#page-home .v244-news button{
-  width:100% !important;
-  min-height:31px !important;
-  padding:4px 3px !important;
-  background:transparent !important;
-  box-shadow:none !important;
-  border-radius:7px !important;
-  text-align:left !important;
-}
-
-/* WORKFLOW */
-#page-home .v244-flow{
-  display:grid !important;
-  grid-template-columns:1fr auto 1fr auto 1fr auto 1fr auto 1fr !important;
-  align-items:center !important;
-  gap:4px !important;
-}
-
-#page-home .v244-flow button{
-  min-width:0 !important;
-  background:transparent !important;
-  box-shadow:none !important;
-  padding:4px 2px !important;
-}
-
-#page-home .v244-flow button .n{
-  width:50px !important;
-  height:50px !important;
-  margin:0 auto 7px !important;
-  border-radius:50% !important;
-  display:grid !important;
-  place-items:center !important;
-  font-size:0 !important;
-  box-shadow:0 7px 15px rgba(70,65,95,.08);
-}
-
-#page-home .v244-flow button .n::after{font-size:25px}
-#page-home .v244-flow button:nth-of-type(1) .n::after{content:"📁"}
-#page-home .v244-flow button:nth-of-type(2) .n::after{content:"🗓️"}
-#page-home .v244-flow button:nth-of-type(3) .n::after{content:"🔎"}
-#page-home .v244-flow button:nth-of-type(4) .n::after{content:"👤"}
-#page-home .v244-flow button:nth-of-type(5) .n::after{content:"🔒"}
-
-#page-home .v244-flow i{
-  color:#aab2c0 !important;
-  font-style:normal !important;
-}
-
-/* iPad landscape */
-@media (min-width:768px) and (max-width:1366px){
-  #page-home .v244-home-shell{gap:10px !important}
-  #page-home .v244-hero{
-    min-height:215px !important;
-    padding:21px 28px !important;
+/* mobile */
+@media (max-width:640px){
+  #page-home .h26{padding:8px;gap:9px}
+  #page-home .h26-hero{
+    grid-template-columns:1fr;
+    min-height:auto;
+    padding:20px 18px 12px;
   }
-  #page-home .v244-hero h1{font-size:clamp(34px,4vw,49px) !important}
-  #page-home .v244-hero-art{min-height:170px !important}
-  #page-home .v244-hero-art::before{font-size:116px;width:162px;height:146px}
-  #page-home .v244-hero-art::after{font-size:64px}
-  #page-home .v244-stat{min-height:92px !important}
-  #page-home .v244-stat-icon{width:52px !important;height:52px !important;font-size:28px !important}
-  #page-home .v244-shortcut-grid button{min-height:122px !important}
-  #page-home .v244-shortcut-grid button > span{width:50px !important;height:50px !important;font-size:28px !important}
+  #page-home .h26-eyebrow{font-size:19px}
+  #page-home .h26-title{font-size:36px}
+  #page-home .h26-sub{font-size:13px}
+  #page-home .h26-desc{font-size:10.5px}
+  #page-home .h26-hero-art{margin-top:5px}
+  #page-home .h26-hero-svg{width:100%;max-height:185px}
+  #page-home .h26-stats{grid-template-columns:1fr 1fr;gap:8px}
+  #page-home .h26-stat{min-height:88px;padding:9px;grid-template-columns:44px 1fr;gap:8px}
+  #page-home .h26-stat-icon{width:42px;height:42px}
+  #page-home .h26-stat-icon svg{width:28px;height:28px}
+  #page-home .h26-stat-label{font-size:9.5px}
+  #page-home .h26-stat-value{font-size:21px}
+  #page-home .h26-stat-note{font-size:7.8px}
+  #page-home .h26-middle{grid-template-columns:1fr}
+  #page-home .h26-shortcuts{grid-template-columns:1fr 1fr;gap:8px}
+  #page-home .h26-shortcut{min-height:126px}
+  #page-home .h26-bottom{grid-template-columns:1fr}
+  #page-home .h26-flow{grid-template-columns:1fr 1fr 1fr;gap:10px}
+  #page-home .h26-arrow{display:none}
+  #page-home .h26-step{padding:4px}
+  #page-home .h26-bottom>.h26-card{min-height:auto}
 }
 
-/* mobile fallback */
-@media (max-width:900px){
-  #page-home .v244-hero{grid-template-columns:1fr !important}
-  #page-home .v244-hero-art{display:none !important}
-  #page-home .v244-middle,
-  #page-home .v244-bottom{grid-template-columns:1fr !important}
-}
-
-/* =========================================================
-   HOME V25.1 — FINAL iPad REFINEMENTS
-   ========================================================= */
-
-/* เพิ่มระยะหายใจระหว่าง Hero กับการ์ดสถิติ */
-#page-home .v244-stat-grid{
-  margin-top:4px !important;
-}
-
-/* ขยายพื้นที่ส่วนล่างให้สมดุลขึ้น */
-#page-home .v244-bottom{
-  align-items:stretch !important;
-  margin-top:2px !important;
-}
-
-#page-home .v244-bottom > .v244-card{
-  min-height:172px !important;
-}
-
-/* ประกาศ / แจ้งเตือน */
-#page-home .v244-news{
-  min-height:118px !important;
-}
-
-#page-home .v244-news button{
-  font-size:11.2px !important;
-  line-height:1.35 !important;
-}
-
-/* ตัวอักษรปฏิทินให้อ่านง่ายขึ้น */
-#page-home .v244-calendar > div{
-  font-size:11.7px !important;
-}
-
-#page-home .v244-calendar > .head{
-  font-size:11px !important;
-}
-
-/* ทางลัด */
-#page-home .v244-shortcut-grid button strong,
-#page-home .v244-shortcut-grid button b{
-  font-size:12.2px !important;
-}
-
-#page-home .v244-shortcut-grid button small{
-  font-size:10px !important;
-  line-height:1.3 !important;
-}
-
-/* ขั้นตอนการทำงาน */
-#page-home .v244-flow button{
-  min-height:92px !important;
-}
-
-#page-home .v244-flow button span:not(.n),
-#page-home .v244-flow button strong,
-#page-home .v244-flow button small{
-  font-size:10.4px !important;
-  line-height:1.25 !important;
-}
-
-/* ป้องกันส่วนล่างซ้อน */
-#page-home .v244-middle,
-#page-home .v244-bottom{
-  position:relative !important;
-  z-index:1 !important;
-}
-
-#page-home .v244-card{
-  overflow:hidden !important;
-}
-
-/* Hero spacing refinement */
-#page-home .v244-hero{
-  margin-bottom:2px !important;
-}
-
-#page-home .v244-hero-copy{
-  padding-right:8px !important;
-}
-
-#page-home .v244-hero h1{
-  max-width:100% !important;
-}
-
-/* ทำให้ปุ่มและการ์ดแตะง่ายขึ้นบน iPad */
-#page-home button,
-#page-home .v244-stat{
-  touch-action:manipulation;
-  -webkit-tap-highlight-color:rgba(255,99,156,.08);
-}
-
-/* iPad landscape — final balance */
-@media (min-width:900px) and (max-width:1366px) and (orientation:landscape){
-  #page-home{
-    padding-bottom:26px !important;
-  }
-
-  #page-home .v244-home-shell{
-    gap:11px !important;
-    padding-bottom:22px !important;
-  }
-
-  #page-home .v244-hero{
-    min-height:220px !important;
-  }
-
-  #page-home .v244-stat-grid{
-    margin-top:5px !important;
-  }
-
-  #page-home .v244-stat{
-    min-height:96px !important;
-  }
-
-  #page-home .v244-middle{
-    grid-template-columns:minmax(300px,.82fr) minmax(0,2fr) !important;
-  }
-
-  #page-home .v244-calendar-card{
-    min-height:252px !important;
-  }
-
-  #page-home .v244-shortcut-grid button{
-    min-height:128px !important;
-  }
-
-  #page-home .v244-bottom > .v244-card{
-    min-height:184px !important;
-  }
-
-  #page-home .v244-flow button .n{
-    width:52px !important;
-    height:52px !important;
-  }
-
-  #page-home .v244-flow button .n::after{
-    font-size:26px !important;
-  }
-}
-
-/* จอ iPad ที่ความสูงค่อนข้างจำกัด */
-@media (min-width:900px) and (max-width:1366px) and (max-height:900px) and (orientation:landscape){
-  #page-home .v244-hero{
-    min-height:205px !important;
-    padding-top:18px !important;
-    padding-bottom:18px !important;
-  }
-
-  #page-home .v244-stat{
-    min-height:90px !important;
-  }
-
-  #page-home .v244-shortcut-grid button{
-    min-height:118px !important;
-  }
-
-  #page-home .v244-bottom > .v244-card{
-    min-height:168px !important;
-  }
-
-  #page-home .v244-calendar-card{
-    min-height:238px !important;
-  }
+/* tiny phones */
+@media (max-width:390px){
+  #page-home .h26-stats{grid-template-columns:1fr}
+  #page-home .h26-shortcuts{grid-template-columns:1fr}
+  #page-home .h26-title{font-size:32px}
 }
