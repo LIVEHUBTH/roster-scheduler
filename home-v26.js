@@ -1,5 +1,5 @@
 /* =========================================================
-   ROSTER SCHEDULER — HOME V26
+   ROSTER SCHEDULER — HOME V27 (filename kept for drop-in replacement)
    Rebuilds only Home, preserves existing app pages/functions
    ========================================================= */
 (function(){
@@ -107,6 +107,21 @@
   function rebuild(){
     const page=$("page-home");
     if(!page || page.dataset.h26Built==="1") return;
+
+    /* V27 IMPORTANT:
+       #status belongs to the main app/login flow.
+       Preserve it before rebuilding Home so setStatus() never receives null. */
+    let statusNode = document.getElementById("status");
+    if(!statusNode){
+      statusNode = document.createElement("div");
+      statusNode.id = "status";
+      statusNode.className = "status no-print";
+      statusNode.style.display = "none";
+      statusNode.textContent = "กำลังเริ่มระบบ...";
+    }else{
+      statusNode.remove();
+    }
+
     page.dataset.h26Built="1";
 
     page.innerHTML=`
@@ -202,8 +217,11 @@
         </div>
       </section>
 
-      <div class="h26-version">V26.0 • Home Responsive</div>
+      <div class="h26-version">V27.0 • Home Responsive</div>
     </div>`;
+
+    /* Put the shared app status node back after rebuilding Home. */
+    page.prepend(statusNode);
 
     page.querySelectorAll("[data-go]").forEach(el=>el.addEventListener("click",()=>go(el.dataset.go)));
     $("h26Start").onclick=()=>go("roster");
@@ -242,7 +260,7 @@
   function updateVersionEverywhere(){
     document.querySelectorAll("body *").forEach(el=>{
       if(el.children.length===0 && /V24\.5/.test(el.textContent||"")){
-        el.textContent=(el.textContent||"").replace(/V24\.5/g,"V26.0");
+        el.textContent=(el.textContent||"").replace(/V24\\.5/g,"V27.0");
       }
     });
   }

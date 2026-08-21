@@ -1,3 +1,4 @@
+/* ROSTER SCHEDULER — V27.0 CLEAN RESPONSIVE */
 /* =========================================================
    ROSTER SCHEDULER — HOME V26 RESPONSIVE
    Desktop / iPad / Mobile
@@ -307,4 +308,66 @@
   #page-home .h26-stats{grid-template-columns:1fr}
   #page-home .h26-shortcuts{grid-template-columns:1fr}
   #page-home .h26-title{font-size:32px}
+}
+
+/* =========================================================
+   V27.0 — SAFETY + RESPONSIVE REFINEMENTS
+   ========================================================= */
+
+/* Shared status is part of the app lifecycle; keep it harmless on Home */
+#page-home > #status {
+  display:none;
+  margin:0 0 10px;
+}
+
+/* If an error/success explicitly shows status, keep it readable */
+#page-home > #status[style*="display: block"],
+#page-home > #status[style*="display:block"] {
+  display:block !important;
+}
+
+/* Make Home use available width without horizontal overflow */
+#page-home,
+#page-home .h26 {
+  width:100%;
+  max-width:100%;
+  overflow-x:hidden;
+}
+
+/* Better mobile tap targets */
+#page-home button,
+.side-nav a,
+.mobile-menu-btn {
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+}
+
+/* Desktop polish */
+@media (min-width:1367px){
+  #page-home .h26{
+    max-width:1480px;
+    margin:0 auto;
+  }
+}
+
+/* iPad landscape */
+@media (min-width:821px) and (max-width:1366px) and (orientation:landscape){
+  #page-home .h26-bottom{
+    align-items:stretch;
+  }
+  #page-home .h26-bottom > .h26-card{
+    min-width:0;
+  }
+}
+
+/* Mobile: cards never overflow the viewport */
+@media (max-width:640px){
+  #page-home .h26,
+  #page-home .h26-card,
+  #page-home .h26-hero,
+  #page-home .h26-stat,
+  #page-home .h26-shortcut{
+    min-width:0;
+    max-width:100%;
+  }
 }
