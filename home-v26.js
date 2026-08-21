@@ -58,12 +58,36 @@
     </svg>`;
   }
 
+  let routeBusy = false;
+
   function go(page){
-    if(typeof window.showPage==="function"){ window.showPage(page,true); return; }
-    document.querySelectorAll(".page-view").forEach(v=>v.classList.toggle("active",v.dataset.view===page));
-    document.querySelectorAll(".side-nav a[data-page]").forEach(a=>a.classList.toggle("active",a.dataset.page===page));
-    if(location.hash!=="#"+page) history.replaceState(null,"","#"+page);
-    window.scrollTo(0,0);
+    if(routeBusy) return;
+    routeBusy = true;
+
+    document.documentElement.classList.add("v271-routing");
+
+    /* Let Safari paint the pressed state first, then switch page. */
+    requestAnimationFrame(function(){
+      try{
+        if(typeof window.showPage==="function"){
+          window.showPage(page,true);
+        }else{
+          document.querySelectorAll(".page-view").forEach(function(v){
+            v.classList.toggle("active",v.dataset.view===page);
+          });
+          document.querySelectorAll(".side-nav a[data-page]").forEach(function(a){
+            a.classList.toggle("active",a.dataset.page===page);
+          });
+          if(location.hash!=="#"+page) history.replaceState(null,"","#"+page);
+          window.scrollTo(0,0);
+        }
+      }finally{
+        setTimeout(function(){
+          routeBusy = false;
+          document.documentElement.classList.remove("v271-routing");
+        }, 80);
+      }
+    });
   }
 
   let calDate=new Date();
@@ -217,7 +241,7 @@
         </div>
       </section>
 
-      <div class="h26-version">V27.0 • Home Responsive</div>
+      <div class="h26-version">V27.1 • Home Fast</div>
     </div>`;
 
     /* Put the shared app status node back after rebuilding Home. */
@@ -260,7 +284,7 @@
   function updateVersionEverywhere(){
     document.querySelectorAll("body *").forEach(el=>{
       if(el.children.length===0 && /V24\.5/.test(el.textContent||"")){
-        el.textContent=(el.textContent||"").replace(/V24\\.5/g,"V27.0");
+        el.textContent=(el.textContent||"").replace(/V24\\.5/g,"V27.1");
       }
     });
   }
@@ -268,8 +292,11 @@
   function init(){
     rebuild();
     updateVersionEverywhere();
-    setTimeout(()=>{syncStats();renderCalendar();updateVersionEverywhere()},400);
-    setTimeout(()=>{syncStats();renderCalendar();updateVersionEverywhere()},1200);
+    setTimeout(function(){
+      syncStats();
+      renderCalendar();
+      updateVersionEverywhere();
+    }, 300);
   }
 
   if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",init,{once:true});

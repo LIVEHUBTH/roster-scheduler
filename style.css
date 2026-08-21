@@ -371,3 +371,41 @@
     max-width:100%;
   }
 }
+
+
+/* =========================================================
+   V27.1 FAST — iPad / Mobile interaction tuning
+   ========================================================= */
+
+#page-home button,
+#page-home [data-go],
+.side-nav a[data-page]{
+  cursor:pointer;
+  will-change:transform;
+  transform:translateZ(0);
+}
+
+#page-home button:active,
+#page-home [data-go]:active,
+.side-nav a[data-page]:active{
+  transform:scale(.985) translateZ(0);
+}
+
+html.v271-routing{
+  cursor:progress;
+}
+
+/* Keep expensive paint effects lighter on iPad/mobile */
+@media (max-width:1366px){
+  #page-home .h26-card,
+  #page-home .h26-hero{
+    box-shadow:0 4px 14px rgba(64,63,83,.055);
+  }
+}
+
+@media (max-width:640px){
+  #page-home .h26-card,
+  #page-home .h26-hero{
+    box-shadow:0 3px 10px rgba(64,63,83,.045);
+  }
+}
