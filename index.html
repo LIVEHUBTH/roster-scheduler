@@ -1744,7 +1744,8 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 <link rel="stylesheet" href="style.css?v=30.0">
 <link rel="stylesheet" href="roster-v29.css?v=29.3">
 <link rel="stylesheet" href="people-v30.css?v=30.4">
-<link rel="stylesheet" href="rules-v31.css?v=31.0">
+<link rel="stylesheet" href="rules-v31.css?v=31.1">
+<link rel="stylesheet" href="holidays-v32.css?v=32.0">
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 </head>
@@ -2350,37 +2351,88 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 </section>
 
 <section class="page-view" id="page-holidays" data-view="holidays">
-  <div class="v24-page-title"><div><h2>🎁 วันหยุด/นักขัตฤกษ์</h2><p>จัดการวันหยุดประจำปีและวันนักขัตฤกษ์</p></div></div>
-  <div class="v24-holiday-top">
-    <div class="v24-card">
-      <div class="v24-card-head"><h3>🗓 ปฏิทินวันหยุด</h3><div><button id="holidayPrevMonthV24">‹</button><b id="holidayMonthTitleV24">-</b><button id="holidayNextMonthV24">›</button></div></div>
-      <div id="holidayCalendarV24" class="v24-big-calendar"></div>
-      <div class="v24-calendar-legend"><span class="pink-dot">● นักขัตฤกษ์</span><span class="yellow-dot">● วันหยุดชดเชย</span><span class="mint-dot">● วันหยุดพิเศษ</span><span class="purple-dot">● วันหยุดสุดสัปดาห์</span></div>
-    </div>
-    <div class="v24-holiday-side">
-      <div class="v24-card">
-        <h3>📊 สรุปวันหยุด</h3>
-        <div class="v24-stat-grid four"><div class="v24-mini-stat pink"><b id="holidayTotalV24">0</b><span>วันหยุดทั้งหมด</span></div><div class="v24-mini-stat mint"><b id="holidayOfficialV24">0</b><span>นักขัตฤกษ์</span></div><div class="v24-mini-stat purple"><b id="holidayWeekendV24">0</b><span>วันหยุดสุดสัปดาห์</span></div><div class="v24-mini-stat yellow"><b id="holidaySpecialV24">0</b><span>วันหยุดพิเศษ</span></div></div>
+  <div class="h32-shell">
+    <div class="h32-page-head">
+      <div class="h32-title-wrap">
+        <span class="h32-title-icon">🎁</span>
+        <div><h2>วันหยุด/นักขัตฤกษ์</h2><p>จัดการวันหยุดประจำปีและวันนักขัตฤกษ์</p></div>
       </div>
-      <div class="v24-card"><div class="v24-card-head"><h3>📝 รายการวันหยุดที่กำลังจะมาถึง</h3></div><div id="holidayUpcomingV24" class="v24-upcoming"></div></div>
+      <span class="h32-version">V32.0 • Holidays</span>
     </div>
-  </div>
-  <div class="v24-three-grid">
-    <div class="v24-card">
-      <h3>✏️ เพิ่ม/แก้ไขวันหยุด</h3>
-      <div class="holidaybar v24-holiday-form">
-        <label>ชื่อวันหยุด<input id="holidayName" type="text" placeholder="เช่น วันจักรี"></label>
-        <label>วันที่<input id="holidayDate" type="date"></label>
-        <label>ประเภท<select id="holidayTypeV24"><option value="official">นักขัตฤกษ์</option><option value="substitute">วันหยุดชดเชย</option><option value="special">วันหยุดพิเศษ</option></select></label>
-        <button id="addHolidayBtn">＋ เพิ่มวันหยุด</button>
+
+    <div class="h32-top-grid">
+      <section class="h32-card h32-calendar-card">
+        <div class="h32-card-head">
+          <h3><span class="h32-head-icon pink">▦</span> ปฏิทินวันหยุด</h3>
+          <div class="h32-month-nav">
+            <button type="button" id="holidayPrevMonthV24" aria-label="เดือนก่อน">‹</button>
+            <button type="button" id="holidayMonthPickerV32" class="h32-month-pill"><span id="holidayMonthTitleV24">-</span>⌄</button>
+            <button type="button" id="holidayNextMonthV24" aria-label="เดือนถัดไป">›</button>
+            <button type="button" id="holidayTodayV32" class="h32-today">วันนี้</button>
+          </div>
+        </div>
+        <div class="h32-week-head"><span>อา.</span><span>จ.</span><span>อ.</span><span>พ.</span><span>พฤ.</span><span>ศ.</span><span>ส.</span></div>
+        <div id="holidayCalendarV24" class="v24-big-calendar h32-calendar"></div>
+        <div class="h32-legend">
+          <span><i class="dot official"></i>นักขัตฤกษ์</span>
+          <span><i class="dot substitute"></i>วันหยุดชดเชย</span>
+          <span><i class="dot special"></i>วันหยุดพิเศษ</span>
+          <span><i class="dot weekend"></i>วันหยุดสุดสัปดาห์</span>
+        </div>
+      </section>
+
+      <div class="h32-side-stack">
+        <section class="h32-card h32-summary-card">
+          <h3><span class="h32-head-icon mint">▥</span> สรุปวันหยุด</h3>
+          <div class="h32-stat-grid">
+            <article class="pink"><b id="holidayTotalV24">0</b><span>วันหยุดทั้งหมด</span></article>
+            <article class="mint"><b id="holidayOfficialV24">0</b><span>นักขัตฤกษ์</span></article>
+            <article class="purple"><b id="holidayWeekendV24">0</b><span>วันหยุดสุดสัปดาห์</span></article>
+            <article class="yellow"><b id="holidaySpecialV24">0</b><span>วันหยุดพิเศษ</span></article>
+          </div>
+          <p id="holidaySummaryNoteV32" class="h32-summary-note">* ข้อมูลสำหรับเดือนปัจจุบัน</p>
+        </section>
+
+        <section class="h32-card h32-upcoming-card">
+          <div class="h32-card-head compact"><h3><span class="h32-head-icon pink">☑</span> รายการวันหยุดที่กำลังจะมาถึง</h3><button type="button" id="holidayShowAllV32" class="h32-soft-btn purple">ดูทั้งหมด</button></div>
+          <div id="holidayUpcomingV24" class="h32-upcoming"></div>
+          <div id="holidayUpcomingFootV32" class="h32-upcoming-foot">▦ มีวันหยุดที่กำลังจะมาถึง</div>
+        </section>
       </div>
-      <div id="chips" class="chips v24-holiday-chips"></div>
     </div>
-    <div class="v24-card"><h3>📋 หมายเหตุสำหรับการจัดเวร</h3><div class="v24-tip-list"><div>● วันนักขัตฤกษ์ใช้เงื่อนไขวันหยุด</div><div>● วันหยุดชดเชยจัดเวรได้ตามกฎ</div><div>● ตรวจสอบวันหยุดก่อนรันตารางทุกครั้ง</div><div>● ข้อมูลใช้ร่วมกับ Cloud Sync</div></div></div>
-    <div class="v24-card"><h3>↻ ประวัติการแก้ไขล่าสุด</h3><div id="holidayAuditV24" class="v24-upcoming"><div>ระบบจะบันทึกการเปลี่ยนแปลงไว้ใน Audit Log</div></div></div>
+
+    <div class="h32-bottom-grid">
+      <section class="h32-card h32-form-card">
+        <h3><span class="h32-head-icon yellow">✎</span> เพิ่ม/แก้ไขวันหยุด <span class="h32-sparkle">✦</span></h3>
+        <div class="holidaybar h32-form">
+          <label>ชื่อวันหยุด <em>*</em><input id="holidayName" type="text" placeholder="เช่น วันจักรี"></label>
+          <label>วันที่ <em>*</em><input id="holidayDate" type="date"></label>
+          <label>ประเภท <em>*</em><select id="holidayTypeV24"><option value="official">นักขัตฤกษ์</option><option value="substitute">วันหยุดชดเชย</option><option value="special">วันหยุดพิเศษ</option></select></label>
+          <div class="h32-form-actions"><button id="addHolidayBtn" type="button" class="h32-add">＋ เพิ่มวันหยุด</button><button id="holidayClearV32" type="button" class="h32-clear">⌫ ล้างค่า</button></div>
+        </div>
+        <div id="holidayEditHintV32" class="h32-edit-hint" hidden>กำลังแก้ไขวันหยุด — กด “เพิ่มวันหยุด” เพื่อบันทึกแทนรายการเดิม</div>
+        <div id="chips" class="chips h32-hidden-chips" aria-hidden="true"></div>
+      </section>
+
+      <section class="h32-card h32-note-card">
+        <h3><span class="h32-head-icon yellow">▤</span> หมายเหตุสำหรับการจัดเวร</h3>
+        <div class="h32-note-list">
+          <div><i class="dot official"></i><span>วันนักขัตฤกษ์ จะไม่ถูกจัดเวรให้พนักงานตามเงื่อนไขที่กำหนด</span></div>
+          <div><i class="dot substitute"></i><span>วันหยุดชดเชย ให้จัดเวรได้เฉพาะกรณีจำเป็นตามกฎ</span></div>
+          <div><i class="dot weekend"></i><span>วันหยุดสุดสัปดาห์ (เสาร์–อาทิตย์) ถือเป็นวันหยุดโดยปกติ</span></div>
+          <div><i class="dot special"></i><span>วันหยุดพิเศษ ให้กำหนดล่วงหน้าอย่างน้อย 7 วัน</span></div>
+          <div><i class="dot blue"></i><span>ตรวจสอบปฏิทินวันหยุดก่อนทำการจัดเวรทุกครั้ง</span></div>
+        </div>
+      </section>
+
+      <section class="h32-card h32-audit-card">
+        <div class="h32-card-head compact"><h3><span class="h32-head-icon mint">◔</span> ประวัติการแก้ไขล่าสุด</h3><button type="button" id="holidayAuditAllV32" class="h32-soft-btn purple">ดูทั้งหมด</button></div>
+        <div id="holidayAuditV24" class="h32-audit-list"></div>
+        <div class="h32-save-note">▣ บันทึกข้อมูลอัตโนมัติทุกครั้งที่มีการเปลี่ยนแปลง</div>
+      </section>
+    </div>
   </div>
 </section>
-
 
 
 <section class="page-view" id="page-history" data-view="history">
@@ -5807,6 +5859,26 @@ window.__ROSTER_RULES_V31__={
   escape:esc
 };
 
+
+/* V32 holidays-page bridge: exposes only the holiday operations needed by the isolated V32 UI. */
+window.__ROSTER_HOLIDAYS_V32__={
+  getState:function(){return state},
+  saveConfig:saveConfig,
+  renderSheet:renderSheet,
+  renderHolidays:renderHolidays,
+  renderHoliday:renderHolidayV24,
+  addHoliday:addHoliday,
+  applyPermissions:applyUnitPermissions,
+  getUser:function(){return {role:unitUser.role,name:unitUser.name,username:unitUser.username}},
+  current:function(){return {year:cy(),month:cm(),thaiYear:py(),key:currentKey()}},
+  setMonth:function(year,month){
+    if(el('monthSelect'))el('monthSelect').value=String(month);
+    if(el('yearInput'))el('yearInput').value=String(year+543);
+    renderSheet();renderHolidayV24();renderHomeV24();
+  },
+  escape:esc
+};
+
 window.addEventListener('error',function(e){setStatus('JavaScript error: '+e.message,false)});
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 
@@ -5834,7 +5906,8 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   window.addEventListener('pageshow',wirePersonSaveV304);
 })();
 </script>
-<script src="rules-v31.js?v=31.0"></script>
+<script src="holidays-v32.js?v=32.0"></script>
+<script src="rules-v31.js?v=31.1"></script>
 <script src="roster-v29.js?v=29.3"></script>
 <script src="login-fix-v26-1.js?v=30.0"></script>
 <script src="home-v26.js?v=30.0"></script>
