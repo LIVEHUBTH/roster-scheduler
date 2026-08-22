@@ -1,4 +1,4 @@
-/* RULES PAGE V31.0 — functional UI bridge */
+/* RULES PAGE V31.1 — functional UI bridge + pastel animal tabs */
 (function(){
 'use strict';
 var activeTab='general';
@@ -20,6 +20,35 @@ var tabLabels={
  rest:['การพักผ่อน','ตรวจเงื่อนไขการพักหลังเวรหนักและรอยต่อของตาราง'],
  other:['กฎอื่น ๆ','เพิ่มหรือจัดการเงื่อนไขเพิ่มเติมของระบบ']
 };
+
+var tabVisuals={
+ general:{label:'กฎทั่วไป',cls:'r31-tab-general',animal:'dog'},
+ personal:{label:'กฎรายบุคคล',cls:'r31-tab-personal',animal:'cat'},
+ constraints:{label:'ข้อจำกัดเวร',cls:'r31-tab-constraints',animal:'pig'},
+ rotation:{label:'การหมุนเวร',cls:'r31-tab-rotation',animal:'rabbit'},
+ rest:{label:'การพักผ่อน',cls:'r31-tab-rest',animal:'elephant'},
+ other:{label:'อื่นๆ',cls:'r31-tab-other',animal:'bear'}
+};
+function animalSvg(kind){
+ var p={
+  dog:'<path d="M12 17 7 11c-1.2-1.4-.6-3.5 1.2-4l5.8-1.6M36 17l5-6c1.2-1.4.6-3.5-1.2-4L34 5.4"/><path d="M13 14c3-5 7-7 11-7s8 2 11 7v12c0 8-5 14-11 14S13 34 13 26Z"/><circle cx="19" cy="22" r="1.4" fill="currentColor" stroke="none"/><circle cx="29" cy="22" r="1.4" fill="currentColor" stroke="none"/><path d="M21 28h6l-3 3Z"/><path d="M19 33c1.7 1.5 3.3 2 5 2s3.3-.5 5-2"/>',
+  cat:'<path d="M13 16 10 7l9 5M35 16l3-9-9 5"/><path d="M12 18c0-6 5-10 12-10s12 4 12 10v9c0 8-5 13-12 13S12 35 12 27Z"/><circle cx="19" cy="23" r="1.3" fill="currentColor" stroke="none"/><circle cx="29" cy="23" r="1.3" fill="currentColor" stroke="none"/><path d="M21 28h6l-3 3Z"/><path d="M8 27h10M30 27h10M9 32l9-2M39 32l-9-2"/>',
+  pig:'<path d="M14 14 10 8c5-.4 8 .8 10 3M34 14l4-6c-5-.4-8 .8-10 3"/><path d="M11 23c0-9 5-15 13-15s13 6 13 15v5c0 8-5 12-13 12S11 36 11 28Z"/><circle cx="18.5" cy="22" r="1.3" fill="currentColor" stroke="none"/><circle cx="29.5" cy="22" r="1.3" fill="currentColor" stroke="none"/><ellipse cx="24" cy="30" rx="7" ry="5"/><circle cx="21.5" cy="30" r="1" fill="currentColor" stroke="none"/><circle cx="26.5" cy="30" r="1" fill="currentColor" stroke="none"/>',
+  rabbit:'<path d="M18 13C14 6 15 2 18 2c3 0 5 5 6 11M30 13c4-7 3-11 0-11-3 0-5 5-6 11"/><path d="M12 24c0-8 5-13 12-13s12 5 12 13v5c0 7-5 11-12 11S12 36 12 29Z"/><circle cx="19" cy="24" r="1.3" fill="currentColor" stroke="none"/><circle cx="29" cy="24" r="1.3" fill="currentColor" stroke="none"/><path d="M21 29h6l-3 3Z"/><path d="M24 32v4M20 35h8"/>',
+  elephant:'<path d="M13 17c-4 0-7 3-7 8s4 9 9 9h2M35 17c4 0 7 3 7 8s-4 9-9 9h-2"/><path d="M13 19c0-7 4-11 11-11s11 4 11 11v8c0 4-2 7-5 9"/><path d="M18 36c-3-2-5-5-5-9"/><circle cx="19" cy="21" r="1.3" fill="currentColor" stroke="none"/><circle cx="29" cy="21" r="1.3" fill="currentColor" stroke="none"/><path d="M24 25v11c0 5 4 7 7 4 1.4-1.3 1.5-3 .8-4.5"/>',
+  bear:'<circle cx="14" cy="13" r="6"/><circle cx="34" cy="13" r="6"/><path d="M11 23c0-9 5-14 13-14s13 5 13 14v5c0 8-5 12-13 12S11 36 11 28Z"/><circle cx="19" cy="22" r="1.3" fill="currentColor" stroke="none"/><circle cx="29" cy="22" r="1.3" fill="currentColor" stroke="none"/><ellipse cx="24" cy="29" rx="6" ry="5"/><path d="M22 28h4l-2 2Z"/><path d="M21 33c1 .8 2 .9 3 .9s2-.1 3-.9"/>'
+ };
+ return '<svg viewBox="0 0 48 48" aria-hidden="true" focusable="false">'+(p[kind]||p.bear)+'</svg>';
+}
+function decorateTabs(){
+ document.querySelectorAll('#page-rules [data-r31-tab]').forEach(function(btn){
+   var key=btn.dataset.r31Tab,v=tabVisuals[key];if(!v)return;
+   Object.keys(tabVisuals).forEach(function(k){btn.classList.remove(tabVisuals[k].cls)});
+   btn.classList.add(v.cls);
+   btn.setAttribute('aria-label',v.label);
+   btn.innerHTML='<span class="r31-tab-animal">'+animalSvg(v.animal)+'</span><span class="r31-tab-label">'+v.label+'</span>';
+ });
+}
 var meta={
  r1:['เวลาราชการ (จันทร์–ศุกร์ ไม่รวมวันหยุดนักขัตฤกษ์)','◷','purple'],
  r2:['ห้ามชื่อซ้ำในวันเดียวกัน','♟','pink'],
@@ -99,7 +128,8 @@ function renderRules(){
  var personal=document.getElementById('rulesPersonalPanelV31'),other=document.getElementById('rulesOtherPanelV31');
  personal.hidden=activeTab!=='personal';other.hidden=activeTab!=='other';host.style.display=(activeTab==='personal')?'none':'grid';
  var lab=tabLabels[activeTab]||tabLabels.general;var t=document.getElementById('rulesSectionTitleV31'),sub=document.getElementById('rulesSectionSubV31');if(t)t.textContent=lab[0];if(sub)sub.textContent=lab[1];
- document.querySelectorAll('#page-rules [data-r31-tab]').forEach(function(b){b.classList.toggle('active',b.dataset.r31Tab===activeTab)});
+ decorateTabs();
+ document.querySelectorAll('#page-rules [data-r31-tab]').forEach(function(b){b.classList.toggle('active',b.dataset.r31Tab===activeTab);b.setAttribute('aria-selected',b.dataset.r31Tab===activeTab?'true':'false')});
  if(activeTab!=='personal'){
    var cat={};allCatalog().forEach(function(r){cat[r.id]=r});var ids=ruleIdsForTab();var rows=ids.map(function(id,i){return cat[id]?ruleRow(cat[id],i):''}).filter(Boolean);
    host.innerHTML=rows.length?rows.join(''):'<div class="r31-empty">ยังไม่มีกฎในหมวดนี้</div>';
@@ -144,7 +174,8 @@ function resetRules(){var a=A(),s=state();if(!a||!s)return;if(!isAdmin()){a.setS
 function checkRules(){var a=A();if(!a)return;lastValidationErrors=a.validate(true)||0;updatedAt=Date.now();refreshSummary();if(lastValidationErrors===0)a.setStatus('ตรวจสอบกฎแล้ว ไม่พบข้อขัดแย้ง',true);else a.setStatus('ตรวจสอบแล้ว พบข้อขัดแย้ง '+lastValidationErrors+' จุด',false)}
 function saveRules(){var a=A();if(!a)return;a.saveConfig();updatedAt=Date.now();refreshSummary();a.setStatus('บันทึกกฎทั้งหมดแล้ว',true)}
 function wire(){
- document.querySelectorAll('#page-rules [data-r31-tab]').forEach(function(b){b.onclick=function(){activeTab=this.dataset.r31Tab;renderRules()}});
+ decorateTabs();
+ document.querySelectorAll('#page-rules [data-r31-tab]').forEach(function(b){b.onclick=function(){activeTab=this.dataset.r31Tab;renderRules();try{this.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'})}catch(e){}}});
  var reset=document.getElementById('rulesResetBtnV24'),save=document.getElementById('rulesSaveBtnV24'),check=document.getElementById('rulesCheckBtnV24'),bottom=document.getElementById('rulesSaveBottomV31'),report=document.getElementById('rulesReportBtnV31');
  if(reset)reset.onclick=resetRules;if(save)save.onclick=saveRules;if(check)check.onclick=checkRules;if(bottom)bottom.onclick=saveRules;if(report)report.onclick=checkRules;
  var ar=document.getElementById('addRuleBtn'),ac=document.getElementById('addCustomRuleBtn');if(ar)ar.onclick=addRule;if(ac)ac.onclick=addCustomRule;
@@ -154,7 +185,7 @@ window.buildCustomOptions=buildCustomOptions;
 window.renderCustomRules=renderCustomRules;
 window.addCustomRule=addCustomRule;
 window.addRule=addRule;
-window.RulesV31={renderRules:renderRules,refreshSummary:refreshSummary};
+window.RulesV31={renderRules:renderRules,refreshSummary:refreshSummary,decorateTabs:decorateTabs};
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',wire);else wire();
-window.addEventListener('pageshow',function(){setTimeout(function(){renderRules();refreshSummary()},0)});
+window.addEventListener('pageshow',function(){setTimeout(function(){decorateTabs();renderRules();refreshSummary()},0)});
 })();
