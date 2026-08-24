@@ -1,4 +1,4 @@
-/* HOLIDAYS V32.6 — independent calendar render + reliable month navigation */
+/* HOLIDAYS V32.7 — independent calendar render + reliable month navigation */
 (function(){
   'use strict';
 
@@ -40,8 +40,8 @@
         }
       }
     }catch(e){}
-    var ms=document.getElementById('monthSelect');
-    var yi=document.getElementById('yearInput');
+    var ms=document.getElementById('month')||document.getElementById('monthSelect');
+    var yi=document.getElementById('year')||document.getElementById('yearInput');
     var m=ms?parseInt(ms.value,10):(new Date()).getMonth();
     var ty=yi?parseInt(yi.value,10):(new Date()).getFullYear()+543;
     if(!isFinite(m)||m<0||m>11)m=(new Date()).getMonth();
@@ -399,8 +399,29 @@
     setTimeout(refresh,20);
   }
 
+  function setCalendarMonth(year,month){
+    year=Number(year); month=Number(month);
+    if(!isFinite(year))year=(new Date()).getFullYear();
+    if(!isFinite(month))month=(new Date()).getMonth();
+    while(month<0){month+=12;year--;}
+    while(month>11){month-=12;year++;}
+
+    var monthEl=$('month')||$('monthSelect');
+    var yearEl=$('year')||$('yearInput');
+
+    if(monthEl)monthEl.value=String(month);
+    if(yearEl)yearEl.value=String(year+543);
+
+    try{if(B&&typeof B.renderSheet==='function')B.renderSheet()}catch(e){}
+    try{if(B&&typeof B.renderHoliday==='function')B.renderHoliday()}catch(e){}
+
+    setTimeout(refresh,20);
+    setTimeout(refresh,120);
+  }
+
   function setToday(){
-    var d=new Date();B.setMonth(d.getFullYear(),d.getMonth());setTimeout(refresh,30);
+    var d=new Date();
+    setCalendarMonth(d.getFullYear(),d.getMonth());
   }
 
   function wireMonthPicker(){
@@ -417,7 +438,7 @@
     input.addEventListener('change',function(){
       if(!this.value)return;
       var p=this.value.split('-'),y=parseInt(p[0],10),m=parseInt(p[1],10)-1;
-      if(isFinite(y)&&isFinite(m)){B.setMonth(y,m);setTimeout(refresh,30)}
+      if(isFinite(y)&&isFinite(m))setCalendarMonth(y,m);
     });
   }
 
@@ -443,21 +464,18 @@
 
     var prev=$('holidayPrevMonthV24');
     if(prev)prev.onclick=function(ev){
-      if(ev)ev.preventDefault();
-      var c=current(),m=c.month-1,y=c.year;
-      if(m<0){m=11;y--;}
-      if(B&&typeof B.setMonth==='function')B.setMonth(y,m);
-      else{if($('monthSelect'))$('monthSelect').value=String(m);if($('yearInput'))$('yearInput').value=String(y+543);}
-      setTimeout(refresh,20);
+      if(ev){ev.preventDefault();ev.stopPropagation();}
+      var c=current();
+      setCalendarMonth(c.year,c.month-1);
+      return false;
     };
+
     var next=$('holidayNextMonthV24');
     if(next)next.onclick=function(ev){
-      if(ev)ev.preventDefault();
-      var c=current(),m=c.month+1,y=c.year;
-      if(m>11){m=0;y++;}
-      if(B&&typeof B.setMonth==='function')B.setMonth(y,m);
-      else{if($('monthSelect'))$('monthSelect').value=String(m);if($('yearInput'))$('yearInput').value=String(y+543);}
-      setTimeout(refresh,20);
+      if(ev){ev.preventDefault();ev.stopPropagation();}
+      var c=current();
+      setCalendarMonth(c.year,c.month+1);
+      return false;
     };
 
     wireMonthPicker();
