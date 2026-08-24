@@ -1,0 +1,47 @@
+/* HISTORY V33.0 — responsive white pastel history dashboard */
+#page-history{background:#fff!important}
+#page-history .h33-shell{width:100%;max-width:1480px;margin:0 auto;padding:20px 22px 34px;color:#333b50;background:#fff}
+#page-history .h33-page-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}
+#page-history .h33-title-wrap{display:flex;align-items:center;gap:14px}
+#page-history .h33-title-icon{width:58px;height:58px;border-radius:20px;display:grid;place-items:center;font-size:31px;font-weight:900;color:#ef5f94;background:linear-gradient(145deg,#ffe6ef,#e8fff7);box-shadow:0 8px 22px rgba(237,95,148,.10)}
+#page-history .h33-page-head h2{margin:0;font-size:31px;line-height:1.1;color:#384158;font-weight:900}
+#page-history .h33-page-head p{margin:5px 0 0;font-size:13px;color:#7c8595}
+#page-history .h33-version{font-size:11px;color:#a0a7b3}
+#page-history .h33-card{background:#fff;border:1px solid #eee5df;border-radius:22px;box-shadow:0 5px 18px rgba(98,76,61,.045);padding:18px}
+#page-history .h33-filter-card{margin-bottom:16px}
+#page-history .h33-filters{display:grid;grid-template-columns:minmax(250px,1.55fr) .75fr .62fr .78fr .82fr auto;gap:12px;align-items:end}
+#page-history .h33-filters label{display:grid;gap:6px;min-width:0}
+#page-history .h33-filters label>span{font-size:11px;font-weight:800;color:#5b6475}
+#page-history .h33-filters input,#page-history .h33-filters select{height:44px;width:100%;border:1px solid #e2e4ea;border-radius:12px;background:#fff;color:#40495b;padding:0 13px;font-size:12px;outline:none}
+#page-history .h33-search>div{position:relative}.h33-search input{padding-right:36px!important}.h33-search b{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:#687285}
+#page-history .h33-filter-actions{display:flex;gap:8px;align-items:center;white-space:nowrap}
+#page-history .h33-btn{height:44px;border-radius:12px;border:1px solid transparent;padding:0 15px;font-weight:800;font-size:11px;cursor:pointer;transition:.16s ease}
+#page-history .h33-btn:active{transform:translateY(1px) scale(.985)}
+#page-history .h33-btn.search{background:#f780aa;color:#fff;box-shadow:0 7px 15px rgba(239,95,148,.15)}
+#page-history .h33-btn.reset{background:#fff;color:#626b7b;border-color:#e3e4e9}
+#page-history .h33-btn.export{background:#f4eeff;color:#7b5fc3;border-color:#dfd2f5}
+#page-history .h33-stat-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:16px}
+#page-history .h33-stat{min-height:118px;border-radius:20px;border:1px solid;display:flex;align-items:center;gap:18px;padding:18px 20px}
+#page-history .h33-stat-icon{width:58px;height:58px;border-radius:18px;display:grid;place-items:center;font-size:30px;background:rgba(255,255,255,.58);box-shadow:0 6px 14px rgba(65,63,84,.07)}
+#page-history .h33-stat div{min-width:0}.h33-stat small{display:block;font-size:11px;font-weight:800;color:#60697a}.h33-stat b{display:inline-block;font-size:29px;line-height:1.05;margin:5px 6px 0 0}.h33-stat em{font-style:normal;font-size:10px;color:#7f8795}
+#page-history .h33-stat.pink{background:#fff1f6;border-color:#f4d3df;color:#e85f91}.h33-stat.mint{background:#effbf7;border-color:#d0eee4;color:#35aa84}.h33-stat.purple{background:#f5f1ff;border-color:#e1d7f7;color:#8566d0}.h33-stat.yellow{background:#fff8e9;border-color:#f0dfb0;color:#d39a25}
+#page-history .h33-table-card{padding:0;overflow:hidden;margin-bottom:16px}
+#page-history .h33-card-head{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 18px;border-bottom:1px solid #f0ebe7}
+#page-history .h33-card-head h3{margin:0;font-size:16px;color:#424b5f}.h33-muted{font-size:10px;color:#9299a7}
+#page-history .h33-table-wrap{overflow:auto;-webkit-overflow-scrolling:touch}
+#page-history .h33-table{width:100%;min-width:1080px;border-collapse:collapse;font-size:11px}
+#page-history .h33-table th{padding:13px 10px;text-align:left;color:#596275;font-weight:800;background:#fff;border-bottom:1px solid #ece7e3;white-space:nowrap}
+#page-history .h33-table td{padding:11px 10px;border-bottom:1px solid #f1ece9;color:#4e5769;vertical-align:middle}
+#page-history .h33-table tr:hover td{background:#fffafd}
+#page-history .h33-month-cell{display:flex;align-items:center;gap:9px;font-weight:800;color:#445064}.h33-month-ico{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;background:#fff1f6;color:#e65e90}
+#page-history .h33-user{display:flex;align-items:center;gap:8px}.h33-avatar{width:29px;height:29px;border-radius:50%;display:grid;place-items:center;background:#ffe6ee;font-size:16px}
+#page-history .h33-status{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;font-size:9px;font-weight:900;white-space:nowrap}.h33-status.locked{background:#f1eaff;color:#7b5ac7}.h33-status.approved{background:#e7f8ef;color:#2d9a71}.h33-status.submitted{background:#e8f4ff;color:#4a93cf}.h33-status.draft{background:#fff4d7;color:#b48a27}
+#page-history .h33-open{border:1px solid #f3d5df;background:#fff4f8;color:#de5c8a;border-radius:9px;height:32px;padding:0 10px;font-size:9px;font-weight:800}.h33-more{width:32px;height:32px;border:1px solid #e6e5ea;border-radius:9px;background:#fff;color:#6b7380;margin-left:5px}
+#page-history .h33-table-footer{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;padding:12px 16px;font-size:10px;color:#7d8592}.h33-table-footer>label{justify-self:end;display:flex;align-items:center;gap:7px}.h33-table-footer select{height:34px;border:1px solid #e2e2e7;border-radius:9px;background:#fff;padding:0 9px}
+#page-history .h33-pagination{display:flex;gap:5px;align-items:center}.h33-pagination button{width:32px;height:32px;border:1px solid #e5e3e8;border-radius:9px;background:#fff;color:#60697a}.h33-pagination button.active{background:#ffe8f1;color:#d95887;border-color:#f5cadb;font-weight:900}.h33-pagination button:disabled{opacity:.35}
+#page-history .h33-viewer{margin:14px 16px 16px;border-radius:15px;border:1px solid #ece5df;background:#fff;box-shadow:none}
+#page-history .h33-bottom-grid{display:grid;grid-template-columns:.82fr 1.18fr;gap:16px}.h33-bottom-grid .h33-card{padding:0;overflow:hidden}.h33-link-btn{border:0;background:transparent;color:#8c68cf;font-weight:800;font-size:10px}
+#page-history .h33-recent-list,#page-history .h33-audit-list{padding:8px 16px 16px;display:grid;gap:4px}.h33-recent-item,.h33-audit-item{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid #f1ece9}.h33-recent-item:last-child,.h33-audit-item:last-child{border-bottom:0}.h33-list-icon{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;background:#fff1f6;color:#e75e90}.h33-list-main b{display:block;font-size:11px;color:#475164}.h33-list-main small{font-size:9px;color:#8a929e}.h33-list-time{font-size:9px;color:#70798a;white-space:nowrap}
+@media(max-width:1180px){#page-history .h33-filters{grid-template-columns:2fr 1fr 1fr 1fr}.h33-filter-actions{grid-column:1/-1}.h33-stat-grid{gap:12px}.h33-stat{padding:15px 14px}.h33-stat-icon{width:50px;height:50px}.h33-stat b{font-size:25px}}
+@media(max-width:820px){#page-history .h33-shell{padding:16px 14px 28px}.h33-page-head h2{font-size:25px!important}.h33-stat-grid{grid-template-columns:repeat(2,1fr)!important}.h33-bottom-grid{grid-template-columns:1fr!important}.h33-filters{grid-template-columns:1fr 1fr!important}.h33-search{grid-column:1/-1}.h33-filter-actions{flex-wrap:wrap}.h33-table-footer{grid-template-columns:1fr;justify-items:center}.h33-table-footer>label{justify-self:center}}
+@media(max-width:520px){#page-history .h33-shell{padding:12px 10px 24px}.h33-version{display:none}.h33-title-icon{width:46px!important;height:46px!important;font-size:25px!important}.h33-page-head h2{font-size:22px!important}.h33-filters{grid-template-columns:1fr!important}.h33-search{grid-column:auto}.h33-filter-actions{display:grid!important;grid-template-columns:1fr 1fr}.h33-btn.export{grid-column:1/-1}.h33-stat-grid{grid-template-columns:1fr!important}.h33-stat{min-height:92px!important}.h33-stat-icon{width:46px!important;height:46px!important;font-size:24px!important}}
