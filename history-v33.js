@@ -1,4 +1,4 @@
-/* HISTORY V33.4 — compact pastel layout + working viewer */
+/* HISTORY V33.5 — compact pastel layout + working viewer */
 (function(){
   'use strict';
   var B=window.__ROSTER_HISTORY_V33__;
@@ -27,7 +27,7 @@
             '<div class="h33-title-icon" aria-hidden="true"><span class="clock-face"></span><span class="arrow"></span></div>'+
             '<div><h2>ประวัติการจัดเวร</h2><p>ค้นหา เปิดดู และตรวจสอบตารางเวรย้อนหลัง</p></div>'+
           '</div>'+
-          '<div class="h33-head-right"><div class="h33-signature">Supaporn<br><small>MALAWAS</small></div><span class="h33-version">V33.4 • History</span></div>'+
+          '<div class="h33-head-right"><div class="h33-signature">Supaporn<br><small>MALAWAS</small></div><span class="h33-version">V33.5 • History</span></div>'+
         '</header>'+
 
         '<section class="h33-card h33-filter-card">'+
@@ -72,7 +72,11 @@
         records.push({year:y,month:r.month,data:d,status:workflowStatus(d),unit:unitName(),scheduler:schedulerName(d),savedAt:sv&&sv.at||d.savedAt||'',approvedAt:ap&&ap.at||'',lockedAt:lk&&lk.at||'',note:noteFor(d)});
       });
     });
-    records.sort(function(a,b){return String(b.savedAt||'').localeCompare(String(a.savedAt||''))});
+    records.sort(function(a,b){
+      if(Number(b.year)!==Number(a.year))return Number(b.year)-Number(a.year);
+      if(Number(b.month)!==Number(a.month))return Number(b.month)-Number(a.month);
+      return String(b.savedAt||'').localeCompare(String(a.savedAt||''));
+    });
   }
 
   function setupFilters(){
