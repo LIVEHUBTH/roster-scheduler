@@ -1,4 +1,4 @@
-/* HOLIDAYS V32.5 — stable calendar render + pastel holiday dashboard */
+/* HOLIDAYS V32.6 — stable calendar render + pastel holiday dashboard */
 #page-holidays{background:#fff!important}
 #page-holidays .h32-shell{
   width:100%;max-width:1480px;margin:0 auto;padding:18px 22px 32px;
@@ -934,3 +934,9 @@
   #page-holidays .h32-calendar .h32-day-caption{font-size:7px!important}
 }
 
+
+
+/* V32.6 hard calendar visibility guard */
+#page-holidays #holidayCalendarV24{display:grid!important;grid-template-columns:repeat(7,minmax(0,1fr))!important;visibility:visible!important;opacity:1!important;min-height:390px!important;}
+#page-holidays #holidayCalendarV24 .h32-day{display:flex!important;visibility:visible!important;opacity:1!important;color:#354052!important;}
+#page-holidays #holidayCalendarV24 .h32-day-number{display:block!important;visibility:visible!important;opacity:1!important;}

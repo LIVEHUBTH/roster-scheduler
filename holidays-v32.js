@@ -1,4 +1,4 @@
-/* HOLIDAYS V32.5 — robust calendar boot + Thai holidays / Buddhist days / important dates */
+/* HOLIDAYS V32.6 — independent calendar render + reliable month navigation */
 (function(){
   'use strict';
 
@@ -19,10 +19,36 @@
 
   function $(id){return document.getElementById(id)}
   function esc(s){return B.escape?B.escape(String(s==null?'':s)):String(s==null?'':s).replace(/[&<>"']/g,function(c){return({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]})}
-  function state(){return B.getState()||{holidays:{}}}
+  function state(){
+    try{
+      var s=B&&typeof B.getState==='function'?B.getState():null;
+      if(s)return s;
+    }catch(e){}
+    return {holidays:{}};
+  }
   function pad(n){return String(n).padStart(2,'0')}
   function iso(y,m,d){return y+'-'+pad(m+1)+'-'+pad(d)}
-  function current(){return B.current()}
+  function current(){
+    try{
+      if(B&&typeof B.current==='function'){
+        var c=B.current();
+        if(c&&isFinite(Number(c.year))&&isFinite(Number(c.month))){
+          c.year=Number(c.year); c.month=Number(c.month);
+          c.thaiYear=Number(c.thaiYear||c.year+543);
+          c.key=c.key||(c.year+'-'+pad(c.month+1));
+          return c;
+        }
+      }
+    }catch(e){}
+    var ms=document.getElementById('monthSelect');
+    var yi=document.getElementById('yearInput');
+    var m=ms?parseInt(ms.value,10):(new Date()).getMonth();
+    var ty=yi?parseInt(yi.value,10):(new Date()).getFullYear()+543;
+    if(!isFinite(m)||m<0||m>11)m=(new Date()).getMonth();
+    if(!isFinite(ty))ty=(new Date()).getFullYear()+543;
+    var y=ty>2400?ty-543:ty;
+    return {year:y,month:m,thaiYear:y+543,key:y+'-'+pad(m+1)};
+  }
   function typeLabel(t){
     return t==='substitute'?'วันหยุดชดเชย':
       t==='special'?'วันหยุดพิเศษ':
@@ -415,14 +441,34 @@
       renderAudit();
     };
 
-    ['holidayPrevMonthV24','holidayNextMonthV24'].forEach(function(id){
-      var b=$(id);if(b)b.addEventListener('click',function(){setTimeout(refresh,50)});
-    });
+    var prev=$('holidayPrevMonthV24');
+    if(prev)prev.onclick=function(ev){
+      if(ev)ev.preventDefault();
+      var c=current(),m=c.month-1,y=c.year;
+      if(m<0){m=11;y--;}
+      if(B&&typeof B.setMonth==='function')B.setMonth(y,m);
+      else{if($('monthSelect'))$('monthSelect').value=String(m);if($('yearInput'))$('yearInput').value=String(y+543);}
+      setTimeout(refresh,20);
+    };
+    var next=$('holidayNextMonthV24');
+    if(next)next.onclick=function(ev){
+      if(ev)ev.preventDefault();
+      var c=current(),m=c.month+1,y=c.year;
+      if(m>11){m=0;y++;}
+      if(B&&typeof B.setMonth==='function')B.setMonth(y,m);
+      else{if($('monthSelect'))$('monthSelect').value=String(m);if($('yearInput'))$('yearInput').value=String(y+543);}
+      setTimeout(refresh,20);
+    };
 
     wireMonthPicker();
     refresh();
     setTimeout(refresh,120);
     setTimeout(refresh,500);
+    setTimeout(refresh,1200);
+    setInterval(function(){
+      var host=$('holidayCalendarV24');
+      if(host&&host.querySelectorAll('.h32-day').length<28)refresh();
+    },1500);
 
     var page=$('page-holidays');
     if(page&&window.MutationObserver){
