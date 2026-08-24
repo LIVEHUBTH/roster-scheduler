@@ -1,4 +1,4 @@
-/* HOLIDAYS V32.4 — calendar toolbar containment + summary color alignment */
+/* HOLIDAYS V32.5 — stable calendar render + pastel holiday dashboard */
 #page-holidays{background:#fff!important}
 #page-holidays .h32-shell{
   width:100%;max-width:1480px;margin:0 auto;padding:18px 22px 32px;
@@ -833,5 +833,104 @@
 #page-holidays .h32-type-badge.important{
   background:var(--h32-blue-soft)!important;
   color:#3d86b4!important;
+}
+
+/* =========================================================
+   V32.5 — calendar visibility / alignment hardening
+   ========================================================= */
+#page-holidays .h32-calendar{
+  width:100%!important;
+  min-width:0!important;
+  overflow:visible!important;
+}
+#page-holidays .h32-calendar .h32-day{
+  display:flex!important;
+  visibility:visible!important;
+  opacity:1!important;
+  min-height:58px!important;
+  color:#3d465a!important;
+}
+#page-holidays .h32-calendar .h32-day-number{
+  display:block!important;
+  visibility:visible!important;
+  opacity:1!important;
+  font-size:17px!important;
+  line-height:1.05!important;
+  font-weight:800!important;
+  color:inherit!important;
+}
+#page-holidays .h32-calendar .h32-day-caption{
+  display:block!important;
+  width:100%!important;
+  min-height:13px!important;
+  margin-top:3px!important;
+  font-size:8px!important;
+  line-height:1.15!important;
+  text-align:center!important;
+  color:#8a92a1!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+#page-holidays .h32-calendar .h32-day-markers{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  flex-wrap:wrap!important;
+  gap:3px!important;
+  min-height:9px!important;
+  margin-top:3px!important;
+}
+#page-holidays .h32-calendar .h32-day.is-sunday .h32-day-number{color:#ef647d!important}
+#page-holidays .h32-calendar .h32-day.is-saturday .h32-day-number{color:#8e70d7!important}
+#page-holidays .h32-calendar .h32-day.is-muted .h32-day-number{color:#c4c9d2!important}
+#page-holidays .h32-calendar .h32-day.is-today{background:#effbf7!important;border-color:#7dd2b5!important;box-shadow:inset 0 0 0 1px #7dd2b5!important}
+#page-holidays .h32-calendar .h32-day.is-official{background:#fff5ea!important;border-color:#f2c99f!important}
+#page-holidays .h32-calendar .h32-day.is-official .h32-day-number{color:#df8b34!important}
+#page-holidays .h32-calendar .h32-day.is-substitute{background:#fff0f6!important;border-color:#f4c8d9!important}
+#page-holidays .h32-calendar .h32-day.is-substitute .h32-day-number{color:#dd648f!important}
+#page-holidays .h32-calendar .h32-day.is-special{background:#f4f5f7!important;border-color:#dfe3e8!important}
+#page-holidays .h32-calendar .h32-day.is-special .h32-day-number{color:#7b8491!important}
+#page-holidays .h32-calendar .h32-day.is-important{background:#eef8ff!important;border-color:#cfe8f8!important}
+#page-holidays .h32-calendar .h32-day.is-important .h32-day-number{color:#4b9dd3!important}
+#page-holidays .h32-calendar .h32-day.is-buddhist{background:#fff9e8!important;border-color:#eedc9a!important}
+#page-holidays .h32-calendar .h32-day.is-buddhist .h32-day-number{color:#b18816!important}
+#page-holidays .h32-buddha-mark{font-size:11px;line-height:1}
+#page-holidays .h32-mini-dot.saturday{background:#8e70d7!important}
+#page-holidays .h32-mini-dot.sunday{background:#ef647d!important}
+#page-holidays .h32-mini-dot.today{background:#58c59f!important}
+#page-holidays .h32-mini-dot.official{background:#efa14b!important}
+#page-holidays .h32-mini-dot.substitute{background:#ef78a5!important}
+#page-holidays .h32-mini-dot.special{background:#adb3bd!important}
+#page-holidays .h32-mini-dot.buddhist{background:#efc94c!important}
+#page-holidays .h32-mini-dot.important{background:#58ace2!important}
+
+/* Summary colors must follow the agreed meaning */
+#page-holidays .h32-stat-grid .pink{background:#fff7f9!important;border-color:#f0dde4!important;color:#667085!important}
+#page-holidays .h32-stat-grid .mint{background:#fff5ea!important;border-color:#f2c99f!important;color:#df8b34!important}
+#page-holidays .h32-stat-grid .purple{background:#f5f0ff!important;border-color:#ddd2f6!important;color:#8567d2!important}
+#page-holidays .h32-stat-grid .yellow{background:#f4f5f7!important;border-color:#dfe3e8!important;color:#7b8491!important}
+
+@media(max-width:1180px){
+  #page-holidays .h32-calendar-card .h32-card-head{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:10px!important;
+  }
+  #page-holidays .h32-calendar-card .h32-month-nav{
+    width:100%!important;
+    display:grid!important;
+    grid-template-columns:40px minmax(0,1fr) 40px 62px!important;
+    gap:7px!important;
+    margin:0!important;
+  }
+  #page-holidays .h32-calendar-card .h32-month-pill{min-width:0!important;width:100%!important}
+}
+
+@media(max-width:620px){
+  #page-holidays .h32-calendar{grid-template-rows:repeat(6,minmax(48px,1fr))!important;gap:3px!important}
+  #page-holidays .h32-calendar .h32-day{min-height:48px!important;padding:3px 2px!important}
+  #page-holidays .h32-calendar .h32-day-number{font-size:15px!important}
+  #page-holidays .h32-calendar .h32-day-caption{font-size:7px!important}
 }
 

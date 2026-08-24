@@ -1,8 +1,17 @@
-/* HOLIDAYS V32.4 — Thai public holidays + Buddhist holy days + important dates */
+/* HOLIDAYS V32.5 — robust calendar boot + Thai holidays / Buddhist days / important dates */
 (function(){
   'use strict';
-  var B=window.__ROSTER_HOLIDAYS_V32__;
-  if(!B)return;
+
+  var bootAttempts=0;
+  function startHolidaysV325(){
+    var B=window.__ROSTER_HOLIDAYS_V32__;
+    if(!B){
+      bootAttempts++;
+      if(bootAttempts<80)setTimeout(startHolidaysV325,100);
+      return;
+    }
+    if(window.__HOLIDAYS_V325_BOOTED__)return;
+    window.__HOLIDAYS_V325_BOOTED__=true;
 
   var editKey='';
   var auditKey='roster_holiday_audit_v32';
@@ -188,7 +197,9 @@
 
   function renderCalendarV322(){
     var host=$('holidayCalendarV24');if(!host)return;
-    var c=current(),y=c.year,m=c.month;
+    var c=current()||{},y=Number(c.year),m=Number(c.month);
+    if(!isFinite(y)||y<1900||y>2200)y=(new Date()).getFullYear();
+    if(!isFinite(m)||m<0||m>11)m=(new Date()).getMonth();
     var first=new Date(y,m,1);
     var start=new Date(y,m,1-first.getDay());
     var today=new Date();
@@ -315,14 +326,14 @@
   }
 
   function refresh(){
-    seedOfficial2569();
-    applyCalendarIconsV323();
-    renderMonthTitle();
-    renderCalendarV322();
-    renderLegendV323();
-    renderSummary();
-    renderUpcoming();
-    renderAudit();
+    try{seedOfficial2569()}catch(e){console.warn('[V32.5] seed',e)}
+    try{applyCalendarIconsV323()}catch(e){console.warn('[V32.5] icons',e)}
+    try{renderMonthTitle()}catch(e){console.warn('[V32.5] month title',e)}
+    try{renderCalendarV322()}catch(e){console.error('[V32.5] calendar',e)}
+    try{renderLegendV323()}catch(e){console.warn('[V32.5] legend',e)}
+    try{renderSummary()}catch(e){console.warn('[V32.5] summary',e)}
+    try{renderUpcoming()}catch(e){console.warn('[V32.5] upcoming',e)}
+    try{renderAudit()}catch(e){console.warn('[V32.5] audit',e)}
   }
 
   function clearForm(){
@@ -410,11 +421,17 @@
 
     wireMonthPicker();
     refresh();
+    setTimeout(refresh,120);
+    setTimeout(refresh,500);
 
     var page=$('page-holidays');
     if(page&&window.MutationObserver){
-      new MutationObserver(function(){if(page.classList.contains('active')||page.classList.contains('show'))setTimeout(refresh,30)})
-        .observe(page,{attributes:true,attributeFilter:['class','style']});
+      new MutationObserver(function(){
+        if(page.classList.contains('active')||page.classList.contains('show')){
+          setTimeout(refresh,30);
+          setTimeout(refresh,180);
+        }
+      }).observe(page,{attributes:true,attributeFilter:['class','style']});
     }
   }
 
@@ -423,5 +440,8 @@
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',wire,{once:true});
   else wire();
 
-  window.addEventListener('pageshow',function(){setTimeout(refresh,30)});
+  window.addEventListener('pageshow',function(){setTimeout(refresh,60)});
+  }
+
+  startHolidaysV325();
 })();
