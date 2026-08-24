@@ -1,4 +1,4 @@
-/* HOLIDAYS V32.2 — Thai public holidays + Buddhist holy days + important dates */
+/* HOLIDAYS V32.3 — Thai public holidays + Buddhist holy days + important dates */
 (function(){
   'use strict';
   var B=window.__ROSTER_HOLIDAYS_V32__;
@@ -14,7 +14,12 @@
   function pad(n){return String(n).padStart(2,'0')}
   function iso(y,m,d){return y+'-'+pad(m+1)+'-'+pad(d)}
   function current(){return B.current()}
-  function typeLabel(t){return t==='substitute'?'วันหยุดชดเชย':t==='special'?'วันหยุดพิเศษ':'นักขัตฤกษ์'}
+  function typeLabel(t){
+    return t==='substitute'?'วันหยุดชดเชย':
+      t==='special'?'วันหยุดพิเศษ':
+      t==='buddhist'?'วันพระ':
+      t==='important'?'วันสำคัญ':'นักขัตฤกษ์';
+  }
 
   /* Official/government holidays for B.E.2569 (2026).
      Bangkok-only Oct 16 special holiday is explicitly labelled. */
@@ -79,7 +84,7 @@
 
   function iconFor(name,type,kind){
     var s=String(name||'');
-    if(kind==='buddhist')return '🪷';
+    if(kind==='buddhist')return '🧘‍♂️';
     if(kind==='important'){
       if(/พยาบาล|มหิดล|สาธารณสุข/.test(s))return '🩺';
       if(/วิทยาศาสตร์/.test(s))return '🔬';
@@ -104,7 +109,7 @@
         changed=true;
       }
     });
-    if(changed){try{B.saveConfig()}catch(e){console.warn('[V32.2] seed save',e)}}
+    if(changed){try{B.saveConfig()}catch(e){console.warn('[V32.3] seed save',e)}}
   }
 
   function readAudit(){try{return JSON.parse(localStorage.getItem(auditKey)||'[]')}catch(e){return []}}
@@ -139,31 +144,107 @@
     return Object.keys(set).sort();
   }
 
+
+  function applyCalendarIconsV323(){
+    var titleIcon=document.querySelector('#page-holidays .h32-title-icon');
+    if(titleIcon){
+      titleIcon.textContent='🗓️';
+      titleIcon.setAttribute('aria-label','ปฏิทินวันหยุด');
+      titleIcon.title='ปฏิทินวันหยุด';
+    }
+    var cardIcon=document.querySelector('#page-holidays .h32-head-icon.pink');
+    if(cardIcon){
+      cardIcon.textContent='📅';
+      cardIcon.setAttribute('aria-label','ปฏิทิน');
+      cardIcon.title='ปฏิทิน';
+    }
+  }
+
+  function renderLegendV323(){
+    var host=document.querySelector('#page-holidays .h32-legend');
+    if(!host)return;
+    host.innerHTML=[
+      '<span class="legend-saturday"><i class="dot saturday"></i>วันเสาร์</span>',
+      '<span class="legend-sunday"><i class="dot sunday"></i>วันอาทิตย์</span>',
+      '<span class="legend-buddhist"><i class="legend-monk">🧘‍♂️</i><i class="dot buddhist"></i>วันพระ</span>',
+      '<span class="legend-today"><i class="dot today"></i>วันปัจจุบัน</span>',
+      '<span class="legend-official"><i class="dot official"></i>นักขัตฤกษ์</span>',
+      '<span class="legend-important"><i class="dot important"></i>วันสำคัญ</span>',
+      '<span class="legend-substitute"><i class="dot substitute"></i>วันหยุดชดเชย</span>',
+      '<span class="legend-special"><i class="dot special"></i>วันหยุดพิเศษ</span>'
+    ].join('');
+  }
+
+  function shortCalendarCaption(evs){
+    if(!evs||!evs.length)return '';
+    var holiday=evs.find(function(x){return x.kind==='holiday'});
+    var important=evs.find(function(x){return x.kind==='important'});
+    var buddhist=evs.find(function(x){return x.kind==='buddhist'});
+    if(holiday)return holiday.name||'วันหยุด';
+    if(important)return important.name||'วันสำคัญ';
+    if(buddhist)return 'วันพระ';
+    return '';
+  }
+
   function renderCalendarV322(){
     var host=$('holidayCalendarV24');if(!host)return;
     var c=current(),y=c.year,m=c.month;
-    var first=new Date(y,m,1),start=new Date(y,m,1-first.getDay()),today=new Date(),html='';
+    var first=new Date(y,m,1);
+    var start=new Date(y,m,1-first.getDay());
+    var today=new Date();
+    var html='';
+
     for(var i=0;i<42;i++){
       var d=new Date(start.getFullYear(),start.getMonth(),start.getDate()+i);
       var key=iso(d.getFullYear(),d.getMonth(),d.getDate());
-      var evs=eventsForDate(key),h=(state().holidays||{})[key],classes=['h32-day'];
+      var evs=eventsForDate(key);
+      var h=(state().holidays||{})[key];
+      var hasBuddhist=!!BUDDHIST_2026[key];
+      var hasImportant=!!IMPORTANT_2026[key];
+      var isToday=today.getFullYear()===d.getFullYear()&&today.getMonth()===d.getMonth()&&today.getDate()===d.getDate();
+      var classes=['h32-day'];
+
       if(d.getMonth()!==m)classes.push('is-muted');
       if(d.getDay()===0)classes.push('is-sunday');
       if(d.getDay()===6)classes.push('is-saturday');
-      if(h)classes.push('is-'+(h.type||'official'));
-      if(today.getFullYear()===d.getFullYear()&&today.getMonth()===d.getMonth()&&today.getDate()===d.getDate())classes.push('is-today');
 
-      var dots=[];
-      if(h)dots.push('<i class="h32-mini-dot '+esc(h.type||'official')+'"></i>');
-      if(BUDDHIST_2026[key])dots.push('<i class="h32-mini-dot buddhist"></i>');
-      if(IMPORTANT_2026[key])dots.push('<i class="h32-mini-dot important"></i>');
+      if(h){
+        if(h.type==='substitute')classes.push('is-substitute');
+        else if(h.type==='special')classes.push('is-special');
+        else classes.push('is-official');
+      }else if(hasImportant){
+        classes.push('is-important');
+      }else if(hasBuddhist){
+        classes.push('is-buddhist');
+      }
 
+      if(hasBuddhist)classes.push('has-buddhist');
+      if(hasImportant)classes.push('has-important');
+      if(isToday)classes.push('is-today');
+
+      var markers=[];
+      if(d.getDay()===6)markers.push('<i class="h32-mini-dot saturday" title="วันเสาร์"></i>');
+      if(d.getDay()===0)markers.push('<i class="h32-mini-dot sunday" title="วันอาทิตย์"></i>');
+      if(hasBuddhist)markers.push('<span class="h32-buddha-mark" title="วันพระ" aria-label="วันพระ">🧘‍♂️</span>');
+      if(h){
+        markers.push('<i class="h32-mini-dot '+esc(h.type||'official')+'" title="'+esc(typeLabel(h.type||'official'))+'"></i>');
+      }
+      if(hasImportant)markers.push('<i class="h32-mini-dot important" title="วันสำคัญ"></i>');
+      if(isToday)markers.push('<i class="h32-mini-dot today" title="วันปัจจุบัน"></i>');
+
+      var caption=shortCalendarCaption(evs);
       var title=evs.map(function(x){return x.name}).join(' • ');
-      html+='<button type="button" class="'+classes.join(' ')+'" data-date="'+key+'" title="'+esc(title)+'" aria-label="'+esc(formatThaiDate(key)+(title?' '+title:''))+'">'+
-        '<span class="h32-day-num">'+d.getDate()+'</span>'+
-        '<span class="h32-day-dots">'+dots.join('')+'</span></button>';
+      var aria=formatThaiDate(key)+(title?' '+title:'')+(isToday?' วันปัจจุบัน':'');
+
+      html+='<button type="button" class="'+classes.join(' ')+'" data-date="'+key+'" title="'+esc(title)+'" aria-label="'+esc(aria)+'">'+
+        '<span class="h32-day-number">'+d.getDate()+'</span>'+
+        '<span class="h32-day-caption">'+(caption?esc(caption):'&nbsp;')+'</span>'+
+        '<span class="h32-day-markers">'+markers.join('')+'</span>'+
+      '</button>';
     }
+
     host.innerHTML=html;
+
     host.querySelectorAll('.h32-day').forEach(function(btn){
       btn.addEventListener('click',function(){
         var key=this.dataset.date;
@@ -235,8 +316,10 @@
 
   function refresh(){
     seedOfficial2569();
+    applyCalendarIconsV323();
     renderMonthTitle();
     renderCalendarV322();
+    renderLegendV323();
     renderSummary();
     renderUpcoming();
     renderAudit();
