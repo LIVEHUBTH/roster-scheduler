@@ -1,4 +1,4 @@
-/* HOLIDAYS V32.3 — reference-match layout + Thai calendar markers */
+/* HOLIDAYS V32.4 — calendar toolbar containment + summary color alignment */
 #page-holidays{background:#fff!important}
 #page-holidays .h32-shell{
   width:100%;max-width:1480px;margin:0 auto;padding:18px 22px 32px;
@@ -627,5 +627,211 @@
   #page-holidays .h32-legend{
     grid-template-columns:repeat(2,minmax(0,1fr))!important;
   }
+}
+
+/* =========================================================
+   V32.4 — FIX 1: month navigator stays inside calendar card
+           FIX 2: summary colors match the calendar color system
+
+   สีระบบ:
+   เสาร์ = ม่วง
+   อาทิตย์ = แดง
+   วันพระ = เหลือง
+   วันปัจจุบัน = เขียว
+   นักขัตฤกษ์ = ส้ม
+   วันสำคัญ = ฟ้า
+   วันหยุดชดเชย = ชมพู
+   วันหยุดพิเศษ = เทา
+   ========================================================= */
+
+/* ป้องกันหัวปฏิทิน/ตัวเปลี่ยนเดือนล้นออกนอกกรอบ */
+#page-holidays .h32-calendar-card{
+  min-width:0!important;
+  overflow:hidden!important;
+}
+
+#page-holidays .h32-calendar-card .h32-card-head{
+  min-width:0!important;
+}
+
+#page-holidays .h32-calendar-card .h32-card-head h3{
+  min-width:0!important;
+  margin:0!important;
+}
+
+#page-holidays .h32-calendar-card .h32-month-nav{
+  min-width:0!important;
+  max-width:100%!important;
+}
+
+#page-holidays .h32-calendar-card .h32-month-nav button{
+  min-width:0!important;
+  box-sizing:border-box!important;
+}
+
+/* Desktop กว้างมาก: ยังคงหัวข้อซ้าย + ตัวเปลี่ยนเดือนขวา */
+@media(min-width:1181px){
+  #page-holidays .h32-calendar-card .h32-card-head{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) auto!important;
+    align-items:center!important;
+    gap:14px!important;
+  }
+
+  #page-holidays .h32-calendar-card .h32-month-nav{
+    display:grid!important;
+    grid-template-columns:40px minmax(170px,210px) 40px 62px!important;
+    align-items:center!important;
+    gap:8px!important;
+    width:auto!important;
+    margin-left:0!important;
+    justify-content:end!important;
+  }
+
+  #page-holidays .h32-calendar-card .h32-month-pill{
+    width:100%!important;
+    min-width:0!important;
+  }
+}
+
+/* iPad / Desktop ขนาดกลาง:
+   ย้ายแถบเปลี่ยนเดือนลงมาเป็นแถวที่ 2 ภายในกรอบปฏิทิน */
+@media(max-width:1180px){
+  #page-holidays .h32-calendar-card .h32-card-head{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    align-items:stretch!important;
+    gap:11px!important;
+  }
+
+  #page-holidays .h32-calendar-card .h32-month-nav{
+    display:grid!important;
+    grid-template-columns:40px minmax(0,1fr) 40px 62px!important;
+    gap:8px!important;
+    width:100%!important;
+    margin:0!important;
+    justify-content:stretch!important;
+  }
+
+  #page-holidays .h32-calendar-card .h32-month-nav>button{
+    width:100%!important;
+    max-width:100%!important;
+  }
+
+  #page-holidays .h32-calendar-card .h32-month-nav>button:first-child,
+  #page-holidays .h32-calendar-card .h32-month-nav>button:nth-child(3){
+    width:40px!important;
+  }
+
+  #page-holidays .h32-calendar-card .h32-month-pill{
+    min-width:0!important;
+    width:100%!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    white-space:nowrap!important;
+  }
+
+  #page-holidays .h32-calendar-card .h32-today{
+    width:62px!important;
+    padding:0 8px!important;
+  }
+}
+
+/* มือถือ */
+@media(max-width:520px){
+  #page-holidays .h32-calendar-card .h32-month-nav{
+    grid-template-columns:36px minmax(0,1fr) 36px 54px!important;
+    gap:5px!important;
+  }
+
+  #page-holidays .h32-calendar-card .h32-month-nav>button:first-child,
+  #page-holidays .h32-calendar-card .h32-month-nav>button:nth-child(3){
+    width:36px!important;
+  }
+
+  #page-holidays .h32-calendar-card .h32-today{
+    width:54px!important;
+    padding:0 5px!important;
+    font-size:11px!important;
+  }
+}
+
+/* ---------------------------------------------------------
+   SUMMARY COLOR MAP
+   HTML เดิมใช้:
+   .pink   = วันหยุดทั้งหมด
+   .mint   = นักขัตฤกษ์
+   .purple = วันหยุดสุดสัปดาห์
+   .yellow = วันหยุดพิเศษ
+
+   V32.4 เปลี่ยนเฉพาะหน้าตาให้ตรงกับระบบสีใหม่
+   --------------------------------------------------------- */
+
+/* วันหยุดทั้งหมด: ใช้ neutral pastel เพื่อไม่แย่งสีประเภท */
+#page-holidays .h32-stat-grid .pink{
+  background:#fff7f9!important;
+  border-color:#f0dde4!important;
+  color:#697286!important;
+}
+
+/* นักขัตฤกษ์ = สีส้ม */
+#page-holidays .h32-stat-grid .mint{
+  background:var(--h32-orange-soft)!important;
+  border-color:#f2cfaa!important;
+  color:var(--h32-orange)!important;
+}
+
+/* วันหยุดสุดสัปดาห์ = สีม่วง */
+#page-holidays .h32-stat-grid .purple{
+  background:var(--h32-purple-soft)!important;
+  border-color:#ddd1f6!important;
+  color:var(--h32-purple)!important;
+}
+
+/* วันหยุดพิเศษ = สีเทา */
+#page-holidays .h32-stat-grid .yellow{
+  background:var(--h32-gray-soft)!important;
+  border-color:#dfe3e9!important;
+  color:var(--h32-gray)!important;
+}
+
+/* ให้ตัวเลขและชื่ออยู่กลางกรอบเท่ากัน */
+#page-holidays .h32-stat-grid article{
+  min-width:0!important;
+  text-align:center!important;
+}
+
+#page-holidays .h32-stat-grid article b{
+  width:100%!important;
+  text-align:center!important;
+}
+
+#page-holidays .h32-stat-grid article span{
+  width:100%!important;
+  max-width:100%!important;
+  text-align:center!important;
+  line-height:1.25!important;
+}
+
+/* badge รายการด้านขวาให้ย้ำสีเดียวกัน */
+#page-holidays .h32-type-badge.official{
+  background:var(--h32-orange-soft)!important;
+  color:#b36e30!important;
+}
+#page-holidays .h32-type-badge.substitute{
+  background:var(--h32-pink-soft)!important;
+  color:#b65b82!important;
+}
+#page-holidays .h32-type-badge.special{
+  background:var(--h32-gray-soft)!important;
+  color:#727b88!important;
+}
+#page-holidays .h32-type-badge.buddhist{
+  background:var(--h32-yellow-soft)!important;
+  color:#9b7711!important;
+}
+#page-holidays .h32-type-badge.important{
+  background:var(--h32-blue-soft)!important;
+  color:#3d86b4!important;
 }
 

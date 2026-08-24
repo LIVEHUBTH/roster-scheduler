@@ -1,4 +1,4 @@
-/* HOLIDAYS V32.3 — Thai public holidays + Buddhist holy days + important dates */
+/* HOLIDAYS V32.4 — Thai public holidays + Buddhist holy days + important dates */
 (function(){
   'use strict';
   var B=window.__ROSTER_HOLIDAYS_V32__;
@@ -267,7 +267,7 @@
     if($('holidayTotalV24'))$('holidayTotalV24').textContent=keys.length;
     if($('holidayOfficialV24'))$('holidayOfficialV24').textContent=official;
     if($('holidayWeekendV24'))$('holidayWeekendV24').textContent=weekend;
-    if($('holidaySpecialV24'))$('holidaySpecialV24').textContent=special+substitute;
+    if($('holidaySpecialV24'))$('holidaySpecialV24').textContent=special;
     var b=Object.keys(BUDDHIST_2026).filter(function(k){return k.indexOf(prefix)===0}).length;
     var im=Object.keys(IMPORTANT_2026).filter(function(k){return k.indexOf(prefix)===0}).length;
     if($('holidaySummaryNoteV32'))$('holidaySummaryNoteV32').textContent='* พ.ศ. '+c.thaiYear+' · วันพระ '+b+' วัน · วันสำคัญ '+im+' วัน';
