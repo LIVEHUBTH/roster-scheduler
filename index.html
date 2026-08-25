@@ -1769,7 +1769,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 
 
 <style id="home-v246-responsive-fit">
-/* ===== HOME V24.6 — iPad/Desktop single-frame + balanced mobile ===== */
+/* ===== HOME V24.7 — tighter iPad/Desktop viewport fit + balanced mobile ===== */
 #page-home{
   width:100%!important;
   max-width:1500px!important;
@@ -1986,7 +1986,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
     <div class="auth-head">
       <div class="auth-logo">🗓️</div>
       <h2>เข้าสู่ระบบจัดตารางเวร</h2>
-      <p>V24.6 • Home iPad Fit • สิทธิ์ผู้ใช้งานจากเซิร์ฟเวอร์</p>
+      <p>V24.7 • Home iPad Fit • สิทธิ์ผู้ใช้งานจากเซิร์ฟเวอร์</p>
     </div>
     <div class="auth-body">
       <label>Username</label>
@@ -2136,7 +2136,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
     <div id="homeAlertsCard" style="display:none"><span id="dashWarn">0</span><span id="dashError">0</span></div>
     <div id="homeFullRoster" style="display:none"></div>
     <div style="display:none"><span id="dashV"></span><span id="dashOT"></span><span id="dashMorning"></span><span id="dashNight"></span><span id="dashLong"></span><span id="dashEvening"></span><span id="dashExtra"></span><span id="dashTotal"></span><span id="dashBalance"></span><span id="dashBalanceText"></span></div>
-    <div class="home-version-footer">V24.6 • Home</div>
+    <div class="home-version-footer">V24.7 • Home</div>
   </div>
 </section>
 
@@ -2949,7 +2949,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
     </div>
   </div>
 
-  <div class="unit-page-version">V24.6 • Home iPad Fit</div>
+  <div class="unit-page-version">V24.7 • Home iPad Fit</div>
 </section>
 
 
@@ -3024,7 +3024,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
       <p class="admin-password-note">สำหรับบัญชี Admin เท่านั้น • รหัสผ่านใหม่ต้องมีอย่างน้อย 8 ตัวอักษร</p>
     </div>
     <div class="v24-card v24-about">
-      <h3>ⓘ เกี่ยวกับโปรแกรม</h3><b>รับตารางเวร</b><p>ระบบจัดตารางเวรอัตโนมัติ พร้อม Workflow และ Cloud Sync</p><small>V24.6 • Home iPad Fit • Auth V22.1</small>
+      <h3>ⓘ เกี่ยวกับโปรแกรม</h3><b>รับตารางเวร</b><p>ระบบจัดตารางเวรอัตโนมัติ พร้อม Workflow และ Cloud Sync</p><small>V24.7 • Home iPad Fit • Auth V22.1</small>
     </div>
   </div>
 </section>
@@ -4995,7 +4995,120 @@ function saveSummaryPDF(){
     });
   });
 }
-function printSummary(){var table=el('summaryTable');if(!table)return;var win=window.open('','_blank');if(!win)return;var title='ตารางหลักการเฉลี่ยเวร เดือน'+MONTHS[cm()]+' พ.ศ. '+py();win.document.write('<!DOCTYPE html><html lang="th"><head><meta charset="utf-8"><title>'+title+'</title><style>@page{size:A4 landscape;margin:15mm 10mm 13mm 10mm}body{font-family:-apple-system,BlinkMacSystemFont,"Noto Sans Thai",Tahoma,Arial,sans-serif;margin:0}h2{text-align:center;font-size:15px}table{border-collapse:collapse;width:100%;font-size:6px}th,td{border:1px solid #999;padding:1.5px;text-align:center;white-space:nowrap;color:#111!important}td{background:#fff!important}th{background:#e7e7ea!important}tfoot td{background:#ededed!important}</style></head><body><h2>'+title+'</h2>'+table.outerHTML+'<script>window.onload=function(){window.print()}<\/script></body></html>');win.document.close()}
+function printSummary(){var table=el('summaryTable');if(!table)return;var win=window.open('','_blank');if(!win)return;var title='ตารางหลักการเฉลี่ยเวร เดือน'+MONTHS[cm()]+' พ.ศ. '+py();win.document.write('<!DOCTYPE html><html lang="th"><head><meta charset="utf-8"><title>'+title+'</title><style>@page{size:A4 landscape;margin:15mm 10mm 13mm 10mm}body{font-family:-apple-system,BlinkMacSystemFont,"Noto Sans Thai",Tahoma,Arial,sans-serif;margin:0}h2{text-align:center;font-size:15px}table{border-collapse:collapse;width:100%;font-size:6px}th,td{border:1px solid #999;padding:1.5px;text-align:center;white-space:nowrap;color:#111!important}td{background:#fff!important}th{background:#e7e7ea!important}tfoot td{background:#ededed!important}</style>
+<style id="home-v247-hard-fit">
+/* ===== HOME V24.7 — hard fit for iPad/Desktop landscape ===== */
+/* Keep the complete Home dashboard visible inside one iPad/Desktop frame. */
+@media (min-width:901px) and (max-height:900px){
+  #page-home{
+    overflow:visible!important;
+  }
+  #page-home .v244-home-shell{
+    height:calc(100svh - 154px)!important;
+    max-height:calc(100svh - 154px)!important;
+    min-height:0!important;
+    grid-template-rows:
+      minmax(104px,1.03fr)
+      minmax(54px,.43fr)
+      minmax(122px,.95fr)
+      minmax(92px,.70fr)
+      9px!important;
+    gap:5px!important;
+    overflow:hidden!important;
+  }
+  #page-home .v244-hero{
+    padding:8px 20px!important;
+    border-radius:17px!important;
+  }
+  #page-home .v244-hello{font-size:13px!important;line-height:1.05!important}
+  #page-home .v244-hero h1{font-size:27px!important;line-height:1.02!important;margin:2px 0 3px!important}
+  #page-home .v244-hero h2{font-size:9px!important;line-height:1.1!important;margin:0 0 2px!important}
+  #page-home .v244-hero p{font-size:7px!important;line-height:1.18!important;margin:0 0 4px!important}
+  #page-home .v244-start-btn{min-height:22px!important;padding:2px 8px!important;font-size:7.2px!important}
+  #page-home .v244-hero-art{max-height:102px!important;min-height:0!important}
+  #page-home .v244-hero-art img{max-height:98px!important;max-width:82%!important}
+
+  #page-home .v244-stats{gap:5px!important}
+  #page-home .v244-stat{
+    min-height:0!important;
+    padding:3px 7px!important;
+    grid-template-columns:30px minmax(0,1fr)!important;
+    gap:5px!important;
+    border-radius:13px!important;
+  }
+  #page-home .v244-stat-icon{width:28px!important;height:28px!important;font-size:16px!important}
+  #page-home .v244-stat strong{font-size:15px!important;line-height:1!important}
+  #page-home .v244-stat small{font-size:6.2px!important;line-height:1!important}
+  #page-home .v244-stat em{font-size:6.3px!important}
+  #page-home .v244-stat span{font-size:5.5px!important;line-height:1!important;margin-top:1px!important}
+
+  #page-home .v244-middle,
+  #page-home .v244-bottom{gap:5px!important;min-height:0!important}
+  #page-home .v244-middle{grid-template-columns:29% 1fr!important}
+  #page-home .v244-bottom{grid-template-columns:.95fr 1.28fr .95fr!important}
+
+  #page-home .v244-card{
+    padding:5px 7px!important;
+    border-radius:13px!important;
+    min-height:0!important;
+    overflow:hidden!important;
+  }
+  #page-home .v244-card-title{min-height:15px!important;margin-bottom:1px!important}
+  #page-home .v244-card-title h3{font-size:8.5px!important;line-height:1!important}
+  #page-home .v244-calendar-nav b{font-size:6.3px!important;min-width:66px!important}
+  #page-home .v244-calendar-nav button{width:16px!important;height:16px!important;font-size:7px!important}
+  #page-home .v244-calendar{gap:0!important;margin-top:0!important}
+  #page-home .v244-calendar>div{font-size:6px!important;line-height:1!important;border-radius:5px!important}
+  #page-home .v244-calendar .head{font-size:5.6px!important}
+  #page-home .v244-legend{font-size:5.2px!important;margin-top:1px!important;gap:6px!important}
+
+  #page-home .v244-shortcut-grid{gap:5px!important}
+  #page-home .v244-shortcut-grid button{padding:3px!important;border-radius:11px!important;gap:1px!important;min-height:0!important}
+  #page-home .v244-shortcut-grid span{font-size:18px!important;line-height:1!important}
+  #page-home .v244-shortcut-grid b{font-size:7.1px!important;line-height:1.05!important}
+  #page-home .v244-shortcut-grid small{font-size:5px!important;line-height:1.05!important}
+
+  #page-home .v244-news,
+  #page-home .v244-flow,
+  #page-home .v244-tips{height:calc(100% - 15px)!important;min-height:0!important;overflow:hidden!important}
+  #page-home .v244-news span{font-size:5.7px!important;line-height:1.05!important}
+  #page-home .v244-news em{font-size:5px!important;line-height:1.05!important}
+  #page-home .v244-flow .n{width:20px!important;height:20px!important;font-size:6px!important;margin-bottom:1px!important}
+  #page-home .v244-flow b{font-size:5.7px!important;line-height:1!important}
+  #page-home .v244-flow small{font-size:4.7px!important;line-height:1!important}
+  #page-home .v244-flow>i{font-size:8px!important}
+  #page-home .v244-tips button{font-size:5.6px!important;line-height:1.05!important;padding:1px 0!important}
+  #page-home .home-version-footer{height:9px!important;line-height:9px!important;font-size:5.5px!important;margin:0!important}
+}
+
+/* Extra-tight landscape window: fit without hiding any Home component. */
+@media (min-width:901px) and (max-height:700px){
+  #page-home .v244-home-shell{
+    height:calc(100svh - 142px)!important;
+    max-height:calc(100svh - 142px)!important;
+    grid-template-rows:94px 48px 112px 82px 8px!important;
+    gap:4px!important;
+  }
+  #page-home .v244-hero{padding:6px 18px!important}
+  #page-home .v244-hero h1{font-size:24px!important}
+  #page-home .v244-hero-art{max-height:88px!important}
+  #page-home .v244-hero-art img{max-height:84px!important}
+  #page-home .v244-stat strong{font-size:14px!important}
+  #page-home .v244-card{padding:4px 6px!important}
+  #page-home .v244-shortcut-grid span{font-size:16px!important}
+}
+
+/* Mobile remains naturally scrollable, but keeps cards balanced and readable. */
+@media (max-width:640px){
+  #page-home .v244-home-shell{overflow:visible!important}
+  #page-home .v244-bottom{align-items:stretch!important}
+  #page-home .v244-bottom>.v244-card{height:auto!important;min-height:150px!important}
+  #page-home .v244-news,
+  #page-home .v244-flow,
+  #page-home .v244-tips{height:auto!important;min-height:0!important}
+}
+</style>
+</head><body><h2>'+title+'</h2>'+table.outerHTML+'<script>window.onload=function(){window.print()}<\/script></body></html>');win.document.close()}
 function openSummaryPdf(){el('summaryPdfFile').click()}
 
 
