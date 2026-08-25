@@ -2394,6 +2394,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 
 
 <link rel="stylesheet" href="home-v27.css?v=27.1">
+<link rel="stylesheet" href="summary-v34.css?v=34.0">
 </head>
 <body>
 
@@ -3150,30 +3151,124 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 
 
 <section class="page-view" id="page-summary" data-view="summary">
-  <div class="v24-page-title"><div><h2>รายงานสรุป</h2><p>สรุปสถิติและผลการจัดเวรประจำเดือนที่เลือก</p></div></div>
-  <div class="v24-card v24-summary-toolbar">
-    <div><label>เดือน<select id="summaryMonthProxyV24"></select></label><label>ปี พ.ศ.<input id="summaryYearProxyV24" type="number" min="2500" max="2700"></label></div>
-    <div class="page-tools no-print"><button id="summaryPdfBtn">PDF ดาวน์โหลด PDF</button><button id="summaryPrintBtn">🖨 พิมพ์</button><button id="summaryOpenPdfBtn">เปิด PDF ย้อนหลัง</button><input id="summaryPdfFile" type="file" accept="application/pdf" style="display:none"></div>
+  <div class="s34-shell">
+    <header class="s34-head">
+      <div>
+        <h2>รายงานสรุป</h2>
+        <p>สรุปสถิติและผลการจัดเวรประจำเดือนที่เลือก</p>
+      </div>
+    </header>
+
+    <section class="s34-toolbar">
+      <div class="s34-field">
+        <label>เดือน</label>
+        <div class="s34-select-wrap"><span class="s34-mini-icon s34-calendar-pink"></span><select id="summaryMonthProxyV24"></select></div>
+      </div>
+      <div class="s34-field s34-year-field">
+        <label>ปี พ.ศ.</label>
+        <div class="s34-select-wrap"><span class="s34-mini-icon s34-calendar-blue"></span><input id="summaryYearProxyV24" type="number" min="2500" max="2700"></div>
+      </div>
+
+      <div class="s34-report-type">
+        <label>ประเภทรายงาน</label>
+        <div class="s34-tabs" id="summaryTabsV34">
+          <button type="button" class="active" data-summary-tab="overview">ภาพรวม</button>
+          <button type="button" data-summary-tab="people">รายบุคคล</button>
+          <button type="button" data-summary-tab="compare">เปรียบเทียบเวร</button>
+          <button type="button" data-summary-tab="holiday">วันหยุด</button>
+        </div>
+      </div>
+
+      <div class="s34-actions no-print">
+        <button type="button" id="summaryViewBtnV34" class="s34-action view"><span class="s34-action-icon eye"></span>ดูรายงาน</button>
+        <button type="button" id="summaryPdfBtn" class="s34-action pdf"><span class="s34-action-icon pdf"></span>ดาวน์โหลด PDF</button>
+        <button type="button" id="summaryExcelBtnV34" class="s34-action excel"><span class="s34-action-icon excel"></span>ส่งออก Excel</button>
+        <button type="button" id="summaryPrintBtn" class="s34-action print"><span class="s34-action-icon print"></span>พิมพ์</button>
+        <button type="button" id="summaryOpenPdfBtn" class="s34-history-pdf" title="เปิด PDF ย้อนหลัง">⋯</button>
+        <input id="summaryPdfFile" type="file" accept="application/pdf" style="display:none">
+      </div>
+    </section>
+
+    <section class="s34-stats">
+      <article class="s34-stat purple">
+        <span class="s34-stat-icon people"></span>
+        <div><small>จำนวนบุคลากรทั้งหมด</small><strong><b id="summaryPeopleV24">0</b> <em>คน</em></strong><p id="summaryPeopleDeltaV34">ข้อมูลผู้ใช้งานปัจจุบัน</p></div>
+      </article>
+      <article class="s34-stat mint">
+        <span class="s34-stat-icon calendar"></span>
+        <div><small>เวรรวมทั้งเดือน</small><strong><b id="summaryAssignmentsV24">0</b> <em>เวร</em></strong><p id="summaryAssignmentsDeltaV34">กำลังอัปเดตตามตาราง</p></div>
+      </article>
+      <article class="s34-stat yellow">
+        <span class="s34-stat-icon gift"></span>
+        <div><small>วันหยุด/นักขัตฤกษ์</small><strong><b id="summaryHolidayV24">0</b> <em>วัน</em></strong><p>ในเดือนนี้</p></div>
+      </article>
+      <article class="s34-stat blue">
+        <span class="s34-stat-icon star"></span>
+        <div><small>คะแนนความสมดุลเฉลี่ย</small><strong><b id="summaryBalanceV24">-</b></strong><p id="summaryBalanceTextV34">ตรวจสอบตามกฎข้อ 21</p></div>
+      </article>
+      <article class="s34-stat pink">
+        <span class="s34-stat-icon shield"></span>
+        <div><small>จำนวนข้อขัดแย้งที่แก้แล้ว</small><strong><b id="summaryConflictV24">0</b> <em>รายการ</em></strong><p id="summaryConflictTextV34">ตรวจสอบสถานะล่าสุด</p></div>
+      </article>
+    </section>
+
+    <section class="s34-charts">
+      <article class="s34-card s34-bar-card" id="summaryChartCardV34">
+        <div class="s34-card-head">
+          <div><h3>สรุปจำนวนเวรตามประเภท</h3><small>จำนวนเวร</small></div>
+          <select id="summaryChartModeV34"><option value="count">แสดงจำนวนเวร</option><option value="percent">แสดงเปอร์เซ็นต์</option></select>
+        </div>
+        <div id="summaryBarChartV24" class="s34-bar-chart"></div>
+      </article>
+
+      <article class="s34-card s34-donut-card">
+        <div class="s34-card-head"><h3>สัดส่วนเวรของเดือนนี้</h3></div>
+        <div class="s34-donut-wrap">
+          <div id="summaryDonutV24" class="s34-donut"><div><small>รวม</small><b id="summaryDonutTotalV24">0</b><span>เวร</span></div></div>
+          <div id="summaryLegendV24" class="s34-donut-legend"></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="s34-detail-grid">
+      <article class="s34-card s34-people-card" id="summaryPeopleCardV34">
+        <div class="s34-card-head"><h3>สรุปรายบุคคล</h3></div>
+        <div id="summaryTopPeopleV24" class="s34-people-table"></div>
+        <button type="button" id="summaryAllPeopleBtnV34" class="s34-wide-btn no-print"><span class="s34-small-people"></span>ดูรายงานรายบุคคลทั้งหมด</button>
+      </article>
+
+      <div class="s34-right-stack">
+        <article class="s34-card s34-ranking-card">
+          <div class="s34-card-head"><h3>👑 บุคลากรเวรสูงสุด 5 อันดับ</h3></div>
+          <div id="summaryRankingV34" class="s34-ranking"></div>
+        </article>
+        <article class="s34-card s34-tips-card">
+          <div class="s34-card-head"><h3>💡 ข้อสังเกตและคำแนะนำ</h3></div>
+          <div id="summaryTipsV24" class="s34-tips"></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="s34-card s34-compare-card" id="summaryCompareCardV34">
+      <div class="s34-card-head"><h3>📈 เปรียบเทียบเดือนก่อน</h3></div>
+      <div id="summaryCompareV34" class="s34-compare-grid"></div>
+    </section>
+
+    <div id="summary" class="summary s34-legacy-summary no-print" aria-hidden="true"></div>
+    <div class="s34-version">V34.0 • Summary Report</div>
   </div>
-  <div class="v24-stat-grid five">
-    <div class="v24-stat purple"><span>👥</span><div><small>จำนวนบุคลากรทั้งหมด</small><b id="summaryPeopleV24">0</b><em>คน</em></div></div>
-    <div class="v24-stat mint"><span>🗓️</span><div><small>เวรรวมทั้งเดือน</small><b id="summaryAssignmentsV24">0</b><em>เวร</em></div></div>
-    <div class="v24-stat yellow"><span>🎁</span><div><small>วันหยุด/นักขัตฤกษ์</small><b id="summaryHolidayV24">0</b><em>วัน</em></div></div>
-    <div class="v24-stat blue"><span>⭐</span><div><small>คะแนนความสมดุลเฉลี่ย</small><b id="summaryBalanceV24">-</b></div></div>
-    <div class="v24-stat pink"><span>🛡️</span><div><small>ข้อขัดแย้งที่แก้แล้ว</small><b id="summaryConflictV24">0</b><em>รายการ</em></div></div>
+
+  <div id="summaryModalV34" class="s34-modal no-print" aria-hidden="true">
+    <div class="s34-modal-backdrop" data-summary-close="1"></div>
+    <div class="s34-modal-panel">
+      <div class="s34-modal-head">
+        <div><b id="summaryModalTitleV34">รายงานรายบุคคลทั้งหมด</b><small>ตารางหลักการเฉลี่ยเวร</small></div>
+        <button type="button" data-summary-close="1">×</button>
+      </div>
+      <div id="summaryModalBodyV34" class="s34-modal-body"></div>
+    </div>
   </div>
-  <div class="v24-two-grid charts">
-    <div class="v24-card"><div class="v24-card-head"><h3>สรุปจำนวนเวรตามประเภท</h3></div><div id="summaryBarChartV24" class="v24-bar-chart"></div></div>
-    <div class="v24-card"><div class="v24-card-head"><h3>สัดส่วนเวรของเดือนนี้</h3></div><div class="v24-donut-wrap"><div id="summaryDonutV24" class="v24-donut"><b id="summaryDonutTotalV24">0</b><span>เวร</span></div><div id="summaryLegendV24" class="v24-donut-legend"></div></div></div>
-  </div>
-  <div class="v24-two-grid">
-    <div class="v24-card"><h3>สรุปรายบุคคล</h3><div id="summaryTopPeopleV24" class="v24-top-people"></div></div>
-    <div class="v24-card"><h3>💡 ข้อสังเกตและคำแนะนำ</h3><div id="summaryTipsV24" class="v24-tip-list"></div></div>
-  </div>
-  <div class="v24-card"><h3 id="summaryTitle">ตารางหลักการเฉลี่ยเวร</h3><div id="summary" class="summary no-print"></div></div>
 </section>
-
-
 
 
 <section class="page-view" id="page-internal" data-view="internal">
@@ -6677,5 +6772,6 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <script src="roster-v29.js?v=29.3"></script>
 <script src="login-fix-v26-1.js?v=30.0"></script>
 <script src="home-v26.js?v=30.0"></script>
-</body>
+
+<script src="summary-v34.js?v=34.0"></script></body>
 </html>
