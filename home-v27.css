@@ -1,0 +1,237 @@
+/* =========================================================
+   HOME V27.0 — EXTERNAL CSS / HISTORY FRAME MATCH
+   Goal:
+   - iPad + desktop: Home uses the same outer frame width as History.
+   - All Home sections stay inside one screen frame in landscape.
+   - iPad portrait: compact single-frame composition.
+   - Mobile: balanced stacking, no content removed.
+   This file is loaded LAST and intentionally overrides older Home patches.
+   ========================================================= */
+
+html body #page-home{
+  box-sizing:border-box!important;
+  width:min(1480px,calc(100% - 18px))!important;
+  max-width:1480px!important;
+  margin:0 auto!important;
+  padding:8px 0 12px!important;
+  background:#fff!important;
+  overflow:hidden!important;
+}
+html body #page-home *{box-sizing:border-box}
+
+/* ---------- iPad landscape + desktop: TRUE ONE FRAME ---------- */
+@media (min-width:834px){
+  html body #page-home .v244-home-shell{
+    width:100%!important;
+    height:min(600px,calc(100dvh - 94px))!important;
+    min-height:560px!important;
+    max-height:600px!important;
+    margin:0!important;
+    padding:0!important;
+    display:grid!important;
+    grid-template-rows:148px 70px minmax(188px,1fr) 116px 10px!important;
+    gap:7px!important;
+    overflow:hidden!important;
+  }
+
+  html body #page-home .v244-hero{
+    min-height:0!important;
+    height:100%!important;
+    display:grid!important;
+    grid-template-columns:1.08fr .92fr!important;
+    align-items:center!important;
+    padding:9px 22px!important;
+    border-radius:18px!important;
+    overflow:hidden!important;
+  }
+  html body #page-home .v244-hero-copy{min-width:0!important}
+  html body #page-home .v244-hello{font-size:14px!important;line-height:1.05!important}
+  html body #page-home .v244-hero h1{
+    font-size:31px!important;line-height:1!important;margin:3px 0 4px!important;letter-spacing:-.55px!important
+  }
+  html body #page-home .v244-hero h2{font-size:10px!important;line-height:1.1!important;margin:0 0 2px!important}
+  html body #page-home .v244-hero p{font-size:7.8px!important;line-height:1.2!important;margin:0 0 5px!important}
+  html body #page-home .v244-start-btn{
+    min-height:25px!important;height:25px!important;padding:2px 10px!important;border-radius:9px!important;font-size:8px!important
+  }
+  html body #page-home .v244-hero-art{
+    height:128px!important;min-height:0!important;max-height:128px!important;margin:0!important
+  }
+  html body #page-home .v244-hero-art img{
+    width:auto!important;max-width:84%!important;max-height:124px!important;object-fit:contain!important
+  }
+
+  html body #page-home .v244-stats{
+    height:100%!important;min-height:0!important;
+    display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:7px!important
+  }
+  html body #page-home .v244-stat{
+    height:100%!important;min-height:0!important;
+    grid-template-columns:36px minmax(0,1fr)!important;gap:6px!important;
+    padding:5px 9px!important;border-radius:14px!important;overflow:hidden!important
+  }
+  html body #page-home .v244-stat-icon{width:32px!important;height:32px!important;font-size:18px!important}
+  html body #page-home .v244-stat small{font-size:6.8px!important;line-height:1.05!important}
+  html body #page-home .v244-stat strong{font-size:17px!important;line-height:1!important}
+  html body #page-home .v244-stat em{font-size:6.8px!important;line-height:1!important}
+  html body #page-home .v244-stat span{font-size:5.8px!important;line-height:1.05!important;margin-top:1px!important}
+
+  html body #page-home .v244-middle{
+    height:100%!important;min-height:0!important;
+    display:grid!important;grid-template-columns:29% 1fr!important;gap:7px!important;overflow:hidden!important
+  }
+  html body #page-home .v244-bottom{
+    height:100%!important;min-height:0!important;
+    display:grid!important;grid-template-columns:.95fr 1.28fr .95fr!important;gap:7px!important;overflow:hidden!important
+  }
+  html body #page-home .v244-card{
+    height:100%!important;min-height:0!important;max-height:none!important;
+    padding:6px 8px!important;border-radius:14px!important;overflow:hidden!important
+  }
+  html body #page-home .v244-card-title{min-height:17px!important;height:17px!important;margin:0 0 2px!important}
+  html body #page-home .v244-card-title h3{font-size:9px!important;line-height:1!important;margin:0!important}
+  html body #page-home .v244-link{font-size:6px!important;line-height:1!important}
+
+  /* calendar */
+  html body #page-home .v244-calendar-card{display:flex!important;flex-direction:column!important}
+  html body #page-home .v244-calendar-nav{gap:2px!important}
+  html body #page-home .v244-calendar-nav b{font-size:6.8px!important;min-width:74px!important;line-height:1!important}
+  html body #page-home .v244-calendar-nav button{width:18px!important;height:18px!important;min-height:18px!important;font-size:8px!important}
+  html body #page-home .v244-calendar{
+    flex:1 1 auto!important;min-height:0!important;height:auto!important;
+    margin-top:1px!important;gap:1px!important;grid-auto-rows:1fr!important
+  }
+  html body #page-home .v244-calendar>div{min-height:0!important;font-size:6.3px!important;line-height:1!important;border-radius:5px!important}
+  html body #page-home .v244-calendar .head{font-size:5.8px!important}
+  html body #page-home .v244-legend{font-size:5.3px!important;line-height:1!important;margin-top:1px!important;gap:6px!important}
+
+  /* shortcuts */
+  html body #page-home .v244-shortcuts{display:flex!important;flex-direction:column!important}
+  html body #page-home .v244-shortcut-grid{
+    flex:1 1 auto!important;min-height:0!important;height:auto!important;
+    display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:6px!important
+  }
+  html body #page-home .v244-shortcut-grid button{
+    min-height:0!important;height:100%!important;padding:4px!important;border-radius:12px!important;gap:1px!important
+  }
+  html body #page-home .v244-shortcut-grid span{font-size:20px!important;line-height:1!important}
+  html body #page-home .v244-shortcut-grid b{font-size:7.2px!important;line-height:1.05!important}
+  html body #page-home .v244-shortcut-grid small{font-size:5.2px!important;line-height:1.05!important}
+
+  /* bottom 3 cards */
+  html body #page-home .v244-bottom>.v244-card{height:100%!important;min-height:0!important;overflow:hidden!important}
+  html body #page-home .v244-news,
+  html body #page-home .v244-flow,
+  html body #page-home .v244-tips{
+    height:calc(100% - 19px)!important;min-height:0!important;max-height:none!important;overflow:hidden!important
+  }
+  html body #page-home .v244-news{grid-template-rows:repeat(4,minmax(0,1fr))!important}
+  html body #page-home .v244-news button{min-height:0!important;height:auto!important;padding:0!important;gap:4px!important}
+  html body #page-home .v244-news span{font-size:5.8px!important;line-height:1.05!important}
+  html body #page-home .v244-news em{font-size:5px!important;line-height:1!important}
+  html body #page-home .v244-news i{width:5px!important;height:5px!important}
+
+  html body #page-home .v244-flow{
+    grid-template-columns:1fr 10px 1fr 10px 1fr 10px 1fr 10px 1fr!important;align-items:center!important
+  }
+  html body #page-home .v244-flow>button{min-height:0!important;height:auto!important;padding:0!important}
+  html body #page-home .v244-flow>i{font-size:8px!important}
+  html body #page-home .v244-flow .n{width:20px!important;height:20px!important;font-size:6px!important;margin-bottom:1px!important}
+  html body #page-home .v244-flow b{font-size:5.8px!important;line-height:1!important}
+  html body #page-home .v244-flow small{font-size:4.8px!important;line-height:1!important;margin-top:1px!important}
+
+  html body #page-home .v244-tips{grid-template-rows:repeat(5,minmax(0,1fr))!important}
+  html body #page-home .v244-tips button{min-height:0!important;height:auto!important;padding:0!important;font-size:5.8px!important;line-height:1.05!important}
+
+  html body #page-home .home-version-footer{
+    height:10px!important;line-height:10px!important;margin:0!important;padding:0 2px!important;
+    font-size:5.5px!important;text-align:right!important
+  }
+}
+
+/* Slightly shorter iPad landscape viewport */
+@media (min-width:834px) and (max-height:720px){
+  html body #page-home .v244-home-shell{
+    height:min(566px,calc(100dvh - 88px))!important;
+    min-height:540px!important;max-height:566px!important;
+    grid-template-rows:136px 66px minmax(176px,1fr) 108px 9px!important;
+    gap:6px!important
+  }
+  html body #page-home .v244-hero{padding:7px 20px!important}
+  html body #page-home .v244-hero h1{font-size:28px!important}
+  html body #page-home .v244-hero-art{height:116px!important;max-height:116px!important}
+  html body #page-home .v244-hero-art img{max-height:112px!important}
+  html body #page-home .v244-card{padding:5px 7px!important}
+}
+
+/* ---------- iPad portrait: still one compact frame ---------- */
+@media (min-width:600px) and (max-width:833px){
+  html body #page-home{
+    width:min(100% - 18px,760px)!important;
+    padding:8px 0 12px!important;
+    overflow:hidden!important
+  }
+  html body #page-home .v244-home-shell{
+    width:100%!important;height:min(820px,calc(100dvh - 92px))!important;min-height:740px!important;max-height:820px!important;
+    display:grid!important;grid-template-rows:150px 126px 250px 190px 10px!important;gap:8px!important;overflow:hidden!important
+  }
+  html body #page-home .v244-hero{grid-template-columns:1.05fr .95fr!important;padding:10px 18px!important}
+  html body #page-home .v244-hero h1{font-size:29px!important;margin:3px 0!important}
+  html body #page-home .v244-hero-art{height:126px!important;max-height:126px!important}
+  html body #page-home .v244-hero-art img{max-height:122px!important}
+  html body #page-home .v244-stats{grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-template-rows:repeat(2,1fr)!important;gap:7px!important}
+  html body #page-home .v244-stat{min-height:0!important;height:100%!important;padding:6px 9px!important}
+  html body #page-home .v244-middle{grid-template-columns:38% 1fr!important;gap:8px!important;min-height:0!important;overflow:hidden!important}
+  html body #page-home .v244-bottom{grid-template-columns:1fr 1.15fr 1fr!important;gap:8px!important;min-height:0!important;overflow:hidden!important}
+  html body #page-home .v244-card{height:100%!important;min-height:0!important;padding:7px 8px!important;overflow:hidden!important}
+  html body #page-home .v244-shortcut-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-template-rows:repeat(2,1fr)!important;gap:6px!important}
+  html body #page-home .v244-shortcut-grid button{min-height:0!important;height:100%!important;padding:4px!important}
+  html body #page-home .v244-shortcut-grid span{font-size:21px!important}
+  html body #page-home .v244-shortcut-grid b{font-size:7.2px!important}
+  html body #page-home .v244-shortcut-grid small{font-size:5.2px!important}
+  html body #page-home .v244-news,html body #page-home .v244-flow,html body #page-home .v244-tips{height:calc(100% - 22px)!important;overflow:hidden!important}
+  html body #page-home .v244-flow .n{width:22px!important;height:22px!important;font-size:6px!important}
+  html body #page-home .v244-flow b{font-size:5.6px!important}
+  html body #page-home .v244-flow small{font-size:4.6px!important}
+  html body #page-home .home-version-footer{height:10px!important;line-height:10px!important;font-size:5.5px!important}
+}
+
+/* ---------- Mobile: balanced responsive stacking ---------- */
+@media (max-width:599px){
+  html body #page-home{
+    width:100%!important;max-width:none!important;margin:0!important;padding:10px 10px 24px!important;overflow:visible!important
+  }
+  html body #page-home .v244-home-shell{
+    width:100%!important;height:auto!important;min-height:0!important;max-height:none!important;
+    display:grid!important;grid-template-rows:auto!important;gap:10px!important;overflow:visible!important
+  }
+  html body #page-home .v244-hero{
+    grid-template-columns:1fr!important;padding:14px!important;border-radius:16px!important
+  }
+  html body #page-home .v244-hello{font-size:14px!important}
+  html body #page-home .v244-hero h1{font-size:29px!important;line-height:1.05!important;margin:3px 0 4px!important}
+  html body #page-home .v244-hero h2{font-size:10px!important}
+  html body #page-home .v244-hero p{font-size:8px!important;line-height:1.35!important}
+  html body #page-home .v244-hero-art{height:124px!important;max-height:124px!important;margin-top:3px!important}
+  html body #page-home .v244-hero-art img{max-height:120px!important}
+  html body #page-home .v244-stats{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
+  html body #page-home .v244-stat{min-height:68px!important;height:auto!important;padding:7px 8px!important;grid-template-columns:34px minmax(0,1fr)!important}
+  html body #page-home .v244-stat-icon{width:30px!important;height:30px!important;font-size:17px!important}
+  html body #page-home .v244-stat strong{font-size:16px!important}
+  html body #page-home .v244-middle,html body #page-home .v244-bottom{grid-template-columns:1fr!important;gap:10px!important;height:auto!important;overflow:visible!important}
+  html body #page-home .v244-card{height:auto!important;min-height:170px!important;padding:11px!important;border-radius:16px!important;overflow:visible!important}
+  html body #page-home .v244-calendar-card{min-height:300px!important}
+  html body #page-home .v244-shortcuts{min-height:275px!important}
+  html body #page-home .v244-shortcut-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
+  html body #page-home .v244-shortcut-grid button{min-height:105px!important;height:auto!important}
+  html body #page-home .v244-bottom>.v244-card{min-height:175px!important}
+  html body #page-home .v244-news,html body #page-home .v244-flow,html body #page-home .v244-tips{height:auto!important;min-height:0!important;overflow:visible!important}
+  html body #page-home .v244-flow{grid-template-columns:repeat(5,1fr)!important;gap:3px!important}
+  html body #page-home .v244-flow>i{display:none!important}
+  html body #page-home .home-version-footer{height:auto!important;line-height:1.2!important;font-size:7px!important;padding-top:2px!important}
+}
+
+@media (max-width:390px){
+  html body #page-home .v244-stats{grid-template-columns:1fr!important}
+  html body #page-home .v244-stat{min-height:62px!important}
+}
