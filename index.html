@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- BUILD: ADMIN PASSWORD UI V22.1 / 2026-08-25 -->
 <html lang="th">
 <head>
 <meta charset="utf-8">
@@ -1749,6 +1750,22 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 <link rel="stylesheet" href="history-v33.css?v=33.8">
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+
+<style id="admin-password-v221-styles">
+#page-settings .admin-password-card{border:1px solid #f1ddea;background:linear-gradient(145deg,#fffafd,#ffffff);}
+#page-settings .admin-password-card h3{display:flex;align-items:center;gap:8px;color:#4a5162}
+#page-settings .admin-password-fields{display:grid;gap:10px;margin-top:10px}
+#page-settings .admin-password-fields label{display:grid;gap:6px;font-size:11px;font-weight:800;color:#646d7e}
+#page-settings .admin-password-fields input{height:42px;width:100%;border:1px solid #e2e4ea;border-radius:11px;padding:0 12px;font-size:13px;background:#fff;color:#384158;outline:none}
+#page-settings .admin-password-fields input:focus{border-color:#ef86ad;box-shadow:0 0 0 3px rgba(239,134,173,.12)}
+#page-settings .admin-password-actions{display:flex;align-items:center;gap:10px;margin-top:12px;flex-wrap:wrap}
+#page-settings #settingsChangePasswordBtn{height:42px;border:0;border-radius:11px;padding:0 16px;background:#f47faa;color:#fff;font-weight:900;cursor:pointer;box-shadow:0 7px 16px rgba(244,127,170,.16)}
+#page-settings #settingsChangePasswordBtn:disabled{opacity:.55;cursor:not-allowed}
+#page-settings #settingsPasswordStatus{font-size:10px;color:#7b8493;min-height:16px}
+#page-settings #settingsPasswordStatus.ok{color:#2eaa80}
+#page-settings #settingsPasswordStatus.error{color:#d65370}
+#page-settings .admin-password-note{margin:7px 0 0;font-size:9px;color:#9097a4;line-height:1.5}
+</style>
 </head>
 <body>
 
@@ -2781,8 +2798,21 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
       <h3>🗄 จัดการข้อมูลระบบ</h3>
       <div class="v24-manage-grid"><button id="settingsClearV24">🗑 ล้างตารางเดือนนี้</button><button id="settingsResetV24">↻ รีเซ็ตค่าหน้าจอ</button><button id="settingsPeopleV24">👥 จัดการข้อมูลพนักงาน</button><button id="settingsValidateV24">🔗 ตรวจสอบความสมบูรณ์ข้อมูล</button></div>
     </div>
+    <div class="v24-card admin-password-card" id="adminPasswordCard" style="display:none">
+      <h3>🔐 เปลี่ยนรหัสผ่านแอดมิน</h3>
+      <div class="admin-password-fields">
+        <label>รหัสผ่านปัจจุบัน<input id="settingsCurrentPassword" type="password" autocomplete="current-password" placeholder="กรอกรหัสผ่านปัจจุบัน"></label>
+        <label>รหัสผ่านใหม่<input id="settingsNewPassword" type="password" autocomplete="new-password" placeholder="อย่างน้อย 8 ตัวอักษร"></label>
+        <label>ยืนยันรหัสผ่านใหม่<input id="settingsConfirmPassword" type="password" autocomplete="new-password" placeholder="กรอกรหัสผ่านใหม่อีกครั้ง"></label>
+      </div>
+      <div class="admin-password-actions">
+        <button id="settingsChangePasswordBtn" type="button">🔐 บันทึกรหัสผ่านใหม่</button>
+        <span id="settingsPasswordStatus"></span>
+      </div>
+      <p class="admin-password-note">สำหรับบัญชี Admin เท่านั้น • รหัสผ่านใหม่ต้องมีอย่างน้อย 8 ตัวอักษร</p>
+    </div>
     <div class="v24-card v24-about">
-      <h3>ⓘ เกี่ยวกับโปรแกรม</h3><b>รับตารางเวร</b><p>ระบบจัดตารางเวรอัตโนมัติ พร้อม Workflow และ Cloud Sync</p><small>V24.5 • Home iPad Fit</small>
+      <h3>ⓘ เกี่ยวกับโปรแกรม</h3><b>รับตารางเวร</b><p>ระบบจัดตารางเวรอัตโนมัติ พร้อม Workflow และ Cloud Sync</p><small>V24.5 • Home iPad Fit • Auth V22.1</small>
     </div>
   </div>
 </section>
@@ -4985,11 +5015,63 @@ function applyUnitPermissions(){
   document.querySelectorAll('#names input').forEach(function(n){n.disabled=!editConfig});
   document.querySelectorAll('#ruleList button,[data-edit-rule],[data-delete-rule]').forEach(function(n){n.disabled=!admin});
   if(el('newRuleText'))el('newRuleText').disabled=!admin;
+  if(el('adminPasswordCard'))el('adminPasswordCard').style.display=admin?'block':'none';
   if(el('holidayDate'))el('holidayDate').disabled=!editConfig;
   if(el('holidayName'))el('holidayName').disabled=!editConfig;
   if(el('customPerson'))el('customPerson').disabled=!editConfig;
   if(el('customRuleType'))el('customRuleType').disabled=!editConfig;
   if(el('customSlots'))el('customSlots').disabled=!editConfig;
+}
+
+
+async function changeAdminPassword(){
+  var status=el('settingsPasswordStatus');
+  var btn=el('settingsChangePasswordBtn');
+  function show(msg,ok){
+    if(!status)return;
+    status.textContent=msg||'';
+    status.classList.remove('ok','error');
+    if(msg)status.classList.add(ok?'ok':'error');
+  }
+  if(unitUser.role!=='admin'){show('เมนูนี้ใช้ได้เฉพาะ Admin',false);return}
+  var current=(el('settingsCurrentPassword')&&el('settingsCurrentPassword').value)||'';
+  var next=(el('settingsNewPassword')&&el('settingsNewPassword').value)||'';
+  var confirmPw=(el('settingsConfirmPassword')&&el('settingsConfirmPassword').value)||'';
+  if(!current||!next||!confirmPw){show('กรุณากรอกข้อมูลให้ครบทั้ง 3 ช่อง',false);return}
+  if(next.length<8){show('รหัสผ่านใหม่ต้องมีอย่างน้อย 8 ตัวอักษร',false);return}
+  if(next!==confirmPw){show('ยืนยันรหัสผ่านใหม่ไม่ตรงกัน',false);return}
+  if(current===next){show('รหัสผ่านใหม่ต้องไม่เหมือนรหัสผ่านปัจจุบัน',false);return}
+  try{
+    if(btn){btn.disabled=true;btn.textContent='กำลังบันทึก...'}
+    show('',true);
+    await authFetch('/api/auth/change-password',{
+      method:'POST',
+      body:JSON.stringify({
+        currentPassword:current,
+        newPassword:next,
+        confirmPassword:confirmPw
+      })
+    });
+    if(el('settingsCurrentPassword'))el('settingsCurrentPassword').value='';
+    if(el('settingsNewPassword'))el('settingsNewPassword').value='';
+    if(el('settingsConfirmPassword'))el('settingsConfirmPassword').value='';
+    show('เปลี่ยนรหัสผ่านเรียบร้อยแล้ว ✓',true);
+    setStatus('เปลี่ยนรหัสผ่านแอดมินเรียบร้อยแล้ว',true);
+  }catch(err){
+    var msg=String(err&&err.message||err||'');
+    var thai={
+      current_password_required:'กรุณากรอกรหัสผ่านปัจจุบัน',
+      invalid_current_password:'รหัสผ่านปัจจุบันไม่ถูกต้อง',
+      current_password_incorrect:'รหัสผ่านปัจจุบันไม่ถูกต้อง',
+      password_too_short:'รหัสผ่านใหม่ต้องมีอย่างน้อย 8 ตัวอักษร',
+      passwords_do_not_match:'ยืนยันรหัสผ่านใหม่ไม่ตรงกัน',
+      forbidden:'ใช้ได้เฉพาะบัญชี Admin',
+      unauthorized:'Session หมดอายุ กรุณาเข้าสู่ระบบใหม่'
+    };
+    show(thai[msg]||('เปลี่ยนรหัสผ่านไม่สำเร็จ: '+msg),false);
+  }finally{
+    if(btn){btn.disabled=false;btn.textContent='🔐 บันทึกรหัสผ่านใหม่'}
+  }
 }
 
 
@@ -5725,6 +5807,8 @@ if(el('historySearchV24'))el('historySearchV24').oninput=function(){var q=this.v
 if(el('historyStatusV24'))el('historyStatusV24').onchange=function(){var v=this.value;document.querySelectorAll('#historyMonthList .history-month-item').forEach(function(x){var t=x.textContent;x.style.display=(v==='all'||(v==='locked'&&t.indexOf('ล็อกแล้ว')>=0)||(v==='approved'&&t.indexOf('อนุมัติแล้ว')>=0)||(v==='submitted'&&t.indexOf('ส่งตรวจแล้ว')>=0)||(v==='draft'&&t.indexOf('บันทึกในระบบ')>=0))?'':'none'})};
 if(el('summaryMonthProxyV24')){el('summaryMonthProxyV24').innerHTML=MONTHS.map(function(x,i){return '<option value="'+i+'">'+x+'</option>'}).join('');el('summaryMonthProxyV24').value=String(cm());el('summaryMonthProxyV24').onchange=function(){el('monthSelect').value=this.value;renderSheet();renderSummary()}};
 if(el('summaryYearProxyV24')){el('summaryYearProxyV24').value=String(py());el('summaryYearProxyV24').onchange=function(){el('yearInput').value=this.value;renderSheet();renderSummary()}};
+if(el('settingsChangePasswordBtn'))el('settingsChangePasswordBtn').onclick=changeAdminPassword;
+if(el('settingsConfirmPassword'))el('settingsConfirmPassword').onkeydown=function(e){if(e.key==='Enter')changeAdminPassword()};
 if(el('settingsSaveUnitV24'))el('settingsSaveUnitV24').onclick=function(){if(unitUser.role!=='admin'){setStatus('แก้ข้อมูลหน่วยงานได้เฉพาะ Admin',false);return}state.unitInfo=normalizeUnitInfo(state.unitInfo);state.unitInfo.name=el('settingsUnitNameV24').value.trim();state.unitInfo.organization=el('settingsOrgV24').value.trim();state.unitInfo.head=el('settingsHeadV24').value.trim();state.unitInfo.scheduler=el('settingsSchedulerV24').value.trim();saveConfig();renderUnitInfo();setStatus('บันทึกข้อมูลหน่วยงานแล้ว',true)};
 if(el('settingsSaveTimeV24'))el('settingsSaveTimeV24').onclick=saveV24Settings;
 if(el('settingsSaveStyleV24'))el('settingsSaveStyleV24').onclick=saveV24Settings;
