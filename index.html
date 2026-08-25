@@ -1766,6 +1766,218 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 #page-settings #settingsPasswordStatus.error{color:#d65370}
 #page-settings .admin-password-note{margin:7px 0 0;font-size:9px;color:#9097a4;line-height:1.5}
 </style>
+
+
+<style id="home-v246-responsive-fit">
+/* ===== HOME V24.6 — iPad/Desktop single-frame + balanced mobile ===== */
+#page-home{
+  width:100%!important;
+  max-width:1500px!important;
+  margin:0 auto!important;
+}
+
+/* Desktop + iPad landscape: keep every home component inside one viewport */
+@media (min-width:901px){
+  #page-home .v244-home-shell{
+    box-sizing:border-box!important;
+    height:calc(100dvh - 112px)!important;
+    min-height:0!important;
+    max-height:none!important;
+    overflow:hidden!important;
+    display:grid!important;
+    grid-template-rows:
+      minmax(132px,1.12fr)
+      minmax(64px,.48fr)
+      minmax(148px,1fr)
+      minmax(126px,.82fr)
+      12px!important;
+    gap:7px!important;
+    padding:0 0 1px!important;
+  }
+
+  #page-home .v244-hero{
+    min-height:0!important;
+    padding:12px 24px!important;
+    border-radius:19px!important;
+  }
+  #page-home .v244-hello{font-size:16px!important}
+  #page-home .v244-hero h1{font-size:clamp(30px,3vw,38px)!important;margin:3px 0 4px!important}
+  #page-home .v244-hero h2{font-size:11.5px!important;margin-bottom:3px!important}
+  #page-home .v244-hero p{font-size:8.7px!important;margin-bottom:7px!important}
+  #page-home .v244-start-btn{min-height:28px!important;padding:4px 11px!important;font-size:8.8px!important}
+  #page-home .v244-hero-art{height:100%!important;min-height:0!important;max-height:145px!important}
+  #page-home .v244-hero-art img{max-height:138px!important;max-width:88%!important}
+
+  #page-home .v244-stats{gap:7px!important;min-height:0!important}
+  #page-home .v244-stat{
+    min-height:0!important;
+    grid-template-columns:42px minmax(0,1fr)!important;
+    gap:7px!important;
+    padding:6px 10px!important;
+    border-radius:15px!important;
+  }
+  #page-home .v244-stat-icon{width:38px!important;height:38px!important;font-size:22px!important}
+  #page-home .v244-stat strong{font-size:20px!important}
+  #page-home .v244-stat small{font-size:7.5px!important}
+  #page-home .v244-stat em{font-size:7.7px!important}
+  #page-home .v244-stat span{font-size:6.5px!important;margin-top:2px!important}
+
+  #page-home .v244-middle,
+  #page-home .v244-bottom{min-height:0!important;gap:7px!important}
+  #page-home .v244-middle{grid-template-columns:29% 1fr!important}
+  #page-home .v244-bottom{grid-template-columns:.95fr 1.28fr .95fr!important}
+
+  #page-home .v244-card{
+    min-height:0!important;
+    padding:8px 10px!important;
+    border-radius:15px!important;
+    overflow:hidden!important;
+  }
+  #page-home .v244-card-title{min-height:20px!important}
+  #page-home .v244-card-title h3{font-size:10.8px!important}
+  #page-home .v244-calendar-nav b{font-size:7.6px!important;min-width:80px!important}
+  #page-home .v244-calendar-nav button{width:20px!important;height:20px!important}
+  #page-home .v244-calendar{min-height:0!important;margin-top:2px!important;gap:1px!important}
+  #page-home .v244-calendar>div{font-size:7.2px!important;border-radius:6px!important}
+  #page-home .v244-calendar .head{font-size:6.6px!important}
+  #page-home .v244-legend{font-size:6.1px!important;margin-top:2px!important;gap:8px!important}
+
+  #page-home .v244-shortcut-grid{gap:7px!important}
+  #page-home .v244-shortcut-grid button{padding:5px!important;border-radius:13px!important;gap:2px!important}
+  #page-home .v244-shortcut-grid span{font-size:23px!important}
+  #page-home .v244-shortcut-grid b{font-size:8.8px!important}
+  #page-home .v244-shortcut-grid small{font-size:6.2px!important}
+
+  #page-home .v244-news,
+  #page-home .v244-flow,
+  #page-home .v244-tips{height:calc(100% - 20px)!important}
+  #page-home .v244-news span{font-size:6.5px!important}
+  #page-home .v244-news em{font-size:5.8px!important}
+  #page-home .v244-flow .n{width:25px!important;height:25px!important;font-size:7px!important;margin-bottom:3px!important}
+  #page-home .v244-flow b{font-size:6.5px!important}
+  #page-home .v244-flow small{font-size:5.5px!important}
+  #page-home .v244-flow>i{font-size:11px!important}
+  #page-home .v244-tips button{font-size:6.5px!important;line-height:1.08!important}
+  #page-home .home-version-footer{height:12px!important;line-height:12px!important;font-size:6.4px!important}
+}
+
+/* Short-height iPad/desktop (landscape Safari) */
+@media (min-width:901px) and (max-height:760px){
+  #page-home .v244-home-shell{
+    height:calc(100dvh - 102px)!important;
+    grid-template-rows:minmax(112px,1fr) 58px minmax(128px,.95fr) minmax(108px,.78fr) 10px!important;
+    gap:6px!important;
+  }
+  #page-home .v244-hero{padding:9px 21px!important}
+  #page-home .v244-hello{font-size:14px!important}
+  #page-home .v244-hero h1{font-size:29px!important}
+  #page-home .v244-hero h2{font-size:10px!important}
+  #page-home .v244-hero p{font-size:7.8px!important;margin-bottom:5px!important}
+  #page-home .v244-start-btn{min-height:25px!important;padding:3px 9px!important;font-size:8px!important}
+  #page-home .v244-hero-art{max-height:118px!important}
+  #page-home .v244-hero-art img{max-height:114px!important}
+  #page-home .v244-stat{padding:4px 8px!important;grid-template-columns:35px minmax(0,1fr)!important}
+  #page-home .v244-stat-icon{width:32px!important;height:32px!important;font-size:19px!important}
+  #page-home .v244-stat strong{font-size:17px!important}
+  #page-home .v244-card{padding:6px 8px!important}
+  #page-home .v244-card-title{min-height:18px!important}
+  #page-home .v244-card-title h3{font-size:9.7px!important}
+  #page-home .v244-shortcut-grid span{font-size:20px!important}
+  #page-home .v244-shortcut-grid b{font-size:8px!important}
+  #page-home .v244-shortcut-grid small{font-size:5.7px!important}
+}
+
+/* Tablet portrait: preserve all elements, reorganize without crowding */
+@media (min-width:641px) and (max-width:900px){
+  #page-home .v244-home-shell{
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    overflow:visible!important;
+    display:grid!important;
+    grid-template-rows:auto!important;
+    gap:10px!important;
+  }
+  #page-home .v244-hero{grid-template-columns:1.05fr .95fr!important;padding:16px 18px!important}
+  #page-home .v244-hero-art{height:145px!important}
+  #page-home .v244-hero-art img{max-height:140px!important}
+  #page-home .v244-stats{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
+  #page-home .v244-middle{grid-template-columns:1fr 1.45fr!important;gap:10px!important}
+  #page-home .v244-bottom{grid-template-columns:1fr 1fr!important;gap:10px!important}
+  #page-home .v244-bottom>.v244-card:nth-child(2){grid-column:1 / -1!important;grid-row:1!important}
+  #page-home .v244-calendar-card,#page-home .v244-shortcuts,#page-home .v244-bottom>.v244-card{min-height:210px!important}
+}
+
+/* Mobile: balanced stacking while retaining every original component */
+@media (max-width:640px){
+  #page-home{padding:0!important}
+  #page-home .v244-home-shell{
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    overflow:visible!important;
+    display:flex!important;
+    flex-direction:column!important;
+    gap:10px!important;
+  }
+  #page-home .v244-hero{
+    grid-template-columns:1fr!important;
+    text-align:center!important;
+    padding:17px 15px 12px!important;
+    border-radius:18px!important;
+  }
+  #page-home .v244-hello{font-size:15px!important}
+  #page-home .v244-hero h1{font-size:29px!important;line-height:1.08!important}
+  #page-home .v244-hero h2{font-size:11px!important}
+  #page-home .v244-hero p{font-size:8.5px!important;line-height:1.45!important}
+  #page-home .v244-hero-art{height:126px!important;margin-top:4px!important}
+  #page-home .v244-hero-art img{max-height:122px!important}
+
+  #page-home .v244-stats{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
+  #page-home .v244-stat{
+    grid-template-columns:36px minmax(0,1fr)!important;
+    padding:8px!important;
+    gap:6px!important;
+    min-height:74px!important;
+  }
+  #page-home .v244-stat-icon{width:34px!important;height:34px!important;font-size:19px!important}
+  #page-home .v244-stat strong{font-size:18px!important}
+  #page-home .v244-stat small{font-size:7px!important}
+  #page-home .v244-stat span{font-size:6px!important}
+
+  #page-home .v244-middle,#page-home .v244-bottom{display:grid!important;grid-template-columns:1fr!important;gap:10px!important}
+  #page-home .v244-card{padding:12px!important;border-radius:16px!important}
+  #page-home .v244-calendar-card{min-height:300px!important}
+  #page-home .v244-shortcuts{min-height:275px!important}
+  #page-home .v244-shortcut-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
+  #page-home .v244-shortcut-grid button{min-height:108px!important}
+  #page-home .v244-shortcut-grid span{font-size:27px!important}
+  #page-home .v244-shortcut-grid b{font-size:10px!important}
+  #page-home .v244-shortcut-grid small{font-size:7px!important}
+
+  #page-home .v244-bottom>.v244-card{min-height:180px!important}
+  #page-home .v244-flow{
+    grid-template-columns:1fr 10px 1fr 10px 1fr!important;
+    grid-template-rows:auto auto!important;
+    row-gap:10px!important;
+    height:auto!important;
+  }
+  #page-home .v244-flow>button:nth-of-type(4){grid-column:1!important;grid-row:2!important}
+  #page-home .v244-flow>button:nth-of-type(5){grid-column:3!important;grid-row:2!important}
+  #page-home .v244-flow>i:nth-of-type(4){display:none!important}
+  #page-home .v244-news,#page-home .v244-tips{height:auto!important}
+  #page-home .v244-news button{min-height:38px!important}
+  #page-home .v244-news span{font-size:7.5px!important;white-space:normal!important}
+  #page-home .v244-tips button{min-height:32px!important;font-size:8px!important}
+  #page-home .home-version-footer{padding:5px 2px 0!important;height:auto!important;line-height:1.2!important}
+}
+
+@media (max-width:390px){
+  #page-home .v244-stats{grid-template-columns:1fr!important}
+  #page-home .v244-stat{min-height:68px!important}
+}
+</style>
+
 </head>
 <body>
 
@@ -1774,7 +1986,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
     <div class="auth-head">
       <div class="auth-logo">🗓️</div>
       <h2>เข้าสู่ระบบจัดตารางเวร</h2>
-      <p>V24.5 • Home iPad Fit • สิทธิ์ผู้ใช้งานจากเซิร์ฟเวอร์</p>
+      <p>V24.6 • Home iPad Fit • สิทธิ์ผู้ใช้งานจากเซิร์ฟเวอร์</p>
     </div>
     <div class="auth-body">
       <label>Username</label>
@@ -1924,7 +2136,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
     <div id="homeAlertsCard" style="display:none"><span id="dashWarn">0</span><span id="dashError">0</span></div>
     <div id="homeFullRoster" style="display:none"></div>
     <div style="display:none"><span id="dashV"></span><span id="dashOT"></span><span id="dashMorning"></span><span id="dashNight"></span><span id="dashLong"></span><span id="dashEvening"></span><span id="dashExtra"></span><span id="dashTotal"></span><span id="dashBalance"></span><span id="dashBalanceText"></span></div>
-    <div class="home-version-footer">V24.5 • Home</div>
+    <div class="home-version-footer">V24.6 • Home</div>
   </div>
 </section>
 
@@ -2737,7 +2949,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
     </div>
   </div>
 
-  <div class="unit-page-version">V24.5 • Home iPad Fit</div>
+  <div class="unit-page-version">V24.6 • Home iPad Fit</div>
 </section>
 
 
@@ -2812,7 +3024,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
       <p class="admin-password-note">สำหรับบัญชี Admin เท่านั้น • รหัสผ่านใหม่ต้องมีอย่างน้อย 8 ตัวอักษร</p>
     </div>
     <div class="v24-card v24-about">
-      <h3>ⓘ เกี่ยวกับโปรแกรม</h3><b>รับตารางเวร</b><p>ระบบจัดตารางเวรอัตโนมัติ พร้อม Workflow และ Cloud Sync</p><small>V24.5 • Home iPad Fit • Auth V22.1</small>
+      <h3>ⓘ เกี่ยวกับโปรแกรม</h3><b>รับตารางเวร</b><p>ระบบจัดตารางเวรอัตโนมัติ พร้อม Workflow และ Cloud Sync</p><small>V24.6 • Home iPad Fit • Auth V22.1</small>
     </div>
   </div>
 </section>
