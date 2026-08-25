@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- BUILD: HOME V24.7.2 IPAD ONE-FRAME 2026-08-25 -->
+<!-- BUILD: HOME V24.7.3 IPAD TRUE-FIT 2026-08-25 -->
 <!-- BUILD: ADMIN PASSWORD UI V22.1 / 2026-08-25 -->
 <html lang="th">
 <head>
@@ -2201,6 +2201,55 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
   #page-home .v244-bottom>.v244-card{min-height:170px!important}
 }
 </style>
+
+<style id="home-v2473-ipad-true-fit">
+/* ===== HOME V24.7.3 — TRUE ONE-FRAME FIT FOR IPAD LANDSCAPE ===== */
+/* Uniformly fit the complete Home dashboard inside the usable iPad viewport.
+   This affects Home only; Login and all other pages remain untouched. */
+@media (min-width:701px) and (max-width:1100px){
+  #page-home{
+    overflow:hidden!important;
+    padding-bottom:0!important;
+  }
+  #page-home .v244-home-shell{
+    transform:scale(.86)!important;
+    transform-origin:top left!important;
+    width:116.28%!important;
+    height:calc((100svh - 72px)/.86)!important;
+    max-height:none!important;
+    overflow:hidden!important;
+    grid-template-rows:142px 56px minmax(150px,1fr) 108px 8px!important;
+    gap:4px!important;
+  }
+  #page-home .v244-hero{padding:7px 16px!important}
+  #page-home .v244-hero-art{height:116px!important;max-height:116px!important}
+  #page-home .v244-hero-art img{max-height:112px!important}
+  #page-home .v244-hero h1{font-size:26px!important}
+  #page-home .v244-stats{gap:4px!important}
+  #page-home .v244-middle,#page-home .v244-bottom{gap:4px!important}
+  #page-home .v244-card{padding:4px 6px!important}
+  #page-home .v244-shortcut-grid{gap:4px!important}
+  #page-home .v244-bottom>.v244-card{overflow:hidden!important}
+}
+
+/* Desktop keeps full-size proportions but still prevents accidental overflow. */
+@media (min-width:1101px){
+  #page-home .v244-home-shell{
+    max-height:calc(100svh - 78px)!important;
+  }
+}
+
+/* Mobile remains naturally scrollable and balanced; never scale the UI. */
+@media (max-width:700px){
+  #page-home .v244-home-shell{
+    transform:none!important;
+    width:100%!important;
+    height:auto!important;
+    max-height:none!important;
+    overflow:visible!important;
+  }
+}
+</style>
 </head>
 <body>
 
@@ -2209,7 +2258,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
     <div class="auth-head">
       <div class="auth-logo">🗓️</div>
       <h2>เข้าสู่ระบบจัดตารางเวร</h2>
-      <p>V24.7.1 • Home iPad Fit • สิทธิ์ผู้ใช้งานจากเซิร์ฟเวอร์</p>
+      <p>V24.7.3 • Home iPad Fit • สิทธิ์ผู้ใช้งานจากเซิร์ฟเวอร์</p>
     </div>
     <div class="auth-body">
       <label>Username</label>
