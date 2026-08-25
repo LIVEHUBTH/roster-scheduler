@@ -393,6 +393,93 @@ async function logout(request, env) {
   return json(request, env, { ok: true });
 }
 
+
+async function changeAdminPassword(request, env, identity) {
+  const body = await readJson(request);
+  if (!body || body === undefined) {
+    return json(request, env, { ok: false, error: 'invalid_json' }, 400);
+  }
+
+  if (identity.kind !== 'session' || identity.user.role !== 'admin') {
+    return json(request, env, { ok: false, error: 'forbidden' }, 403);
+  }
+
+  const currentPassword = String(body.currentPassword || '');
+  const newPassword = String(body.newPassword || '');
+  const confirmPassword = String(body.confirmPassword || '');
+
+  if (!currentPassword || !newPassword || !confirmPassword) {
+    return json(request, env, { ok: false, error: 'password_fields_required' }, 400);
+  }
+
+  if (newPassword !== confirmPassword) {
+    return json(request, env, { ok: false, error: 'password_confirmation_mismatch' }, 400);
+  }
+
+  if (newPassword.length < AUTH.PASSWORD_MIN || newPassword.length > 200) {
+    return json(request, env, { ok: false, error: 'password_too_short' }, 400);
+  }
+
+  if (currentPassword === newPassword) {
+    return json(request, env, { ok: false, error: 'new_password_must_be_different' }, 400);
+  }
+
+  const user = await env.DB.prepare(`
+    SELECT id, username, display_name, password_hash, password_salt,
+           role, is_active, created_at, updated_at, last_login_at
+    FROM users
+    WHERE id = ?
+    LIMIT 1
+  `).bind(identity.user.id).first();
+
+  if (!user || !user.is_active || user.role !== 'admin') {
+    return json(request, env, { ok: false, error: 'user_not_found' }, 404);
+  }
+
+  const computed = await passwordHash(currentPassword, user.password_salt);
+  if (!safeEqualString(computed, user.password_hash)) {
+    await audit(env, user, 'password_change_failed', { reason: 'invalid_current_password' });
+    return json(request, env, { ok: false, error: 'invalid_current_password' }, 401);
+  }
+
+  const pw = await makePasswordRecord(newPassword);
+  const now = new Date().toISOString();
+  const currentToken = bearerToken(request);
+  const currentTokenHash = currentToken ? await sha256Base64(currentToken) : '';
+
+  await env.DB.prepare(`
+    UPDATE users
+    SET password_hash = ?, password_salt = ?, updated_at = ?
+    WHERE id = ?
+  `).bind(pw.hash, pw.salt, now, user.id).run();
+
+  if (currentTokenHash) {
+    await env.DB.prepare(`
+      UPDATE auth_sessions
+      SET revoked_at = ?
+      WHERE user_id = ?
+        AND token_hash <> ?
+        AND revoked_at IS NULL
+    `).bind(now, user.id, currentTokenHash).run();
+  } else {
+    await env.DB.prepare(`
+      UPDATE auth_sessions
+      SET revoked_at = ?
+      WHERE user_id = ? AND revoked_at IS NULL
+    `).bind(now, user.id).run();
+  }
+
+  await audit(env, user, 'password_changed', {
+    revokedOtherSessions: true,
+  });
+
+  return json(request, env, {
+    ok: true,
+    message: 'password_changed',
+    user: publicUser({ ...user, updated_at: now }),
+  });
+}
+
 function bootstrapAuthorized(request, env) {
   const actual = request.headers.get('X-Sync-Token') || '';
   const bootstrap = env.BOOTSTRAP_TOKEN || '';
@@ -587,7 +674,7 @@ export default {
           ok: true,
           database: true,
           auth: true,
-          version: '22.0-auth-bootstrap',
+          version: '22.1-admin-password-change',
           time: new Date().toISOString(),
         });
       } catch (error) {
@@ -609,6 +696,13 @@ export default {
 
     if (path === '/api/auth/logout' && request.method === 'POST') {
       return logout(request, env);
+    }
+
+
+    if (path === '/api/auth/change-password' && request.method === 'POST') {
+      const auth = await requireIdentity(request, env, ['admin']);
+      if (!auth.ok) return json(request, env, { ok: false, error: auth.error }, auth.status);
+      return changeAdminPassword(request, env, auth.identity);
     }
 
     if (path === '/api/auth/me' && request.method === 'GET') {
