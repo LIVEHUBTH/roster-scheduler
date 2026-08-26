@@ -993,3 +993,43 @@ body.s34-modal-open header{visibility:hidden!important}
 .side-nav .s34-nav-chart i:after{
   border-top-color:#f2bd62!important;
 }
+
+/* =========================================================
+   SUMMARY V34.7 — ONLY subtitle spacing + pastel card icons
+   Keep all other V34.6 layout/functions unchanged.
+   ========================================================= */
+
+/* 1) Add a little breathing room between subtitle and toolbar */
+#page-summary .s34-head{
+  height:50px!important;
+  padding-bottom:6px!important;
+  box-sizing:border-box!important;
+}
+@media (min-width:821px) and (orientation:landscape){
+  #page-summary .s34-shell{
+    grid-template-rows:50px 76px 78px 175px 166px 104px 10px!important;
+  }
+}
+@media (max-width:1100px) and (min-width:821px) and (orientation:landscape){
+  #page-summary .s34-shell{
+    grid-template-rows:50px 76px 78px 175px 166px 128px 10px!important;
+  }
+}
+
+/* 2) Pastel card icons inspired by the Home palette, with no white frame */
+#page-summary .s34-stat-icon{
+  background:transparent!important;
+  box-shadow:none!important;
+  border:0!important;
+  border-radius:0!important;
+  opacity:.94!important;
+}
+#page-summary .s34-stat-icon:before{
+  filter:saturate(.58) brightness(1.12) contrast(.92)!important;
+  text-shadow:0 3px 8px rgba(98,86,115,.08)!important;
+}
+#page-summary .s34-stat.purple .s34-stat-icon:before{filter:saturate(.52) brightness(1.14) hue-rotate(4deg)!important}
+#page-summary .s34-stat.mint .s34-stat-icon:before{filter:saturate(.48) brightness(1.13) hue-rotate(22deg)!important}
+#page-summary .s34-stat.yellow .s34-stat-icon:before{filter:saturate(.55) brightness(1.14)!important}
+#page-summary .s34-stat.blue .s34-stat-icon:before{filter:saturate(.48) brightness(1.15) hue-rotate(7deg)!important}
+#page-summary .s34-stat.pink .s34-stat-icon:before{filter:saturate(.50) brightness(1.12) hue-rotate(-8deg)!important}
