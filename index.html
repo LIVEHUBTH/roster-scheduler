@@ -2394,7 +2394,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 
 
 <link rel="stylesheet" href="home-v27.css?v=27.1">
-<link rel="stylesheet" href="summary-v34.css?v=34.0">
+<link rel="stylesheet" href="summary-v34.css?v=34.1">
 </head>
 <body>
 
@@ -3254,8 +3254,9 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
       <div id="summaryCompareV34" class="s34-compare-grid"></div>
     </section>
 
+    <div id="summaryTitle" style="display:none"></div>
     <div id="summary" class="summary s34-legacy-summary no-print" aria-hidden="true"></div>
-    <div class="s34-version">V34.0 • Summary Report</div>
+    <div class="s34-version">V34.1 • Summary Report</div>
   </div>
 
   <div id="summaryModalV34" class="s34-modal no-print" aria-hidden="true">
@@ -6739,6 +6740,85 @@ window.__ROSTER_HISTORY_V33__={
   escape:esc
 };
 
+/* V34.1 summary-page bridge: expose summary data safely from the main app IIFE. */
+function summaryV341Snapshot(){
+  var counts=currentCounts();
+  var report=rule21Report();
+  var groups=['v','ot','morning','night','long','evening','extra'].map(function(kind){
+    var info=groupAverageInfo(kind);
+    return {
+      kind:kind,
+      label:info.label,
+      total:Math.round(info.total||0),
+      avg:Number(info.avg||0)
+    };
+  });
+  var people=(state.people||[]).map(function(p){
+    var g=counts.group||{};
+    return {
+      id:p.id,
+      name:p.name||'-',
+      total:counts.total[p.id]||0,
+      ot:(g.ot&&g.ot[p.id])||0,
+      sdmc:
+        ((g.morning&&g.morning[p.id])||0)+
+        ((g.night&&g.night[p.id])||0)+
+        ((g.long&&g.long[p.id])||0)+
+        ((g.evening&&g.evening[p.id])||0),
+      extra:(g.extra&&g.extra[p.id])||0
+    };
+  });
+  var prev=savedMonth(prevKey());
+  return {
+    month:cm(),
+    yearThai:py(),
+    key:currentKey(),
+    months:MONTHS.slice(),
+    people:people,
+    peopleCount:(state.people||[]).length,
+    assignmentTotal:assignmentsCount(),
+    holidayCount:Object.keys(state.holidays||{}).filter(function(k){return k.indexOf(currentKey()+'-')===0}).length,
+    groups:groups,
+    report:{
+      ok:!!report.ok,
+      groupProblems:(report.groupProblems||[]).slice(),
+      totalBad:(report.totalBad||[]).slice(),
+      extraOnlyBad:(report.extraOnlyBad||[]).slice()
+    },
+    previous:prev?{
+      key:prev.key||prevKey(),
+      assignments:prev.assignments||{},
+      peopleSnapshot:prev.peopleSnapshot||[]
+    }:null
+  };
+}
+window.__ROSTER_SUMMARY_V34__={
+  months:MONTHS.slice(),
+  getSnapshot:function(){return summaryV341Snapshot()},
+  setPeriod:async function(month,yearThai){
+    var m=parseInt(month,10), y=parseInt(yearThai,10);
+    if(Number.isFinite(m)&&el('month'))el('month').value=String(m);
+    if(Number.isFinite(y)&&el('year'))el('year').value=String(y);
+    if(cloud.connected){
+      try{await ensureCloudMonths([prevKey(),currentKey()])}catch(e){}
+    }
+    loadMonth(true);
+    try{renderSummary()}catch(e){}
+    try{renderSummaryV24()}catch(e){}
+    return summaryV341Snapshot();
+  },
+  refresh:function(){
+    try{renderSummary()}catch(e){}
+    try{renderSummaryV24()}catch(e){}
+    return summaryV341Snapshot();
+  },
+  getLegacySummaryHtml:function(){
+    try{renderSummary()}catch(e){}
+    return el('summary')?el('summary').innerHTML:'';
+  },
+  getPreviousKey:function(){return prevKey()}
+};
+
 window.addEventListener('error',function(e){setStatus('JavaScript error: '+e.message,false)});
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 
@@ -6773,5 +6853,5 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <script src="login-fix-v26-1.js?v=30.0"></script>
 <script src="home-v26.js?v=30.0"></script>
 
-<script src="summary-v34.js?v=34.0"></script></body>
+<script src="summary-v34.js?v=34.1"></script></body>
 </html>
