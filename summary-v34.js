@@ -1,4 +1,4 @@
-/* SUMMARY V34.3 — data bridge fix + reference dashboard controller */
+/* SUMMARY V34.4 — personal table / compare / icon / scroll fix */
 (function(){
   'use strict';
 
@@ -20,6 +20,7 @@
   function $(id){return document.getElementById(id)}
   function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
   function snapshot(){try{return B.getSnapshot()}catch(e){return null}}
+
   function countPrev(assignments){
     var total=0, byKind={v:0,ot:0,morning:0,night:0,long:0,evening:0,extra:0};
     var slotKind={
@@ -37,6 +38,7 @@
     });
     return {total:total,byKind:byKind};
   }
+
   function pctDelta(cur,prev){
     if(!prev)return cur?100:0;
     return Math.round((cur-prev)/prev*1000)/10;
@@ -127,25 +129,41 @@
     var avg=arr.length?arr.reduce(function(sum,p){return sum+p.total},0)/arr.length:0;
     return arr.map(function(p){
       var score=avg?Math.max(0,Math.min(100,Math.round((100-Math.abs(p.total-avg)/Math.max(1,avg)*45)*10)/10)):100;
-      return Object.assign({},p,{score:score});
+      return Object.assign({},p,{score:score,v:Number(p.v||0)});
     });
   }
+
   function personalTableHtml(s,full){
     var people=scoredPeople(s);
     var cls=full?'s34-full-person-table':'';
-    return '<table class="'+cls+'"><thead><tr><th>#</th><th>ชื่อบุคลากร</th><th>เวรทั้งหมด</th><th>OT</th><th>SDMC</th><th>EXTRA</th><th>คะแนนสมดุล</th></tr></thead><tbody>'+
-      people.map(function(p,i){
-        return '<tr><td>'+(i+1)+'</td><td><span class="s34-person-name"><span class="s34-person-avatar">👩🏻</span>'+esc(p.name)+'</span></td><td>'+p.total+'</td><td>'+p.ot+'</td><td>'+p.sdmc+'</td><td>'+p.extra+'</td><td><span class="s34-score '+(p.score<85?'mid':'')+'">'+p.score.toFixed(1)+'%</span></td></tr>';
-      }).join('')+'</tbody></table>';
+    return '<table class="'+cls+'"><thead><tr>'+[
+      '<th>#</th>',
+      '<th>ชื่อบุคลากร</th>',
+      '<th>เวร1-2</th>',
+      '<th>เวรรวมทั้งหมด</th>',
+      '<th>OT</th>',
+      '<th>SDMC</th>',
+      '<th>EXTRA</th>',
+      '<th>คะแนนสมดุล</th>'
+    ].join('')+'</tr></thead><tbody>'+people.map(function(p,i){
+      return '<tr>'+
+        '<td>'+(i+1)+'</td>'+
+        '<td><span class="s34-person-name"><span class="s34-person-avatar">👩🏻</span>'+esc(p.name)+'</span></td>'+
+        '<td>'+Number(p.v||0)+'</td>'+
+        '<td>'+p.total+'</td>'+
+        '<td>'+p.ot+'</td>'+
+        '<td>'+p.sdmc+'</td>'+
+        '<td>'+p.extra+'</td>'+
+        '<td><span class="s34-score '+(p.score<85?'mid':'')+'">'+p.score.toFixed(1)+'%</span></td>'+
+      '</tr>';
+    }).join('')+'</tbody></table>';
   }
 
   function renderPeople(s){
     if(!s)return;
     var people=scoredPeople(s);
     var host=$('summaryTopPeopleV24');
-    if(host){
-      host.innerHTML=personalTableHtml(s,false);
-    }
+    if(host)host.innerHTML=personalTableHtml(s,false);
 
     var top=people.slice(0,5);
     var rank=$('summaryRankingV34');
@@ -159,15 +177,20 @@
 
   function spark(color,seed){
     var pts=[],n=8;
-    for(var i=0;i<n;i++){var y=24-((seed+i*7+(i%3)*11)%20);pts.push((i*(60/(n-1))).toFixed(1)+','+y)}
+    for(var i=0;i<n;i++){
+      var y=24-((seed+i*7+(i%3)*11)%20);
+      pts.push((i*(60/(n-1))).toFixed(1)+','+y);
+    }
     return '<div class="s34-spark"><svg viewBox="0 0 60 28" preserveAspectRatio="none"><polyline points="'+pts.join(' ')+'" fill="none" stroke="'+color+'" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>'+pts.map(function(p){var a=p.split(',');return '<circle cx="'+a[0]+'" cy="'+a[1]+'" r="1.4" fill="'+color+'"/>'}).join('')+'</svg></div>';
   }
+
   function renderCompare(s){
     if(!s)return;
     var prev=countPrev(s.previous&&s.previous.assignments||{});
     var map={};(s.groups||[]).forEach(function(g){map[g.kind]=Number(g.total||0)});
     var current={
       total:s.assignmentTotal,
+      v:map.v||0,
       ot:map.ot||0,
       sdmc:(map.morning||0)+(map.night||0)+(map.long||0)+(map.evening||0),
       extra:map.extra||0,
@@ -175,6 +198,7 @@
     };
     var prevVals={
       total:prev.total,
+      v:prev.byKind.v,
       ot:prev.byKind.ot,
       sdmc:prev.byKind.morning+prev.byKind.night+prev.byKind.long+prev.byKind.evening,
       extra:prev.byKind.extra,
@@ -182,6 +206,7 @@
     };
     var items=[
       ['เวรรวมทั้งหมด',current.total,prevVals.total,'เวร',COLORS[0]],
+      ['เวร1–2',current.v,prevVals.v,'เวร','#f08db0'],
       ['OT รวม',current.ot,prevVals.ot,'เวร','#38a477'],
       ['SDMC รวม',current.sdmc,prevVals.sdmc,'เวร','#8c6bd2'],
       ['EXTRA รวม',current.extra,prevVals.extra,'เวร','#e3a528'],
@@ -224,26 +249,23 @@
       await B.setPeriod(m,y);
       renderAll();
     }catch(e){
-      console.error('[SUMMARY V34.3] period change',e);
+      console.error('[SUMMARY V34.4] period change',e);
     }
   }
 
   function exportExcel(){
     var s=snapshot();if(!s)return;
     var people=scoredPeople(s);
-    var rows=[
-      ['ลำดับ','ชื่อบุคลากร','เวรทั้งหมด','OT','SDMC','EXTRA','คะแนนสมดุล']
-    ];
+    var rows=[['ลำดับ','ชื่อบุคลากร','เวร1-2','เวรรวมทั้งหมด','OT','SDMC','EXTRA','คะแนนสมดุล']];
     people.forEach(function(p,i){
-      rows.push([i+1,p.name,p.total,p.ot,p.sdmc,p.extra,p.score.toFixed(1)+'%']);
+      rows.push([i+1,p.name,Number(p.v||0),p.total,p.ot,p.sdmc,p.extra,p.score.toFixed(1)+'%']);
     });
     function xml(v){
       return String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     }
     var sheet='<?xml version="1.0"?>'+
       '<?mso-application progid="Excel.Sheet"?>'+
-      '<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" '+
-      'xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">'+
+      '<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">'+
       '<Worksheet ss:Name="รายงานสรุป"><Table>'+
       rows.map(function(r){
         return '<Row>'+r.map(function(v){
@@ -264,7 +286,9 @@
     var modal=$('summaryModalV34'),body=$('summaryModalBodyV34');
     if(!modal||!body||!s)return;
     if($('summaryModalTitleV34'))$('summaryModalTitleV34').textContent='ตารางรายบุคคลทั้งหมด';
-    body.innerHTML='<p class="s34-modal-note">ตารางนี้เป็นรายงานรายบุคคล แยกจาก “ตารางการเฉลี่ยเวร” โดยเฉพาะ</p>'+personalTableHtml(s,true);
+    body.innerHTML=''+
+      '<p class="s34-modal-note">ตารางนี้เป็นรายงานรายบุคคล แยกจาก “ตารางการเฉลี่ยเวร” โดยเฉพาะ และสามารถเลื่อนดูได้ทั้งแนวตั้งและแนวนอน</p>'+
+      '<div class="s34-modal-table-wrap">'+personalTableHtml(s,true)+'</div>';
     modal.classList.add('show');
     modal.setAttribute('aria-hidden','false');
   }
@@ -275,17 +299,18 @@
     if($('summaryModalTitleV34'))$('summaryModalTitleV34').textContent='ตารางการเฉลี่ยเวร';
     var legacy='';
     try{legacy=B.getLegacySummaryHtml()||''}catch(e){}
-    body.innerHTML='<div class="s34-average-report-wrap">'+(legacy||'<div style="padding:20px;text-align:center;color:#8c93a1">ไม่พบข้อมูลตารางการเฉลี่ยเวร</div>')+'</div>';
+    body.innerHTML=''+
+      '<p class="s34-modal-note">ตารางนี้ใช้สำหรับดูค่าเฉลี่ยเวรแบบเต็ม สามารถเลื่อนดูได้ทั้งหมดทั้งแนวนอนและแนวตั้ง</p>'+
+      '<div class="s34-average-report-scroll"><div class="s34-average-report-wrap">'+(legacy||'<div style="padding:20px;text-align:center;color:#8c93a1">ไม่พบข้อมูลตารางการเฉลี่ยเวร</div>')+'</div></div>';
     modal.classList.add('show');
     modal.setAttribute('aria-hidden','false');
   }
 
   function closeModal(){var m=$('summaryModalV34');if(m){m.classList.remove('show');m.setAttribute('aria-hidden','true')}}
 
-
   function setTab(tab){
     if(tab==='holiday'){
-      try{B.openHolidays()}catch(e){console.error('[SUMMARY V34.3] HOLIDAYS',e)}
+      try{B.openHolidays()}catch(e){console.error('[SUMMARY V34.4] HOLIDAYS',e)}
       return;
     }
 
@@ -297,9 +322,7 @@
     var detail=document.querySelector('#page-summary .s34-detail-grid');
     var compare=$('summaryCompareCardV34');
 
-    [charts,detail,compare].forEach(function(x){
-      if(x)x.classList.remove('s34-section-hidden');
-    });
+    [charts,detail,compare].forEach(function(x){ if(x)x.classList.remove('s34-section-hidden'); });
 
     if(tab==='people'){
       if(charts)charts.classList.add('s34-section-hidden');
@@ -324,23 +347,14 @@
     };
 
     if($('summaryAllPeopleBtnV34'))$('summaryAllPeopleBtnV34').onclick=showAllPeople;
-
-    if($('summaryPdfBtn'))$('summaryPdfBtn').onclick=function(){
-      try{B.savePdf()}catch(e){console.error('[SUMMARY V34.3] PDF',e)}
-    };
-    if($('summaryPrintBtn'))$('summaryPrintBtn').onclick=function(){
-      try{B.printReport()}catch(e){console.error('[SUMMARY V34.3] PRINT',e)}
-    };
-    if($('summaryOpenPdfBtn'))$('summaryOpenPdfBtn').onclick=function(){
-      try{B.openSavedPdf()}catch(e){console.error('[SUMMARY V34.3] OPEN PDF',e)}
-    };
+    if($('summaryPdfBtn'))$('summaryPdfBtn').onclick=function(){ try{B.savePdf()}catch(e){console.error('[SUMMARY V34.4] PDF',e)} };
+    if($('summaryPrintBtn'))$('summaryPrintBtn').onclick=function(){ try{B.printReport()}catch(e){console.error('[SUMMARY V34.4] PRINT',e)} };
+    if($('summaryOpenPdfBtn'))$('summaryOpenPdfBtn').onclick=function(){ try{B.openSavedPdf()}catch(e){console.error('[SUMMARY V34.4] OPEN PDF',e)} };
 
     if($('summaryMonthProxyV24'))$('summaryMonthProxyV24').onchange=changePeriod;
     if($('summaryYearProxyV24'))$('summaryYearProxyV24').onchange=changePeriod;
 
-    document.querySelectorAll('#summaryModalV34 [data-summary-close]').forEach(function(x){
-      x.onclick=closeModal;
-    });
+    document.querySelectorAll('#summaryModalV34 [data-summary-close]').forEach(function(x){ x.onclick=closeModal; });
 
     document.querySelectorAll('#summaryTabsV34 [data-summary-tab]').forEach(function(btn){
       btn.onclick=function(){

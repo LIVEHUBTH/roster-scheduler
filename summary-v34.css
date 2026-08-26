@@ -417,3 +417,178 @@
   #page-summary .s34-tips{height:78px!important;font-size:7px!important}
   #page-summary .s34-rank-row{font-size:7px!important;grid-template-columns:18px 120px 1fr 40px!important}
 }
+
+/* =========================================================
+   SUMMARY V34.4 — personal table / average modal / icon polish
+   ========================================================= */
+#page-summary .s34-head h2{
+  display:flex!important;
+  align-items:center!important;
+  gap:10px!important;
+}
+#page-summary .s34-page-icon{
+  width:34px;
+  height:34px;
+  display:grid;
+  place-items:center;
+  border-radius:12px;
+  background:linear-gradient(135deg,#ffe1ef,#e7f7ff 55%,#fff7cf);
+  color:#ef6f9e;
+  box-shadow:0 8px 20px rgba(110,115,145,.10);
+  font-size:18px;
+  flex:0 0 auto;
+}
+
+#page-summary .s34-stat{
+  box-shadow:0 10px 24px rgba(63,78,109,.05)!important;
+}
+#page-summary .s34-stat-icon{
+  width:44px!important;
+  height:44px!important;
+  border-radius:14px!important;
+  background:linear-gradient(180deg,#ffffff,#fff7fb)!important;
+  box-shadow:0 8px 18px rgba(72,78,109,.09)!important;
+}
+#page-summary .s34-stat.purple .s34-stat-icon{background:linear-gradient(180deg,#fff,#f6f0ff)!important}
+#page-summary .s34-stat.mint .s34-stat-icon{background:linear-gradient(180deg,#fff,#eefcf8)!important}
+#page-summary .s34-stat.yellow .s34-stat-icon{background:linear-gradient(180deg,#fff,#fff8e8)!important}
+#page-summary .s34-stat.blue .s34-stat-icon{background:linear-gradient(180deg,#fff,#edf8ff)!important}
+#page-summary .s34-stat.pink .s34-stat-icon{background:linear-gradient(180deg,#fff,#fff1f7)!important}
+#page-summary .s34-stat-icon:before{font-size:24px!important}
+#page-summary .s34-stat-icon.people:before{content:'👥'}
+#page-summary .s34-stat-icon.calendar:before{content:'📅'}
+#page-summary .s34-stat-icon.gift:before{content:'🎁'}
+#page-summary .s34-stat-icon.star:before{content:'🌟'}
+#page-summary .s34-stat-icon.shield:before{content:'🛡️'}
+
+#page-summary .s34-people-table{
+  overflow:auto!important;
+  padding:0 10px!important;
+}
+#page-summary .s34-people-table table{
+  min-width:100%!important;
+  width:100%!important;
+  table-layout:fixed!important;
+}
+#page-summary .s34-people-table th:nth-child(1){width:5%}
+#page-summary .s34-people-table th:nth-child(2){width:27%}
+#page-summary .s34-people-table th:nth-child(3){width:10%}
+#page-summary .s34-people-table th:nth-child(4){width:12%}
+#page-summary .s34-people-table th:nth-child(5){width:9%}
+#page-summary .s34-people-table th:nth-child(6){width:11%}
+#page-summary .s34-people-table th:nth-child(7){width:10%}
+#page-summary .s34-people-table th:nth-child(8){width:16%}
+#page-summary .s34-people-table th,
+#page-summary .s34-people-table td{
+  font-size:5.9px!important;
+  padding:1px 3px!important;
+}
+#page-summary .s34-person-name{min-width:0;overflow:hidden;text-overflow:ellipsis}
+
+#page-summary .s34-compare-card{height:104px!important}
+#page-summary .s34-compare-grid{
+  grid-template-columns:repeat(6,minmax(0,1fr))!important;
+  gap:7px!important;
+  height:70px!important;
+}
+#page-summary .s34-compare-item{
+  grid-template-columns:minmax(0,1fr) 56px!important;
+  padding:5px 6px!important;
+}
+#page-summary .s34-compare-copy small{font-size:5.2px!important}
+#page-summary .s34-compare-copy b{font-size:10px!important}
+#page-summary .s34-compare-copy em{font-size:5px!important}
+#page-summary .s34-spark{width:56px!important}
+
+#page-summary .s34-modal-body{
+  overflow:auto!important;
+  -webkit-overflow-scrolling:touch;
+}
+#page-summary .s34-modal-table-wrap,
+#page-summary .s34-average-report-scroll{
+  width:100%;
+  overflow:auto;
+  -webkit-overflow-scrolling:touch;
+}
+#page-summary .s34-full-person-table{
+  min-width:920px!important;
+  width:max-content!important;
+  table-layout:fixed!important;
+  font-size:8.5px!important;
+}
+#page-summary .s34-full-person-table th:nth-child(1){width:48px}
+#page-summary .s34-full-person-table th:nth-child(2){width:240px}
+#page-summary .s34-full-person-table th:nth-child(3){width:86px}
+#page-summary .s34-full-person-table th:nth-child(4){width:96px}
+#page-summary .s34-full-person-table th:nth-child(5){width:72px}
+#page-summary .s34-full-person-table th:nth-child(6){width:82px}
+#page-summary .s34-full-person-table th:nth-child(7){width:78px}
+#page-summary .s34-full-person-table th:nth-child(8){width:110px}
+#page-summary .s34-full-person-table th,
+#page-summary .s34-full-person-table td{
+  white-space:nowrap!important;
+}
+#page-summary .s34-full-person-table th:nth-child(2),
+#page-summary .s34-full-person-table td:nth-child(2){
+  position:sticky!important;
+  left:0!important;
+  z-index:3!important;
+  background:#fff!important;
+}
+#page-summary .s34-full-person-table th:nth-child(2){background:#fff2f7!important}
+
+#page-summary .s34-average-report-wrap{
+  min-width:1280px!important;
+}
+#page-summary .s34-average-report-wrap #summaryTable,
+#page-summary .s34-average-report-wrap table{
+  width:max-content!important;
+  min-width:1280px!important;
+  table-layout:auto!important;
+  border-collapse:collapse!important;
+  font-size:8px!important;
+}
+#page-summary .s34-average-report-wrap th,
+#page-summary .s34-average-report-wrap td{
+  padding:4px 6px!important;
+  white-space:nowrap!important;
+  line-height:1.15!important;
+}
+#page-summary .s34-average-report-wrap th:nth-child(1),
+#page-summary .s34-average-report-wrap td:nth-child(1){min-width:48px!important}
+#page-summary .s34-average-report-wrap th:nth-child(2),
+#page-summary .s34-average-report-wrap td:nth-child(2){min-width:180px!important;position:sticky!important;left:0!important;z-index:2!important;background:#fff!important}
+#page-summary .s34-average-report-wrap th:nth-child(3),
+#page-summary .s34-average-report-wrap td:nth-child(3),
+#page-summary .s34-average-report-wrap th:nth-child(4),
+#page-summary .s34-average-report-wrap td:nth-child(4){min-width:82px!important}
+#page-summary .s34-average-report-wrap th:nth-child(n+5),
+#page-summary .s34-average-report-wrap td:nth-child(n+5){min-width:58px!important}
+#page-summary .s34-average-report-wrap tfoot td{font-weight:800!important;background:#fbfafc!important}
+
+@media (max-width:1100px) and (min-width:821px){
+  #page-summary .s34-people-table th,
+  #page-summary .s34-people-table td{font-size:5.4px!important}
+  #page-summary .s34-compare-card{height:128px!important}
+  #page-summary .s34-compare-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;height:auto!important;padding-bottom:8px!important}
+}
+@media (max-width:820px){
+  #page-summary .s34-head h2{font-size:21px!important}
+  #page-summary .s34-page-icon{width:30px;height:30px;border-radius:10px;font-size:16px}
+  #page-summary .s34-people-table table{min-width:680px!important;width:max-content!important}
+  #page-summary .s34-compare-card{height:auto!important}
+  #page-summary .s34-compare-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;height:auto!important}
+  #page-summary .s34-full-person-table{min-width:860px!important}
+  #page-summary .s34-average-report-wrap{min-width:1120px!important}
+}
+@media (max-width:520px){
+  #page-summary .s34-stat-icon{width:40px!important;height:40px!important}
+  #page-summary .s34-stat-icon:before{font-size:21px!important}
+  #page-summary .s34-compare-grid{grid-template-columns:1fr!important}
+}
+@media (min-width:821px) and (orientation:landscape){
+  #page-summary .s34-shell{grid-template-rows:44px 76px 78px 175px 166px 104px 10px!important}
+}
+@media (max-width:1100px) and (min-width:821px) and (orientation:landscape){
+  #page-summary .s34-shell{grid-template-rows:44px 76px 78px 175px 166px 128px 10px!important}
+}

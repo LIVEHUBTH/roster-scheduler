@@ -2394,7 +2394,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 
 
 <link rel="stylesheet" href="home-v27.css?v=27.1">
-<link rel="stylesheet" href="summary-v34.css?v=34.3">
+<link rel="stylesheet" href="summary-v34.css?v=34.4">
 </head>
 <body>
 
@@ -2430,7 +2430,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
     <a href="#rules" data-page="rules"><span class="ico">♢</span><span>กฎการจัดเวร</span></a>
     <a href="#holidays" data-page="holidays"><span class="ico">🗓</span><span>วันหยุด/นักขัตฤกษ์</span></a>
     <a href="#history" data-page="history"><span class="ico">◔</span><span>ประวัติการจัดเวร</span></a>
-    <a href="#summary" data-page="summary"><span class="ico">▥</span><span>รายงานสรุป</span></a>
+    <a href="#summary" data-page="summary"><span class="ico">📊</span><span>รายงานสรุป</span></a>
     <a href="#internal" data-page="internal"><span class="ico">▤</span><span>ระบบหน่วยงาน</span></a>
     <a href="#settings" data-page="settings"><span class="ico">⚙</span><span>ตั้งค่าโปรแกรม</span></a>
   </nav>
@@ -3154,7 +3154,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
   <div class="s34-shell">
     <header class="s34-head">
       <div>
-        <h2>รายงานสรุป</h2>
+        <h2><span class="s34-page-icon">📊</span><span>รายงานสรุป</span></h2>
         <p>สรุปสถิติและผลการจัดเวรประจำเดือนที่เลือก</p>
       </div>
     </header>
@@ -3256,7 +3256,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 
     <div id="summaryTitle" style="display:none"></div>
     <div id="summary" class="summary s34-legacy-summary no-print" aria-hidden="true"></div>
-    <div class="s34-version">V34.3 • Summary Report</div>
+    <div class="s34-version">V34.4 • Summary Report</div>
   </div>
 
   <div id="summaryModalV34" class="s34-modal no-print" aria-hidden="true">
@@ -6766,6 +6766,7 @@ function summaryV341Snapshot(){
       name:p.name||'-',
       total:counts.total[p.id]||0,
       ot:(g.ot&&g.ot[p.id])||0,
+      v:(g.v&&g.v[p.id])||0,
       sdmc:
         ((g.morning&&g.morning[p.id])||0)+
         ((g.night&&g.night[p.id])||0)+
@@ -6878,5 +6879,5 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <script src="login-fix-v26-1.js?v=30.0"></script>
 <script src="home-v26.js?v=30.0"></script>
 
-<script src="summary-v34.js?v=34.3"></script></body>
+<script src="summary-v34.js?v=34.4"></script></body>
 </html>
