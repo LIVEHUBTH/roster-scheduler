@@ -1,4 +1,4 @@
-/* SUMMARY V34.4 — personal table / compare / icon / scroll fix */
+/* SUMMARY V34.5 — personal table / compare / icon / scroll fix */
 (function(){
   'use strict';
 
@@ -139,8 +139,8 @@
     return '<table class="'+cls+'"><thead><tr>'+[
       '<th>#</th>',
       '<th>ชื่อบุคลากร</th>',
-      '<th>เวร1-2</th>',
       '<th>เวรรวมทั้งหมด</th>',
+      '<th>เวร</th>',
       '<th>OT</th>',
       '<th>SDMC</th>',
       '<th>EXTRA</th>',
@@ -149,8 +149,8 @@
       return '<tr>'+
         '<td>'+(i+1)+'</td>'+
         '<td><span class="s34-person-name"><span class="s34-person-avatar">👩🏻</span>'+esc(p.name)+'</span></td>'+
-        '<td>'+Number(p.v||0)+'</td>'+
         '<td>'+p.total+'</td>'+
+        '<td>'+Number(p.v||0)+'</td>'+
         '<td>'+p.ot+'</td>'+
         '<td>'+p.sdmc+'</td>'+
         '<td>'+p.extra+'</td>'+
@@ -249,16 +249,16 @@
       await B.setPeriod(m,y);
       renderAll();
     }catch(e){
-      console.error('[SUMMARY V34.4] period change',e);
+      console.error('[SUMMARY V34.5] period change',e);
     }
   }
 
   function exportExcel(){
     var s=snapshot();if(!s)return;
     var people=scoredPeople(s);
-    var rows=[['ลำดับ','ชื่อบุคลากร','เวร1-2','เวรรวมทั้งหมด','OT','SDMC','EXTRA','คะแนนสมดุล']];
+    var rows=[['ลำดับ','ชื่อบุคลากร','เวรรวมทั้งหมด','เวร','OT','SDMC','EXTRA','คะแนนสมดุล']];
     people.forEach(function(p,i){
-      rows.push([i+1,p.name,Number(p.v||0),p.total,p.ot,p.sdmc,p.extra,p.score.toFixed(1)+'%']);
+      rows.push([i+1,p.name,p.total,Number(p.v||0),p.ot,p.sdmc,p.extra,p.score.toFixed(1)+'%']);
     });
     function xml(v){
       return String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
@@ -287,8 +287,10 @@
     if(!modal||!body||!s)return;
     if($('summaryModalTitleV34'))$('summaryModalTitleV34').textContent='ตารางรายบุคคลทั้งหมด';
     body.innerHTML=''+
-      '<p class="s34-modal-note">ตารางนี้เป็นรายงานรายบุคคล แยกจาก “ตารางการเฉลี่ยเวร” โดยเฉพาะ และสามารถเลื่อนดูได้ทั้งแนวตั้งและแนวนอน</p>'+
+      '<div class="s34-modal-section-title"><span class="s34-title-chart"><i></i></span><div><b>ตารางสรุปรายบุคคล</b><small>เวรรวมทั้งหมด • เวร (รวมเวร1–2) • OT • SDMC • EXTRA • คะแนนสมดุล</small></div></div>'+
+      '<p class="s34-modal-note">เลื่อนดูรายชื่อได้ทั้งแนวตั้งและแนวนอน โดยหัวชื่อบุคลากรจะคงอยู่ด้านซ้าย</p>'+
       '<div class="s34-modal-table-wrap">'+personalTableHtml(s,true)+'</div>';
+    document.body.classList.add('s34-modal-open');
     modal.classList.add('show');
     modal.setAttribute('aria-hidden','false');
   }
@@ -299,18 +301,22 @@
     if($('summaryModalTitleV34'))$('summaryModalTitleV34').textContent='ตารางการเฉลี่ยเวร';
     var legacy='';
     try{legacy=B.getLegacySummaryHtml()||''}catch(e){}
+    var s=snapshot();
+    var period=s&&B.months?((B.months[s.month]||'')+' '+(s.yearThai||'')):'';
     body.innerHTML=''+
-      '<p class="s34-modal-note">ตารางนี้ใช้สำหรับดูค่าเฉลี่ยเวรแบบเต็ม สามารถเลื่อนดูได้ทั้งหมดทั้งแนวนอนและแนวตั้ง</p>'+
+      '<div class="s34-modal-section-title"><span class="s34-title-chart"><i></i></span><div><b>ตารางการเฉลี่ยเวร</b><small>'+esc(period)+' • ตรวจสอบค่าเฉลี่ยและการกระจายเวรทุกประเภท</small></div></div>'+
+      '<p class="s34-modal-note">เลื่อนตารางได้ทั้งแนวนอนและแนวตั้ง ตารางจะไม่ถูกเมนูด้านซ้ายบัง</p>'+
       '<div class="s34-average-report-scroll"><div class="s34-average-report-wrap">'+(legacy||'<div style="padding:20px;text-align:center;color:#8c93a1">ไม่พบข้อมูลตารางการเฉลี่ยเวร</div>')+'</div></div>';
+    document.body.classList.add('s34-modal-open');
     modal.classList.add('show');
     modal.setAttribute('aria-hidden','false');
   }
 
-  function closeModal(){var m=$('summaryModalV34');if(m){m.classList.remove('show');m.setAttribute('aria-hidden','true')}}
+  function closeModal(){var m=$('summaryModalV34');document.body.classList.remove('s34-modal-open');if(m){m.classList.remove('show');m.setAttribute('aria-hidden','true')}}
 
   function setTab(tab){
     if(tab==='holiday'){
-      try{B.openHolidays()}catch(e){console.error('[SUMMARY V34.4] HOLIDAYS',e)}
+      try{B.openHolidays()}catch(e){console.error('[SUMMARY V34.5] HOLIDAYS',e)}
       return;
     }
 
@@ -347,9 +353,9 @@
     };
 
     if($('summaryAllPeopleBtnV34'))$('summaryAllPeopleBtnV34').onclick=showAllPeople;
-    if($('summaryPdfBtn'))$('summaryPdfBtn').onclick=function(){ try{B.savePdf()}catch(e){console.error('[SUMMARY V34.4] PDF',e)} };
-    if($('summaryPrintBtn'))$('summaryPrintBtn').onclick=function(){ try{B.printReport()}catch(e){console.error('[SUMMARY V34.4] PRINT',e)} };
-    if($('summaryOpenPdfBtn'))$('summaryOpenPdfBtn').onclick=function(){ try{B.openSavedPdf()}catch(e){console.error('[SUMMARY V34.4] OPEN PDF',e)} };
+    if($('summaryPdfBtn'))$('summaryPdfBtn').onclick=function(){ try{B.savePdf()}catch(e){console.error('[SUMMARY V34.5] PDF',e)} };
+    if($('summaryPrintBtn'))$('summaryPrintBtn').onclick=function(){ try{B.printReport()}catch(e){console.error('[SUMMARY V34.5] PRINT',e)} };
+    if($('summaryOpenPdfBtn'))$('summaryOpenPdfBtn').onclick=function(){ try{B.openSavedPdf()}catch(e){console.error('[SUMMARY V34.5] OPEN PDF',e)} };
 
     if($('summaryMonthProxyV24'))$('summaryMonthProxyV24').onchange=changePeriod;
     if($('summaryYearProxyV24'))$('summaryYearProxyV24').onchange=changePeriod;
