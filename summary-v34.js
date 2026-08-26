@@ -1,4 +1,4 @@
-/* SUMMARY V34.2 — data bridge fix + reference dashboard controller */
+/* SUMMARY V34.3 — data bridge fix + reference dashboard controller */
 (function(){
   'use strict';
 
@@ -130,16 +130,24 @@
       return Object.assign({},p,{score:score});
     });
   }
+  function personalTableHtml(s,full){
+    var people=scoredPeople(s);
+    var cls=full?'s34-full-person-table':'';
+    return '<table class="'+cls+'"><thead><tr><th>#</th><th>ชื่อบุคลากร</th><th>เวรทั้งหมด</th><th>OT</th><th>SDMC</th><th>EXTRA</th><th>คะแนนสมดุล</th></tr></thead><tbody>'+
+      people.map(function(p,i){
+        return '<tr><td>'+(i+1)+'</td><td><span class="s34-person-name"><span class="s34-person-avatar">👩🏻</span>'+esc(p.name)+'</span></td><td>'+p.total+'</td><td>'+p.ot+'</td><td>'+p.sdmc+'</td><td>'+p.extra+'</td><td><span class="s34-score '+(p.score<85?'mid':'')+'">'+p.score.toFixed(1)+'%</span></td></tr>';
+      }).join('')+'</tbody></table>';
+  }
+
   function renderPeople(s){
     if(!s)return;
-    var people=scoredPeople(s),top=people.slice(0,5);
+    var people=scoredPeople(s);
     var host=$('summaryTopPeopleV24');
     if(host){
-      host.innerHTML='<table><thead><tr><th>#</th><th>ชื่อบุคลากร</th><th>เวรทั้งหมด</th><th>OT</th><th>SDMC</th><th>EXTRA</th><th>คะแนนสมดุล</th></tr></thead><tbody>'+
-        top.map(function(p,i){
-          return '<tr><td>'+(i+1)+'</td><td><span class="s34-person-name"><span class="s34-person-avatar">👩🏻</span>'+esc(p.name)+'</span></td><td>'+p.total+'</td><td>'+p.ot+'</td><td>'+p.sdmc+'</td><td>'+p.extra+'</td><td><span class="s34-score '+(p.score<85?'mid':'')+'">'+p.score.toFixed(1)+'%</span></td></tr>';
-        }).join('')+'</tbody></table>';
+      host.innerHTML=personalTableHtml(s,false);
     }
+
+    var top=people.slice(0,5);
     var rank=$('summaryRankingV34');
     if(rank){
       var mx=Math.max.apply(null,top.map(function(x){return x.total}).concat([1]));
@@ -216,7 +224,7 @@
       await B.setPeriod(m,y);
       renderAll();
     }catch(e){
-      console.error('[SUMMARY V34.2] period change',e);
+      console.error('[SUMMARY V34.3] period change',e);
     }
   }
 
@@ -252,22 +260,46 @@
   }
 
   function showAllPeople(){
-    var modal=$('summaryModalV34'),body=$('summaryModalBodyV34');if(!modal||!body)return;
-    body.innerHTML=B.getLegacySummaryHtml()||'<div style="padding:20px">ไม่มีข้อมูล</div>';
-    modal.classList.add('show');modal.setAttribute('aria-hidden','false');
+    var s=snapshot();
+    var modal=$('summaryModalV34'),body=$('summaryModalBodyV34');
+    if(!modal||!body||!s)return;
+    if($('summaryModalTitleV34'))$('summaryModalTitleV34').textContent='ตารางรายบุคคลทั้งหมด';
+    body.innerHTML='<p class="s34-modal-note">ตารางนี้เป็นรายงานรายบุคคล แยกจาก “ตารางการเฉลี่ยเวร” โดยเฉพาะ</p>'+personalTableHtml(s,true);
+    modal.classList.add('show');
+    modal.setAttribute('aria-hidden','false');
   }
+
+  function showAverageReport(){
+    var modal=$('summaryModalV34'),body=$('summaryModalBodyV34');
+    if(!modal||!body)return;
+    if($('summaryModalTitleV34'))$('summaryModalTitleV34').textContent='ตารางการเฉลี่ยเวร';
+    var legacy='';
+    try{legacy=B.getLegacySummaryHtml()||''}catch(e){}
+    body.innerHTML='<div class="s34-average-report-wrap">'+(legacy||'<div style="padding:20px;text-align:center;color:#8c93a1">ไม่พบข้อมูลตารางการเฉลี่ยเวร</div>')+'</div>';
+    modal.classList.add('show');
+    modal.setAttribute('aria-hidden','false');
+  }
+
   function closeModal(){var m=$('summaryModalV34');if(m){m.classList.remove('show');m.setAttribute('aria-hidden','true')}}
 
 
   function setTab(tab){
+    if(tab==='holiday'){
+      try{B.openHolidays()}catch(e){console.error('[SUMMARY V34.3] HOLIDAYS',e)}
+      return;
+    }
+
     document.querySelectorAll('#summaryTabsV34 [data-summary-tab]').forEach(function(b){
       b.classList.toggle('active',b.dataset.summaryTab===tab);
     });
+
     var charts=document.querySelector('#page-summary .s34-charts');
     var detail=document.querySelector('#page-summary .s34-detail-grid');
     var compare=$('summaryCompareCardV34');
 
-    [charts,detail,compare].forEach(function(x){if(x)x.classList.remove('s34-section-hidden')});
+    [charts,detail,compare].forEach(function(x){
+      if(x)x.classList.remove('s34-section-hidden');
+    });
 
     if(tab==='people'){
       if(charts)charts.classList.add('s34-section-hidden');
@@ -275,9 +307,6 @@
     }else if(tab==='compare'){
       if(charts)charts.classList.add('s34-section-hidden');
       if(detail)detail.classList.add('s34-section-hidden');
-    }else if(tab==='holiday'){
-      if(detail)detail.classList.add('s34-section-hidden');
-      if(compare)compare.classList.add('s34-section-hidden');
     }
   }
 
@@ -287,32 +316,41 @@
 
     if($('summaryChartModeV34'))$('summaryChartModeV34').onchange=renderAll;
     if($('summaryExcelBtnV34'))$('summaryExcelBtnV34').onclick=exportExcel;
+
     if($('summaryViewBtnV34'))$('summaryViewBtnV34').onclick=function(){
       try{B.refresh()}catch(e){}
       renderAll();
-      setTab('overview');
+      showAverageReport();
     };
+
     if($('summaryAllPeopleBtnV34'))$('summaryAllPeopleBtnV34').onclick=showAllPeople;
 
-    /* Bind these again from V34.2 so they work even if the legacy bind() ran before/after this UI. */
     if($('summaryPdfBtn'))$('summaryPdfBtn').onclick=function(){
-      try{B.savePdf()}catch(e){console.error('[SUMMARY V34.2] PDF',e)}
+      try{B.savePdf()}catch(e){console.error('[SUMMARY V34.3] PDF',e)}
     };
     if($('summaryPrintBtn'))$('summaryPrintBtn').onclick=function(){
-      try{B.printReport()}catch(e){console.error('[SUMMARY V34.2] PRINT',e)}
+      try{B.printReport()}catch(e){console.error('[SUMMARY V34.3] PRINT',e)}
     };
     if($('summaryOpenPdfBtn'))$('summaryOpenPdfBtn').onclick=function(){
-      try{B.openSavedPdf()}catch(e){console.error('[SUMMARY V34.2] OPEN PDF',e)}
+      try{B.openSavedPdf()}catch(e){console.error('[SUMMARY V34.3] OPEN PDF',e)}
     };
 
     if($('summaryMonthProxyV24'))$('summaryMonthProxyV24').onchange=changePeriod;
     if($('summaryYearProxyV24'))$('summaryYearProxyV24').onchange=changePeriod;
 
-    document.querySelectorAll('#summaryModalV34 [data-summary-close]').forEach(function(x){x.onclick=closeModal});
+    document.querySelectorAll('#summaryModalV34 [data-summary-close]').forEach(function(x){
+      x.onclick=closeModal;
+    });
+
     document.querySelectorAll('#summaryTabsV34 [data-summary-tab]').forEach(function(btn){
       btn.onclick=function(){
+        var tab=btn.dataset.summaryTab||'overview';
+        if(tab==='holiday'){
+          setTab('holiday');
+          return;
+        }
         renderAll();
-        setTab(btn.dataset.summaryTab||'overview');
+        setTab(tab);
       };
     });
 

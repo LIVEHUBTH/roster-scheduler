@@ -2394,7 +2394,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 
 
 <link rel="stylesheet" href="home-v27.css?v=27.1">
-<link rel="stylesheet" href="summary-v34.css?v=34.2">
+<link rel="stylesheet" href="summary-v34.css?v=34.3">
 </head>
 <body>
 
@@ -3234,7 +3234,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
       <article class="s34-card s34-people-card" id="summaryPeopleCardV34">
         <div class="s34-card-head"><h3>สรุปรายบุคคล</h3></div>
         <div id="summaryTopPeopleV24" class="s34-people-table"></div>
-        <button type="button" id="summaryAllPeopleBtnV34" class="s34-wide-btn no-print"><span class="s34-small-people"></span>ดูรายงานรายบุคคลทั้งหมด</button>
+        <button type="button" id="summaryAllPeopleBtnV34" class="s34-wide-btn no-print"><span class="s34-small-people"></span>เปิดตารางรายบุคคลแบบเต็ม</button>
       </article>
 
       <div class="s34-right-stack">
@@ -3256,7 +3256,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 
     <div id="summaryTitle" style="display:none"></div>
     <div id="summary" class="summary s34-legacy-summary no-print" aria-hidden="true"></div>
-    <div class="s34-version">V34.2 • Summary Report</div>
+    <div class="s34-version">V34.3 • Summary Report</div>
   </div>
 
   <div id="summaryModalV34" class="s34-modal no-print" aria-hidden="true">
@@ -6829,6 +6829,18 @@ window.__ROSTER_SUMMARY_V34__={
   refreshLegacy:function(){
     try{renderSummary()}catch(e){}
     return el('summary')?el('summary').innerHTML:'';
+  },
+  openHolidays:function(){
+    try{showPage('holidays',true)}catch(e){
+      try{location.hash='#holidays'}catch(ignore){}
+    }
+    try{renderHolidays()}catch(e){}
+    try{renderHolidayV24()}catch(e){}
+  },
+  openSummaryPage:function(){
+    try{showPage('summary',true)}catch(e){
+      try{location.hash='#summary'}catch(ignore){}
+    }
   }
 };
 
@@ -6866,5 +6878,5 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <script src="login-fix-v26-1.js?v=30.0"></script>
 <script src="home-v26.js?v=30.0"></script>
 
-<script src="summary-v34.js?v=34.2"></script></body>
+<script src="summary-v34.js?v=34.3"></script></body>
 </html>

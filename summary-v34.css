@@ -1,4 +1,4 @@
-/* SUMMARY V34.2 — reference-matched one-frame dashboard */
+/* SUMMARY V34.3 — reference-matched one-frame dashboard */
 #page-summary{background:#fff!important}
 #page-summary .s34-shell{
   width:100%;max-width:1480px;margin:0 auto;padding:10px 14px 8px;
@@ -183,7 +183,7 @@
 }
 
 
-/* ===== SUMMARY V34.2 — TABLE + FUNCTION VISUAL FIX ===== */
+/* ===== SUMMARY V34.3 — TABLE + FUNCTION VISUAL FIX ===== */
 #page-summary .s34-bar-chart{
   background:
     repeating-linear-gradient(
@@ -246,3 +246,174 @@
   transform:translateY(1px)!important;
 }
 #page-summary .s34-section-hidden{display:none!important}
+
+
+/* =========================================================
+   SUMMARY V34.3 — PERSONAL TABLE / CARD FIT / NAVIGATION FIX
+   ========================================================= */
+
+#page-summary .s34-people-card{
+  height:166px!important;
+  min-height:0!important;
+  display:grid!important;
+  grid-template-rows:27px minmax(0,1fr) 27px!important;
+  overflow:hidden!important;
+}
+#page-summary .s34-people-card>.s34-card-head{
+  height:27px!important;
+  min-height:27px!important;
+  padding:7px 10px 2px!important;
+}
+#page-summary .s34-people-table{
+  height:auto!important;
+  min-height:0!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  padding:0 10px!important;
+  scrollbar-width:thin;
+  scrollbar-color:#e7b7ca #fff7fa;
+}
+#page-summary .s34-people-table::-webkit-scrollbar{width:5px}
+#page-summary .s34-people-table::-webkit-scrollbar-track{background:#fff7fa;border-radius:999px}
+#page-summary .s34-people-table::-webkit-scrollbar-thumb{background:#e7b7ca;border-radius:999px}
+
+#page-summary .s34-people-table table{
+  width:100%!important;
+  table-layout:fixed!important;
+}
+#page-summary .s34-people-table thead th{
+  position:sticky!important;
+  top:0!important;
+  z-index:3!important;
+  background:#fbf8fa!important;
+}
+#page-summary .s34-people-table th:nth-child(1){width:5%}
+#page-summary .s34-people-table th:nth-child(2){width:30%}
+#page-summary .s34-people-table th:nth-child(3){width:13%}
+#page-summary .s34-people-table th:nth-child(4){width:9%}
+#page-summary .s34-people-table th:nth-child(5){width:11%}
+#page-summary .s34-people-table th:nth-child(6){width:10%}
+#page-summary .s34-people-table th:nth-child(7){width:22%}
+#page-summary .s34-people-table th,
+#page-summary .s34-people-table td{
+  height:16px!important;
+  min-height:16px!important;
+  padding:1px 4px!important;
+  line-height:1.05!important;
+}
+#page-summary .s34-wide-btn{
+  align-self:center!important;
+  height:21px!important;
+  min-height:21px!important;
+  width:calc(100% - 20px)!important;
+  margin:3px 10px!important;
+  padding:0 8px!important;
+  line-height:19px!important;
+  overflow:hidden!important;
+  white-space:nowrap!important;
+  text-overflow:ellipsis!important;
+}
+
+#page-summary .s34-right-stack{
+  height:166px!important;
+  min-height:0!important;
+  grid-template-rows:96px 62px!important;
+  gap:8px!important;
+}
+#page-summary .s34-ranking-card,
+#page-summary .s34-tips-card{
+  min-height:0!important;
+  height:100%!important;
+  overflow:hidden!important;
+}
+#page-summary .s34-ranking-card .s34-card-head,
+#page-summary .s34-tips-card .s34-card-head{
+  height:24px!important;
+  min-height:24px!important;
+  padding:6px 10px 1px!important;
+}
+#page-summary .s34-ranking{
+  height:72px!important;
+  min-height:0!important;
+  padding:1px 10px 5px!important;
+  display:grid!important;
+  grid-template-rows:repeat(5,minmax(0,1fr))!important;
+  gap:1px!important;
+  overflow:hidden!important;
+}
+#page-summary .s34-rank-row{
+  min-height:0!important;
+  height:auto!important;
+  line-height:1!important;
+  font-size:5.8px!important;
+  grid-template-columns:14px 98px minmax(30px,1fr) 31px!important;
+  gap:4px!important;
+}
+#page-summary .s34-rank-bar{height:5px!important}
+#page-summary .s34-rank-value{font-size:5.7px!important;white-space:nowrap!important}
+
+#page-summary .s34-tips{
+  height:38px!important;
+  min-height:0!important;
+  padding:0 10px 4px!important;
+  display:grid!important;
+  grid-template-rows:repeat(3,minmax(0,1fr))!important;
+  gap:1px!important;
+  overflow:hidden!important;
+  font-size:5.4px!important;
+}
+#page-summary .s34-tip{
+  min-height:0!important;
+  line-height:1.05!important;
+  grid-template-columns:10px minmax(0,1fr)!important;
+  gap:3px!important;
+}
+#page-summary .s34-tip:before{
+  width:8px!important;
+  height:8px!important;
+  font-size:5px!important;
+}
+
+#page-summary .s34-full-person-table{
+  width:100%!important;
+  border-collapse:collapse!important;
+  font-size:9px!important;
+}
+#page-summary .s34-full-person-table th,
+#page-summary .s34-full-person-table td{
+  border:1px solid #ddd6d5!important;
+  padding:6px 7px!important;
+}
+#page-summary .s34-full-person-table th{
+  position:sticky!important;
+  top:0!important;
+  z-index:2!important;
+  background:#fff2f7!important;
+  color:#465066!important;
+}
+#page-summary .s34-full-person-table td:not(:nth-child(2)){text-align:center}
+#page-summary .s34-modal-note{
+  font-size:8px;
+  color:#8a91a0;
+  margin:0 0 8px;
+}
+#page-summary .s34-average-report-wrap{min-width:980px}
+
+@media (max-width:820px){
+  #page-summary .s34-people-card{
+    height:260px!important;
+    grid-template-rows:32px minmax(0,1fr) 34px!important;
+  }
+  #page-summary .s34-wide-btn{
+    height:27px!important;
+    min-height:27px!important;
+    line-height:25px!important;
+  }
+  #page-summary .s34-right-stack{
+    height:auto!important;
+    grid-template-rows:150px 110px!important;
+  }
+  #page-summary .s34-ranking{height:116px!important}
+  #page-summary .s34-tips{height:78px!important;font-size:7px!important}
+  #page-summary .s34-rank-row{font-size:7px!important;grid-template-columns:18px 120px 1fr 40px!important}
+}
