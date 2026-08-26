@@ -1,4 +1,4 @@
-/* SUMMARY V34.1 — data bridge fix + reference dashboard controller */
+/* SUMMARY V34.2 — data bridge fix + reference dashboard controller */
 (function(){
   'use strict';
 
@@ -216,19 +216,39 @@
       await B.setPeriod(m,y);
       renderAll();
     }catch(e){
-      console.error('[SUMMARY V34.1] period change',e);
+      console.error('[SUMMARY V34.2] period change',e);
     }
   }
 
   function exportExcel(){
     var s=snapshot();if(!s)return;
     var people=scoredPeople(s);
-    var rows=[['ลำดับ','ชื่อบุคลากร','เวรทั้งหมด','OT','SDMC','EXTRA','คะแนนสมดุล']];
-    people.forEach(function(p,i){rows.push([i+1,p.name,p.total,p.ot,p.sdmc,p.extra,p.score.toFixed(1)+'%'])});
-    var csv='\ufeff'+rows.map(function(row){return row.map(function(v){return '"'+String(v==null?'':v).replace(/"/g,'""')+'"'}).join(',')}).join('\n');
-    var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
-    a.download='รายงานสรุป-'+s.yearThai+'-'+String(s.month+1).padStart(2,'0')+'.csv';
-    document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href)},1000);
+    var rows=[
+      ['ลำดับ','ชื่อบุคลากร','เวรทั้งหมด','OT','SDMC','EXTRA','คะแนนสมดุล']
+    ];
+    people.forEach(function(p,i){
+      rows.push([i+1,p.name,p.total,p.ot,p.sdmc,p.extra,p.score.toFixed(1)+'%']);
+    });
+    function xml(v){
+      return String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+    var sheet='<?xml version="1.0"?>'+
+      '<?mso-application progid="Excel.Sheet"?>'+
+      '<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" '+
+      'xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">'+
+      '<Worksheet ss:Name="รายงานสรุป"><Table>'+
+      rows.map(function(r){
+        return '<Row>'+r.map(function(v){
+          var num=typeof v==='number';
+          return '<Cell><Data ss:Type="'+(num?'Number':'String')+'">'+xml(v)+'</Data></Cell>';
+        }).join('')+'</Row>';
+      }).join('')+
+      '</Table></Worksheet></Workbook>';
+    var a=document.createElement('a');
+    a.href=URL.createObjectURL(new Blob(['\ufeff'+sheet],{type:'application/vnd.ms-excel;charset=utf-8'}));
+    a.download='รายงานสรุป-'+s.yearThai+'-'+String(s.month+1).padStart(2,'0')+'.xls';
+    document.body.appendChild(a);a.click();a.remove();
+    setTimeout(function(){URL.revokeObjectURL(a.href)},1000);
   }
 
   function showAllPeople(){
@@ -238,13 +258,52 @@
   }
   function closeModal(){var m=$('summaryModalV34');if(m){m.classList.remove('show');m.setAttribute('aria-hidden','true')}}
 
+
+  function setTab(tab){
+    document.querySelectorAll('#summaryTabsV34 [data-summary-tab]').forEach(function(b){
+      b.classList.toggle('active',b.dataset.summaryTab===tab);
+    });
+    var charts=document.querySelector('#page-summary .s34-charts');
+    var detail=document.querySelector('#page-summary .s34-detail-grid');
+    var compare=$('summaryCompareCardV34');
+
+    [charts,detail,compare].forEach(function(x){if(x)x.classList.remove('s34-section-hidden')});
+
+    if(tab==='people'){
+      if(charts)charts.classList.add('s34-section-hidden');
+      if(compare)compare.classList.add('s34-section-hidden');
+    }else if(tab==='compare'){
+      if(charts)charts.classList.add('s34-section-hidden');
+      if(detail)detail.classList.add('s34-section-hidden');
+    }else if(tab==='holiday'){
+      if(detail)detail.classList.add('s34-section-hidden');
+      if(compare)compare.classList.add('s34-section-hidden');
+    }
+  }
+
   function wire(){
     renderAll();
+    setTab('overview');
 
     if($('summaryChartModeV34'))$('summaryChartModeV34').onchange=renderAll;
     if($('summaryExcelBtnV34'))$('summaryExcelBtnV34').onclick=exportExcel;
-    if($('summaryViewBtnV34'))$('summaryViewBtnV34').onclick=renderAll;
+    if($('summaryViewBtnV34'))$('summaryViewBtnV34').onclick=function(){
+      try{B.refresh()}catch(e){}
+      renderAll();
+      setTab('overview');
+    };
     if($('summaryAllPeopleBtnV34'))$('summaryAllPeopleBtnV34').onclick=showAllPeople;
+
+    /* Bind these again from V34.2 so they work even if the legacy bind() ran before/after this UI. */
+    if($('summaryPdfBtn'))$('summaryPdfBtn').onclick=function(){
+      try{B.savePdf()}catch(e){console.error('[SUMMARY V34.2] PDF',e)}
+    };
+    if($('summaryPrintBtn'))$('summaryPrintBtn').onclick=function(){
+      try{B.printReport()}catch(e){console.error('[SUMMARY V34.2] PRINT',e)}
+    };
+    if($('summaryOpenPdfBtn'))$('summaryOpenPdfBtn').onclick=function(){
+      try{B.openSavedPdf()}catch(e){console.error('[SUMMARY V34.2] OPEN PDF',e)}
+    };
 
     if($('summaryMonthProxyV24'))$('summaryMonthProxyV24').onchange=changePeriod;
     if($('summaryYearProxyV24'))$('summaryYearProxyV24').onchange=changePeriod;
@@ -252,16 +311,14 @@
     document.querySelectorAll('#summaryModalV34 [data-summary-close]').forEach(function(x){x.onclick=closeModal});
     document.querySelectorAll('#summaryTabsV34 [data-summary-tab]').forEach(function(btn){
       btn.onclick=function(){
-        document.querySelectorAll('#summaryTabsV34 [data-summary-tab]').forEach(function(b){b.classList.toggle('active',b===btn)});
         renderAll();
-        var id=btn.dataset.summaryTab==='people'?'summaryPeopleCardV34':btn.dataset.summaryTab==='compare'?'summaryCompareCardV34':null;
-        if(id&&$(id)&&$(id).scrollIntoView)$(id).scrollIntoView({behavior:'smooth',block:'center'});
+        setTab(btn.dataset.summaryTab||'overview');
       };
     });
 
     document.addEventListener('click',function(e){
       var nav=e.target.closest&&e.target.closest('[data-page="summary"]');
-      if(nav)setTimeout(renderAll,120);
+      if(nav)setTimeout(function(){renderAll();setTab('overview')},120);
     });
     window.addEventListener('pageshow',function(){setTimeout(renderAll,120)});
   }

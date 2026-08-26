@@ -2394,7 +2394,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 
 
 <link rel="stylesheet" href="home-v27.css?v=27.1">
-<link rel="stylesheet" href="summary-v34.css?v=34.1">
+<link rel="stylesheet" href="summary-v34.css?v=34.2">
 </head>
 <body>
 
@@ -3256,7 +3256,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 
     <div id="summaryTitle" style="display:none"></div>
     <div id="summary" class="summary s34-legacy-summary no-print" aria-hidden="true"></div>
-    <div class="s34-version">V34.1 • Summary Report</div>
+    <div class="s34-version">V34.2 • Summary Report</div>
   </div>
 
   <div id="summaryModalV34" class="s34-modal no-print" aria-hidden="true">
@@ -6401,6 +6401,12 @@ function renderHistoryV24(){
   if(el('historyRecentV24'))el('historyRecentV24').innerHTML=last?'<div><span>เดือนล่าสุด</span><b>'+last+' '+year+'</b></div>':'<div>ยังไม่มีประวัติที่บันทึก</div>';
 }
 function renderSummaryV24(){
+  if(document.querySelector('#page-summary .s34-shell')){
+    if(window.SummaryV34&&typeof window.SummaryV34.render==='function'){
+      try{window.SummaryV34.render()}catch(e){}
+    }
+    return;
+  }
   try{
     var counts=currentCounts(),groups=[['เวร1–2','v'],['OT1–2','ot'],['SDMC เช้า','morning'],['SDMC บ่าย-ดึก','night'],['SDMC 5–6','long'],['SDMC 7–8','evening'],['EXTRA','extra']];
     var vals=groups.map(function(g){var info=groupAverageInfo(g[1]);return {label:g[0],value:Math.round(info.total||0)}});
@@ -6816,7 +6822,14 @@ window.__ROSTER_SUMMARY_V34__={
     try{renderSummary()}catch(e){}
     return el('summary')?el('summary').innerHTML:'';
   },
-  getPreviousKey:function(){return prevKey()}
+  getPreviousKey:function(){return prevKey()},
+  savePdf:function(){return saveSummaryPDF()},
+  printReport:function(){return printSummary()},
+  openSavedPdf:function(){return openSummaryPdf()},
+  refreshLegacy:function(){
+    try{renderSummary()}catch(e){}
+    return el('summary')?el('summary').innerHTML:'';
+  }
 };
 
 window.addEventListener('error',function(e){setStatus('JavaScript error: '+e.message,false)});
@@ -6853,5 +6866,5 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <script src="login-fix-v26-1.js?v=30.0"></script>
 <script src="home-v26.js?v=30.0"></script>
 
-<script src="summary-v34.js?v=34.1"></script></body>
+<script src="summary-v34.js?v=34.2"></script></body>
 </html>

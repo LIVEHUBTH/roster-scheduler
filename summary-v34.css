@@ -1,4 +1,4 @@
-/* SUMMARY V34.1 — reference-matched one-frame dashboard */
+/* SUMMARY V34.2 — reference-matched one-frame dashboard */
 #page-summary{background:#fff!important}
 #page-summary .s34-shell{
   width:100%;max-width:1480px;margin:0 auto;padding:10px 14px 8px;
@@ -181,3 +181,68 @@
   #page-summary .s34-donut-card{padding-bottom:10px}
   #page-summary .s34-compare-grid{grid-template-columns:1fr}
 }
+
+
+/* ===== SUMMARY V34.2 — TABLE + FUNCTION VISUAL FIX ===== */
+#page-summary .s34-bar-chart{
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent calc(25% - .5px),
+      #ece6e4 calc(25% - .5px),
+      #ece6e4 calc(25% + .5px),
+      transparent calc(25% + .5px),
+      transparent 25%
+    ) !important;
+  border-left:1px solid #ddd5d3 !important;
+  border-bottom:1px solid #ddd5d3 !important;
+}
+#page-summary .s34-bar-chart:before,
+#page-summary .s34-bar-chart:after{display:none!important}
+
+#page-summary .s34-people-table{
+  overflow:hidden!important;
+  border-radius:8px!important;
+}
+#page-summary .s34-people-table table{
+  border:1px solid #ded7d5!important;
+  background:#fff!important;
+}
+#page-summary .s34-people-table th,
+#page-summary .s34-people-table td{
+  border:1px solid #ded7d5!important;
+}
+#page-summary .s34-people-table th{
+  background:#fbf8fa!important;
+}
+
+#page-summary .s34-modal-body table{
+  width:100%!important;
+  border-collapse:collapse!important;
+  background:#fff!important;
+}
+#page-summary .s34-modal-body table th,
+#page-summary .s34-modal-body table td{
+  border:1px solid #ddd6d5!important;
+  padding:5px 6px!important;
+}
+#page-summary .s34-modal-body table th{
+  background:#fff4f8!important;
+  color:#465066!important;
+  position:sticky!important;
+  top:0!important;
+  z-index:2!important;
+}
+#page-summary .s34-modal-body table tr:nth-child(even) td{
+  background:#fffdfd!important;
+}
+#page-summary .s34-tabs button.active{
+  box-shadow:inset 0 -2px 0 #ef7da4!important;
+}
+#page-summary .s34-action:active,
+#page-summary .s34-wide-btn:active,
+#page-summary .s34-tabs button:active{
+  transform:translateY(1px)!important;
+}
+#page-summary .s34-section-hidden{display:none!important}
