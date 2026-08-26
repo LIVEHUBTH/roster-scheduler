@@ -995,7 +995,7 @@ body.s34-modal-open header{visibility:hidden!important}
 }
 
 /* =========================================================
-   SUMMARY V34.7 — ONLY subtitle spacing + pastel card icons
+   SUMMARY V34.8 — ONLY subtitle spacing + pastel card icons
    Keep all other V34.6 layout/functions unchanged.
    ========================================================= */
 
@@ -1033,3 +1033,36 @@ body.s34-modal-open header{visibility:hidden!important}
 #page-summary .s34-stat.yellow .s34-stat-icon:before{filter:saturate(.55) brightness(1.14)!important}
 #page-summary .s34-stat.blue .s34-stat-icon:before{filter:saturate(.48) brightness(1.15) hue-rotate(7deg)!important}
 #page-summary .s34-stat.pink .s34-stat-icon:before{filter:saturate(.50) brightness(1.12) hue-rotate(-8deg)!important}
+
+/* =========================================================
+   SUMMARY V34.8 — ONLY card icons changed to Roster V29 style
+   Keep all V34.7 spacing/layout/functions unchanged.
+   ========================================================= */
+#page-summary .s34-stat-icon,
+#page-summary .s34-stat.purple .s34-stat-icon,
+#page-summary .s34-stat.mint .s34-stat-icon,
+#page-summary .s34-stat.yellow .s34-stat-icon,
+#page-summary .s34-stat.blue .s34-stat-icon,
+#page-summary .s34-stat.pink .s34-stat-icon{
+  width:42px!important;
+  height:42px!important;
+  display:grid!important;
+  place-items:center!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  border:0!important;
+  border-radius:0!important;
+  opacity:1!important;
+}
+#page-summary .s34-stat-icon:before{content:none!important;display:none!important}
+#page-summary .s34-stat-icon svg{
+  width:36px!important;
+  height:36px!important;
+  display:block!important;
+  filter:none!important;
+  overflow:visible!important;
+}
+@media (max-width:820px){
+  #page-summary .s34-stat-icon{width:38px!important;height:38px!important}
+  #page-summary .s34-stat-icon svg{width:32px!important;height:32px!important}
+}
