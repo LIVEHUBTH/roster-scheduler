@@ -1,5 +1,5 @@
 /* =========================================================
-   ROSTER SCHEDULER — HOME V28.3 (filename kept for drop-in replacement)
+   ROSTER SCHEDULER — HOME V28.4 Balanced Reference (filename kept for drop-in replacement)
    Rebuilds only Home, preserves existing app pages/functions
    ========================================================= */
 (function(){
@@ -132,7 +132,7 @@
     const page=$("page-home");
     if(!page || page.dataset.h26Built==="1") return;
 
-    /* V28.3 IMPORTANT:
+    /* V28.4 IMPORTANT:
        #status belongs to the main app/login flow.
        Preserve it before rebuilding Home so setStatus() never receives null. */
     let statusNode = document.getElementById("status");
@@ -241,7 +241,7 @@
         </div>
       </section>
 
-      <div class="h26-version">V28.3 • Home One Frame</div>
+      <div class="h26-version">V28.4 • Home Balanced Reference</div>
     </div>`;
 
     /* Put the shared app status node back after rebuilding Home. */
@@ -284,7 +284,7 @@
   function updateVersionEverywhere(){
     document.querySelectorAll("body *").forEach(el=>{
       if(el.children.length===0 && /V24\.5/.test(el.textContent||"")){
-        el.textContent=(el.textContent||"").replace(/V24\\.5/g,"V28.3");
+        el.textContent=(el.textContent||"").replace(/V24\\.5/g,"V27.1");
       }
     });
   }

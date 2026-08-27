@@ -1,6 +1,4 @@
 <!DOCTYPE html>
-<!-- BUILD: HOME V24.7.4 HISTORY-FRAME-MATCH 2026-08-25 -->
-<!-- BUILD: ADMIN PASSWORD UI V22.1 / 2026-08-25 -->
 <html lang="th">
 <head>
 <meta charset="utf-8">
@@ -1306,27 +1304,28 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 }
 
 
-/* ===== V24.5 HOME SINGLE-SCREEN IPAD FIT ===== */
+/* ===== V24.6 HOME SINGLE-FRAME FIT (match summary density) ===== */
 #page-home{
   max-width:1500px!important;
   margin:0 auto!important;
+  overflow:hidden!important;
 }
 #page-home .home-version-footer{
   margin:0!important;
   padding:0 2px!important;
-  height:14px;
-  line-height:14px;
+  height:12px;
+  line-height:12px;
   text-align:right;
-  font-size:6.8px;
+  font-size:6.5px;
   color:#9ea3ad!important
 }
 .v244-home-shell{
   height:calc(100dvh - 84px);
-  min-height:690px;
-  max-height:860px;
+  min-height:610px;
+  max-height:760px;
   display:grid;
-  grid-template-rows:190px 82px 190px 165px 14px;
-  gap:8px;
+  grid-template-rows:162px 72px 168px 142px 12px;
+  gap:6px;
   overflow:hidden;
   padding-bottom:1px
 }
@@ -1335,7 +1334,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
   grid-template-columns:1.08fr .92fr;
   align-items:center;
   border:1px solid #f3cfdd;
-  border-radius:22px;
+  border-radius:20px;
   overflow:hidden;
   background:
     radial-gradient(circle at 22% 18%,rgba(255,255,255,.9) 0 4px,transparent 5px),
@@ -1343,51 +1342,51 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
     radial-gradient(circle at 58% 21%,rgba(255,255,255,.8) 0 4px,transparent 5px),
     linear-gradient(102deg,#fff7fa 0%,#ffe5f0 50%,#fff6fb 100%);
   box-shadow:0 6px 18px rgba(235,94,145,.05);
-  padding:16px 28px;
+  padding:12px 22px;
   position:relative
 }
 .v244-hello{
-  font-size:18px;
+  font-size:16px;
   font-weight:900;
   color:#43506b;
-  line-height:1.05
+  line-height:1.04
 }
 .v244-hero h1{
-  margin:5px 0 6px;
+  margin:4px 0 5px;
   color:#ff5f98;
-  font-size:39px;
-  line-height:1.04;
-  letter-spacing:-.8px
+  font-size:34px;
+  line-height:1.02;
+  letter-spacing:-.7px
 }
 .v244-hero h2{
-  font-size:13px;
+  font-size:12px;
   margin:0 0 4px;
   color:#37445e
 }
 .v244-hero p{
-  font-size:9.4px;
-  margin:0 0 11px;
+  font-size:8.8px;
+  margin:0 0 9px;
   color:#667189
 }
 .v244-start-btn{
-  min-height:32px!important;
-  padding:6px 12px!important;
-  border-radius:11px!important;
+  min-height:30px!important;
+  padding:5px 11px!important;
+  border-radius:10px!important;
   background:#fff7fa!important;
   border:1px solid #efbfd0!important;
   color:#df5a8a!important;
-  font-size:9.5px!important;
+  font-size:9px!important;
   font-weight:800!important
 }
 .v244-hero-art{
-  height:154px;
+  height:126px;
   position:relative;
   display:grid;
   place-items:center
 }
 .v244-hero-art img{
-  width:min(315px,88%);
-  max-height:150px;
+  width:min(285px,84%);
+  max-height:122px;
   object-fit:contain;
   border-radius:22px;
   mix-blend-mode:multiply
@@ -1395,27 +1394,27 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 .v244-spark{
   position:absolute;
   color:#fff;
-  font-size:20px;
+  font-size:17px;
   text-shadow:0 0 10px rgba(255,255,255,.9)
 }
 .v244-spark.s1{left:11%;top:13%}
-.v244-spark.s2{right:8%;top:14%;font-size:25px}
-.v244-spark.s3{right:17%;bottom:12%;font-size:15px}
+.v244-spark.s2{right:8%;top:14%;font-size:21px}
+.v244-spark.s3{right:17%;bottom:12%;font-size:13px}
 
 .v244-stats{
   display:grid;
   grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:8px
+  gap:6px
 }
 .v244-stat{
   min-width:0;
   border:1px solid;
-  border-radius:16px;
+  border-radius:15px;
   display:grid;
-  grid-template-columns:48px minmax(0,1fr);
+  grid-template-columns:42px minmax(0,1fr);
   align-items:center;
-  gap:8px;
-  padding:8px 12px;
+  gap:7px;
+  padding:7px 10px;
   box-shadow:0 3px 10px rgba(0,0,0,.02)
 }
 .v244-stat.pink{background:#fff3f8;border-color:#f1cad9}
@@ -1423,35 +1422,35 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 .v244-stat.yellow{background:#fff8e4;border-color:#edd994}
 .v244-stat.purple{background:#f7f3ff;border-color:#dacdf4}
 .v244-stat-icon{
-  width:42px;
-  height:42px;
+  width:36px;
+  height:36px;
   border-radius:50%;
   display:grid;
   place-items:center;
   background:rgba(255,255,255,.7);
-  font-size:25px
+  font-size:21px
 }
 .v244-stat small,.v244-stat span{display:block}
 .v244-stat small{
-  font-size:8px;
+  font-size:7.4px;
   color:#6f788e;
   font-weight:800
 }
 .v244-stat strong{
-  font-size:23px;
+  font-size:20px;
   line-height:1;
   color:#33405a;
   margin-right:4px
 }
 .v244-stat em{
-  font-size:8.5px;
+  font-size:8px;
   font-style:normal;
   color:#536077
 }
 .v244-stat span{
-  font-size:7px;
+  font-size:6.5px;
   color:#939aaa;
-  margin-top:3px;
+  margin-top:2px;
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis
@@ -1461,33 +1460,33 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
   min-height:0;
   display:grid;
   grid-template-columns:30% 1fr;
-  gap:8px
+  gap:6px
 }
 .v244-bottom{
   min-height:0;
   display:grid;
   grid-template-columns:.95fr 1.25fr .95fr;
-  gap:8px
+  gap:6px
 }
 .v244-card{
   min-width:0;
   min-height:0;
   background:#fff;
   border:1px solid #ebe1da;
-  border-radius:16px;
-  padding:10px 12px;
+  border-radius:15px;
+  padding:8px 10px;
   box-shadow:0 4px 14px rgba(72,56,42,.025);
   overflow:hidden
 }
 .v244-card-title{
-  min-height:24px;
+  min-height:20px;
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:8px
 }
 .v244-card-title h3{
-  font-size:12px;
+  font-size:11px;
   margin:0;
   color:#3b4861
 }
@@ -1499,17 +1498,17 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 .v244-calendar-nav{
   display:flex;
   align-items:center;
-  gap:5px
+  gap:4px
 }
 .v244-calendar-nav b{
-  min-width:88px;
+  min-width:84px;
   text-align:center;
-  font-size:8.2px;
+  font-size:7.8px;
   color:#4e5a72
 }
 .v244-calendar-nav button{
-  width:24px;
-  height:24px;
+  width:22px;
+  height:22px;
   padding:0!important;
   border:0!important;
   background:#fff!important;
@@ -1518,24 +1517,24 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 }
 .v244-calendar{
   flex:1 1 auto;
-  min-height:132px;
+  min-height:118px;
   display:grid;
   grid-template-columns:repeat(7,1fr);
   grid-auto-rows:1fr;
   gap:2px;
   align-items:stretch;
-  margin-top:4px
+  margin-top:3px
 }
 .v244-calendar>div{
   min-height:0!important;
   display:grid!important;
   place-items:center!important;
   border-radius:7px!important;
-  font-size:8px!important;
+  font-size:7.5px!important;
   color:#536075
 }
 .v244-calendar .head{
-  font-size:7px!important;
+  font-size:6.5px!important;
   font-weight:900;
   color:#59667c
 }
@@ -1544,16 +1543,16 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 .v244-calendar .weekend{color:#8a67cf}
 .v244-legend{
   display:flex;
-  gap:10px;
+  gap:8px;
   align-items:center;
-  font-size:6.7px;
+  font-size:6.2px;
   color:#858da0;
-  margin-top:4px
+  margin-top:3px
 }
 .v244-legend i,.v244-news i{
   display:inline-block;
-  width:7px;
-  height:7px;
+  width:6px;
+  height:6px;
   border-radius:50%
 }
 .pink-dot{background:#ff6b9d}
@@ -1569,37 +1568,37 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
   flex:1 1 auto;
   display:grid;
   grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:8px
+  gap:6px
 }
 .v244-shortcut-grid button{
   min-width:0!important;
-  border-radius:15px!important;
+  border-radius:14px!important;
   border:1px solid!important;
   display:flex!important;
   flex-direction:column!important;
   align-items:center!important;
   justify-content:center!important;
-  gap:3px!important;
-  padding:8px 7px!important;
+  gap:2px!important;
+  padding:7px 6px!important;
   box-shadow:0 2px 10px rgba(0,0,0,.02)
 }
 .v244-shortcut-grid .pink{background:#fff3f7!important;border-color:#f1ccd8!important}
 .v244-shortcut-grid .mint{background:#eefaf6!important;border-color:#c9e7de!important}
 .v244-shortcut-grid .purple{background:#f6f2ff!important;border-color:#dcd1f5!important}
 .v244-shortcut-grid .yellow{background:#fff8e7!important;border-color:#eedda8!important}
-.v244-shortcut-grid span{font-size:28px}
-.v244-shortcut-grid b{font-size:10px;color:#43506a;line-height:1.15}
-.v244-shortcut-grid small{font-size:7px;color:#9399a8;text-align:center;line-height:1.15}
+.v244-shortcut-grid span{font-size:24px}
+.v244-shortcut-grid b{font-size:9.2px;color:#43506a;line-height:1.15}
+.v244-shortcut-grid small{font-size:6.6px;color:#9399a8;text-align:center;line-height:1.12}
 
 .v244-link{
   border:0!important;
   background:transparent!important;
   color:#5797d2!important;
   padding:2px!important;
-  font-size:7.6px!important
+  font-size:7px!important
 }
 .v244-news{
-  height:calc(100% - 24px);
+  height:calc(100% - 20px);
   display:grid;
   grid-template-rows:repeat(4,1fr);
   gap:1px
@@ -1611,30 +1610,30 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
   border-radius:0!important;
   background:transparent!important;
   display:grid!important;
-  grid-template-columns:10px 1fr auto!important;
+  grid-template-columns:9px 1fr auto!important;
   align-items:center!important;
   text-align:left!important;
-  gap:5px!important;
+  gap:4px!important;
   padding:1px 0!important;
   color:#4d586f!important
 }
 .v244-news button:last-child{border-bottom:0!important}
 .v244-news span{
-  font-size:7.2px;
+  font-size:6.7px;
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis
 }
 .v244-news em{
-  font-size:6.4px;
+  font-size:6px;
   font-style:normal;
   color:#9ba2af
 }
 
 .v244-flow{
-  height:calc(100% - 24px);
+  height:calc(100% - 20px);
   display:grid;
-  grid-template-columns:1fr 14px 1fr 14px 1fr 14px 1fr 14px 1fr;
+  grid-template-columns:1fr 12px 1fr 12px 1fr 12px 1fr 12px 1fr;
   align-items:center
 }
 .v244-flow>button{
@@ -1651,17 +1650,17 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
   text-align:center;
   color:#b4bbc8;
   font-style:normal;
-  font-size:13px
+  font-size:11px
 }
 .v244-flow .n{
-  width:29px;
-  height:29px;
+  width:27px;
+  height:27px;
   border-radius:50%;
   display:grid;
   place-items:center;
-  font-size:8px;
+  font-size:7.6px;
   font-weight:900;
-  margin-bottom:5px
+  margin-bottom:4px
 }
 .v244-flow .n.pink{background:#ffe5ef;color:#ed5e91}
 .v244-flow .n.mint{background:#def7ef;color:#24977b}
@@ -1669,19 +1668,19 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 .v244-flow .n.yellow{background:#fff0ca;color:#c98913}
 .v244-flow .n.blue{background:#e4f3ff;color:#278bc6}
 .v244-flow b{
-  font-size:7.2px;
+  font-size:6.9px;
   color:#46536a;
   white-space:nowrap
 }
 .v244-flow small{
-  font-size:6.2px;
+  font-size:5.8px;
   color:#989fab;
-  line-height:1.1;
-  margin-top:2px
+  line-height:1.08;
+  margin-top:1px
 }
 
 .v244-tips{
-  height:calc(100% - 24px);
+  height:calc(100% - 20px);
   display:grid;
   grid-template-rows:repeat(5,1fr)
 }
@@ -1691,9 +1690,9 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
   background:transparent!important;
   text-align:left!important;
   padding:1px 0!important;
-  font-size:7.2px!important;
+  font-size:6.8px!important;
   color:#536076!important;
-  line-height:1.15
+  line-height:1.12
 }
 .v244-tips button:nth-child(1){color:#35a68e!important}
 .v244-tips button:nth-child(2){color:#55a8d2!important}
@@ -1725,56 +1724,65 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
   .v244-stats{grid-template-columns:1fr}
   .v244-shortcut-grid{grid-template-columns:1fr 1fr}
 }
-@media(max-height:820px){
+@media(max-height:900px){
   .v244-home-shell{
-    grid-template-rows:176px 76px 178px 154px 12px;
-    gap:7px
+    grid-template-rows:154px 68px 162px 138px 12px;
+    gap:5px
   }
-  .v244-hero{
-    padding:14px 24px
-  }
-  .v244-hero h1{font-size:35px}
-  .v244-hero h2{font-size:12px}
-  .v244-hero-art{height:142px}
-  .v244-hero-art img{max-height:138px}
-  .v244-stat{padding:7px 10px}
-  .v244-stat strong{font-size:21px}
-  .v244-card{padding:9px 11px}
-  .v244-shortcut-grid span{font-size:24px}
+  .v244-hero{padding:11px 20px}
+  .v244-hero h1{font-size:32px}
+  .v244-hero h2{font-size:11px}
+  .v244-hero p{font-size:8.4px;margin-bottom:8px}
+  .v244-hero-art{height:118px}
+  .v244-hero-art img{max-height:114px}
+  .v244-stat{padding:6px 9px}
+  .v244-stat strong{font-size:19px}
+  .v244-card{padding:8px 9px}
+  .v244-shortcut-grid span{font-size:22px}
+  .v244-shortcut-grid b{font-size:8.8px}
+  .v244-shortcut-grid small{font-size:6.3px}
+  .v244-news span{font-size:6.4px}
+  .v244-tips button{font-size:6.5px!important}
 }
+@media(min-width:901px) and (max-height:780px){
+  .v244-home-shell{
+    grid-template-rows:148px 64px 156px 132px 12px;
+    gap:4px;
+    max-height:720px
+  }
+  .v244-hero{padding:10px 18px}
+  .v244-hello{font-size:15px}
+  .v244-hero h1{font-size:30px;margin:3px 0 4px}
+  .v244-hero h2{font-size:10.8px}
+  .v244-hero p{font-size:8.1px;margin-bottom:7px}
+  .v244-start-btn{min-height:28px!important;font-size:8.7px!important}
+  .v244-hero-art{height:112px}
+  .v244-hero-art img{max-height:108px}
+  .v244-stat-icon{width:34px;height:34px;font-size:19px}
+  .v244-stat strong{font-size:18px}
+  .v244-stat small{font-size:7px}
+  .v244-card-title h3{font-size:10.5px}
+  .v244-calendar{min-height:110px}
+  .v244-calendar>div{font-size:7.2px!important}
+  .v244-shortcut-grid span{font-size:21px}
+  .v244-shortcut-grid b{font-size:8.5px}
+  .v244-shortcut-grid small{font-size:6px}
+  .v244-flow .n{width:25px;height:25px;font-size:7.2px}
+  .v244-flow b{font-size:6.6px}
+  .v244-flow small{font-size:5.6px}
+  .v244-news span{font-size:6.2px}
+  .v244-tips button{font-size:6.2px!important}
+}
+
 </style>
 <link rel="stylesheet" href="style.css?v=30.0">
 <link rel="stylesheet" href="roster-v29.css?v=29.3">
 <link rel="stylesheet" href="people-v30.css?v=30.4">
 <link rel="stylesheet" href="rules-v31.css?v=31.1">
-<link rel="stylesheet" href="holidays-v32.css?v=32.5">
-<link rel="stylesheet" href="history-v33.css?v=33.8">
+<link rel="stylesheet" href="holidays-v32.css?v=32.0">
+<link rel="stylesheet" href="home-v28.css?v=28.4">
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
-
-<style id="admin-password-v221-styles">
-#page-settings .admin-password-card{border:1px solid #f1ddea;background:linear-gradient(145deg,#fffafd,#ffffff);}
-#page-settings .admin-password-card h3{display:flex;align-items:center;gap:8px;color:#4a5162}
-#page-settings .admin-password-fields{display:grid;gap:10px;margin-top:10px}
-#page-settings .admin-password-fields label{display:grid;gap:6px;font-size:11px;font-weight:800;color:#646d7e}
-#page-settings .admin-password-fields input{height:42px;width:100%;border:1px solid #e2e4ea;border-radius:11px;padding:0 12px;font-size:13px;background:#fff;color:#384158;outline:none}
-#page-settings .admin-password-fields input:focus{border-color:#ef86ad;box-shadow:0 0 0 3px rgba(239,134,173,.12)}
-#page-settings .admin-password-actions{display:flex;align-items:center;gap:10px;margin-top:12px;flex-wrap:wrap}
-#page-settings #settingsChangePasswordBtn{height:42px;border:0;border-radius:11px;padding:0 16px;background:#f47faa;color:#fff;font-weight:900;cursor:pointer;box-shadow:0 7px 16px rgba(244,127,170,.16)}
-#page-settings #settingsChangePasswordBtn:disabled{opacity:.55;cursor:not-allowed}
-#page-settings #settingsPasswordStatus{font-size:10px;color:#7b8493;min-height:16px}
-#page-settings #settingsPasswordStatus.ok{color:#2eaa80}
-#page-settings #settingsPasswordStatus.error{color:#d65370}
-#page-settings .admin-password-note{margin:7px 0 0;font-size:9px;color:#9097a4;line-height:1.5}
-</style>
-
-
-
-
-
-
-<link rel="stylesheet" href="home-v28.css?v=28.3">
-<link rel="stylesheet" href="summary-v34.css?v=34.8">
 </head>
 <body>
 
@@ -1783,7 +1791,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
     <div class="auth-head">
       <div class="auth-logo">🗓️</div>
       <h2>เข้าสู่ระบบจัดตารางเวร</h2>
-      <p>V28.2 • Home Clean • สิทธิ์ผู้ใช้งานจากเซิร์ฟเวอร์</p>
+      <p>V24.6 • Home One Frame iPad Fit • สิทธิ์ผู้ใช้งานจากเซิร์ฟเวอร์</p>
     </div>
     <div class="auth-body">
       <label>Username</label>
@@ -1810,7 +1818,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
     <a href="#rules" data-page="rules"><span class="ico">♢</span><span>กฎการจัดเวร</span></a>
     <a href="#holidays" data-page="holidays"><span class="ico">🗓</span><span>วันหยุด/นักขัตฤกษ์</span></a>
     <a href="#history" data-page="history"><span class="ico">◔</span><span>ประวัติการจัดเวร</span></a>
-    <a href="#summary" data-page="summary"><span class="ico s34-nav-chart" aria-hidden="true"><i></i></span><span>รายงานสรุป</span></a>
+    <a href="#summary" data-page="summary"><span class="ico">▥</span><span>รายงานสรุป</span></a>
     <a href="#internal" data-page="internal"><span class="ico">▤</span><span>ระบบหน่วยงาน</span></a>
     <a href="#settings" data-page="settings"><span class="ico">⚙</span><span>ตั้งค่าโปรแกรม</span></a>
   </nav>
@@ -1933,7 +1941,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
     <div id="homeAlertsCard" style="display:none"><span id="dashWarn">0</span><span id="dashError">0</span></div>
     <div id="homeFullRoster" style="display:none"></div>
     <div style="display:none"><span id="dashV"></span><span id="dashOT"></span><span id="dashMorning"></span><span id="dashNight"></span><span id="dashLong"></span><span id="dashEvening"></span><span id="dashExtra"></span><span id="dashTotal"></span><span id="dashBalance"></span><span id="dashBalanceText"></span></div>
-    <div class="home-version-footer">V28.2 • Home Clean</div>
+    <div class="home-version-footer">V24.6 • Home One Frame</div>
   </div>
 </section>
 
@@ -2463,193 +2471,63 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 
 
 <section class="page-view" id="page-history" data-view="history">
-  <div class="h33-shell">
-    <header class="h33-page-head">
-      <div class="h33-title-wrap">
-        <span class="h33-title-icon">◷</span>
-        <div><h2>ประวัติการจัดเวร</h2><p>ค้นหา เปิดดู และตรวจสอบตารางเวรย้อนหลัง</p></div>
-      </div>
-      <span class="h33-version">V33.0 • History</span>
-    </header>
-
-    <section class="h33-card h33-filter-card">
-      <div class="h33-filters">
-        <label class="h33-search"><span>ค้นหาชื่อหน่วยงาน, ผู้จัดเวร, หมายเหตุ...</span><div><input id="historySearchV24" type="search" placeholder="ค้นหา..."><b>⌕</b></div></label>
-        <label><span>เดือน</span><select id="historyMonthV33"><option value="all">ทั้งหมด</option></select></label>
-        <label><span>ปี</span><select id="historyYearSelectV33"></select></label>
-        <label><span>สถานะ</span><select id="historyStatusV24"><option value="all">ทั้งหมด</option><option value="locked">ล็อกแล้ว</option><option value="approved">อนุมัติแล้ว</option><option value="submitted">ส่งตรวจแล้ว</option><option value="draft">ร่างตาราง</option></select></label>
-        <label><span>หน่วยงาน</span><select id="historyUnitV33"><option value="all">ทั้งหมด</option></select></label>
-        <div class="h33-filter-actions">
-          <button type="button" id="historyRefreshBtn" class="h33-btn search">⌕ ค้นหา</button>
-          <button type="button" id="historyResetV33" class="h33-btn reset">↻ ล้างตัวกรอง</button>
-          <button type="button" id="historyExportV33" class="h33-btn export">⇩ ส่งออก⌄</button>
-        </div>
-      </div>
-      <input id="historyYear" type="hidden">
-      <button id="historySaveBtn" type="button" hidden>บันทึกเดือนปัจจุบัน</button>
-    </section>
-
-    <section class="h33-stat-grid">
-      <article class="h33-stat pink"><span class="h33-stat-icon">▣</span><div><small>จำนวนประวัติทั้งหมด</small><b id="historyTotalV24">0</b><em>รายการ</em></div></article>
-      <article class="h33-stat mint"><span class="h33-stat-icon">▦</span><div><small>เดือนที่บันทึกล่าสุด</small><b id="historyLatestV24">-</b><em id="historyLatestDateV33">-</em></div></article>
-      <article class="h33-stat purple"><span class="h33-stat-icon">★</span><div><small>ตารางที่อนุมัติแล้ว</small><b id="historyApprovedV24">0</b><em id="historyApprovedPctV33">0%</em></div></article>
-      <article class="h33-stat yellow"><span class="h33-stat-icon">▣</span><div><small>ตารางที่ล็อกแล้ว</small><b id="historyLockedV24">0</b><em id="historyLockedPctV33">0%</em></div></article>
-    </section>
-
-    <section class="h33-card h33-table-card">
-      <div class="h33-card-head"><h3>🗓️ ประวัติการจัดเวรย้อนหลัง</h3><span id="historyInfo" class="h33-muted"></span></div>
-      <div class="h33-table-wrap">
-        <table class="h33-table">
-          <thead><tr><th>เดือน/ปี</th><th>หน่วยงาน</th><th>สถานะ</th><th>ผู้จัดเวร</th><th>วันที่บันทึก</th><th>วันที่อนุมัติ</th><th>วันที่ล็อก</th><th>หมายเหตุ</th><th>จัดการ</th></tr></thead>
-          <tbody id="historyRowsV33"></tbody>
-        </table>
-      </div>
-      <div class="h33-table-footer">
-        <span id="historyRangeV33">แสดง 0 รายการ</span>
-        <div class="h33-pagination" id="historyPagerV33"></div>
-        <label>แสดงต่อหน้า <select id="historyPageSizeV33"><option>5</option><option>10</option><option>20</option></select></label>
-      </div>
-      <div id="historyMonthList" class="history-month-list v24-history-list" hidden></div>
-      <div id="historyViewer" class="history-viewer h33-viewer">
-        <div class="history-viewer-head"><b id="historyViewerTitle">ประวัติ</b><button id="historyCloseViewerBtn">ปิด</button></div>
-        <div id="historyViewerBody" class="history-viewer-scroll"></div>
-      </div>
-    </section>
-
-    <section class="h33-bottom-grid">
-      <article class="h33-card">
-        <div class="h33-card-head"><h3>◷ ตารางที่เข้าดูล่าสุด</h3><button type="button" id="historyRecentAllV33" class="h33-link-btn">ดูทั้งหมด</button></div>
-        <div id="historyRecentV24" class="h33-recent-list"></div>
-      </article>
-      <article class="h33-card">
-        <div class="h33-card-head"><h3>▤ ประวัติการทำรายการ (Audit Log)</h3><button type="button" id="historyAuditAllV33" class="h33-link-btn">ดูทั้งหมด</button></div>
-        <div id="historyAuditV24" class="h33-audit-list"></div>
-      </article>
-    </section>
+  <div class="v24-page-title"><div><h2>↻ ประวัติการจัดเวร</h2><p>ค้นหา เปิด และตรวจสอบตารางเวรย้อนหลัง</p></div></div>
+  <div class="v24-card">
+    <div class="v24-filterbar">
+      <input id="historySearchV24" type="search" placeholder="ค้นหาเดือน หมายเหตุ สถานะ...">
+      <label>ปี พ.ศ.<input id="historyYear" type="number" min="2500" max="2700"></label>
+      <select id="historyStatusV24"><option value="all">สถานะทั้งหมด</option><option value="locked">ล็อกแล้ว</option><option value="approved">อนุมัติแล้ว</option><option value="submitted">ส่งตรวจแล้ว</option><option value="draft">ร่างตาราง</option></select>
+      <button id="historyRefreshBtn">⌕ ค้นหา</button>
+      <button id="historySaveBtn">💾 บันทึกเดือนปัจจุบัน</button>
+    </div>
+  </div>
+  <div class="v24-stat-grid four">
+    <div class="v24-stat pink"><span>📋</span><div><small>จำนวนประวัติทั้งหมด</small><b id="historyTotalV24">0</b><em>เดือน</em></div></div>
+    <div class="v24-stat mint"><span>🗓️</span><div><small>เดือนที่บันทึกล่าสุด</small><b id="historyLatestV24">-</b></div></div>
+    <div class="v24-stat purple"><span>🛡️</span><div><small>ตารางที่อนุมัติแล้ว</small><b id="historyApprovedV24">0</b><em>รายการ</em></div></div>
+    <div class="v24-stat yellow"><span>🔒</span><div><small>ตารางที่ล็อกแล้ว</small><b id="historyLockedV24">0</b><em>รายการ</em></div></div>
+  </div>
+  <div class="v24-card">
+    <div class="v24-card-head"><h3>🗓 ประวัติการจัดเวรย้อนหลัง</h3><span id="historyInfo" class="muted"></span></div>
+    <div id="historyMonthList" class="history-month-list v24-history-list"></div>
+    <div id="historyViewer" class="history-viewer">
+      <div class="history-viewer-head"><b id="historyViewerTitle">ประวัติ</b><button id="historyCloseViewerBtn">ปิด</button></div>
+      <div id="historyViewerBody" class="history-viewer-scroll"></div>
+    </div>
+  </div>
+  <div class="v24-two-grid">
+    <div class="v24-card"><h3>🕘 ตารางที่เข้าดูล่าสุด</h3><div id="historyRecentV24" class="v24-upcoming"></div></div>
+    <div class="v24-card"><h3>🧾 ประวัติการทำรายการ (Audit Log)</h3><div id="historyAuditV24" class="v24-upcoming"></div></div>
   </div>
 </section>
+
 
 
 <section class="page-view" id="page-summary" data-view="summary">
-  <div class="s34-shell">
-    <header class="s34-head">
-      <div>
-        <h2><span class="s34-page-icon" aria-hidden="true"><i></i></span><span>รายงานสรุป</span></h2>
-        <p>สรุปสถิติและผลการจัดเวรประจำเดือนที่เลือก</p>
-      </div>
-    </header>
-
-    <section class="s34-toolbar">
-      <div class="s34-field">
-        <label>เดือน</label>
-        <div class="s34-select-wrap"><span class="s34-mini-icon s34-calendar-pink"></span><select id="summaryMonthProxyV24"></select></div>
-      </div>
-      <div class="s34-field s34-year-field">
-        <label>ปี พ.ศ.</label>
-        <div class="s34-select-wrap"><span class="s34-mini-icon s34-calendar-blue"></span><input id="summaryYearProxyV24" type="number" min="2500" max="2700"></div>
-      </div>
-
-      <div class="s34-report-type">
-        <label>ประเภทรายงาน</label>
-        <div class="s34-tabs" id="summaryTabsV34">
-          <button type="button" class="active" data-summary-tab="overview">ภาพรวม</button>
-          <button type="button" data-summary-tab="people">รายบุคคล</button>
-          <button type="button" data-summary-tab="compare">เปรียบเทียบเวร</button>
-          <button type="button" data-summary-tab="holiday">วันหยุด</button>
-        </div>
-      </div>
-
-      <div class="s34-actions no-print">
-        <button type="button" id="summaryViewBtnV34" class="s34-action view"><span class="s34-action-icon eye"></span>ดูรายงาน</button>
-        <button type="button" id="summaryPdfBtn" class="s34-action pdf"><span class="s34-action-icon pdf"></span>ดาวน์โหลด PDF</button>
-        <button type="button" id="summaryExcelBtnV34" class="s34-action excel"><span class="s34-action-icon excel"></span>ส่งออก Excel</button>
-        <button type="button" id="summaryPrintBtn" class="s34-action print"><span class="s34-action-icon print"></span>พิมพ์</button>
-        <button type="button" id="summaryOpenPdfBtn" class="s34-history-pdf" title="เปิด PDF ย้อนหลัง">⋯</button>
-        <input id="summaryPdfFile" type="file" accept="application/pdf" style="display:none">
-      </div>
-    </section>
-
-    <section class="s34-stats">
-      <article class="s34-stat purple">
-        <span class="s34-stat-icon people"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="25" cy="22" r="10" fill="#f45f97"/><circle cx="42" cy="24" r="8" fill="#ff9ec0"/><path d="M10 51c1-13 8-19 16-19s16 6 17 19" fill="#f45f97"/><path d="M34 51c1-10 6-15 12-15 7 0 11 5 12 15" fill="#ff9ec0"/></svg></span>
-        <div><small>จำนวนบุคลากรทั้งหมด</small><strong><b id="summaryPeopleV24">0</b> <em>คน</em></strong><p id="summaryPeopleDeltaV34">ข้อมูลผู้ใช้งานปัจจุบัน</p></div>
-      </article>
-      <article class="s34-stat mint">
-        <span class="s34-stat-icon calendar"><svg viewBox="0 0 64 64" aria-hidden="true"><rect x="10" y="14" width="44" height="40" rx="8" fill="#74d9c6"/><rect x="10" y="20" width="44" height="9" fill="#54c7b2"/><rect x="18" y="9" width="5" height="12" rx="2.5" fill="#358f82"/><rect x="41" y="9" width="5" height="12" rx="2.5" fill="#358f82"/><g fill="#fff"><rect x="17" y="34" width="7" height="6" rx="2"/><rect x="28" y="34" width="7" height="6" rx="2"/><rect x="39" y="34" width="7" height="6" rx="2"/><rect x="17" y="43" width="7" height="6" rx="2"/><rect x="28" y="43" width="7" height="6" rx="2"/></g></svg></span>
-        <div><small>เวรรวมทั้งเดือน</small><strong><b id="summaryAssignmentsV24">0</b> <em>เวร</em></strong><p id="summaryAssignmentsDeltaV34">กำลังอัปเดตตามตาราง</p></div>
-      </article>
-      <article class="s34-stat yellow">
-        <span class="s34-stat-icon gift"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M10 31C13 16 24 9 32 9s19 7 22 22c-5-4-9-4-13 0-4-4-8-4-13 0-4-4-9-4-18 0z" fill="#f0b74d"/><path d="M32 31v17c0 6 8 7 10 1" fill="none" stroke="#d68c35" stroke-width="4" stroke-linecap="round"/></svg></span>
-        <div><small>วันหยุด/นักขัตฤกษ์</small><strong><b id="summaryHolidayV24">0</b> <em>วัน</em></strong><p>ในเดือนนี้</p></div>
-      </article>
-      <article class="s34-stat blue">
-        <span class="s34-stat-icon star"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="23" fill="#a9d9ef"/><path d="M32 15l5.2 10.5 11.6 1.7-8.4 8.2 2 11.6L32 41.5 21.6 47l2-11.6-8.4-8.2 11.6-1.7z" fill="#ffd966"/><circle cx="32" cy="32" r="4" fill="#fff6c9"/></svg></span>
-        <div><small>คะแนนความสมดุลเฉลี่ย</small><strong><b id="summaryBalanceV24">-</b></strong><p id="summaryBalanceTextV34">ตรวจสอบตามกฎข้อ 21</p></div>
-      </article>
-      <article class="s34-stat pink">
-        <span class="s34-stat-icon shield"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 7l20 8v14c0 14-9 23-20 29C21 52 12 43 12 29V15z" fill="#f48bad"/><path d="M32 17l4 8 9 1-7 6 2 9-8-5-8 5 2-9-7-6 9-1z" fill="#ffe48b"/></svg></span>
-        <div><small>จำนวนข้อขัดแย้งที่แก้แล้ว</small><strong><b id="summaryConflictV24">0</b> <em>รายการ</em></strong><p id="summaryConflictTextV34">ตรวจสอบสถานะล่าสุด</p></div>
-      </article>
-    </section>
-
-    <section class="s34-charts">
-      <article class="s34-card s34-bar-card" id="summaryChartCardV34">
-        <div class="s34-card-head">
-          <div><h3>สรุปจำนวนเวรตามประเภท</h3><small>จำนวนเวร</small></div>
-          <select id="summaryChartModeV34"><option value="count">แสดงจำนวนเวร</option><option value="percent">แสดงเปอร์เซ็นต์</option></select>
-        </div>
-        <div id="summaryBarChartV24" class="s34-bar-chart"></div>
-      </article>
-
-      <article class="s34-card s34-donut-card">
-        <div class="s34-card-head"><h3>สัดส่วนเวรของเดือนนี้</h3></div>
-        <div class="s34-donut-wrap">
-          <div id="summaryDonutV24" class="s34-donut"><div><small>รวม</small><b id="summaryDonutTotalV24">0</b><span>เวร</span></div></div>
-          <div id="summaryLegendV24" class="s34-donut-legend"></div>
-        </div>
-      </article>
-    </section>
-
-    <section class="s34-detail-grid">
-      <article class="s34-card s34-people-card" id="summaryPeopleCardV34">
-        <div class="s34-card-head"><h3>สรุปรายบุคคล</h3></div>
-        <div id="summaryTopPeopleV24" class="s34-people-table"></div>
-        <button type="button" id="summaryAllPeopleBtnV34" class="s34-wide-btn no-print"><span class="s34-small-people"></span>เปิดตารางรายบุคคลแบบเต็ม</button>
-      </article>
-
-      <div class="s34-right-stack">
-        <article class="s34-card s34-ranking-card">
-          <div class="s34-card-head"><h3>👑 บุคลากรเวรสูงสุด 5 อันดับ</h3></div>
-          <div id="summaryRankingV34" class="s34-ranking"></div>
-        </article>
-        <article class="s34-card s34-tips-card">
-          <div class="s34-card-head"><h3>💡 ข้อสังเกตและคำแนะนำ</h3></div>
-          <div id="summaryTipsV24" class="s34-tips"></div>
-        </article>
-      </div>
-    </section>
-
-    <section class="s34-card s34-compare-card" id="summaryCompareCardV34">
-      <div class="s34-card-head"><h3>📈 เปรียบเทียบเดือนก่อน</h3></div>
-      <div id="summaryCompareV34" class="s34-compare-grid"></div>
-    </section>
-
-    <div id="summaryTitle" style="display:none"></div>
-    <div id="summary" class="summary s34-legacy-summary no-print" aria-hidden="true"></div>
-    <div class="s34-version">V34.8 • Summary Report</div>
+  <div class="v24-page-title"><div><h2>รายงานสรุป</h2><p>สรุปสถิติและผลการจัดเวรประจำเดือนที่เลือก</p></div></div>
+  <div class="v24-card v24-summary-toolbar">
+    <div><label>เดือน<select id="summaryMonthProxyV24"></select></label><label>ปี พ.ศ.<input id="summaryYearProxyV24" type="number" min="2500" max="2700"></label></div>
+    <div class="page-tools no-print"><button id="summaryPdfBtn">PDF ดาวน์โหลด PDF</button><button id="summaryPrintBtn">🖨 พิมพ์</button><button id="summaryOpenPdfBtn">เปิด PDF ย้อนหลัง</button><input id="summaryPdfFile" type="file" accept="application/pdf" style="display:none"></div>
   </div>
-
-  <div id="summaryModalV34" class="s34-modal no-print" aria-hidden="true">
-    <div class="s34-modal-backdrop" data-summary-close="1"></div>
-    <div class="s34-modal-panel">
-      <div class="s34-modal-head">
-        <div><b id="summaryModalTitleV34">รายงานรายบุคคลทั้งหมด</b><small>ตารางหลักการเฉลี่ยเวร</small></div>
-        <button type="button" data-summary-close="1">×</button>
-      </div>
-      <div id="summaryModalBodyV34" class="s34-modal-body"></div>
-    </div>
+  <div class="v24-stat-grid five">
+    <div class="v24-stat purple"><span>👥</span><div><small>จำนวนบุคลากรทั้งหมด</small><b id="summaryPeopleV24">0</b><em>คน</em></div></div>
+    <div class="v24-stat mint"><span>🗓️</span><div><small>เวรรวมทั้งเดือน</small><b id="summaryAssignmentsV24">0</b><em>เวร</em></div></div>
+    <div class="v24-stat yellow"><span>🎁</span><div><small>วันหยุด/นักขัตฤกษ์</small><b id="summaryHolidayV24">0</b><em>วัน</em></div></div>
+    <div class="v24-stat blue"><span>⭐</span><div><small>คะแนนความสมดุลเฉลี่ย</small><b id="summaryBalanceV24">-</b></div></div>
+    <div class="v24-stat pink"><span>🛡️</span><div><small>ข้อขัดแย้งที่แก้แล้ว</small><b id="summaryConflictV24">0</b><em>รายการ</em></div></div>
   </div>
+  <div class="v24-two-grid charts">
+    <div class="v24-card"><div class="v24-card-head"><h3>สรุปจำนวนเวรตามประเภท</h3></div><div id="summaryBarChartV24" class="v24-bar-chart"></div></div>
+    <div class="v24-card"><div class="v24-card-head"><h3>สัดส่วนเวรของเดือนนี้</h3></div><div class="v24-donut-wrap"><div id="summaryDonutV24" class="v24-donut"><b id="summaryDonutTotalV24">0</b><span>เวร</span></div><div id="summaryLegendV24" class="v24-donut-legend"></div></div></div>
+  </div>
+  <div class="v24-two-grid">
+    <div class="v24-card"><h3>สรุปรายบุคคล</h3><div id="summaryTopPeopleV24" class="v24-top-people"></div></div>
+    <div class="v24-card"><h3>💡 ข้อสังเกตและคำแนะนำ</h3><div id="summaryTipsV24" class="v24-tip-list"></div></div>
+  </div>
+  <div class="v24-card"><h3 id="summaryTitle">ตารางหลักการเฉลี่ยเวร</h3><div id="summary" class="summary no-print"></div></div>
 </section>
+
+
 
 
 <section class="page-view" id="page-internal" data-view="internal">
@@ -2841,7 +2719,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
     </div>
   </div>
 
-  <div class="unit-page-version">V28.2 • Home Clean</div>
+  <div class="unit-page-version">V24.6 • Home One Frame iPad Fit</div>
 </section>
 
 
@@ -2902,21 +2780,8 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
       <h3>🗄 จัดการข้อมูลระบบ</h3>
       <div class="v24-manage-grid"><button id="settingsClearV24">🗑 ล้างตารางเดือนนี้</button><button id="settingsResetV24">↻ รีเซ็ตค่าหน้าจอ</button><button id="settingsPeopleV24">👥 จัดการข้อมูลพนักงาน</button><button id="settingsValidateV24">🔗 ตรวจสอบความสมบูรณ์ข้อมูล</button></div>
     </div>
-    <div class="v24-card admin-password-card" id="adminPasswordCard" style="display:none">
-      <h3>🔐 เปลี่ยนรหัสผ่านแอดมิน</h3>
-      <div class="admin-password-fields">
-        <label>รหัสผ่านปัจจุบัน<input id="settingsCurrentPassword" type="password" autocomplete="current-password" placeholder="กรอกรหัสผ่านปัจจุบัน"></label>
-        <label>รหัสผ่านใหม่<input id="settingsNewPassword" type="password" autocomplete="new-password" placeholder="อย่างน้อย 8 ตัวอักษร"></label>
-        <label>ยืนยันรหัสผ่านใหม่<input id="settingsConfirmPassword" type="password" autocomplete="new-password" placeholder="กรอกรหัสผ่านใหม่อีกครั้ง"></label>
-      </div>
-      <div class="admin-password-actions">
-        <button id="settingsChangePasswordBtn" type="button">🔐 บันทึกรหัสผ่านใหม่</button>
-        <span id="settingsPasswordStatus"></span>
-      </div>
-      <p class="admin-password-note">สำหรับบัญชี Admin เท่านั้น • รหัสผ่านใหม่ต้องมีอย่างน้อย 8 ตัวอักษร</p>
-    </div>
     <div class="v24-card v24-about">
-      <h3>ⓘ เกี่ยวกับโปรแกรม</h3><b>รับตารางเวร</b><p>ระบบจัดตารางเวรอัตโนมัติ พร้อม Workflow และ Cloud Sync</p><small>V28.2 • Home Clean • Auth V22.1</small>
+      <h3>ⓘ เกี่ยวกับโปรแกรม</h3><b>รับตารางเวร</b><p>ระบบจัดตารางเวรอัตโนมัติ พร้อม Workflow และ Cloud Sync</p><small>V24.6 • Home One Frame iPad Fit</small>
     </div>
   </div>
 </section>
@@ -5119,63 +4984,11 @@ function applyUnitPermissions(){
   document.querySelectorAll('#names input').forEach(function(n){n.disabled=!editConfig});
   document.querySelectorAll('#ruleList button,[data-edit-rule],[data-delete-rule]').forEach(function(n){n.disabled=!admin});
   if(el('newRuleText'))el('newRuleText').disabled=!admin;
-  if(el('adminPasswordCard'))el('adminPasswordCard').style.display=admin?'block':'none';
   if(el('holidayDate'))el('holidayDate').disabled=!editConfig;
   if(el('holidayName'))el('holidayName').disabled=!editConfig;
   if(el('customPerson'))el('customPerson').disabled=!editConfig;
   if(el('customRuleType'))el('customRuleType').disabled=!editConfig;
   if(el('customSlots'))el('customSlots').disabled=!editConfig;
-}
-
-
-async function changeAdminPassword(){
-  var status=el('settingsPasswordStatus');
-  var btn=el('settingsChangePasswordBtn');
-  function show(msg,ok){
-    if(!status)return;
-    status.textContent=msg||'';
-    status.classList.remove('ok','error');
-    if(msg)status.classList.add(ok?'ok':'error');
-  }
-  if(unitUser.role!=='admin'){show('เมนูนี้ใช้ได้เฉพาะ Admin',false);return}
-  var current=(el('settingsCurrentPassword')&&el('settingsCurrentPassword').value)||'';
-  var next=(el('settingsNewPassword')&&el('settingsNewPassword').value)||'';
-  var confirmPw=(el('settingsConfirmPassword')&&el('settingsConfirmPassword').value)||'';
-  if(!current||!next||!confirmPw){show('กรุณากรอกข้อมูลให้ครบทั้ง 3 ช่อง',false);return}
-  if(next.length<8){show('รหัสผ่านใหม่ต้องมีอย่างน้อย 8 ตัวอักษร',false);return}
-  if(next!==confirmPw){show('ยืนยันรหัสผ่านใหม่ไม่ตรงกัน',false);return}
-  if(current===next){show('รหัสผ่านใหม่ต้องไม่เหมือนรหัสผ่านปัจจุบัน',false);return}
-  try{
-    if(btn){btn.disabled=true;btn.textContent='กำลังบันทึก...'}
-    show('',true);
-    await authFetch('/api/auth/change-password',{
-      method:'POST',
-      body:JSON.stringify({
-        currentPassword:current,
-        newPassword:next,
-        confirmPassword:confirmPw
-      })
-    });
-    if(el('settingsCurrentPassword'))el('settingsCurrentPassword').value='';
-    if(el('settingsNewPassword'))el('settingsNewPassword').value='';
-    if(el('settingsConfirmPassword'))el('settingsConfirmPassword').value='';
-    show('เปลี่ยนรหัสผ่านเรียบร้อยแล้ว ✓',true);
-    setStatus('เปลี่ยนรหัสผ่านแอดมินเรียบร้อยแล้ว',true);
-  }catch(err){
-    var msg=String(err&&err.message||err||'');
-    var thai={
-      current_password_required:'กรุณากรอกรหัสผ่านปัจจุบัน',
-      invalid_current_password:'รหัสผ่านปัจจุบันไม่ถูกต้อง',
-      current_password_incorrect:'รหัสผ่านปัจจุบันไม่ถูกต้อง',
-      password_too_short:'รหัสผ่านใหม่ต้องมีอย่างน้อย 8 ตัวอักษร',
-      passwords_do_not_match:'ยืนยันรหัสผ่านใหม่ไม่ตรงกัน',
-      forbidden:'ใช้ได้เฉพาะบัญชี Admin',
-      unauthorized:'Session หมดอายุ กรุณาเข้าสู่ระบบใหม่'
-    };
-    show(thai[msg]||('เปลี่ยนรหัสผ่านไม่สำเร็จ: '+msg),false);
-  }finally{
-    if(btn){btn.disabled=false;btn.textContent='🔐 บันทึกรหัสผ่านใหม่'}
-  }
 }
 
 
@@ -5781,12 +5594,6 @@ function renderHistoryV24(){
   if(el('historyRecentV24'))el('historyRecentV24').innerHTML=last?'<div><span>เดือนล่าสุด</span><b>'+last+' '+year+'</b></div>':'<div>ยังไม่มีประวัติที่บันทึก</div>';
 }
 function renderSummaryV24(){
-  if(document.querySelector('#page-summary .s34-shell')){
-    if(window.SummaryV34&&typeof window.SummaryV34.render==='function'){
-      try{window.SummaryV34.render()}catch(e){}
-    }
-    return;
-  }
   try{
     var counts=currentCounts(),groups=[['เวร1–2','v'],['OT1–2','ot'],['SDMC เช้า','morning'],['SDMC บ่าย-ดึก','night'],['SDMC 5–6','long'],['SDMC 7–8','evening'],['EXTRA','extra']];
     var vals=groups.map(function(g){var info=groupAverageInfo(g[1]);return {label:g[0],value:Math.round(info.total||0)}});
@@ -5917,8 +5724,6 @@ if(el('historySearchV24'))el('historySearchV24').oninput=function(){var q=this.v
 if(el('historyStatusV24'))el('historyStatusV24').onchange=function(){var v=this.value;document.querySelectorAll('#historyMonthList .history-month-item').forEach(function(x){var t=x.textContent;x.style.display=(v==='all'||(v==='locked'&&t.indexOf('ล็อกแล้ว')>=0)||(v==='approved'&&t.indexOf('อนุมัติแล้ว')>=0)||(v==='submitted'&&t.indexOf('ส่งตรวจแล้ว')>=0)||(v==='draft'&&t.indexOf('บันทึกในระบบ')>=0))?'':'none'})};
 if(el('summaryMonthProxyV24')){el('summaryMonthProxyV24').innerHTML=MONTHS.map(function(x,i){return '<option value="'+i+'">'+x+'</option>'}).join('');el('summaryMonthProxyV24').value=String(cm());el('summaryMonthProxyV24').onchange=function(){el('monthSelect').value=this.value;renderSheet();renderSummary()}};
 if(el('summaryYearProxyV24')){el('summaryYearProxyV24').value=String(py());el('summaryYearProxyV24').onchange=function(){el('yearInput').value=this.value;renderSheet();renderSummary()}};
-if(el('settingsChangePasswordBtn'))el('settingsChangePasswordBtn').onclick=changeAdminPassword;
-if(el('settingsConfirmPassword'))el('settingsConfirmPassword').onkeydown=function(e){if(e.key==='Enter')changeAdminPassword()};
 if(el('settingsSaveUnitV24'))el('settingsSaveUnitV24').onclick=function(){if(unitUser.role!=='admin'){setStatus('แก้ข้อมูลหน่วยงานได้เฉพาะ Admin',false);return}state.unitInfo=normalizeUnitInfo(state.unitInfo);state.unitInfo.name=el('settingsUnitNameV24').value.trim();state.unitInfo.organization=el('settingsOrgV24').value.trim();state.unitInfo.head=el('settingsHeadV24').value.trim();state.unitInfo.scheduler=el('settingsSchedulerV24').value.trim();saveConfig();renderUnitInfo();setStatus('บันทึกข้อมูลหน่วยงานแล้ว',true)};
 if(el('settingsSaveTimeV24'))el('settingsSaveTimeV24').onclick=saveV24Settings;
 if(el('settingsSaveStyleV24'))el('settingsSaveStyleV24').onclick=saveV24Settings;
@@ -6109,122 +5914,6 @@ window.__ROSTER_HOLIDAYS_V32__={
   escape:esc
 };
 
-
-/* V33 history-page bridge: isolated history UI backed by the existing saved-month engine. */
-window.__ROSTER_HISTORY_V33__={
-  months:MONTHS.slice(),
-  getCurrent:function(){return {year:py(),month:cm(),key:currentKey()}},
-  getUnit:function(){return {name:(state.unitInfo&&state.unitInfo.name)||'หน่วยงานหลัก',scheduler:(state.unitInfo&&state.unitInfo.scheduler)||unitUser.name||'ผู้จัดตารางเวร'}},
-  getUser:function(){return {name:unitUser.name||'',role:unitUser.role||''}},
-  getMonth:function(yThai,m){return savedMonth(historyKeyFromThaiYear(yThai,m))},
-  getYearRecords:function(yThai){var a=[];for(var m=0;m<12;m++){var d=savedMonth(historyKeyFromThaiYear(yThai,m));if(d)a.push({month:m,data:d})}return a},
-  getAvailableYears:function(){var set={};for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i)||'';var mm=k.match(/^roster_month_v7_(\\d{4})-(\\d{2})$/);if(mm)set[parseInt(mm[1],10)+543]=1}set[py()]=1;return Object.keys(set).map(Number).sort(function(a,b){return b-a})},
-  openMonth:function(yThai,m,type){openSystemHistoryMonth(yThai,m,type||'roster')},
-  saveCurrent:function(){saveMonth(false)},
-  statusLabel:function(d){if(d&&d.workflow&&d.workflow.locked)return 'ล็อกแล้ว';var s=d&&d.workflow&&d.workflow.status||'draft';return {approved:'อนุมัติแล้ว',submitted:'ส่งตรวจแล้ว',draft:'ร่างตาราง'}[s]||s},
-  formatTime:formatUnitTime,
-  escape:esc
-};
-
-/* V34.1 summary-page bridge: expose summary data safely from the main app IIFE. */
-function summaryV341Snapshot(){
-  var counts=currentCounts();
-  var report=rule21Report();
-  var groups=['v','ot','morning','night','long','evening','extra'].map(function(kind){
-    var info=groupAverageInfo(kind);
-    return {
-      kind:kind,
-      label:info.label,
-      total:Math.round(info.total||0),
-      avg:Number(info.avg||0)
-    };
-  });
-  var people=(state.people||[]).map(function(p){
-    var g=counts.group||{};
-    return {
-      id:p.id,
-      name:p.name||'-',
-      total:counts.total[p.id]||0,
-      ot:(g.ot&&g.ot[p.id])||0,
-      v:(g.v&&g.v[p.id])||0,
-      sdmc:
-        ((g.morning&&g.morning[p.id])||0)+
-        ((g.night&&g.night[p.id])||0)+
-        ((g.long&&g.long[p.id])||0)+
-        ((g.evening&&g.evening[p.id])||0),
-      extra:(g.extra&&g.extra[p.id])||0
-    };
-  });
-  var prev=savedMonth(prevKey());
-  return {
-    month:cm(),
-    yearThai:py(),
-    key:currentKey(),
-    months:MONTHS.slice(),
-    people:people,
-    peopleCount:(state.people||[]).length,
-    assignmentTotal:assignmentsCount(),
-    holidayCount:Object.keys(state.holidays||{}).filter(function(k){return k.indexOf(currentKey()+'-')===0}).length,
-    groups:groups,
-    report:{
-      ok:!!report.ok,
-      groupProblems:(report.groupProblems||[]).slice(),
-      totalBad:(report.totalBad||[]).slice(),
-      extraOnlyBad:(report.extraOnlyBad||[]).slice()
-    },
-    previous:prev?{
-      key:prev.key||prevKey(),
-      assignments:prev.assignments||{},
-      peopleSnapshot:prev.peopleSnapshot||[]
-    }:null
-  };
-}
-window.__ROSTER_SUMMARY_V34__={
-  months:MONTHS.slice(),
-  getSnapshot:function(){return summaryV341Snapshot()},
-  setPeriod:async function(month,yearThai){
-    var m=parseInt(month,10), y=parseInt(yearThai,10);
-    if(Number.isFinite(m)&&el('month'))el('month').value=String(m);
-    if(Number.isFinite(y)&&el('year'))el('year').value=String(y);
-    if(cloud.connected){
-      try{await ensureCloudMonths([prevKey(),currentKey()])}catch(e){}
-    }
-    loadMonth(true);
-    try{renderSummary()}catch(e){}
-    try{renderSummaryV24()}catch(e){}
-    return summaryV341Snapshot();
-  },
-  refresh:function(){
-    try{renderSummary()}catch(e){}
-    try{renderSummaryV24()}catch(e){}
-    return summaryV341Snapshot();
-  },
-  getLegacySummaryHtml:function(){
-    try{renderSummary()}catch(e){}
-    return el('summary')?el('summary').innerHTML:'';
-  },
-  getPreviousKey:function(){return prevKey()},
-  savePdf:function(){return saveSummaryPDF()},
-  printReport:function(){return printSummary()},
-  openSavedPdf:function(){return openSummaryPdf()},
-  refreshLegacy:function(){
-    try{renderSummary()}catch(e){}
-    return el('summary')?el('summary').innerHTML:'';
-  },
-  openHolidays:function(){
-    try{showPage('holidays',true)}catch(e){
-      try{location.hash='#holidays'}catch(ignore){}
-    }
-    try{renderHolidays()}catch(e){}
-    try{renderHolidayV24()}catch(e){}
-  },
-  openSummaryPage:function(){
-    try{showPage('summary',true)}catch(e){
-      try{location.hash='#summary'}catch(ignore){}
-    }
-  }
-};
-
 window.addEventListener('error',function(e){setStatus('JavaScript error: '+e.message,false)});
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 
@@ -6252,12 +5941,10 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   window.addEventListener('pageshow',wirePersonSaveV304);
 })();
 </script>
-<script src="holidays-v32.js?v=32.5"></script>
-<script src="history-v33.js?v=33.8"></script>
+<script src="holidays-v32.js?v=32.0"></script>
 <script src="rules-v31.js?v=31.1"></script>
 <script src="roster-v29.js?v=29.3"></script>
 <script src="login-fix-v26-1.js?v=30.0"></script>
-<script src="home-v26.js?v=28.3"></script>
-
-<script src="summary-v34.js?v=34.8"></script></body>
+<script src="home-v26.js?v=28.4"></script>
+</body>
 </html>
