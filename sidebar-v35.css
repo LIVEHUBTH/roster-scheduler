@@ -9,13 +9,18 @@
   min-width:220px!important;
   padding:10px 12px 12px!important;
 
-  background:#fff!important;
+  background:
+    linear-gradient(180deg,#fff7fa 0%,#ffe5f0 52%,#fff6fb 100%)!important;
   border:0!important;
-  border-right:1px solid #f0ecef!important;
+  border-right:1px solid #f3cfdd!important;
   border-radius:0!important;
 
-  box-shadow:4px 0 14px rgba(85,62,76,.055)!important;
+  box-shadow:4px 0 14px rgba(235,94,145,.07)!important;
   overflow:hidden!important;
+
+  display:flex!important;
+  flex-direction:column!important;
+  min-height:100dvh!important;
 }
 
 #appSidebar::before{
@@ -29,9 +34,9 @@
 
 /* ---------- Logo: no pink/white card behind it ---------- */
 #appSidebar .brand.v24-brand{
-  height:142px!important;
-  min-height:142px!important;
-  margin:0 0 7px!important;
+  height:158px!important;
+  min-height:158px!important;
+  margin:0!important;
   padding:0!important;
 
   display:flex!important;
@@ -47,9 +52,9 @@
 
 #appSidebar .sidebar-brand-image{
   content:url("sidebar-logo-transparent.png")!important;
-  width:160px!important;
-  max-width:160px!important;
-  height:128px!important;
+  width:182px!important;
+  max-width:182px!important;
+  height:148px!important;
   object-fit:contain!important;
   object-position:center!important;
 
@@ -68,7 +73,9 @@
   flex-direction:column!important;
   gap:7px!important;
   margin:0!important;
-  padding:0 0 148px!important;
+  padding:8px 0!important;
+  flex:1 1 auto!important;
+  justify-content:center!important;
 }
 
 #appSidebar .sidebar-v35 a[data-page]{
@@ -198,13 +205,15 @@
 
 /* ---------- Mascot: no pale-pink card / frame ---------- */
 #appSidebar .v24-sidebar-mascot{
-  position:absolute!important;
-  left:9px!important;
-  right:9px!important;
-  bottom:7px!important;
+  position:relative!important;
+  left:auto!important;
+  right:auto!important;
+  bottom:auto!important;
 
-  height:132px!important;
-  min-height:132px!important;
+  width:100%!important;
+  height:154px!important;
+  min-height:154px!important;
+  flex:0 0 154px!important;
 
   margin:0!important;
   padding:0!important;
@@ -236,20 +245,22 @@
   }
 
   #appSidebar .brand.v24-brand{
-    height:118px!important;
-    min-height:118px!important;
-    margin-bottom:5px!important;
+    height:132px!important;
+    min-height:132px!important;
+    margin:0!important;
   }
 
   #appSidebar .sidebar-brand-image{
-    width:138px!important;
-    max-width:138px!important;
-    height:108px!important;
+    width:158px!important;
+    max-width:158px!important;
+    height:124px!important;
   }
 
   #appSidebar .sidebar-v35{
     gap:5px!important;
-    padding-bottom:116px!important;
+    padding:6px 0!important;
+    flex:1 1 auto!important;
+    justify-content:center!important;
   }
 
   #appSidebar .sidebar-v35 a[data-page]{
@@ -277,11 +288,13 @@
   }
 
   #appSidebar .v24-sidebar-mascot{
-    left:6px!important;
-    right:6px!important;
-    bottom:3px!important;
-    height:104px!important;
-    min-height:104px!important;
+    left:auto!important;
+    right:auto!important;
+    bottom:auto!important;
+    width:100%!important;
+    height:126px!important;
+    min-height:126px!important;
+    flex:0 0 126px!important;
   }
 }
 
