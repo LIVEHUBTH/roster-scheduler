@@ -1,5 +1,5 @@
 /* =========================================================
-   ROSTER SCHEDULER — HOME V28.4 Balanced Reference (filename kept for drop-in replacement)
+   ROSTER SCHEDULER — HOME V28.6 Fuller Frame (filename kept for drop-in replacement)
    Rebuilds only Home, preserves existing app pages/functions
    ========================================================= */
 (function(){
@@ -237,11 +237,10 @@
             <div class="h26-tip"><span class="h26-check">✓</span><span>สื่อสารและประกาศตารางล่วงหน้าอย่างน้อย 7 วัน</span></div>
             <div class="h26-tip"><span class="h26-check">✓</span><span>ทบทวนและปรับปรุงกฎอย่างสม่ำเสมอ</span></div>
           </div>
-          <div class="h26-watermark">Supaporn ✧ MALAWAS</div>
         </div>
       </section>
 
-      <div class="h26-version">V28.4 • Home Balanced Reference</div>
+      <div class="h26-version">V28.6 • Home Fuller Frame</div>
     </div>`;
 
     /* Put the shared app status node back after rebuilding Home. */

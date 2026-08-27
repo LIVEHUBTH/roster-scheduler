@@ -1,5 +1,25 @@
+/* ===== V28.6 HOME FULLER FRAME / REMOVE EXTRA EMPTY SPACE ===== */
+#page-home{
+  width:100% !important;
+  max-width:none !important;
+  margin:0 !important;
+  padding:0 !important;
+}
+
+#page-home .h26{
+  width:100% !important;
+  max-width:none !important;
+  margin:0 !important;
+  padding:4px 6px 8px !important;
+  gap:10px !important;
+}
+
+#page-home .h26-watermark{
+  display:none !important;
+}
+
 /* =========================================================
-   HOME V28.4 — Balanced proportions, based on reference layout
+   HOME V28.6 — Fuller frame, reduced empty margins
    Affects Home only (#page-home)
    ========================================================= */
 
@@ -91,8 +111,8 @@
 @media (min-width: 1024px) and (max-width: 1366px){
   #page-home .h26{
     min-height:calc(100dvh - 84px);
-    padding:10px 12px 12px;
-    gap:10px;
+    padding:2px 4px 8px !important;
+    gap:8px !important;
     grid-template-rows:auto auto auto auto;
   }
   #page-home .h26-hero{
