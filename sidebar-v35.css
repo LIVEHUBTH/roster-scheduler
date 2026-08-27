@@ -695,3 +695,101 @@
     position:relative!important;
   }
 }
+
+
+/* =========================================================
+   SIDEBAR V35.7 — HARD FIX + SHARP ASSETS
+   ========================================================= */
+@media (min-width:821px){
+  #appSidebar.sidebar{
+    position:fixed!important;
+    top:0!important;
+    left:0!important;
+    bottom:0!important;
+    height:100vh!important;
+    max-height:100vh!important;
+    overflow:hidden!important;
+    overscroll-behavior:none!important;
+    touch-action:pan-y!important;
+    transform:translateZ(0)!important;
+    will-change:auto!important;
+  }
+
+  #appSidebar .brand.v24-brand,
+  #appSidebar .sidebar-v35,
+  #appSidebar .v24-sidebar-mascot{
+    flex-shrink:0!important;
+  }
+
+  #appSidebar .sidebar-v35{
+    overflow:hidden!important;
+  }
+
+  #appSidebar .sidebar-brand-image{
+    image-rendering:auto!important;
+    filter:none!important;
+    opacity:1!important;
+  }
+
+  #appSidebar .v24-sidebar-mascot{
+    filter:none!important;
+    opacity:1!important;
+  }
+
+  /* keep content scrolling independently from sidebar */
+  html,body{
+    overflow-x:hidden!important;
+  }
+}
+
+/* iPad: lock sidebar dimensions so it does not jiggle while scrolling */
+@media (min-width:821px) and (max-width:1180px){
+  #appSidebar.sidebar{
+    width:190px!important;
+    min-width:190px!important;
+    max-width:190px!important;
+  }
+}
+
+
+/* =========================================================
+   SIDEBAR V35.8 — WHITE RABBIT / WHITE CALENDAR ASSETS
+   ========================================================= */
+@media (min-width:821px){
+  #appSidebar .sidebar-brand-image{
+    content:url("sidebar-logo-transparent.png")!important;
+    opacity:1!important;
+    mix-blend-mode:normal!important;
+    filter:none!important;
+  }
+
+  #appSidebar .v24-sidebar-mascot{
+    background-image:url("sidebar-mascot-transparent.png")!important;
+    opacity:1!important;
+    mix-blend-mode:normal!important;
+    filter:none!important;
+  }
+}
+
+/* V35.9 HARD LOCK: sidebar and buttons cannot scroll independently */
+@media (min-width:821px){
+ #appSidebar.sidebar{
+   position:fixed!important; top:0!important; left:0!important; bottom:0!important;
+   height:100dvh!important; overflow:hidden!important; overscroll-behavior:none!important;
+   touch-action:none!important; z-index:999!important;
+ }
+ #appSidebar .sidebar-v35{
+   overflow:hidden!important; overscroll-behavior:none!important; touch-action:none!important;
+   scrollbar-width:none!important;
+ }
+ #appSidebar .sidebar-v35::-webkit-scrollbar{display:none!important}
+ #appSidebar .sidebar-v35 a[data-page]{flex-shrink:0!important; transform:none!important}
+ #appSidebar .sidebar-brand-image{
+   content:url("sidebar-logo-transparent.png")!important;
+   image-rendering:auto!important; opacity:1!important; filter:none!important;
+ }
+ #appSidebar .v24-sidebar-mascot{
+   background-image:url("sidebar-mascot-transparent.png")!important;
+   image-rendering:auto!important; opacity:1!important; filter:none!important;
+ }
+}
