@@ -793,3 +793,99 @@
    image-rendering:auto!important; opacity:1!important; filter:none!important;
  }
 }
+
+/* =========================================================
+   SIDEBAR V36.0 — TRUE VIEWPORT LOCK + BALANCED ART
+   1) Sidebar never moves with page scroll on iPad/Desktop.
+   2) Main content becomes the only vertical scroll container.
+   3) Logo + bunny/calendar are enlarged to balance the sidebar.
+   ========================================================= */
+@media (min-width:821px){
+  html,
+  body{
+    width:100%!important;
+    height:100%!important;
+    max-height:100%!important;
+    overflow:hidden!important;
+    overscroll-behavior:none!important;
+  }
+
+  body > .app-shell,
+  .app-shell{
+    position:relative!important;
+    width:100%!important;
+    height:100vh!important;
+    height:100dvh!important;
+    min-height:0!important;
+    overflow:hidden!important;
+  }
+
+  #appSidebar.sidebar{
+    position:absolute!important;
+    inset:0 auto 0 0!important;
+    height:100%!important;
+    min-height:0!important;
+    max-height:none!important;
+    overflow:hidden!important;
+    overscroll-behavior:none!important;
+    touch-action:none!important;
+    -webkit-overflow-scrolling:auto!important;
+    transform:none!important;
+    z-index:9999!important;
+  }
+
+  .main-shell,
+  body > .main-shell{
+    height:100vh!important;
+    height:100dvh!important;
+    min-height:0!important;
+    overflow-x:hidden!important;
+    overflow-y:auto!important;
+    overscroll-behavior-y:contain!important;
+    -webkit-overflow-scrolling:touch!important;
+  }
+
+  #appSidebar .brand.v24-brand{
+    flex:0 0 176px!important;
+    height:176px!important;
+    min-height:176px!important;
+  }
+
+  #appSidebar .sidebar-brand-image{
+    width:194px!important;
+    max-width:194px!important;
+    height:166px!important;
+    object-fit:contain!important;
+    object-position:center!important;
+  }
+
+  #appSidebar .v24-sidebar-mascot{
+    flex:0 0 176px!important;
+    height:176px!important;
+    min-height:176px!important;
+    background-position:center bottom!important;
+    background-size:184px auto!important;
+  }
+}
+
+/* iPad landscape — larger artwork without squeezing the 9 menu buttons */
+@media (min-width:821px) and (max-width:1180px){
+  #appSidebar .brand.v24-brand{
+    flex:0 0 156px!important;
+    height:156px!important;
+    min-height:156px!important;
+  }
+
+  #appSidebar .sidebar-brand-image{
+    width:172px!important;
+    max-width:172px!important;
+    height:150px!important;
+  }
+
+  #appSidebar .v24-sidebar-mascot{
+    flex:0 0 156px!important;
+    height:156px!important;
+    min-height:156px!important;
+    background-size:166px auto!important;
+  }
+}
