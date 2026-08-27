@@ -889,3 +889,133 @@
     background-size:166px auto!important;
   }
 }
+
+/* =========================================================
+   SIDEBAR V36.1 — KEEP BUNNY FULLY VISIBLE
+   Fix: mascot was pushed below the visible iPad viewport.
+   Sidebar is divided into 3 fixed layout zones so the bunny
+   always stays inside the viewport while the bar remains locked.
+   ========================================================= */
+@media (min-width:821px){
+  #appSidebar.sidebar{
+    display:grid!important;
+    grid-template-rows:168px minmax(0,1fr) 160px!important;
+    align-items:stretch!important;
+    height:100vh!important;
+    height:100dvh!important;
+    max-height:100dvh!important;
+    min-height:0!important;
+    padding:10px 12px 10px!important;
+    overflow:hidden!important;
+  }
+
+  #appSidebar .brand.v24-brand{
+    grid-row:1!important;
+    width:100%!important;
+    height:168px!important;
+    min-height:0!important;
+    max-height:168px!important;
+    margin:0!important;
+    padding:0!important;
+    align-self:stretch!important;
+  }
+
+  #appSidebar .sidebar-brand-image{
+    width:min(194px,100%)!important;
+    max-width:194px!important;
+    height:158px!important;
+    object-fit:contain!important;
+    object-position:center center!important;
+  }
+
+  #appSidebar .sidebar-v35{
+    grid-row:2!important;
+    min-height:0!important;
+    height:100%!important;
+    margin:0!important;
+    padding:6px 0!important;
+    display:flex!important;
+    flex-direction:column!important;
+    justify-content:center!important;
+    gap:6px!important;
+    overflow:hidden!important;
+    touch-action:none!important;
+  }
+
+  #appSidebar .sidebar-v35 a[data-page]{
+    flex:1 1 0!important;
+    min-height:36px!important;
+    max-height:46px!important;
+    height:auto!important;
+    transform:none!important;
+  }
+
+  #appSidebar .v24-sidebar-mascot{
+    grid-row:3!important;
+    position:relative!important;
+    inset:auto!important;
+    width:100%!important;
+    height:160px!important;
+    min-height:0!important;
+    max-height:160px!important;
+    margin:0!important;
+    padding:0!important;
+    align-self:end!important;
+    background-image:url("sidebar-mascot-transparent.png")!important;
+    background-repeat:no-repeat!important;
+    background-position:center bottom!important;
+    background-size:190px auto!important;
+    overflow:visible!important;
+    opacity:1!important;
+  }
+}
+
+/* iPad landscape / shorter browser viewport */
+@media (min-width:821px) and (max-height:900px){
+  #appSidebar.sidebar{
+    grid-template-rows:148px minmax(0,1fr) 146px!important;
+    padding-top:8px!important;
+    padding-bottom:8px!important;
+  }
+  #appSidebar .brand.v24-brand{
+    height:148px!important;
+    max-height:148px!important;
+  }
+  #appSidebar .sidebar-brand-image{
+    width:min(178px,100%)!important;
+    height:142px!important;
+  }
+  #appSidebar .sidebar-v35{
+    gap:5px!important;
+    padding:5px 0!important;
+  }
+  #appSidebar .sidebar-v35 a[data-page]{
+    min-height:34px!important;
+    max-height:43px!important;
+  }
+  #appSidebar .v24-sidebar-mascot{
+    height:146px!important;
+    max-height:146px!important;
+    background-size:176px auto!important;
+  }
+}
+
+/* iPad width: keep artwork balanced but never clip the mascot */
+@media (min-width:821px) and (max-width:1180px){
+  #appSidebar.sidebar{
+    grid-template-rows:146px minmax(0,1fr) 142px!important;
+  }
+  #appSidebar .brand.v24-brand{
+    height:146px!important;
+    max-height:146px!important;
+  }
+  #appSidebar .sidebar-brand-image{
+    width:min(166px,100%)!important;
+    height:138px!important;
+  }
+  #appSidebar .v24-sidebar-mascot{
+    height:142px!important;
+    max-height:142px!important;
+    background-size:164px auto!important;
+  }
+}
