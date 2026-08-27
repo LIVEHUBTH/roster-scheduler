@@ -304,3 +304,154 @@
     border-radius:0!important;
   }
 }
+
+
+/* =========================================================
+   SIDEBAR V35.5 — FINAL OVERRIDE
+   - iPad/Desktop sidebar fixed in place
+   - solid hero-pink sidebar background
+   - larger transparent logo + mascot
+   - active page gets a slightly darker matching edge
+   ========================================================= */
+
+/* Desktop + iPad only */
+@media (min-width:821px){
+  #appSidebar.sidebar{
+    position:fixed!important;
+    left:0!important;
+    top:0!important;
+    bottom:0!important;
+    height:100dvh!important;
+    min-height:100dvh!important;
+    z-index:60!important;
+
+    /* same pink family as the hero right side */
+    background:#ffeaf3!important;
+    border-right:1px solid #f2cfdd!important;
+    box-shadow:4px 0 14px rgba(224,92,139,.06)!important;
+
+    display:flex!important;
+    flex-direction:column!important;
+    overflow:hidden!important;
+  }
+
+  #appSidebar .brand.v24-brand{
+    flex:0 0 184px!important;
+    height:184px!important;
+    min-height:184px!important;
+    padding:0!important;
+    margin:0!important;
+    background:transparent!important;
+    border:0!important;
+    box-shadow:none!important;
+    overflow:visible!important;
+  }
+
+  #appSidebar .sidebar-brand-image{
+    content:url("sidebar-logo-transparent.png")!important;
+    width:202px!important;
+    max-width:none!important;
+    height:172px!important;
+    object-fit:contain!important;
+    margin:auto!important;
+    padding:0!important;
+    background:transparent!important;
+    border:0!important;
+    border-radius:0!important;
+    box-shadow:none!important;
+  }
+
+  #appSidebar .sidebar-v35{
+    flex:1 1 auto!important;
+    min-height:0!important;
+    display:flex!important;
+    flex-direction:column!important;
+    justify-content:center!important;
+    gap:7px!important;
+    padding:6px 0!important;
+    margin:0!important;
+  }
+
+  #appSidebar .v24-sidebar-mascot{
+    position:relative!important;
+    left:auto!important;
+    right:auto!important;
+    top:auto!important;
+    bottom:auto!important;
+    flex:0 0 178px!important;
+    width:100%!important;
+    height:178px!important;
+    min-height:178px!important;
+    margin:0!important;
+    padding:0!important;
+
+    background:
+      url("sidebar-mascot-transparent.png")
+      center center / 196px auto no-repeat!important;
+
+    border:0!important;
+    border-radius:0!important;
+    box-shadow:none!important;
+    overflow:visible!important;
+  }
+
+  #appSidebar .v24-sidebar-mascot > *{
+    display:none!important;
+  }
+}
+
+/* Active-page edge: same hue as each button, just slightly darker */
+#appSidebar .sidebar-v35 a[data-page="home"]     { --nav-active-border:#ef9fbd; }
+#appSidebar .sidebar-v35 a[data-page="roster"]   { --nav-active-border:#8fd8c5; }
+#appSidebar .sidebar-v35 a[data-page="people"]   { --nav-active-border:#b7a9e8; }
+#appSidebar .sidebar-v35 a[data-page="rules"]    { --nav-active-border:#eda7b0; }
+#appSidebar .sidebar-v35 a[data-page="holidays"] { --nav-active-border:#e8cf7b; }
+#appSidebar .sidebar-v35 a[data-page="history"]  { --nav-active-border:#9dd0ec; }
+#appSidebar .sidebar-v35 a[data-page="summary"]  { --nav-active-border:#e8b685; }
+#appSidebar .sidebar-v35 a[data-page="internal"] { --nav-active-border:#e3a6bf; }
+#appSidebar .sidebar-v35 a[data-page="settings"] { --nav-active-border:#91d5c1; }
+
+#appSidebar .sidebar-v35 a[data-page].active{
+  border:2px solid var(--nav-active-border)!important;
+  transform:none!important;
+  box-shadow:
+    0 4px 10px rgba(72,50,65,.08),
+    inset 0 1px 0 rgba(255,255,255,.75)!important;
+}
+
+/* iPad landscape: keep sidebar fixed and make art visibly larger */
+@media (min-width:821px) and (max-width:1180px){
+  #appSidebar.sidebar{
+    width:190px!important;
+    min-width:190px!important;
+    padding:5px 9px!important;
+  }
+
+  .main-shell{
+    margin-left:190px!important;
+    width:calc(100% - 190px)!important;
+  }
+
+  #appSidebar .brand.v24-brand{
+    flex-basis:150px!important;
+    height:150px!important;
+    min-height:150px!important;
+  }
+
+  #appSidebar .sidebar-brand-image{
+    width:176px!important;
+    height:142px!important;
+  }
+
+  #appSidebar .sidebar-v35{
+    gap:5px!important;
+    padding:4px 0!important;
+  }
+
+  #appSidebar .v24-sidebar-mascot{
+    flex-basis:146px!important;
+    height:146px!important;
+    min-height:146px!important;
+    background-size:168px auto!important;
+  }
+}
