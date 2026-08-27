@@ -1019,3 +1019,108 @@
     background-size:164px auto!important;
   }
 }
+
+/* =========================================================
+   V36.2 BALANCE TUNE
+   - slightly larger logo + bunny/calendar
+   - a little more breathing room between nav buttons
+   - use the middle zone more evenly so artwork and buttons
+     feel visually connected without large empty gaps
+   ========================================================= */
+@media (min-width:821px){
+  #appSidebar.sidebar{
+    grid-template-rows:174px minmax(0,1fr) 168px!important;
+    padding:8px 12px 8px!important;
+  }
+
+  #appSidebar .brand.v24-brand{
+    height:174px!important;
+    max-height:174px!important;
+  }
+
+  #appSidebar .sidebar-brand-image{
+    width:min(202px,100%)!important;
+    max-width:202px!important;
+    height:166px!important;
+  }
+
+  #appSidebar .sidebar-v35{
+    padding:4px 0!important;
+    gap:8px!important;
+    justify-content:space-between!important;
+  }
+
+  #appSidebar .sidebar-v35 a[data-page]{
+    flex:1 1 0!important;
+    min-height:37px!important;
+    max-height:47px!important;
+  }
+
+  #appSidebar .v24-sidebar-mascot{
+    height:168px!important;
+    max-height:168px!important;
+    background-size:198px auto!important;
+    background-position:center bottom!important;
+  }
+}
+
+/* iPad landscape / shorter browser viewport */
+@media (min-width:821px) and (max-height:900px){
+  #appSidebar.sidebar{
+    grid-template-rows:154px minmax(0,1fr) 152px!important;
+    padding-top:7px!important;
+    padding-bottom:7px!important;
+  }
+  #appSidebar .brand.v24-brand{
+    height:154px!important;
+    max-height:154px!important;
+  }
+  #appSidebar .sidebar-brand-image{
+    width:min(186px,100%)!important;
+    max-width:186px!important;
+    height:148px!important;
+  }
+  #appSidebar .sidebar-v35{
+    gap:7px!important;
+    padding:3px 0!important;
+    justify-content:space-between!important;
+  }
+  #appSidebar .sidebar-v35 a[data-page]{
+    min-height:35px!important;
+    max-height:44px!important;
+  }
+  #appSidebar .v24-sidebar-mascot{
+    height:152px!important;
+    max-height:152px!important;
+    background-size:184px auto!important;
+  }
+}
+
+/* iPad width */
+@media (min-width:821px) and (max-width:1180px){
+  #appSidebar.sidebar{
+    grid-template-rows:152px minmax(0,1fr) 150px!important;
+  }
+  #appSidebar .brand.v24-brand{
+    height:152px!important;
+    max-height:152px!important;
+  }
+  #appSidebar .sidebar-brand-image{
+    width:min(180px,100%)!important;
+    max-width:180px!important;
+    height:146px!important;
+  }
+  #appSidebar .sidebar-v35{
+    gap:7px!important;
+    padding:3px 0!important;
+  }
+  #appSidebar .sidebar-v35 a[data-page]{
+    min-height:35px!important;
+    max-height:44px!important;
+  }
+  #appSidebar .v24-sidebar-mascot{
+    height:150px!important;
+    max-height:150px!important;
+    background-size:180px auto!important;
+  }
+}
