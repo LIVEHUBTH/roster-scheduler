@@ -1124,3 +1124,131 @@
     background-size:180px auto!important;
   }
 }
+
+/* =========================================================
+   V36.3 — FULL 9-BUTTON FIT + LARGER LOGO
+   - show all 9 navigation buttons completely
+   - equal spacing between every button
+   - keep bunny anchored at the bottom
+   - enlarge the top logo without pushing menu/mascot out
+   - sidebar remains viewport-locked
+   ========================================================= */
+@media (min-width:821px){
+  #appSidebar.sidebar{
+    grid-template-rows:182px minmax(0,1fr) 162px!important;
+    padding:8px 12px 8px!important;
+  }
+
+  #appSidebar .brand.v24-brand{
+    height:182px!important;
+    max-height:182px!important;
+    min-height:0!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+  }
+
+  #appSidebar .sidebar-brand-image{
+    width:min(216px,100%)!important;
+    max-width:216px!important;
+    height:176px!important;
+    object-fit:contain!important;
+    object-position:center center!important;
+  }
+
+  #appSidebar .sidebar-v35{
+    height:100%!important;
+    min-height:0!important;
+    padding:4px 0!important;
+    gap:7px!important;
+    justify-content:space-between!important;
+    overflow:hidden!important;
+  }
+
+  #appSidebar .sidebar-v35 a[data-page]{
+    flex:1 1 0!important;
+    min-height:34px!important;
+    max-height:46px!important;
+    margin:0!important;
+  }
+
+  #appSidebar .v24-sidebar-mascot{
+    height:162px!important;
+    max-height:162px!important;
+    min-height:0!important;
+    background-size:194px auto!important;
+    background-position:center bottom!important;
+    align-self:end!important;
+  }
+}
+
+/* iPad landscape / Safari short viewport */
+@media (min-width:821px) and (max-height:900px){
+  #appSidebar.sidebar{
+    grid-template-rows:160px minmax(0,1fr) 146px!important;
+    padding:7px 12px 7px!important;
+  }
+
+  #appSidebar .brand.v24-brand{
+    height:160px!important;
+    max-height:160px!important;
+  }
+
+  #appSidebar .sidebar-brand-image{
+    width:min(198px,100%)!important;
+    max-width:198px!important;
+    height:154px!important;
+  }
+
+  #appSidebar .sidebar-v35{
+    padding:3px 0!important;
+    gap:6px!important;
+    justify-content:space-between!important;
+  }
+
+  #appSidebar .sidebar-v35 a[data-page]{
+    min-height:32px!important;
+    max-height:42px!important;
+  }
+
+  #appSidebar .v24-sidebar-mascot{
+    height:146px!important;
+    max-height:146px!important;
+    background-size:182px auto!important;
+  }
+}
+
+/* iPad widths: preserve larger logo while guaranteeing all 9 buttons */
+@media (min-width:821px) and (max-width:1180px){
+  #appSidebar.sidebar{
+    grid-template-rows:160px minmax(0,1fr) 144px!important;
+  }
+
+  #appSidebar .brand.v24-brand{
+    height:160px!important;
+    max-height:160px!important;
+  }
+
+  #appSidebar .sidebar-brand-image{
+    width:min(198px,100%)!important;
+    max-width:198px!important;
+    height:154px!important;
+  }
+
+  #appSidebar .sidebar-v35{
+    padding:3px 0!important;
+    gap:6px!important;
+    justify-content:space-between!important;
+  }
+
+  #appSidebar .sidebar-v35 a[data-page]{
+    min-height:32px!important;
+    max-height:42px!important;
+  }
+
+  #appSidebar .v24-sidebar-mascot{
+    height:144px!important;
+    max-height:144px!important;
+    background-size:180px auto!important;
+  }
+}
