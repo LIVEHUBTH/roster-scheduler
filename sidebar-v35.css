@@ -1516,3 +1516,39 @@ html.phone-device #appSidebar .v24-sidebar-mascot{
     clip-path:inset(0)!important;
   }
 }
+
+
+/* =========================================================
+   SIDEBAR V35.5.14.3 — iPad/Desktop MASCOT HARD LOCK ONLY
+   แก้เฉพาะตำแหน่งกระต่ายบน iPad/Desktop:
+   - ฟิกกระต่ายให้อยู่ตำแหน่งเดิมด้านล่างของ Sidebar
+   - ไม่ให้เด้ง/เลื่อนตามเนื้อหาหรือ viewport
+   - ไม่แตะโทรศัพท์
+   - ไม่เปลี่ยนปุ่ม โลโก้ สี ขนาดเมนู ระบบ หรือหน้าอื่น
+   ========================================================= */
+@media screen and (min-width:768px){
+  #appSidebar .v24-sidebar-mascot{
+    position:absolute!important;
+    left:6px!important;
+    right:6px!important;
+    bottom:8px!important;
+    top:auto!important;
+
+    width:auto!important;
+    height:112px!important;
+    min-height:112px!important;
+    max-height:112px!important;
+
+    margin:0!important;
+    transform:none!important;
+    flex:none!important;
+
+    background-size:contain!important;
+    background-position:center bottom!important;
+    background-repeat:no-repeat!important;
+
+    overflow:visible!important;
+    z-index:5!important;
+    pointer-events:none!important;
+  }
+}
