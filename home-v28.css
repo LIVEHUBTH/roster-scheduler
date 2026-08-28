@@ -200,3 +200,376 @@
   #page-home .h26-bottom > .h26-card:nth-child(2){grid-column:1/-1;order:-1}
   #page-home .h26-shortcuts{grid-template-columns:repeat(4,1fr)}
 }
+
+
+/* =========================================================
+   HOME V28.7 — PHONE RESPONSIVE ONLY
+   แก้เฉพาะ #page-home บนโทรศัพท์ <= 640px
+   ไม่แตะ Sidebar / ระบบ / หน้าอื่น / iPad / Desktop
+   ========================================================= */
+@media screen and (max-width:640px){
+
+  /* Home page must never keep desktop width on phone */
+  #page-home{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    margin:0!important;
+    padding:0!important;
+    overflow-x:hidden!important;
+  }
+
+  #page-home .h26{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    margin:0!important;
+    padding:8px 10px 16px!important;
+    gap:10px!important;
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr)!important;
+  }
+
+  #page-home .h26 > *{
+    min-width:0!important;
+    max-width:100%!important;
+  }
+
+  /* HERO — stack text and artwork, readable on phone */
+  #page-home .h26-hero{
+    min-height:0!important;
+    grid-template-columns:1fr!important;
+    gap:8px!important;
+    padding:18px 16px 14px!important;
+    border-radius:20px!important;
+    overflow:hidden!important;
+  }
+
+  #page-home .h26-hero > *{
+    min-width:0!important;
+  }
+
+  #page-home .h26-eyebrow{
+    font-size:17px!important;
+    line-height:1.15!important;
+  }
+
+  #page-home .h26-title{
+    font-size:clamp(28px,9vw,38px)!important;
+    line-height:1.02!important;
+    margin:3px 0 7px!important;
+    overflow-wrap:anywhere!important;
+  }
+
+  #page-home .h26-sub{
+    font-size:12px!important;
+    line-height:1.35!important;
+  }
+
+  #page-home .h26-desc{
+    font-size:9.5px!important;
+    line-height:1.45!important;
+    margin-bottom:9px!important;
+  }
+
+  #page-home .h26-start{
+    min-height:34px!important;
+    width:max-content!important;
+    max-width:100%!important;
+    padding:7px 12px!important;
+    font-size:10.5px!important;
+  }
+
+  #page-home .h26-hero-art,
+  #page-home .h26-hero-visual{
+    display:flex!important;
+    justify-content:center!important;
+    align-items:center!important;
+    min-height:118px!important;
+  }
+
+  #page-home .h26-hero-svg{
+    width:min(82%,290px)!important;
+    height:auto!important;
+    max-height:145px!important;
+    margin:0 auto!important;
+  }
+
+  /* 4 summary cards -> 2 x 2 */
+  #page-home .h26-stats{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:8px!important;
+  }
+
+  #page-home .h26-stat{
+    min-width:0!important;
+    min-height:82px!important;
+    grid-template-columns:38px minmax(0,1fr)!important;
+    gap:7px!important;
+    padding:10px 9px!important;
+    border-radius:16px!important;
+  }
+
+  #page-home .h26-stat-icon{
+    width:36px!important;
+    height:36px!important;
+  }
+
+  #page-home .h26-stat-icon svg{
+    width:24px!important;
+    height:24px!important;
+  }
+
+  #page-home .h26-stat-label{
+    font-size:9px!important;
+    line-height:1.15!important;
+  }
+
+  #page-home .h26-stat-value{
+    font-size:21px!important;
+    line-height:1!important;
+  }
+
+  #page-home .h26-stat-value small{
+    font-size:8px!important;
+  }
+
+  #page-home .h26-stat-note{
+    font-size:7.2px!important;
+    line-height:1.2!important;
+    margin-top:3px!important;
+  }
+
+  /* Calendar and shortcuts stack vertically */
+  #page-home .h26-middle{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    gap:10px!important;
+  }
+
+  #page-home .h26-section,
+  #page-home .h26-shortcuts-wrap{
+    width:100%!important;
+    min-width:0!important;
+    padding:12px!important;
+    border-radius:18px!important;
+  }
+
+  #page-home .h26-head{
+    gap:6px!important;
+    margin-bottom:8px!important;
+  }
+
+  #page-home .h26-head h3{
+    font-size:13px!important;
+    line-height:1.2!important;
+  }
+
+  #page-home .h26-monthnav{
+    font-size:9px!important;
+    gap:3px!important;
+    white-space:nowrap!important;
+  }
+
+  #page-home .h26-monthnav button{
+    width:22px!important;
+    height:22px!important;
+    min-height:22px!important;
+  }
+
+  #page-home .h26-calendar{
+    width:100%!important;
+    grid-template-columns:repeat(7,minmax(0,1fr))!important;
+    gap:2px!important;
+  }
+
+  #page-home .h26-day{
+    min-width:0!important;
+    min-height:31px!important;
+    font-size:10.5px!important;
+  }
+
+  #page-home .h26-day.hd{
+    min-height:22px!important;
+    font-size:9.5px!important;
+  }
+
+  #page-home .h26-legends{
+    margin-top:8px!important;
+    gap:10px!important;
+    font-size:8px!important;
+    flex-wrap:wrap!important;
+  }
+
+  /* shortcuts: 2 x 2, not squeezed vertical strips */
+  #page-home .h26-shortcuts{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:8px!important;
+  }
+
+  #page-home .h26-shortcut{
+    min-width:0!important;
+    min-height:126px!important;
+    padding:12px 8px!important;
+    border-radius:16px!important;
+    align-content:center!important;
+  }
+
+  #page-home .h26-shortcut-icon{
+    width:50px!important;
+    height:50px!important;
+    border-radius:15px!important;
+    margin-bottom:7px!important;
+  }
+
+  #page-home .h26-shortcut-icon svg{
+    width:31px!important;
+    height:31px!important;
+  }
+
+  #page-home .h26-shortcut b{
+    font-size:10px!important;
+    line-height:1.2!important;
+  }
+
+  #page-home .h26-shortcut small{
+    font-size:7.6px!important;
+    line-height:1.25!important;
+  }
+
+  /* bottom three cards -> one column */
+  #page-home .h26-bottom{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    gap:10px!important;
+  }
+
+  #page-home .h26-bottom > .h26-card{
+    width:100%!important;
+    min-width:0!important;
+    min-height:0!important;
+    padding:12px!important;
+    border-radius:18px!important;
+  }
+
+  #page-home .h26-bottom > .h26-card:nth-child(2){
+    grid-column:auto!important;
+    order:0!important;
+  }
+
+  #page-home .h26-news-item{
+    min-height:30px!important;
+    grid-template-columns:10px minmax(0,1fr) auto!important;
+    gap:6px!important;
+    font-size:8.5px!important;
+  }
+
+  #page-home .h26-news-time{
+    font-size:7px!important;
+  }
+
+  /* workflow remains horizontal but compact and fully visible */
+  #page-home .h26-flow{
+    width:100%!important;
+    display:grid!important;
+    grid-template-columns:repeat(5,minmax(0,1fr))!important;
+    gap:2px!important;
+    margin-top:7px!important;
+    align-items:start!important;
+  }
+
+  #page-home .h26-step{
+    min-width:0!important;
+  }
+
+  #page-home .h26-num{
+    width:20px!important;
+    height:20px!important;
+    margin:0 auto 5px!important;
+    font-size:8px!important;
+  }
+
+  #page-home .h26-step-icon{
+    width:42px!important;
+    height:42px!important;
+    margin:0 auto 5px!important;
+  }
+
+  #page-home .h26-step-icon svg{
+    width:26px!important;
+    height:26px!important;
+  }
+
+  #page-home .h26-step b{
+    display:block!important;
+    font-size:7.7px!important;
+    line-height:1.18!important;
+    overflow-wrap:anywhere!important;
+  }
+
+  #page-home .h26-step small{
+    display:block!important;
+    font-size:6.5px!important;
+    line-height:1.2!important;
+    overflow-wrap:anywhere!important;
+  }
+
+  #page-home .h26-arrow{
+    display:none!important;
+  }
+
+  #page-home .h26-tips{
+    gap:6px!important;
+    margin-top:5px!important;
+  }
+
+  #page-home .h26-tip{
+    font-size:8.5px!important;
+    line-height:1.35!important;
+    gap:6px!important;
+  }
+
+  #page-home .h26-check{
+    width:15px!important;
+    height:15px!important;
+    flex:0 0 15px!important;
+    font-size:8px!important;
+  }
+
+  #page-home .h26-watermark{
+    display:none!important;
+  }
+
+  #page-home .h26-version{
+    font-size:7px!important;
+    padding:2px 0 0!important;
+  }
+}
+
+/* Extra-small phones */
+@media screen and (max-width:390px){
+  #page-home .h26{
+    padding-left:8px!important;
+    padding-right:8px!important;
+  }
+
+  #page-home .h26-title{
+    font-size:27px!important;
+  }
+
+  #page-home .h26-stat{
+    grid-template-columns:32px minmax(0,1fr)!important;
+    padding:9px 7px!important;
+  }
+
+  #page-home .h26-stat-icon{
+    width:31px!important;
+    height:31px!important;
+  }
+
+  #page-home .h26-stat-value{
+    font-size:19px!important;
+  }
+}
