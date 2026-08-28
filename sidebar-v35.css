@@ -1328,3 +1328,42 @@ html.phone-device #appSidebar .v24-sidebar-mascot{
     background:#fffafb!important;
   }
 }
+
+
+/* =========================================================
+   SIDEBAR V35.5.11 — IPAD / DESKTOP HARD LOCK + TWO-TONE ONLY
+   เปลี่ยนเฉพาะตัวแถบ Sidebar บน iPad/Desktop เท่านั้น
+   - ล็อกแถบซ้ายให้อยู่กับที่ ไม่เลื่อนตามหน้าฝั่งขวา
+   - คืนพื้นหลังขาว–ชมพูทูโทน
+   - ไม่แก้ปุ่ม โลโก้ กระต่าย ขนาด ตำแหน่งภายใน หรือหน้าอื่น
+   ========================================================= */
+@media screen and (min-width:768px){
+  #appSidebar.sidebar{
+    position:fixed!important;
+    top:0!important;
+    left:0!important;
+    bottom:0!important;
+
+    height:100svh!important;
+    min-height:100svh!important;
+    max-height:100svh!important;
+
+    margin:0!important;
+    transform:none!important;
+
+    overflow:hidden!important;
+    overscroll-behavior:none!important;
+
+    /* white + pastel pink two-tone, restored */
+    background:
+      linear-gradient(
+        180deg,
+        #ffffff 0%,
+        #fffdfd 54%,
+        #fff3f8 74%,
+        #ffe7f1 100%
+      )!important;
+
+    background-attachment:fixed!important;
+  }
+}
