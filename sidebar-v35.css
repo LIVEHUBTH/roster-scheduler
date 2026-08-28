@@ -1039,6 +1039,62 @@ html.phone-device body #page-home .v244-card{
   padding:12px!important;
   overflow:hidden!important;
 }
+
+/* =========================================================
+   SIDEBAR V35.5.6 — IMAGE POSITION / DEVICE SPACING ONLY
+   Phone navigation geometry is intentionally untouched.
+   No Home or application-page selectors are included.
+   ========================================================= */
+
+/* Phone: move only the artwork inside its existing grid areas. */
+@media screen and (max-width:767px){
+  #appSidebar .brand.v24-brand{
+    overflow:visible!important;
+  }
+  #appSidebar .sidebar-brand-image{
+    transform:translateY(24px)!important;
+  }
+  #appSidebar .v24-sidebar-mascot{
+    transform:translateY(-28px)!important;
+    background-size:contain!important;
+    background-position:center center!important;
+    overflow:visible!important;
+  }
+}
+
+/* Same artwork-only movement in iPhone Safari desktop-layout mode. */
+html.phone-device #appSidebar .brand.v24-brand{
+  overflow:visible!important;
+}
+html.phone-device #appSidebar .sidebar-brand-image{
+  transform:translateY(24px)!important;
+}
+html.phone-device #appSidebar .v24-sidebar-mascot{
+  transform:translateY(-28px)!important;
+  background-size:contain!important;
+  background-position:center center!important;
+  overflow:visible!important;
+}
+
+/* iPad and desktop: a little more air between buttons, fixed bar retained. */
+@media screen and (min-width:768px){
+  #appSidebar.sidebar{
+    position:fixed!important;
+    top:0!important;
+    bottom:0!important;
+    overflow:hidden!important;
+  }
+  #appSidebar .sidebar-v35{
+    gap:9px!important;
+  }
+  #appSidebar .v24-sidebar-mascot{
+    bottom:20px!important;
+    transform:none!important;
+    background-size:contain!important;
+    background-position:center center!important;
+    overflow:visible!important;
+  }
+}
 html.phone-device body #page-home .v244-shortcut-grid{
   grid-template-columns:repeat(2,minmax(0,1fr))!important;
   height:auto!important;
