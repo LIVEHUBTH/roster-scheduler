@@ -1464,3 +1464,55 @@ html.phone-device #appSidebar .v24-sidebar-mascot{
 }
 
 /* Keep existing device-specific positioning/locking exactly as before. */
+
+
+/* =========================================================
+   SIDEBAR V35.5.14.2 — iPad/Desktop VIEWPORT LOCK ONLY
+   แก้เฉพาะอาการพื้นหลัง Sidebar เกิดช่องสีต่างกันตอนเลื่อนหน้า
+   - iPad/Desktop เท่านั้น
+   - Sidebar และพื้นหลังยึดกับ viewport ตลอด
+   - ไม่แตะโทรศัพท์
+   - ไม่เปลี่ยนปุ่ม/ไอคอน/โลโก้/กระต่าย/ขนาด/ตำแหน่งภายใน
+   ========================================================= */
+@media screen and (min-width:768px){
+
+  #appSidebar.sidebar{
+    position:fixed!important;
+    top:0!important;
+    left:0!important;
+    bottom:0!important;
+
+    /* ใช้ top+bottom ครอบ viewport จริง แทนความสูง svh ที่อาจเปลี่ยนตอน browser bar ขยับ */
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+
+    margin:0!important;
+    transform:none!important;
+
+    overflow:hidden!important;
+    overscroll-behavior:none!important;
+
+    /* คงสี V35.5.14 เดิม แต่ตรึง gradient กับ viewport */
+    background-color:#fff7fb!important;
+    background-image:
+      linear-gradient(
+        180deg,
+        #ffe8f2 0%,
+        #fff0f6 18%,
+        #fff8fb 34%,
+        #ffffff 46%,
+        #ffffff 54%,
+        #fff8fb 66%,
+        #fff0f6 82%,
+        #ffe8f2 100%
+      )!important;
+    background-repeat:no-repeat!important;
+    background-position:center center!important;
+    background-size:100% 100%!important;
+    background-attachment:fixed!important;
+
+    /* ป้องกันช่องว่างเสี้ยวพิกเซลบน/ล่างเวลาสกรอลล์ */
+    clip-path:inset(0)!important;
+  }
+}
