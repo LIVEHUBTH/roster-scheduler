@@ -5,6 +5,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<script>
+/* Presentation-only phone marker: remains reliable when iPhone Safari requests
+   a desktop-sized layout viewport. iPad and desktop are deliberately excluded. */
+(function(){
+  var s=Math.min(Number(screen.width)||9999,Number(screen.height)||9999);
+  if(s<=500||/iPhone|iPod/i.test(navigator.userAgent||'')){
+    document.documentElement.classList.add('phone-device');
+  }
+})();
+</script>
 <title>โปรแกรมจัดตารางเวร</title>
 <style>
 :root{--bg:#f6f7fb;--card:#fff;--text:#202534;--muted:#6b7280;--line:#d9dce6;--accent:#6d5dfc;--danger:#b42318;--ok:#067647;--weekend:#ececf0}
@@ -2395,7 +2405,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 
 <link rel="stylesheet" href="home-v28.css?v=28.5">
 <link rel="stylesheet" href="summary-v34.css?v=34.8">
-<link rel="stylesheet" href="sidebar-v35.css?v=35.5.3-phone-fixed-drawer-home-stack">
+<link rel="stylesheet" href="sidebar-v35.css?v=35.5.4-phone-device-home-active-border">
 </head>
 <body>
 

@@ -143,39 +143,39 @@
 /* ---------- Pastel palette ---------- */
 #appSidebar .sidebar-v35 a[data-page="home"]{
   --nav-bg:#ffe5ef; --nav-bg2:#ffd6e5;
-  --nav-text:#a74369; --nav-icon:#e85e8e;
+  --nav-text:#a74369; --nav-icon:#e85e8e; --nav-active-border:#d64e7d;
 }
 #appSidebar .sidebar-v35 a[data-page="roster"]{
   --nav-bg:#e2f9f1; --nav-bg2:#cef2e5;
-  --nav-text:#397568; --nav-icon:#4bb5a5;
+  --nav-text:#397568; --nav-icon:#4bb5a5; --nav-active-border:#319783;
 }
 #appSidebar .sidebar-v35 a[data-page="people"]{
   --nav-bg:#eee9ff; --nav-bg2:#ddd6fa;
-  --nav-text:#67579d; --nav-icon:#8b73cf;
+  --nav-text:#67579d; --nav-icon:#8b73cf; --nav-active-border:#745cbb;
 }
 #appSidebar .sidebar-v35 a[data-page="rules"]{
   --nav-bg:#ffe8ea; --nav-bg2:#ffd8dc;
-  --nav-text:#a14f60; --nav-icon:#dc687f;
+  --nav-text:#a14f60; --nav-icon:#dc687f; --nav-active-border:#c7556c;
 }
 #appSidebar .sidebar-v35 a[data-page="holidays"]{
   --nav-bg:#fff5d4; --nav-bg2:#ffebb4;
-  --nav-text:#886827; --nav-icon:#ed9965;
+  --nav-text:#886827; --nav-icon:#ed9965; --nav-active-border:#d38b32;
 }
 #appSidebar .sidebar-v35 a[data-page="history"]{
   --nav-bg:#e1f5ff; --nav-bg2:#cceaff;
-  --nav-text:#3f7290; --nav-icon:#54acc3;
+  --nav-text:#3f7290; --nav-icon:#54acc3; --nav-active-border:#388da9;
 }
 #appSidebar .sidebar-v35 a[data-page="summary"]{
   --nav-bg:#fff0df; --nav-bg2:#ffdebd;
-  --nav-text:#9d5a32; --nav-icon:#e47a5b;
+  --nav-text:#9d5a32; --nav-icon:#e47a5b; --nav-active-border:#c66b48;
 }
 #appSidebar .sidebar-v35 a[data-page="internal"]{
   --nav-bg:#ffe6f0; --nav-bg2:#ffd5e5;
-  --nav-text:#a34770; --nav-icon:#bc75a8;
+  --nav-text:#a34770; --nav-icon:#bc75a8; --nav-active-border:#a55891;
 }
 #appSidebar .sidebar-v35 a[data-page="settings"]{
   --nav-bg:#e1f9f0; --nav-bg2:#cef2e3;
-  --nav-text:#347566; --nav-icon:#53b3a1;
+  --nav-text:#347566; --nav-icon:#53b3a1; --nav-active-border:#348f7d;
 }
 
 /* Active page: DO NOT change color. Only make it raised and clearer. */
@@ -183,7 +183,7 @@
   transform:translateY(-2px) scale(1.012)!important;
   filter:none!important;
 
-  border-color:rgba(255,255,255,.96)!important;
+  border:2px solid var(--nav-active-border)!important;
   box-shadow:
     0 9px 16px rgba(72,50,65,.15),
     0 3px 6px rgba(72,50,65,.09),
@@ -827,4 +827,227 @@
     height:auto!important;
     overflow:hidden!important;
   }
+}
+
+/* =========================================================
+   SIDEBAR V35.5.4 — REQUEST-DESKTOP-SAFE PHONE DETECTION
+   .phone-device is added only on an iPhone-sized physical screen.
+   This fixes Safari desktop-layout mode without touching iPad/desktop.
+   ========================================================= */
+
+/* Requested on every device: slightly larger menu copy. */
+#appSidebar .sidebar-v35 .nav-label{
+  font-size:13px!important;
+}
+
+/* Regular phone viewport refinements. */
+@media screen and (max-width:767px){
+  #appSidebar.sidebar{
+    grid-template-rows:minmax(66px,13dvh) minmax(0,1fr) minmax(64px,12.5dvh)!important;
+  }
+  #appSidebar .sidebar-brand-image{
+    width:92%!important;
+    height:92%!important;
+  }
+  #appSidebar .v24-sidebar-mascot{
+    background-size:88% auto!important;
+  }
+  #appSidebar .sidebar-v35 .nav-label{
+    font-size:11.5px!important;
+  }
+  .mobile-menu-btn,
+  #mobileMenuBtn{
+    display:inline-grid!important;
+    place-items:center!important;
+    width:44px!important;
+    height:44px!important;
+    font-size:29px!important;
+    line-height:1!important;
+  }
+}
+
+/* iPhone drawer behavior even when Safari reports a desktop viewport. */
+html.phone-device,
+html.phone-device body{
+  width:100%!important;
+  max-width:100%!important;
+  overflow-x:hidden!important;
+}
+html.phone-device .main-shell,
+html.phone-device .app-shell,
+html.phone-device .app,
+html.phone-device .page-view{
+  margin-left:0!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:100%!important;
+}
+html.phone-device #appSidebar.sidebar{
+  position:fixed!important;
+  inset:0 auto 0 0!important;
+  width:min(56vw,180px)!important;
+  min-width:0!important;
+  max-width:180px!important;
+  height:100dvh!important;
+  max-height:100dvh!important;
+  padding:7px 8px 8px!important;
+  overflow:hidden!important;
+  overscroll-behavior:contain!important;
+  display:grid!important;
+  grid-template-rows:minmax(66px,13dvh) minmax(0,1fr) minmax(64px,12.5dvh)!important;
+  gap:6px!important;
+  transform:translateX(-105%)!important;
+  transition:transform .22s ease!important;
+  z-index:1000!important;
+}
+html.phone-device body.menu-open #appSidebar.sidebar{
+  transform:translateX(0)!important;
+}
+html.phone-device #appSidebar .brand.v24-brand{
+  width:100%!important;
+  height:auto!important;
+  min-height:0!important;
+  margin:0!important;
+}
+html.phone-device #appSidebar .sidebar-brand-image{
+  width:92%!important;
+  max-width:92%!important;
+  height:92%!important;
+  object-fit:contain!important;
+}
+html.phone-device #appSidebar .sidebar-v35{
+  display:grid!important;
+  grid-template-rows:repeat(9,minmax(28px,1fr))!important;
+  min-height:0!important;
+  height:100%!important;
+  gap:clamp(3px,.55dvh,6px)!important;
+  padding:0!important;
+  overflow:hidden!important;
+}
+html.phone-device #appSidebar .sidebar-v35 a[data-page]{
+  width:100%!important;
+  height:auto!important;
+  min-height:28px!important;
+  max-height:42px!important;
+  padding:0 8px!important;
+  gap:7px!important;
+}
+html.phone-device #appSidebar .sidebar-v35 .nav-label{
+  font-size:11.5px!important;
+  line-height:1.1!important;
+  white-space:nowrap!important;
+}
+html.phone-device #appSidebar .v24-sidebar-mascot{
+  position:relative!important;
+  inset:auto!important;
+  width:100%!important;
+  height:auto!important;
+  min-height:0!important;
+  margin:0!important;
+  background-size:88% auto!important;
+  background-position:center!important;
+}
+html.phone-device .mobile-menu-btn,
+html.phone-device #mobileMenuBtn{
+  display:inline-grid!important;
+  place-items:center!important;
+  width:44px!important;
+  height:44px!important;
+  padding:0!important;
+  color:#f15b91!important;
+  background:transparent!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  outline:0!important;
+  font-size:29px!important;
+  line-height:1!important;
+  z-index:1100!important;
+}
+html.phone-device body.menu-open{
+  overflow:hidden!important;
+  touch-action:none!important;
+}
+html.phone-device body.menu-open #appSidebar{
+  touch-action:manipulation!important;
+}
+
+/* iPhone Home is always a single vertical flow. */
+html.phone-device body #page-home{
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  height:auto!important;
+  max-height:none!important;
+  padding:10px!important;
+  overflow-x:hidden!important;
+  overflow-y:visible!important;
+}
+html.phone-device body #page-home .v244-home-shell{
+  position:relative!important;
+  display:flex!important;
+  flex-direction:column!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  height:auto!important;
+  min-height:0!important;
+  max-height:none!important;
+  margin:0!important;
+  transform:none!important;
+  overflow:visible!important;
+  gap:10px!important;
+}
+html.phone-device body #page-home .v244-hero,
+html.phone-device body #page-home .v244-stats,
+html.phone-device body #page-home .v244-middle,
+html.phone-device body #page-home .v244-bottom{
+  position:relative!important;
+  inset:auto!important;
+  display:flex!important;
+  flex-direction:column!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  height:auto!important;
+  min-height:0!important;
+  max-height:none!important;
+  gap:10px!important;
+  overflow:visible!important;
+}
+html.phone-device body #page-home .v244-hero > *,
+html.phone-device body #page-home .v244-stats > *,
+html.phone-device body #page-home .v244-middle > *,
+html.phone-device body #page-home .v244-bottom > *{
+  position:relative!important;
+  inset:auto!important;
+  grid-column:auto!important;
+  grid-row:auto!important;
+  flex:0 0 auto!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  height:auto!important;
+  margin:0!important;
+}
+html.phone-device body #page-home .v244-card{
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  height:auto!important;
+  min-height:170px!important;
+  padding:12px!important;
+  overflow:hidden!important;
+}
+html.phone-device body #page-home .v244-shortcut-grid{
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  height:auto!important;
+}
+html.phone-device body #page-home .v244-news,
+html.phone-device body #page-home .v244-flow,
+html.phone-device body #page-home .v244-tips{
+  width:100%!important;
+  min-width:0!important;
+  height:auto!important;
+  overflow:visible!important;
 }
