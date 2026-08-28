@@ -1434,3 +1434,33 @@ html.phone-device #appSidebar .v24-sidebar-mascot{
     background-attachment:scroll!important;
   }
 }
+
+
+/* =========================================================
+   SIDEBAR V35.5.14 — ALL DEVICES CENTER WHITE/PINK TWO-TONE
+   แก้เฉพาะสีพื้น Sidebar ทุกอุปกรณ์
+   - กึ่งกลางบาร์เป็นขาว
+   - ไล่ขึ้นด้านบนเป็นชมพูพาสเทลอ่อน
+   - ไล่ลงด้านล่างเป็นชมพูพาสเทลอ่อน
+   - ไม่แก้องค์ประกอบ ขนาด ตำแหน่ง การล็อก หรือระบบ
+   ========================================================= */
+#appSidebar.sidebar{
+  background-color:#fff7fb!important;
+  background-image:
+    linear-gradient(
+      180deg,
+      #ffe8f2 0%,
+      #fff0f6 18%,
+      #fff8fb 34%,
+      #ffffff 46%,
+      #ffffff 54%,
+      #fff8fb 66%,
+      #fff0f6 82%,
+      #ffe8f2 100%
+    )!important;
+  background-repeat:no-repeat!important;
+  background-size:100% 100%!important;
+  background-position:center center!important;
+}
+
+/* Keep existing device-specific positioning/locking exactly as before. */
