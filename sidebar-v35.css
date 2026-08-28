@@ -651,3 +651,45 @@
     display:none!important;
   }
 }
+
+/* V35.5.2: final phone-only Home collision guard.
+   Kept in the Sidebar stylesheet so no application logic or other page
+   stylesheet is changed. iPad and desktop never enter this media query. */
+@media screen and (max-width:599px){
+  body #page-home .v244-middle,
+  body #page-home .v244-bottom{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:stretch!important;
+    width:100%!important;
+    height:auto!important;
+    min-width:0!important;
+    max-width:100%!important;
+    gap:10px!important;
+    overflow:visible!important;
+  }
+  body #page-home .v244-middle > *,
+  body #page-home .v244-bottom > *{
+    position:relative!important;
+    inset:auto!important;
+    grid-column:auto!important;
+    grid-row:auto!important;
+    flex:0 0 auto!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    height:auto!important;
+    margin:0!important;
+  }
+  body #page-home .v244-news,
+  body #page-home .v244-flow,
+  body #page-home .v244-tips{
+    display:flex!important;
+    flex-direction:column!important;
+    width:100%!important;
+    min-width:0!important;
+    height:auto!important;
+    overflow:visible!important;
+    white-space:normal!important;
+  }
+}
