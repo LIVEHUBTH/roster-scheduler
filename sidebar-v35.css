@@ -1298,3 +1298,21 @@ html.phone-device #appSidebar .v24-sidebar-mascot{
   background-size:auto 96%!important;
   background-position:center center!important;
 }
+
+/* =========================================================
+   SIDEBAR V35.5.9 — IPAD / DESKTOP OUTER BAR LOCK ONLY
+   Phone rules and every element inside the sidebar stay untouched.
+   No page or application selectors are included in this block.
+   ========================================================= */
+@media screen and (min-width:768px){
+  #appSidebar.sidebar{
+    position:fixed!important;
+    inset:0 auto 0 0!important;
+    height:100svh!important;
+    min-height:100svh!important;
+    max-height:100svh!important;
+    margin:0!important;
+    overflow:hidden!important;
+    overscroll-behavior:none!important;
+  }
+}
