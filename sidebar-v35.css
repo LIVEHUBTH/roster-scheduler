@@ -1391,3 +1391,46 @@ html.phone-device #appSidebar .v24-sidebar-mascot{
     background-size:100% 100%!important;
   }
 }
+
+
+/* =========================================================
+   SIDEBAR V35.5.13 — IPAD / DESKTOP CENTER TWO-TONE ONLY
+   แก้เฉพาะสีพื้นหลังของ Sidebar บน iPad/Desktop
+   - ขาวด้านบน
+   - ชมพูพาสเทลชัดเจนบริเวณกึ่งกลางบาร์
+   - กลับเป็นขาวอมชมพูอ่อนด้านล่าง
+   - คง HARD LOCK และองค์ประกอบทุกอย่างเดิม
+   - โทรศัพท์ไม่แตะ
+   ========================================================= */
+@media screen and (min-width:768px){
+  #appSidebar.sidebar{
+    position:fixed!important;
+    top:0!important;
+    left:0!important;
+    bottom:0!important;
+    height:100svh!important;
+    min-height:100svh!important;
+    max-height:100svh!important;
+    overflow:hidden!important;
+    overscroll-behavior:none!important;
+
+    background-color:#fff!important;
+    background-image:
+      linear-gradient(
+        180deg,
+        #ffffff 0%,
+        #ffffff 24%,
+        #fff8fb 34%,
+        #ffeaf3 44%,
+        #ffdce9 50%,
+        #ffeaf3 56%,
+        #fff8fb 66%,
+        #ffffff 78%,
+        #ffffff 100%
+      )!important;
+    background-repeat:no-repeat!important;
+    background-size:100% 100%!important;
+    background-position:center center!important;
+    background-attachment:scroll!important;
+  }
+}
