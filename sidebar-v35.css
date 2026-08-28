@@ -1316,3 +1316,15 @@ html.phone-device #appSidebar .v24-sidebar-mascot{
     overscroll-behavior:none!important;
   }
 }
+
+
+/* =========================================================
+   SIDEBAR V35.5.10 — IPAD / DESKTOP BACKGROUND BLEND ONLY
+   เปลี่ยนเฉพาะสีพื้นหลังของแถบซ้ายบน iPad/Desktop
+   ไม่แก้ตำแหน่ง ขนาด ปุ่ม โลโก้ กระต่าย ระบบ หรือหน้าอื่น
+   ========================================================= */
+@media screen and (min-width:768px){
+  #appSidebar.sidebar{
+    background:#fffafb!important;
+  }
+}
