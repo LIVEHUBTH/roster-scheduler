@@ -1272,3 +1272,29 @@ html.phone-device #appSidebar .v24-sidebar-mascot{
   background-position:center center!important;
   overflow:visible!important;
 }
+
+/* =========================================================
+   SIDEBAR V35.5.8 — BACKGROUND + PHONE MASCOT ONLY
+   All devices: sidebar background only.
+   Phone: fit mascot by height so both ears remain fully visible.
+   No navigation, page or application rules are changed here.
+   ========================================================= */
+
+/* White–pink two-tone sidebar background on every device. */
+#appSidebar.sidebar{
+  background:linear-gradient(155deg,#ffffff 0%,#fffafb 44%,#ffe7f1 100%)!important;
+}
+
+/* Phone only: keep the whole mascot inside its existing artwork area. */
+@media screen and (max-width:767px){
+  #appSidebar .v24-sidebar-mascot{
+    background-size:auto 96%!important;
+    background-position:center center!important;
+  }
+}
+
+/* Same phone-only fit when iPhone Safari requests desktop layout. */
+html.phone-device #appSidebar .v24-sidebar-mascot{
+  background-size:auto 96%!important;
+  background-position:center center!important;
+}
