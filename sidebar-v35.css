@@ -1367,3 +1367,27 @@ html.phone-device #appSidebar .v24-sidebar-mascot{
     background-attachment:fixed!important;
   }
 }
+
+
+/* =========================================================
+   SIDEBAR V35.5.12 — IPAD / DESKTOP PINK BLEND CORRECTION ONLY
+   แก้เฉพาะสีพื้น Sidebar ให้ช่วงล่างไม่ติดเหลือง
+   คง hard-lock, ปุ่ม, โลโก้, กระต่าย, ขนาด, ตำแหน่ง และระบบเดิมทั้งหมด
+   ========================================================= */
+@media screen and (min-width:768px){
+  #appSidebar.sidebar{
+    background-color:#fff4f8!important;
+    background-image:
+      linear-gradient(
+        180deg,
+        #ffffff 0%,
+        #fffdfd 40%,
+        #fff9fb 58%,
+        #fff4f8 76%,
+        #ffedf5 100%
+      )!important;
+    background-attachment:scroll!important;
+    background-repeat:no-repeat!important;
+    background-size:100% 100%!important;
+  }
+}
