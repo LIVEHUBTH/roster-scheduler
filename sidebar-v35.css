@@ -1051,3 +1051,118 @@ html.phone-device body #page-home .v244-tips{
   height:auto!important;
   overflow:visible!important;
 }
+
+/* =========================================================
+   SIDEBAR V35.5.5 — PHONE BAR STABILITY ONLY
+   Stable small-viewport units prevent Safari's address bar from
+   resizing the logo, navigation and mascot while the page scrolls.
+   No Home/page/application rules are changed in this block.
+   ========================================================= */
+@media screen and (max-width:767px){
+  #appSidebar.sidebar{
+    width:min(180px,calc(100vw - 40px))!important;
+    max-width:180px!important;
+    height:100svh!important;
+    min-height:100svh!important;
+    max-height:100svh!important;
+    grid-template-rows:clamp(82px,14svh,104px) minmax(0,1fr) clamp(84px,14svh,112px)!important;
+    align-content:stretch!important;
+    gap:6px!important;
+    overflow:hidden!important;
+  }
+  #appSidebar .brand.v24-brand{
+    height:100%!important;
+    min-height:0!important;
+    overflow:hidden!important;
+  }
+  #appSidebar .sidebar-brand-image{
+    width:145px!important;
+    max-width:92%!important;
+    height:98px!important;
+    max-height:100%!important;
+    object-fit:contain!important;
+  }
+  #appSidebar .sidebar-v35{
+    display:grid!important;
+    grid-template-rows:repeat(9,40px)!important;
+    align-content:center!important;
+    height:100%!important;
+    min-height:0!important;
+    gap:7px!important;
+    overflow:hidden!important;
+  }
+  #appSidebar .sidebar-v35 a[data-page]{
+    height:40px!important;
+    min-height:40px!important;
+    max-height:40px!important;
+    transform:none!important;
+    box-shadow:none!important;
+  }
+  #appSidebar .sidebar-v35 a[data-page].active{
+    transform:none!important;
+    box-shadow:none!important;
+  }
+  #appSidebar .v24-sidebar-mascot{
+    width:100%!important;
+    height:100%!important;
+    min-height:0!important;
+    max-height:112px!important;
+    margin:0!important;
+    background-size:145px auto!important;
+    background-position:center bottom!important;
+    overflow:hidden!important;
+  }
+}
+
+/* Same fixed bar geometry when iPhone Safari requests desktop layout. */
+html.phone-device #appSidebar.sidebar{
+  width:180px!important;
+  min-width:0!important;
+  max-width:180px!important;
+  height:100svh!important;
+  min-height:100svh!important;
+  max-height:100svh!important;
+  grid-template-rows:clamp(82px,14svh,104px) minmax(0,1fr) clamp(84px,14svh,112px)!important;
+  align-content:stretch!important;
+  gap:6px!important;
+  overflow:hidden!important;
+}
+html.phone-device #appSidebar .brand.v24-brand{
+  height:100%!important;
+  min-height:0!important;
+  overflow:hidden!important;
+}
+html.phone-device #appSidebar .sidebar-brand-image{
+  width:145px!important;
+  max-width:92%!important;
+  height:98px!important;
+  max-height:100%!important;
+  object-fit:contain!important;
+}
+html.phone-device #appSidebar .sidebar-v35{
+  display:grid!important;
+  grid-template-rows:repeat(9,40px)!important;
+  align-content:center!important;
+  height:100%!important;
+  min-height:0!important;
+  gap:7px!important;
+  overflow:hidden!important;
+}
+html.phone-device #appSidebar .sidebar-v35 a[data-page],
+html.phone-device #appSidebar .sidebar-v35 a[data-page].active{
+  height:40px!important;
+  min-height:40px!important;
+  max-height:40px!important;
+  transform:none!important;
+  box-shadow:none!important;
+}
+html.phone-device #appSidebar .v24-sidebar-mascot{
+  width:100%!important;
+  height:100%!important;
+  min-height:0!important;
+  max-height:112px!important;
+  margin:0!important;
+  background-size:145px auto!important;
+  background-position:center bottom!important;
+  overflow:hidden!important;
+}
