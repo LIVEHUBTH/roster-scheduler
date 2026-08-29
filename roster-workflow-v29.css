@@ -284,3 +284,264 @@
     font-size:7.8px!important;
   }
 }
+
+
+/* =========================================================
+   ROSTER V29.4.1 — VISUAL POLISH ONLY
+   Scope: #page-roster .r29-workflow-hub
+   - สมดุลตัวอักษร/ปุ่ม/กรอบ
+   - ไอคอนพาสเทล
+   - เอาสีกรอบ outer ของ 2 สถานะออก
+   - เอาหัวข้อซ้ำ Audit Log ออกใน HTML
+   - ไม่แตะ Sidebar / ระบบ / หน้าอื่น
+   ========================================================= */
+
+#page-roster .r29-workflow-hub{
+  --wf-text:#455168;
+  --wf-muted:#8b93a4;
+  --wf-pink:#ef78a6;
+  --wf-mint:#55c7b3;
+  --wf-lav:#8e76de;
+  --wf-blue:#59b8dc;
+  --wf-yellow:#efbd53;
+  --wf-orange:#e89a69;
+}
+
+/* Pastel inline SVG icons */
+#page-roster .r29-workflow-hub .r29-pastel-icon,
+#page-roster .r29-workflow-hub .r29-btn-icon{
+  display:inline-grid;
+  place-items:center;
+  flex:0 0 auto;
+  width:24px;
+  height:24px;
+  border-radius:9px;
+  vertical-align:middle;
+}
+#page-roster .r29-workflow-hub .r29-pastel-icon svg,
+#page-roster .r29-workflow-hub .r29-btn-icon svg{
+  width:18px;
+  height:18px;
+  display:block;
+}
+#page-roster .r29-workflow-hub .r29-btn-icon{
+  width:20px;
+  height:20px;
+  border-radius:7px;
+}
+#page-roster .r29-workflow-hub .r29-btn-icon svg{width:15px;height:15px}
+#page-roster .r29-workflow-hub .r29-pi-pink{color:var(--wf-pink);background:#fff0f6}
+#page-roster .r29-workflow-hub .r29-pi-mint{color:var(--wf-mint);background:#eefbf7}
+#page-roster .r29-workflow-hub .r29-pi-lav{color:var(--wf-lav);background:#f3efff}
+#page-roster .r29-workflow-hub .r29-pi-blue{color:var(--wf-blue);background:#eef8ff}
+#page-roster .r29-workflow-hub .r29-pi-yellow{color:var(--wf-yellow);background:#fff8e7}
+#page-roster .r29-workflow-hub .r29-pi-orange{color:var(--wf-orange);background:#fff3eb}
+
+/* 1) typography balance + vertical centering */
+#page-roster .r29-workflow-hub h3,
+#page-roster .r29-workflow-hub b,
+#page-roster .r29-workflow-hub small,
+#page-roster .r29-workflow-hub button,
+#page-roster .r29-workflow-hub span{
+  line-height:1.25;
+}
+
+#page-roster .r29-workflow-hub .unit-status-big{
+  justify-content:center;
+  align-items:center;
+  gap:8px;
+  text-align:center;
+  font-size:16px!important;
+  min-height:34px;
+}
+#page-roster .r29-workflow-hub .unit-status-month{
+  text-align:center;
+  font-size:9px!important;
+  margin-top:2px;
+}
+#page-roster .r29-workflow-hub .unit-status-line{
+  grid-template-columns:24px minmax(82px,.72fr) minmax(0,1.28fr)!important;
+  align-items:center!important;
+  min-height:38px;
+  padding:7px 9px!important;
+}
+#page-roster .r29-workflow-hub .unit-status-line > span:not(.r29-pastel-icon){
+  font-size:8.5px;
+  text-align:left;
+}
+#page-roster .r29-workflow-hub .unit-status-line > b{
+  font-size:8.5px;
+  text-align:center;
+}
+
+#page-roster .r29-workflow-hub .unit-panel-title-pastel{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:8px!important;
+  min-height:32px;
+  font-size:11px!important;
+}
+
+#page-roster .r29-workflow-hub .unit-ref-status-box{
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+  align-items:center!important;
+  text-align:center!important;
+  min-height:64px!important;
+  padding:7px 6px!important;
+}
+#page-roster .r29-workflow-hub .unit-ref-status-box small{
+  font-size:7.5px!important;
+  margin-bottom:4px;
+}
+#page-roster .r29-workflow-hub .unit-ref-status-box b{
+  font-size:9.5px!important;
+  line-height:1.25!important;
+  text-align:center!important;
+}
+
+#page-roster .r29-workflow-hub .unit-approval-actions{
+  display:flex!important;
+  align-items:center!important;
+  flex-wrap:wrap!important;
+  gap:7px!important;
+}
+#page-roster .r29-workflow-hub .unit-approval-actions button,
+#page-roster .r29-workflow-hub .unit-approval-actions .status-pill,
+#page-roster .r29-workflow-hub .unit-approval-actions .locked-tag{
+  min-height:34px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:5px!important;
+  padding:7px 11px!important;
+  font-size:8.5px!important;
+  line-height:1!important;
+  text-align:center!important;
+  white-space:nowrap;
+}
+
+#page-roster .r29-workflow-hub .r29-workflow-subhead{
+  min-height:32px;
+  align-items:center!important;
+  gap:8px!important;
+  font-size:11px!important;
+}
+#page-roster .r29-workflow-hub .r29-workflow-subhead b{
+  display:flex;
+  align-items:center;
+  min-height:24px;
+}
+
+#page-roster .r29-workflow-hub .unit-flow-card{
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+  align-items:center!important;
+  text-align:center!important;
+}
+#page-roster .r29-workflow-hub .unit-flow-icon{
+  height:32px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  margin-bottom:5px!important;
+}
+#page-roster .r29-workflow-hub .unit-flow-card b{
+  min-height:24px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  font-size:9px!important;
+}
+#page-roster .r29-workflow-hub .unit-flow-card small{
+  min-height:20px;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  text-align:center;
+  font-size:7.2px!important;
+}
+
+#page-roster .r29-workflow-hub .unit-wide-btn{
+  min-height:38px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  font-size:9px!important;
+  line-height:1!important;
+  margin-top:8px;
+}
+
+/* 3) no colored outer frames/background for the two status areas */
+#page-roster .r29-workflow-hub .unit-status-hero,
+#page-roster .r29-workflow-hub .unit-approval-ref{
+  border:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+#page-roster .r29-workflow-hub .unit-status-hero{
+  padding:12px 10px!important;
+}
+#page-roster .r29-workflow-hub .unit-approval-ref{
+  padding:12px 10px!important;
+}
+
+/* keep inner information cells neutral, not colored */
+#page-roster .r29-workflow-hub .unit-status-line,
+#page-roster .r29-workflow-hub .unit-ref-status-box{
+  background:#fff!important;
+  border:1px solid #eee8ee!important;
+}
+
+/* audit rows vertically balanced */
+#page-roster .r29-workflow-hub .unit-audit-mini td{
+  height:36px;
+  vertical-align:middle!important;
+  font-size:8.5px!important;
+}
+
+/* iPad */
+@media screen and (min-width:641px) and (max-width:1180px){
+  #page-roster .r29-workflow-hub .unit-status-big{font-size:14px!important}
+  #page-roster .r29-workflow-hub .unit-status-line{
+    min-height:34px;
+    grid-template-columns:22px 74px minmax(0,1fr)!important;
+  }
+  #page-roster .r29-workflow-hub .unit-ref-status-box{min-height:56px!important}
+  #page-roster .r29-workflow-hub .unit-approval-actions button,
+  #page-roster .r29-workflow-hub .unit-approval-actions .status-pill,
+  #page-roster .r29-workflow-hub .unit-approval-actions .locked-tag{
+    min-height:31px!important;
+    padding:6px 8px!important;
+    font-size:7.7px!important;
+  }
+}
+
+/* phone */
+@media screen and (max-width:640px){
+  #page-roster .r29-workflow-hub .unit-status-big{font-size:14px!important}
+  #page-roster .r29-workflow-hub .unit-status-line{
+    grid-template-columns:22px 78px minmax(0,1fr)!important;
+    min-height:36px;
+  }
+  #page-roster .r29-workflow-hub .unit-panel-title-pastel{
+    font-size:10px!important;
+  }
+  #page-roster .r29-workflow-hub .unit-approval-actions{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+  #page-roster .r29-workflow-hub .unit-approval-actions button,
+  #page-roster .r29-workflow-hub .unit-approval-actions .status-pill,
+  #page-roster .r29-workflow-hub .unit-approval-actions .locked-tag{
+    width:100%!important;
+    white-space:normal;
+    min-height:36px!important;
+    padding:7px 6px!important;
+    font-size:8px!important;
+  }
+}

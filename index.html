@@ -1758,7 +1758,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 </style>
 <link rel="stylesheet" href="style.css?v=30.0">
 <link rel="stylesheet" href="roster-v29.css?v=29.3">
-<link rel="stylesheet" href="roster-workflow-v29.css?v=29.4">
+<link rel="stylesheet" href="roster-workflow-v29.css?v=29.4.1">
 <link rel="stylesheet" href="people-v30.css?v=30.4">
 <link rel="stylesheet" href="rules-v31.css?v=31.1">
 <link rel="stylesheet" href="holidays-v32.css?v=32.5">
@@ -2726,16 +2726,16 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
       <div class="r29-workflow-top-grid">
     <div class="unit-ref-card unit-status-hero">
       <h3>สถานะปัจจุบัน</h3>
-      <div class="unit-status-big">🔒 <span id="unitHeroStatusText">ร่างตาราง</span></div>
+      <div class="unit-status-big"><span class="r29-pastel-icon r29-pi-lav" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="3" fill="currentColor" opacity=".22"/><rect x="7" y="10" width="10" height="8" rx="2" fill="currentColor"/><path d="M8 10V8a4 4 0 0 1 8 0v2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><span id="unitHeroStatusText">ร่างตาราง</span></div>
       <div class="unit-status-month" id="unitCurrentMonthLabel">เดือนปัจจุบัน</div>
       <div class="unit-status-lines">
-        <div class="unit-status-line">📤 <span>ส่งตรวจเมื่อ</span><b id="unitHeroSubmittedAt">-</b></div>
-        <div class="unit-status-line">✅ <span>อนุมัติเมื่อ</span><b id="unitHeroApprovedAt">-</b></div>
-        <div class="unit-status-line">🔒 <span>ล็อกเมื่อ</span><b id="unitHeroLockedAt">-</b></div>
+        <div class="unit-status-line"><span class="r29-pastel-icon r29-pi-blue" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 11.5 20 4l-5.7 16-3.1-6.1L4 11.5Z" fill="currentColor"/><path d="m11.2 13.9 3.7-3.8" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></span><span>ส่งตรวจเมื่อ</span><b id="unitHeroSubmittedAt">-</b></div>
+        <div class="unit-status-line"><span class="r29-pastel-icon r29-pi-mint" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="currentColor"/><path d="m8 12.4 2.5 2.5 5.8-6" fill="none" stroke="#fff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>อนุมัติเมื่อ</span><b id="unitHeroApprovedAt">-</b></div>
+        <div class="unit-status-line"><span class="r29-pastel-icon r29-pi-lav" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="3" fill="currentColor" opacity=".22"/><rect x="7" y="10" width="10" height="8" rx="2" fill="currentColor"/><path d="M8 10V8a4 4 0 0 1 8 0v2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><span>ล็อกเมื่อ</span><b id="unitHeroLockedAt">-</b></div>
       </div>
     </div>
     <div class="unit-ref-card unit-approval-ref">
-      <div class="unit-panel-title">🛡️ สถานะตารางเดือนปัจจุบัน</div>
+      <div class="unit-panel-title unit-panel-title-pastel"><span class="r29-pastel-icon r29-pi-pink" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 19 6v5c0 4.8-3 7.7-7 10-4-2.3-7-5.2-7-10V6l7-3Z" fill="currentColor"/><path d="m9 12 2 2 4-5" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>สถานะตารางเดือนปัจจุบัน</span></div>
       <div class="unit-ref-status-grid">
         <div class="unit-ref-status-box"><small>สถานะ</small><b id="unitStatusText">ร่างตาราง</b></div>
         <div class="unit-ref-status-box"><small>ส่งตรวจเมื่อ</small><b id="unitSubmittedAt">-</b></div>
@@ -2746,11 +2746,11 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
       <div class="unit-approval-actions">
         <span id="unitStatusPill" class="status-pill status-draft">ร่างตาราง</span>
         <span id="unitLockTag" class="locked-tag">ยังไม่ล็อก</span>
-        <button id="unitSubmitBtn">📤 ส่งให้หัวหน้าตรวจ</button>
-        <button id="unitReturnBtn" class="workflow-btn-return">↩ ส่งกลับแก้ไข</button>
-        <button id="unitApproveBtn" class="workflow-btn-approve">✓ อนุมัติตาราง</button>
-        <button id="unitLockBtn" class="workflow-btn-lock">🔒 ล็อกตาราง</button>
-        <button id="unitUnlockBtn">🔓 ปลดล็อก</button>
+        <button id="unitSubmitBtn"><span class="r29-pastel-icon r29-pi-blue" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 11.5 20 4l-5.7 16-3.1-6.1L4 11.5Z" fill="currentColor"/><path d="m11.2 13.9 3.7-3.8" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></span><span>ส่งให้หัวหน้าตรวจ</span></button>
+        <button id="unitReturnBtn" class="workflow-btn-return"><span class="r29-btn-icon r29-pi-orange" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 7 4 12l5 5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 12h9a5 5 0 0 1 5 5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></span><span>ส่งกลับแก้ไข</span></button>
+        <button id="unitApproveBtn" class="workflow-btn-approve"><span class="r29-pastel-icon r29-pi-mint" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="currentColor"/><path d="m8 12.4 2.5 2.5 5.8-6" fill="none" stroke="#fff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>อนุมัติตาราง</span></button>
+        <button id="unitLockBtn" class="workflow-btn-lock"><span class="r29-pastel-icon r29-pi-lav" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="3" fill="currentColor" opacity=".22"/><rect x="7" y="10" width="10" height="8" rx="2" fill="currentColor"/><path d="M8 10V8a4 4 0 0 1 8 0v2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><span>ล็อกตาราง</span></button>
+        <button id="unitUnlockBtn"><span class="r29-btn-icon r29-pi-blue" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="3" fill="currentColor"/><path d="M9 10V8a4 4 0 0 1 7-2.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><span>ปลดล็อก</span></button>
       </div>
       <div id="unitActionFeedback" class="action-feedback"></div>
       <div id="unitConflictPanel" class="conflict-detail-panel">
@@ -2762,30 +2762,29 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
       </div>
 
       <div class="r29-workflow-step-wrap">
-        <div class="r29-workflow-subhead"><span>✨</span><b>ขั้นตอนการอนุมัติตาราง</b></div>
+        <div class="r29-workflow-subhead"><span class="r29-pastel-icon r29-pi-yellow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m12 2 1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2Z" fill="currentColor"/><circle cx="19" cy="5" r="2" fill="currentColor" opacity=".65"/></svg></span><b>ขั้นตอนการอนุมัติตาราง</b></div>
   <div class="unit-flow-row">
     <button class="unit-flow-card" id="unitStepPrepareBtn">
-      <span class="unit-flow-icon">👥</span><b>1. เตรียมข้อมูล</b><small>ข้อมูลบุคลากร / วันหยุด / เงื่อนไข</small>
+      <span class="unit-flow-icon"><span class="r29-pastel-icon r29-pi-pink" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="9" cy="9" r="3" fill="currentColor"/><circle cx="16" cy="10" r="2.5" fill="currentColor" opacity=".72"/><path d="M3.5 19c.5-4 2.3-6 5.5-6s5 2 5.5 6H3.5Z" fill="currentColor"/><path d="M13 18c.4-2.8 1.7-4.3 4-4.3 2.1 0 3.4 1.4 3.8 4.3H13Z" fill="currentColor" opacity=".72"/></svg></span></span><b>1. เตรียมข้อมูล</b><small>ข้อมูลบุคลากร / วันหยุด / เงื่อนไข</small>
     </button>
     <button class="unit-flow-card" id="unitStepScheduleBtn">
-      <span class="unit-flow-icon">✨</span><b>2. จัดตารางเวร</b><small>สร้างและจัดตารางตามกฎ 1–21</small>
+      <span class="unit-flow-icon"><span class="r29-pastel-icon r29-pi-yellow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m12 2 1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2Z" fill="currentColor"/><circle cx="19" cy="5" r="2" fill="currentColor" opacity=".65"/></svg></span></span><b>2. จัดตารางเวร</b><small>สร้างและจัดตารางตามกฎ 1–21</small>
     </button>
     <button class="unit-flow-card" id="unitStepSubmitBtn">
-      <span class="unit-flow-icon">📤</span><b>3. ส่งตรวจ</b><small>ส่งตารางให้หัวหน้าตรวจ</small>
+      <span class="unit-flow-icon"><span class="r29-pastel-icon r29-pi-blue" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 11.5 20 4l-5.7 16-3.1-6.1L4 11.5Z" fill="currentColor"/><path d="m11.2 13.9 3.7-3.8" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></span></span><b>3. ส่งตรวจ</b><small>ส่งตารางให้หัวหน้าตรวจ</small>
     </button>
     <button class="unit-flow-card" id="unitStepApproveBtn">
-      <span class="unit-flow-icon">✅</span><b>4. อนุมัติ</b><small>หัวหน้าตรวจและอนุมัติ</small>
+      <span class="unit-flow-icon"><span class="r29-pastel-icon r29-pi-mint" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="currentColor"/><path d="m8 12.4 2.5 2.5 5.8-6" fill="none" stroke="#fff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span><b>4. อนุมัติ</b><small>หัวหน้าตรวจและอนุมัติ</small>
     </button>
     <button class="unit-flow-card" id="unitStepLockBtn">
-      <span class="unit-flow-icon">🔒</span><b>5. ล็อกตาราง</b><small>ป้องกันการแก้ไขหลังประกาศใช้</small>
+      <span class="unit-flow-icon"><span class="r29-pastel-icon r29-pi-lav" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="3" fill="currentColor" opacity=".22"/><rect x="7" y="10" width="10" height="8" rx="2" fill="currentColor"/><path d="M8 10V8a4 4 0 0 1 8 0v2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span></span><b>5. ล็อกตาราง</b><small>ป้องกันการแก้ไขหลังประกาศใช้</small>
     </button>
   </div>
       </div>
 
       <div class="r29-workflow-audit-wrap">
-        <div class="r29-workflow-subhead"><span>🕘</span><b>ประวัติการทำรายการล่าสุด</b></div>
+        <div class="r29-workflow-subhead"><span class="r29-pastel-icon r29-pi-blue" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3 2M7 4.5 4.5 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><b>ประวัติการทำรายการล่าสุด</b></div>
     <div class="unit-ref-card unit-audit-ref-card">
-      <div class="unit-panel-title">↻ ประวัติล่าสุด (Audit Log)</div>
       <table class="unit-audit-mini"><tbody id="unitAuditRecentBody"></tbody></table>
       <button class="unit-wide-btn" id="unitOpenAuditBtn">☷ ดูประวัติทั้งหมด</button>
     </div>
