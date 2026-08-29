@@ -1,0 +1,270 @@
+
+/* =========================================================
+   RULES V31.2 — PASTEL SHIELD ICONS ONLY
+   Scope ONLY: #page-rules
+   - Category animal icons -> pastel shields, preserving each category color
+   - Top action icons -> pastel
+   - Every rule-row icon -> pastel shield, preserving current rule color
+   - Allowed-info icons -> pastel
+   - Validation-summary icon -> pastel
+   - Workflow-overview icons -> pastel
+   NO Sidebar / system / other pages / layout changes
+   ========================================================= */
+
+/* ---------- shared masks ---------- */
+#page-rules{
+  --r31-mask-shield:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2.5 20 6v5.2c0 5-3 8.2-8 10.8-5-2.6-8-5.8-8-10.8V6l8-3.5Z' fill='black'/%3E%3C/svg%3E");
+  --r31-mask-reset:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 7V3L1 7l4 4V8c3.8-3.1 9.4-2.5 12.5 1.3 3.1 3.8 2.5 9.4-1.3 12.5A9 9 0 0 1 3 19l2-1.2A6.8 6.8 0 1 0 5 7Z' fill='black'/%3E%3C/svg%3E");
+  --r31-mask-save:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 3h13l3 3v15H4V3Zm3 2v6h10V5H7Zm2 10v4h6v-4H9Z' fill='black'/%3E%3C/svg%3E");
+  --r31-mask-check:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2.5 20 6v5.2c0 5-3 8.2-8 10.8-5-2.6-8-5.8-8-10.8V6l8-3.5Zm-1.2 13.3 5.6-6-1.6-1.5-4.1 4.4-2-2-1.5 1.5 3.6 3.6Z' fill='black'/%3E%3C/svg%3E");
+  --r31-mask-calendar:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 2h2v3h8V2h2v3h2v17H4V5h2V2Zm0 8v10h12V10H6Zm2 2h3v3H8v-3Zm5 0h3v3h-3v-3Z' fill='black'/%3E%3C/svg%3E");
+  --r31-mask-star:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m12 2.5 2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5-4.7-4.6 6.5-.9L12 2.5Z' fill='black'/%3E%3C/svg%3E");
+  --r31-mask-info:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-1 8v7h2v-7h-2Zm0-4v2h2V6h-2Z' fill='black'/%3E%3C/svg%3E");
+  --r31-mask-report:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 3h16v18H4V3Zm3 12v3h2v-3H7Zm4-5v8h2v-8h-2Zm4-3v11h2V7h-2Z' fill='black'/%3E%3C/svg%3E");
+  --r31-mask-clock:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2a10 10 0 1 1-9.5 13.1l2-.7A8 8 0 1 0 6.4 7L9 9.6H2V2.7l2.9 2.9A10 10 0 0 1 12 2Zm-1 5h2v5.2l3.3 2-1 1.7L11 13.3V7Z' fill='black'/%3E%3C/svg%3E");
+}
+
+/* =========================================================
+   1) Category tabs: replace all animals with shield
+   Keep each existing pastel category color exactly as-is.
+   ========================================================= */
+#page-rules .r31-tabs button .r31-tab-animal svg{
+  display:none!important;
+}
+#page-rules .r31-tabs button .r31-tab-animal::before{
+  content:"";
+  width:24px;
+  height:24px;
+  display:block;
+  background:currentColor;
+  -webkit-mask:var(--r31-mask-shield) center/contain no-repeat;
+  mask:var(--r31-mask-shield) center/contain no-repeat;
+}
+#page-rules .r31-tabs button .r31-tab-animal{
+  color:var(--tab-fg)!important;
+}
+
+/* =========================================================
+   2) Top action buttons: pastel icons matching button color
+   ========================================================= */
+#page-rules #rulesResetBtnV24 > span:first-child,
+#page-rules #rulesSaveBtnV24 > span:first-child,
+#page-rules #rulesCheckBtnV24 > span:first-child{
+  width:24px!important;
+  height:24px!important;
+  flex:0 0 24px!important;
+  display:inline-grid!important;
+  place-items:center!important;
+  border-radius:8px!important;
+  font-size:0!important;
+  background:rgba(255,255,255,.72)!important;
+}
+#page-rules #rulesResetBtnV24 > span:first-child::before,
+#page-rules #rulesSaveBtnV24 > span:first-child::before,
+#page-rules #rulesCheckBtnV24 > span:first-child::before{
+  content:"";
+  width:15px;
+  height:15px;
+  display:block;
+  background:currentColor;
+}
+#page-rules #rulesResetBtnV24 > span:first-child::before{
+  -webkit-mask:var(--r31-mask-reset) center/contain no-repeat;
+  mask:var(--r31-mask-reset) center/contain no-repeat;
+}
+#page-rules #rulesSaveBtnV24 > span:first-child::before{
+  -webkit-mask:var(--r31-mask-save) center/contain no-repeat;
+  mask:var(--r31-mask-save) center/contain no-repeat;
+}
+#page-rules #rulesCheckBtnV24 > span:first-child::before{
+  -webkit-mask:var(--r31-mask-check) center/contain no-repeat;
+  mask:var(--r31-mask-check) center/contain no-repeat;
+}
+#page-rules #rulesResetBtnV24,
+#page-rules #rulesSaveBtnV24,
+#page-rules #rulesCheckBtnV24{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:7px!important;
+}
+
+/* =========================================================
+   3) Every rule row icon: pastel shield preserving row color
+   ========================================================= */
+#page-rules .r31-rule-icon{
+  font-size:0!important;
+}
+#page-rules .r31-rule-icon::before{
+  content:"";
+  width:21px;
+  height:21px;
+  display:block;
+  background:currentColor;
+  -webkit-mask:var(--r31-mask-shield) center/contain no-repeat;
+  mask:var(--r31-mask-shield) center/contain no-repeat;
+}
+
+/* =========================================================
+   4) Allowed information: all icons -> pastel matching card
+   ========================================================= */
+#page-rules .r31-allow-icon{
+  font-size:0!important;
+  color:inherit!important;
+}
+#page-rules .r31-allow-icon::before{
+  content:"";
+  width:17px;
+  height:17px;
+  display:block;
+  background:currentColor;
+}
+#page-rules .r31-allow-item.pink .r31-allow-icon{
+  color:#e65388!important;
+  background:#fff0f5!important;
+}
+#page-rules .r31-allow-item.pink .r31-allow-icon::before{
+  -webkit-mask:var(--r31-mask-calendar) center/contain no-repeat;
+  mask:var(--r31-mask-calendar) center/contain no-repeat;
+}
+#page-rules .r31-allow-item.blue .r31-allow-icon{
+  color:#368fc3!important;
+  background:#edf7ff!important;
+}
+#page-rules .r31-allow-item.blue .r31-allow-icon::before{
+  -webkit-mask:var(--r31-mask-star) center/contain no-repeat;
+  mask:var(--r31-mask-star) center/contain no-repeat;
+}
+#page-rules .r31-allow-item.purple .r31-allow-icon{
+  color:#795ac8!important;
+  background:#f3efff!important;
+}
+#page-rules .r31-allow-item.purple .r31-allow-icon::before{
+  -webkit-mask:var(--r31-mask-info) center/contain no-repeat;
+  mask:var(--r31-mask-info) center/contain no-repeat;
+}
+
+/* =========================================================
+   5) Validation summary: report button pastel icon
+   ========================================================= */
+#page-rules .r31-wide-report{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:7px!important;
+  font-size:0!important;
+}
+#page-rules .r31-wide-report::before{
+  content:"";
+  width:20px;
+  height:20px;
+  flex:0 0 20px;
+  border-radius:7px;
+  background:#ffe4ee;
+  box-shadow:inset 0 0 0 1px #f6d0de;
+}
+#page-rules .r31-wide-report::after{
+  content:"ดูรายงานการตรวจสอบ";
+  font-size:9px;
+  font-weight:900;
+  color:#dc5686;
+  line-height:1;
+}
+/* report glyph inside the pastel badge */
+#page-rules .r31-wide-report{
+  position:relative;
+}
+#page-rules .r31-wide-report > *{display:none!important}
+#page-rules .r31-wide-report::before{
+  -webkit-mask:none;
+  mask:none;
+}
+#page-rules .r31-wide-report{
+  background-image:
+    linear-gradient(#dc5686,#dc5686),
+    linear-gradient(#ffe4ee,#ffe4ee)!important;
+  background-repeat:no-repeat!important;
+  background-size:14px 14px,20px 20px!important;
+  background-position:calc(50% - 72px) center,calc(50% - 72px) center!important;
+  -webkit-mask-image:none!important;
+}
+
+/* =========================================================
+   6) Workflow overview: all icons pastel
+   ========================================================= */
+#page-rules .r31-overview-list .ico{
+  font-size:0!important;
+}
+#page-rules .r31-overview-list .ico::before{
+  content:"";
+  width:14px;
+  height:14px;
+  display:block;
+  background:currentColor;
+}
+#page-rules .r31-overview-list .ico.purple::before{
+  -webkit-mask:var(--r31-mask-shield) center/contain no-repeat;
+  mask:var(--r31-mask-shield) center/contain no-repeat;
+}
+#page-rules .r31-overview-list .ico.green::before{
+  -webkit-mask:var(--r31-mask-check) center/contain no-repeat;
+  mask:var(--r31-mask-check) center/contain no-repeat;
+}
+#page-rules .r31-overview-list .ico.orange::before{
+  -webkit-mask:var(--r31-mask-clock) center/contain no-repeat;
+  mask:var(--r31-mask-clock) center/contain no-repeat;
+}
+
+/* Updated-latest icon */
+#page-rules .r31-updated > span:first-child{
+  width:22px!important;
+  height:22px!important;
+  flex:0 0 22px!important;
+  display:inline-grid!important;
+  place-items:center!important;
+  border-radius:7px!important;
+  font-size:0!important;
+  color:#368fc3!important;
+  background:#edf7ff!important;
+}
+#page-rules .r31-updated > span:first-child::before{
+  content:"";
+  width:14px;
+  height:14px;
+  background:currentColor;
+  -webkit-mask:var(--r31-mask-clock) center/contain no-repeat;
+  mask:var(--r31-mask-clock) center/contain no-repeat;
+}
+
+/* Bottom save icon */
+#page-rules .r31-save-bottom{
+  font-size:0!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:7px!important;
+}
+#page-rules .r31-save-bottom::before{
+  content:"";
+  width:18px;
+  height:18px;
+  background:#268269;
+  -webkit-mask:var(--r31-mask-save) center/contain no-repeat;
+  mask:var(--r31-mask-save) center/contain no-repeat;
+}
+#page-rules .r31-save-bottom::after{
+  content:"บันทึกกฎทั้งหมด";
+  font-size:9px;
+  font-weight:900;
+  color:#268269;
+}
+
+/* Keep sizes consistent on iPad and phone without changing layout */
+@media (max-width:1180px){
+  #page-rules .r31-tabs button .r31-tab-animal::before{width:22px;height:22px}
+  #page-rules .r31-rule-icon::before{width:19px;height:19px}
+}
+@media (max-width:640px){
+  #page-rules .r31-tabs button .r31-tab-animal::before{width:20px;height:20px}
+  #page-rules .r31-rule-icon::before{width:17px;height:17px}
+}
