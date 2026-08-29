@@ -545,3 +545,267 @@
     font-size:8px!important;
   }
 }
+
+
+/* =========================================================
+   ROSTER V29.4.2 — VISUAL + PHONE VIEW FIX ONLY
+   Scope ONLY: #page-roster
+   - กรอบสถานะ 2 ส่วน
+   - pastel toolbar icons
+   - note icon
+   - phone full-width fix
+   - version bottom-right
+   - NO sidebar / system / other pages changes
+   ========================================================= */
+
+/* 1) Frame both current status areas */
+#page-roster .r29-workflow-hub .unit-status-hero,
+#page-roster .r29-workflow-hub .unit-approval-ref{
+  border:1px solid #eadfe6!important;
+  border-radius:18px!important;
+  background:#fff!important;
+  box-shadow:0 4px 14px rgba(63,58,82,.035)!important;
+  padding:14px!important;
+}
+
+/* 2) Current status title: pastel icon + same size as month-current title */
+#page-roster .r29-workflow-hub .unit-status-hero h3{
+  display:flex!important;
+  align-items:center!important;
+  gap:8px!important;
+  min-height:32px!important;
+  margin:0 0 10px!important;
+  font-size:11px!important;
+  line-height:1.2!important;
+  color:#455168!important;
+}
+#page-roster .r29-workflow-hub .unit-status-hero h3::before{
+  content:"";
+  width:24px;
+  height:24px;
+  flex:0 0 24px;
+  border-radius:8px;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='4' y='4' width='16' height='16' rx='5' fill='%23f7a8c5' fill-opacity='.24'/%3E%3Cpath d='M7 12h4l2-4 2 8 2-4h2' fill='none' stroke='%23ec78a5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+    center/20px 20px no-repeat;
+}
+#page-roster .r29-workflow-hub .unit-panel-title-pastel{
+  min-height:32px!important;
+  font-size:11px!important;
+}
+
+/* 3) Toolbar icons to pastel SVG badges. Do not change functionality. */
+#page-roster .r29-action .r29-toolbar-icon{
+  width:28px!important;
+  height:28px!important;
+  flex:0 0 28px!important;
+  display:grid!important;
+  place-items:center!important;
+  border-radius:9px!important;
+  background:#fff!important;
+  box-shadow:0 2px 7px rgba(72,72,96,.05)!important;
+}
+#page-roster .r29-action .r29-toolbar-icon svg{
+  width:18px!important;
+  height:18px!important;
+  display:block!important;
+}
+#page-roster .r29-toolbar-icon.pink{color:#ee78a6!important;background:#fff0f6!important}
+#page-roster .r29-toolbar-icon.mint{color:#52bea8!important;background:#ecfbf6!important}
+#page-roster .r29-toolbar-icon.lav{color:#8f78df!important;background:#f3efff!important}
+#page-roster .r29-toolbar-icon.blue{color:#58b5d8!important;background:#eef8ff!important}
+#page-roster .r29-toolbar-icon.yellow{color:#e8b546!important;background:#fff8e6!important}
+#page-roster .r29-toolbar-icon.orange{color:#ea9968!important;background:#fff2e9!important}
+#page-roster .r29-toolbar-icon.rose{color:#e97987!important;background:#fff0f2!important}
+
+/* soften toolbar button fills so pastel icons remain visible */
+#page-roster .r29-run{background:linear-gradient(135deg,#fff1f6,#ffe2ed)!important;color:#bd4c77!important}
+#page-roster .r29-save{background:linear-gradient(135deg,#effbf7,#dff7ef)!important;color:#278a76!important}
+#page-roster .r29-open{background:linear-gradient(135deg,#f5f1ff,#e9e2ff)!important;color:#6553ad!important}
+#page-roster .r29-check{background:linear-gradient(135deg,#eef9ff,#dff2fb)!important;color:#397fa0!important}
+#page-roster .r29-print{background:linear-gradient(135deg,#fff9e9,#fff0bd)!important;color:#8d6b14!important}
+#page-roster .r29-pdf{background:linear-gradient(135deg,#fff3eb,#ffe2d0)!important;color:#a96840!important}
+#page-roster .r29-clear{background:linear-gradient(135deg,#fff2f4,#ffdde2)!important;color:#b85563!important;border-color:#f2cbd1!important}
+
+/* 4) note title pastel icon */
+#page-roster .r29-note-title{
+  display:flex!important;
+  align-items:center!important;
+  gap:8px!important;
+}
+#page-roster .r29-note-title-icon{
+  width:28px;
+  height:28px;
+  flex:0 0 28px;
+  display:grid;
+  place-items:center;
+  border-radius:9px;
+  color:#8f78df;
+  background:#f3efff;
+}
+#page-roster .r29-note-title-icon svg{width:19px;height:19px;display:block}
+
+/* 6) version moved to the absolute bottom-right of roster content */
+#page-roster .r29-shell{
+  position:relative!important;
+}
+#page-roster .r29-version-bottom{
+  display:block!important;
+  width:100%;
+  text-align:right;
+  margin-top:2px;
+  padding:4px 2px 0;
+  color:#a2a8b4;
+  font-size:8px;
+  font-weight:800;
+  line-height:1;
+}
+
+/* 5) Phone: page content itself must use full available viewport width.
+   Does NOT touch sidebar selectors. */
+@media screen and (max-width:640px){
+  #page-roster{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    margin:0!important;
+    padding-left:8px!important;
+    padding-right:8px!important;
+    overflow-x:hidden!important;
+  }
+
+  #page-roster .r29-shell{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    margin:0!important;
+    gap:10px!important;
+  }
+
+  #page-roster .r29-page-title,
+  #page-roster .r29-toolbar-card,
+  #page-roster .r29-stats,
+  #page-roster .r29-table-card,
+  #page-roster .r29-workflow-hub,
+  #page-roster .r29-bottom{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+  }
+
+  #page-roster .r29-toolbar{
+    width:100%!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:7px!important;
+  }
+  #page-roster .r29-field{
+    min-width:0!important;
+  }
+  #page-roster .r29-field select,
+  #page-roster .r29-field input{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+  }
+  #page-roster .r29-action{
+    width:100%!important;
+    min-width:0!important;
+    height:44px!important;
+    min-height:44px!important;
+    padding:0 8px!important;
+    gap:6px!important;
+    justify-content:flex-start!important;
+    font-size:9px!important;
+  }
+  #page-roster .r29-action .r29-toolbar-icon{
+    width:26px!important;height:26px!important;flex-basis:26px!important;
+  }
+  #page-roster .r29-action .r29-toolbar-icon svg{width:17px!important;height:17px!important}
+
+  #page-roster .r29-stats{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:7px!important;
+  }
+  #page-roster .r29-stat{
+    min-width:0!important;
+    width:100%!important;
+    grid-template-columns:38px minmax(0,1fr)!important;
+    padding:9px 8px!important;
+  }
+  #page-roster .r29-stat-icon{width:36px!important;height:36px!important}
+  #page-roster .r29-stat-copy strong{font-size:18px!important}
+  #page-roster .r29-stat-copy small{font-size:7.8px!important}
+  #page-roster .r29-stat-copy i{font-size:6.8px!important}
+
+  #page-roster .r29-table-card{
+    padding:8px!important;
+    overflow:hidden!important;
+  }
+  #page-roster .r29-table-toolbar{
+    width:100%!important;
+    min-width:0!important;
+  }
+  #page-roster .sheet-wrap{
+    width:100%!important;
+    max-width:100%!important;
+    overflow-x:auto!important;
+    overflow-y:auto!important;
+    -webkit-overflow-scrolling:touch!important;
+  }
+
+  #page-roster .r29-workflow-top-grid{
+    grid-template-columns:minmax(0,1fr)!important;
+    width:100%!important;
+  }
+  #page-roster .r29-workflow-hub .unit-status-hero,
+  #page-roster .r29-workflow-hub .unit-approval-ref{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    padding:10px!important;
+  }
+  #page-roster .r29-workflow-hub .unit-status-line{
+    width:100%!important;
+    grid-template-columns:22px 76px minmax(0,1fr)!important;
+  }
+  #page-roster .r29-workflow-hub .unit-status-line b{
+    overflow-wrap:anywhere!important;
+  }
+  #page-roster .r29-workflow-hub .unit-ref-status-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    width:100%!important;
+  }
+
+  #page-roster .r29-bottom{
+    grid-template-columns:minmax(0,1fr)!important;
+  }
+  #page-roster .r29-panel{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+  }
+
+  #page-roster .r29-version-bottom{
+    font-size:7px!important;
+    padding-right:2px!important;
+  }
+}
+
+/* extra-small phones */
+@media screen and (max-width:390px){
+  #page-roster{
+    padding-left:6px!important;
+    padding-right:6px!important;
+  }
+  #page-roster .r29-action{
+    font-size:8.3px!important;
+    padding:0 6px!important;
+  }
+  #page-roster .r29-toolbar{
+    gap:6px!important;
+  }
+}
+
+@media print{
+  #page-roster .r29-version-bottom{display:none!important}
+}

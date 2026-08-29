@@ -1758,7 +1758,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 </style>
 <link rel="stylesheet" href="style.css?v=30.0">
 <link rel="stylesheet" href="roster-v29.css?v=29.3">
-<link rel="stylesheet" href="roster-workflow-v29.css?v=29.4.1">
+<link rel="stylesheet" href="roster-workflow-v29.css?v=29.4.2">
 <link rel="stylesheet" href="people-v30.css?v=30.4">
 <link rel="stylesheet" href="rules-v31.css?v=31.1">
 <link rel="stylesheet" href="holidays-v32.css?v=32.5">
@@ -2597,7 +2597,6 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
           <p>ระบบจัดการเวรอย่างเป็นระบบ</p>
         </div>
       </div>
-      <div class="r29-version">V29.3 • Roster</div>
     </div>
 
     <section class="r29-toolbar-card no-print">
@@ -2610,13 +2609,13 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
           <span>ปี พ.ศ.</span>
           <input id="year" type="number" min="2500" max="2700">
         </label>
-        <button class="r29-action r29-run" id="runBtn"><span>↻</span><b>รันตารางเวร</b></button>
-        <button class="r29-action r29-save" id="saveBtn"><span>▣</span><b>บันทึกตาราง</b></button>
-        <button class="r29-action r29-open" id="loadBtn"><span>📂</span><b>เปิดตารางเดิม</b></button>
-        <button class="r29-action r29-check" id="validateBtn"><span>🛡</span><b>ตรวจสอบ</b></button>
-        <button class="r29-action r29-print" id="printBtn"><span>▣</span><b>พิมพ์</b></button>
-        <button class="r29-action r29-pdf" id="pdfBtn"><span>⇩</span><b>บันทึก PDF</b></button>
-        <button class="r29-action r29-clear" id="clearBtn"><span>⌫</span><b>ล้างตาราง</b></button>
+        <button class="r29-action r29-run" id="runBtn"><span class="r29-toolbar-icon pink" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 17c4-1 8-5 9-9l3 3c-4 1-8 5-9 9l-3-3Z" fill="currentColor"/><path d="m16 4 .7 2.3L19 7l-2.3.7L16 10l-.7-2.3L13 7l2.3-.7L16 4Zm4 8 .5 1.6L22 14l-1.5.5L20 16l-.5-1.5L18 14l1.5-.4L20 12Z" fill="currentColor" opacity=".72"/></svg></span><b>รันตารางเวร</b></button>
+        <button class="r29-action r29-save" id="saveBtn"><span class="r29-toolbar-icon mint" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 4h12l2 2v14H5V4Z" fill="currentColor"/><path d="M8 4h7v6H8V4Zm1 10h6v4H9v-4Z" fill="#fff" opacity=".95"/></svg></span><b>บันทึกตาราง</b></button>
+        <button class="r29-action r29-open" id="loadBtn"><span class="r29-toolbar-icon lav" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 7h7l2 2h9v10H3V7Z" fill="currentColor" opacity=".35"/><path d="M3 10h18l-3 9H6l-3-9Z" fill="currentColor"/></svg></span><b>เปิดตารางเดิม</b></button>
+        <button class="r29-action r29-check" id="validateBtn"><span class="r29-toolbar-icon blue" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 20 6v5c0 5-3.2 8-8 10-4.8-2-8-5-8-10V6l8-3Z" fill="currentColor"/><path d="m8.5 12 2.2 2.2 4.8-5" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><b>ตรวจสอบ</b></button>
+        <button class="r29-action r29-print" id="printBtn"><span class="r29-toolbar-icon yellow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4h10v5H7V4Z" fill="currentColor"/><rect x="4" y="8" width="16" height="8" rx="3" fill="currentColor" opacity=".65"/><path d="M7 13h10v7H7v-7Z" fill="currentColor"/><path d="M9 15h6M9 17h6" stroke="#fff" stroke-width="1.2"/></svg></span><b>พิมพ์</b></button>
+        <button class="r29-action r29-pdf" id="pdfBtn"><span class="r29-toolbar-icon orange" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6V3Z" fill="currentColor" opacity=".85"/><path d="M14 3v5h5" fill="none" stroke="#fff" stroke-width="1.6"/><path d="M9 14h6M9 17h5" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg></span><b>บันทึก PDF</b></button>
+        <button class="r29-action r29-clear" id="clearBtn"><span class="r29-toolbar-icon rose" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 7h10l-1 13H8L7 7Z" fill="currentColor"/><path d="M5 7h14M9 7l1-3h4l1 3M10 10v7M14 10v7" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round"/></svg></span><b>ล้างตาราง</b></button>
       </div>
     </section>
 
@@ -2848,7 +2847,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
       </article>
 
       <article class="r29-panel r29-notes-panel">
-        <div class="r29-panel-head"><div><h3>หมายเหตุ</h3><small>กฎสำคัญที่ควรตรวจสอบก่อนบันทึก</small></div></div>
+        <div class="r29-panel-head"><div><h3 class="r29-note-title"><span class="r29-note-title-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="4" fill="currentColor" opacity=".22"/><path d="M8 8h8M8 12h8M8 16h5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="18" cy="5" r="3" fill="currentColor"/></svg></span><span>หมายเหตุ</span></h3><small>กฎสำคัญที่ควรตรวจสอบก่อนบันทึก</small></div></div>
         <ul class="r29-note-list">
           <li>ชื่อบุคลากรห้ามซ้ำในวันเดียวกันทุกประเภทเวร</li>
           <li>หลังขึ้นเวรบ่าย-ดึก วันถัดไปห้ามต่อเวรตามเงื่อนไขของระบบ</li>
@@ -2859,6 +2858,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
         <textarea id="pdfNote" rows="3" placeholder="หมายเหตุ: ..."></textarea>
       </article>
     </section>
+    <div class="r29-version r29-version-bottom no-print">V29.4.2 • Roster</div>
   </div>
 </section>
 
