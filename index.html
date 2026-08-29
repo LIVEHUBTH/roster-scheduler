@@ -1760,6 +1760,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 <link rel="stylesheet" href="roster-v29.css?v=29.3">
 <link rel="stylesheet" href="roster-workflow-v29.css?v=29.4.3">
 <link rel="stylesheet" href="people-v30.css?v=30.4">
+<link rel="stylesheet" href="people-polish-v30.css?v=30.5">
 <link rel="stylesheet" href="rules-v31.css?v=31.1">
 <link rel="stylesheet" href="holidays-v32.css?v=32.5">
 <link rel="stylesheet" href="history-v33.css?v=33.8">
@@ -2876,9 +2877,9 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
       <div class="p30-card-head">
         <div><h3>สรุปข้อมูลพนักงาน</h3></div>
         <div class="p30-head-actions">
-          <button id="addPersonBtn" class="p30-action purple"><span>＋</span> เพิ่มพนักงาน</button>
-          <button id="peopleImportBtnV30" class="p30-action mint"><span>⇧</span> นำเข้าข้อมูล</button>
-          <button id="peopleExportBtn" class="p30-action pink"><span>⇩</span> ส่งออกข้อมูล</button>
+          <button id="addPersonBtn" class="p30-action purple"><span class="p305-icon purple" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="9" cy="9" r="4" fill="currentColor"/><path d="M3 20c.6-4.6 2.8-7 6-7s5.4 2.4 6 7H3Z" fill="currentColor" opacity=".8"/><path d="M18 8v7M14.5 11.5h7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><span>เพิ่มพนักงาน</span></button>
+          <button id="peopleImportBtnV30" class="p30-action mint"><span class="p305-icon mint" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 17v3h14v-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M12 4v11m0-11-4 4m4-4 4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>นำเข้าข้อมูล</span></button>
+          <button id="peopleExportBtn" class="p30-action pink"><span class="p305-icon pink" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 17v3h14v-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M12 15V4m0 11-4-4m4 4 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>ส่งออกข้อมูล</span></button>
           <input id="peopleImportFileV30" type="file" accept=".csv,text/csv" hidden>
         </div>
       </div>
@@ -2953,9 +2954,9 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
       </article>
       <article class="p30-card p30-bottom-card p30-quick">
         <h3>จัดการรวดเร็ว</h3>
-        <button id="peopleGroupDeptBtnV30">♧ จัดกลุ่มพนักงานตามแผนก</button>
-        <button id="peopleGoRulesBtn">♢ ตั้งค่าตำแหน่งและสิทธิ์</button>
-        <button id="peopleGoHistoryBtn">◷ ประวัติการเปลี่ยนแปลง</button>
+        <button id="peopleGroupDeptBtnV30"><span class="p305-icon blue" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="8" cy="9" r="3" fill="currentColor"/><circle cx="16" cy="9" r="3" fill="currentColor" opacity=".72"/><path d="M3 19c.4-4 2-6 5-6s4.6 2 5 6H3Z" fill="currentColor"/><path d="M11 19c.4-4 2-6 5-6s4.6 2 5 6H11Z" fill="currentColor" opacity=".72"/></svg></span><span>จัดกลุ่มพนักงานตามแผนก</span></button>
+        <button id="peopleGoRulesBtn"><span class="p305-icon yellow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 19 6v5c0 4.6-2.9 7.7-7 10-4.1-2.3-7-5.4-7-10V6l7-3Z" fill="currentColor"/><path d="m9 12 2 2 4-5" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>ตั้งค่าตำแหน่งและสิทธิ์</span></button>
+        <button id="peopleGoHistoryBtn"><span class="p305-icon lav" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M6 5H3v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>ประวัติการเปลี่ยนแปลง</span></button>
       </article>
     </section>
   </div>

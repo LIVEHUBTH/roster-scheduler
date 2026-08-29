@@ -1,0 +1,191 @@
+
+/* =========================================================
+   PEOPLE V30.5 — PASTEL ICONS + CARD BALANCE ONLY
+   Scope ONLY: #page-people
+   ไม่แตะ Sidebar / ระบบ / หน้าอื่น
+   ========================================================= */
+
+#page-people{
+  --p305-purple:#866bd6;
+  --p305-mint:#4eb89b;
+  --p305-pink:#e96f9d;
+  --p305-blue:#56add2;
+  --p305-yellow:#e8b54b;
+  --p305-lav:#9a79df;
+}
+
+/* 1) Pastel icons for requested buttons */
+#page-people .p305-icon{
+  width:26px;
+  height:26px;
+  flex:0 0 26px;
+  display:inline-grid;
+  place-items:center;
+  border-radius:9px;
+  vertical-align:middle;
+}
+#page-people .p305-icon svg{
+  width:17px;
+  height:17px;
+  display:block;
+}
+#page-people .p305-icon.purple{color:var(--p305-purple);background:#f2edff}
+#page-people .p305-icon.mint{color:var(--p305-mint);background:#eaf9f4}
+#page-people .p305-icon.pink{color:var(--p305-pink);background:#fff0f5}
+#page-people .p305-icon.blue{color:var(--p305-blue);background:#edf8fd}
+#page-people .p305-icon.yellow{color:var(--p305-yellow);background:#fff7e4}
+#page-people .p305-icon.lav{color:var(--p305-lav);background:#f4efff}
+
+#page-people .p30-action{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:7px!important;
+  line-height:1!important;
+}
+#page-people .p30-action > span:last-child{
+  display:inline-flex;
+  align-items:center;
+  white-space:nowrap;
+}
+
+/* Quick-management buttons: pastel icons + aligned labels */
+#page-people .p30-quick button{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:9px!important;
+  min-height:42px!important;
+  padding:7px 12px!important;
+  line-height:1.2!important;
+}
+#page-people .p30-quick button > span:last-child{
+  min-width:0;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+/* Give the three quick actions gentle distinct pastel tones */
+#page-people #peopleGroupDeptBtnV30{
+  background:#eef8ff!important;
+  border-color:#d4eaf5!important;
+  color:#397d9c!important;
+}
+#page-people #peopleGoRulesBtn{
+  background:#fff8e9!important;
+  border-color:#f1dfb1!important;
+  color:#926d1b!important;
+}
+#page-people #peopleGoHistoryBtn{
+  background:#f5f1ff!important;
+  border-color:#dfd6f8!important;
+  color:#735bb7!important;
+}
+
+/* 2) Five summary cards: center text and keep same-line labels together */
+#page-people .p30-stat{
+  grid-template-columns:48px minmax(0,1fr)!important;
+  align-items:center!important;
+  text-align:center!important;
+}
+#page-people .p30-stat > span:last-child{
+  min-width:0;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+}
+#page-people .p30-stat small,
+#page-people .p30-stat strong,
+#page-people .p30-stat i{
+  width:100%;
+  text-align:center!important;
+}
+#page-people .p30-stat small{
+  white-space:nowrap!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  font-size:9.4px!important;
+}
+#page-people .p30-stat strong{
+  display:flex!important;
+  align-items:baseline!important;
+  justify-content:center!important;
+  gap:4px!important;
+  white-space:nowrap!important;
+}
+#page-people .p30-stat strong b,
+#page-people .p30-stat strong em{
+  display:inline!important;
+  white-space:nowrap!important;
+}
+#page-people .p30-stat i{
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  font-size:8.4px!important;
+}
+
+/* 3) Remove underline under subtitle area and balance spacing */
+#page-people .p30-page-title{
+  border-bottom:0!important;
+  padding:4px 2px 4px!important;
+  margin-bottom:2px!important;
+}
+#page-people .p30-page-title p{
+  margin-top:3px!important;
+}
+#page-people .p30-shell{
+  gap:10px!important;
+}
+#page-people .p30-summary-card{
+  margin-top:0!important;
+}
+
+/* iPad */
+@media (min-width:641px) and (max-width:1180px){
+  #page-people .p30-stat{
+    grid-template-columns:42px minmax(0,1fr)!important;
+    padding:11px 10px!important;
+  }
+  #page-people .p30-stat-icon{
+    width:40px!important;
+    height:40px!important;
+  }
+  #page-people .p30-stat-icon svg{
+    width:32px!important;
+    height:32px!important;
+  }
+  #page-people .p30-stat small{font-size:8.6px!important}
+  #page-people .p30-stat strong{font-size:21px!important}
+  #page-people .p30-stat i{font-size:7.6px!important}
+}
+
+/* Phone — only keep requested cards readable; no sidebar selector */
+@media (max-width:640px){
+  #page-people .p30-head-actions{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:7px!important;
+  }
+  #page-people .p30-action{
+    width:100%!important;
+    justify-content:flex-start!important;
+  }
+  #page-people .p30-stat-grid{
+    grid-template-columns:1fr!important;
+  }
+  #page-people .p30-stat{
+    grid-template-columns:44px minmax(0,1fr)!important;
+    min-height:78px!important;
+    padding:10px!important;
+  }
+  #page-people .p30-stat small{font-size:9px!important}
+  #page-people .p30-stat strong{font-size:22px!important}
+  #page-people .p30-stat i{font-size:8px!important}
+  #page-people .p30-quick button > span:last-child{
+    white-space:normal;
+  }
+}
