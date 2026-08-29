@@ -1758,6 +1758,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 </style>
 <link rel="stylesheet" href="style.css?v=30.0">
 <link rel="stylesheet" href="roster-v29.css?v=29.3">
+<link rel="stylesheet" href="roster-workflow-v29.css?v=29.4">
 <link rel="stylesheet" href="people-v30.css?v=30.4">
 <link rel="stylesheet" href="rules-v31.css?v=31.1">
 <link rel="stylesheet" href="holidays-v32.css?v=32.5">
@@ -2702,6 +2703,95 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
       <div class="sheet-wrap"><table id="sheet" class="sheet"></table></div>
     </section>
 
+
+    <section class="r29-workflow-hub no-print" id="r29WorkflowHub">
+      <div class="r29-workflow-hub-head">
+        <div class="r29-workflow-hub-title">
+          <span class="r29-workflow-hub-icon" aria-hidden="true">
+            <svg viewBox="0 0 64 64">
+              <rect x="10" y="11" width="44" height="42" rx="11" fill="#ffe1ec"/>
+              <rect x="10" y="11" width="44" height="11" rx="11" fill="#f7a8c5"/>
+              <path d="M20 32h24M20 41h16" stroke="#d95f8f" stroke-width="4" stroke-linecap="round"/>
+              <circle cx="47" cy="42" r="10" fill="#dff7ef"/>
+              <path d="M43 42l3 3 6-7" fill="none" stroke="#3fb99b" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <div>
+            <h3>สถานะและขั้นตอนการจัดตารางเวร</h3>
+            <p>รวมสถานะการล็อก ขั้นตอนอนุมัติ และประวัติรายการไว้ในหน้าตารางเวร</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="r29-workflow-top-grid">
+    <div class="unit-ref-card unit-status-hero">
+      <h3>สถานะปัจจุบัน</h3>
+      <div class="unit-status-big">🔒 <span id="unitHeroStatusText">ร่างตาราง</span></div>
+      <div class="unit-status-month" id="unitCurrentMonthLabel">เดือนปัจจุบัน</div>
+      <div class="unit-status-lines">
+        <div class="unit-status-line">📤 <span>ส่งตรวจเมื่อ</span><b id="unitHeroSubmittedAt">-</b></div>
+        <div class="unit-status-line">✅ <span>อนุมัติเมื่อ</span><b id="unitHeroApprovedAt">-</b></div>
+        <div class="unit-status-line">🔒 <span>ล็อกเมื่อ</span><b id="unitHeroLockedAt">-</b></div>
+      </div>
+    </div>
+    <div class="unit-ref-card unit-approval-ref">
+      <div class="unit-panel-title">🛡️ สถานะตารางเดือนปัจจุบัน</div>
+      <div class="unit-ref-status-grid">
+        <div class="unit-ref-status-box"><small>สถานะ</small><b id="unitStatusText">ร่างตาราง</b></div>
+        <div class="unit-ref-status-box"><small>ส่งตรวจเมื่อ</small><b id="unitSubmittedAt">-</b></div>
+        <div class="unit-ref-status-box"><small>อนุมัติเมื่อ</small><b id="unitApprovedAt">-</b></div>
+        <div class="unit-ref-status-box"><small>ล็อกเมื่อ</small><b id="unitLockedAt">-</b></div>
+      </div>
+
+      <div class="unit-approval-actions">
+        <span id="unitStatusPill" class="status-pill status-draft">ร่างตาราง</span>
+        <span id="unitLockTag" class="locked-tag">ยังไม่ล็อก</span>
+        <button id="unitSubmitBtn">📤 ส่งให้หัวหน้าตรวจ</button>
+        <button id="unitReturnBtn" class="workflow-btn-return">↩ ส่งกลับแก้ไข</button>
+        <button id="unitApproveBtn" class="workflow-btn-approve">✓ อนุมัติตาราง</button>
+        <button id="unitLockBtn" class="workflow-btn-lock">🔒 ล็อกตาราง</button>
+        <button id="unitUnlockBtn">🔓 ปลดล็อก</button>
+      </div>
+      <div id="unitActionFeedback" class="action-feedback"></div>
+      <div id="unitConflictPanel" class="conflict-detail-panel">
+        <div class="conflict-detail-head"><b>รายละเอียดข้อขัดแย้ง</b><span id="unitConflictCount"></span></div>
+        <div id="unitConflictList" class="conflict-list"></div>
+      </div>
+      <div class="unit-ok-strip" id="unitReadOnlyNotice">สถานะตารางจะแสดงตาม Workflow ปัจจุบัน</div>
+    </div>
+      </div>
+
+      <div class="r29-workflow-step-wrap">
+        <div class="r29-workflow-subhead"><span>✨</span><b>ขั้นตอนการอนุมัติตาราง</b></div>
+  <div class="unit-flow-row">
+    <button class="unit-flow-card" id="unitStepPrepareBtn">
+      <span class="unit-flow-icon">👥</span><b>1. เตรียมข้อมูล</b><small>ข้อมูลบุคลากร / วันหยุด / เงื่อนไข</small>
+    </button>
+    <button class="unit-flow-card" id="unitStepScheduleBtn">
+      <span class="unit-flow-icon">✨</span><b>2. จัดตารางเวร</b><small>สร้างและจัดตารางตามกฎ 1–21</small>
+    </button>
+    <button class="unit-flow-card" id="unitStepSubmitBtn">
+      <span class="unit-flow-icon">📤</span><b>3. ส่งตรวจ</b><small>ส่งตารางให้หัวหน้าตรวจ</small>
+    </button>
+    <button class="unit-flow-card" id="unitStepApproveBtn">
+      <span class="unit-flow-icon">✅</span><b>4. อนุมัติ</b><small>หัวหน้าตรวจและอนุมัติ</small>
+    </button>
+    <button class="unit-flow-card" id="unitStepLockBtn">
+      <span class="unit-flow-icon">🔒</span><b>5. ล็อกตาราง</b><small>ป้องกันการแก้ไขหลังประกาศใช้</small>
+    </button>
+  </div>
+      </div>
+
+      <div class="r29-workflow-audit-wrap">
+        <div class="r29-workflow-subhead"><span>🕘</span><b>ประวัติการทำรายการล่าสุด</b></div>
+    <div class="unit-ref-card unit-audit-ref-card">
+      <div class="unit-panel-title">↻ ประวัติล่าสุด (Audit Log)</div>
+      <table class="unit-audit-mini"><tbody id="unitAuditRecentBody"></tbody></table>
+      <button class="unit-wide-btn" id="unitOpenAuditBtn">☷ ดูประวัติทั้งหมด</button>
+    </div>
+      </div>
+    </section>
+
     <section class="r29-bottom no-print" id="r29RosterSummary">
       <article class="r29-panel r29-summary-panel">
         <div class="r29-panel-head">
@@ -3304,64 +3394,15 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
       </div>
     </div>
 
-    <div class="unit-ref-card unit-status-hero">
-      <h3>สถานะปัจจุบัน</h3>
-      <div class="unit-status-big">🔒 <span id="unitHeroStatusText">ร่างตาราง</span></div>
-      <div class="unit-status-month" id="unitCurrentMonthLabel">เดือนปัจจุบัน</div>
-      <div class="unit-status-lines">
-        <div class="unit-status-line">📤 <span>ส่งตรวจเมื่อ</span><b id="unitHeroSubmittedAt">-</b></div>
-        <div class="unit-status-line">✅ <span>อนุมัติเมื่อ</span><b id="unitHeroApprovedAt">-</b></div>
-        <div class="unit-status-line">🔒 <span>ล็อกเมื่อ</span><b id="unitHeroLockedAt">-</b></div>
-      </div>
-    </div>
+
+
   </div>
 
-  <div class="unit-flow-row">
-    <button class="unit-flow-card" id="unitStepPrepareBtn">
-      <span class="unit-flow-icon">👥</span><b>1. เตรียมข้อมูล</b><small>ข้อมูลบุคลากร / วันหยุด / เงื่อนไข</small>
-    </button>
-    <button class="unit-flow-card" id="unitStepScheduleBtn">
-      <span class="unit-flow-icon">✨</span><b>2. จัดตารางเวร</b><small>สร้างและจัดตารางตามกฎ 1–21</small>
-    </button>
-    <button class="unit-flow-card" id="unitStepSubmitBtn">
-      <span class="unit-flow-icon">📤</span><b>3. ส่งตรวจ</b><small>ส่งตารางให้หัวหน้าตรวจ</small>
-    </button>
-    <button class="unit-flow-card" id="unitStepApproveBtn">
-      <span class="unit-flow-icon">✅</span><b>4. อนุมัติ</b><small>หัวหน้าตรวจและอนุมัติ</small>
-    </button>
-    <button class="unit-flow-card" id="unitStepLockBtn">
-      <span class="unit-flow-icon">🔒</span><b>5. ล็อกตาราง</b><small>ป้องกันการแก้ไขหลังประกาศใช้</small>
-    </button>
-  </div>
+
 
   <div class="unit-panel-grid">
-    <div class="unit-ref-card unit-approval-ref">
-      <div class="unit-panel-title">🛡️ สถานะตารางเดือนปัจจุบัน</div>
-      <div class="unit-ref-status-grid">
-        <div class="unit-ref-status-box"><small>สถานะ</small><b id="unitStatusText">ร่างตาราง</b></div>
-        <div class="unit-ref-status-box"><small>ส่งตรวจเมื่อ</small><b id="unitSubmittedAt">-</b></div>
-        <div class="unit-ref-status-box"><small>อนุมัติเมื่อ</small><b id="unitApprovedAt">-</b></div>
-        <div class="unit-ref-status-box"><small>ล็อกเมื่อ</small><b id="unitLockedAt">-</b></div>
-      </div>
-
-      <div class="unit-approval-actions">
-        <span id="unitStatusPill" class="status-pill status-draft">ร่างตาราง</span>
-        <span id="unitLockTag" class="locked-tag">ยังไม่ล็อก</span>
-        <button id="unitSubmitBtn">📤 ส่งให้หัวหน้าตรวจ</button>
-        <button id="unitReturnBtn" class="workflow-btn-return">↩ ส่งกลับแก้ไข</button>
-        <button id="unitApproveBtn" class="workflow-btn-approve">✓ อนุมัติตาราง</button>
-        <button id="unitLockBtn" class="workflow-btn-lock">🔒 ล็อกตาราง</button>
-        <button id="unitUnlockBtn">🔓 ปลดล็อก</button>
-      </div>
-      <div id="unitActionFeedback" class="action-feedback"></div>
-      <div id="unitConflictPanel" class="conflict-detail-panel">
-        <div class="conflict-detail-head"><b>รายละเอียดข้อขัดแย้ง</b><span id="unitConflictCount"></span></div>
-        <div id="unitConflictList" class="conflict-list"></div>
-      </div>
-      <div class="unit-ok-strip" id="unitReadOnlyNotice">สถานะตารางจะแสดงตาม Workflow ปัจจุบัน</div>
-    </div>
-
     <div class="unit-ref-card unit-summary-card">
+
       <div class="unit-panel-title">สรุปบุคลากรและเวร</div>
       <div class="unit-summary-list">
         <div class="unit-summary-item"><span>จำนวนบุคลากรทั้งหมด</span><b id="unitPeopleTotal">0 คน</b></div>
@@ -3397,11 +3438,8 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
       <button class="unit-wide-btn" id="unitOpenUsersBtn" style="display:none">👥 จัดการบัญชีผู้ใช้งาน</button>
     </div>
 
-    <div class="unit-ref-card unit-audit-ref-card">
-      <div class="unit-panel-title">↻ ประวัติล่าสุด (Audit Log)</div>
-      <table class="unit-audit-mini"><tbody id="unitAuditRecentBody"></tbody></table>
-      <button class="unit-wide-btn" id="unitOpenAuditBtn">☷ ดูประวัติทั้งหมด</button>
-    </div>
+
+
   </div>
 
   <div class="unit-ref-drawer" id="unitInfoDrawer">
