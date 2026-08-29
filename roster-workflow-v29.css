@@ -809,3 +809,75 @@
 @media print{
   #page-roster .r29-version-bottom{display:none!important}
 }
+
+
+/* =========================================================
+   ROSTER V29.4.3 — BUTTON COLORS + STATUS LEFT ONLY
+   Scope ONLY: #page-roster
+   1) ตรวจสอบ = ฟ้าพาสเทล + กรอบฟ้า
+   2) บันทึก PDF = ส้มพาสเทล + กรอบส้ม
+   3) ร่างตาราง + เดือน = ชิดซ้ายในกรอบสถานะปัจจุบัน
+   ไม่แตะ Sidebar / ระบบ / หน้าอื่น / responsive ของหน้าอื่น
+   ========================================================= */
+
+/* 1) ตรวจสอบ: ให้สีกรอบตรงกับสีปุ่ม */
+#page-roster .r29-action.r29-check{
+  background:linear-gradient(135deg,#eef9ff 0%,#dff2fb 100%)!important;
+  border:1px solid #abdced!important;
+  color:#397fa0!important;
+  box-shadow:none!important;
+}
+#page-roster .r29-action.r29-check .r29-toolbar-icon{
+  color:#58b5d8!important;
+  background:#eef8ff!important;
+}
+
+/* 1) บันทึก PDF: ให้สีกรอบตรงกับสีปุ่ม */
+#page-roster .r29-action.r29-pdf{
+  background:linear-gradient(135deg,#fff3eb 0%,#ffe2d0 100%)!important;
+  border:1px solid #f1c6aa!important;
+  color:#a96840!important;
+  box-shadow:none!important;
+}
+#page-roster .r29-action.r29-pdf .r29-toolbar-icon{
+  color:#ea9968!important;
+  background:#fff2e9!important;
+}
+
+/* 2) สถานะปัจจุบัน: ไอคอน + ร่างตาราง + เดือน ชิดซ้าย */
+#page-roster .r29-workflow-hub .unit-status-hero{
+  text-align:left!important;
+}
+
+#page-roster .r29-workflow-hub .unit-status-big{
+  justify-content:flex-start!important;
+  align-items:center!important;
+  text-align:left!important;
+  width:100%!important;
+  margin-left:0!important;
+  padding-left:0!important;
+}
+
+#page-roster .r29-workflow-hub .unit-status-big > span:last-child{
+  text-align:left!important;
+}
+
+#page-roster .r29-workflow-hub .unit-status-month{
+  text-align:left!important;
+  margin-left:32px!important;
+  padding-left:0!important;
+  width:calc(100% - 32px)!important;
+}
+
+/* คงตำแหน่งเดียวกันทุกขนาดจอของหน้าตารางเวร */
+@media screen and (max-width:640px){
+  #page-roster .r29-workflow-hub .unit-status-big{
+    justify-content:flex-start!important;
+    text-align:left!important;
+  }
+  #page-roster .r29-workflow-hub .unit-status-month{
+    text-align:left!important;
+    margin-left:32px!important;
+    width:calc(100% - 32px)!important;
+  }
+}
