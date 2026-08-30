@@ -613,3 +613,148 @@
     font-size:20px!important;
   }
 }
+
+
+/* =========================================================
+   HOLIDAYS V32.9.1 — CALENDAR FULL TEXT + CLEANUP ONLY
+   Scope ONLY: #page-holidays
+   เพิ่มจาก V32.9:
+   - ข้อมูลภายในช่องปฏิทินต้องแสดงครบ ไม่ถูกตัด
+   - รักษากรอบช่องเป็นสี่เหลี่ยมจัตุรัส
+   - เก็บไอคอน/ข้อความซ้ำในส่วนวันหยุดให้เรียบร้อย
+   NO Sidebar / system / other pages / responsive structure changes
+   ========================================================= */
+
+/* Calendar cells: allow full internal content instead of clipping */
+#page-holidays .h32-calendar>div:not(.head){
+  overflow:visible!important;
+  padding:5px 4px 6px!important;
+  flex-direction:column!important;
+  justify-content:flex-start!important;
+  align-items:center!important;
+  gap:2px!important;
+  min-width:0!important;
+}
+
+/* Day number */
+#page-holidays .h32-calendar .day-num,
+#page-holidays .h32-calendar>div:not(.head)>b:first-child,
+#page-holidays .h32-calendar>div:not(.head)>strong:first-child{
+  flex:0 0 auto!important;
+  line-height:1.05!important;
+  margin:0!important;
+}
+
+/* Holiday/event text inside a calendar cell */
+#page-holidays .h32-calendar .day-label,
+#page-holidays .h32-calendar .holiday-name,
+#page-holidays .h32-calendar .event-name,
+#page-holidays .h32-calendar>div:not(.head)>small,
+#page-holidays .h32-calendar>div:not(.head) .label{
+  display:block!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  height:auto!important;
+  max-height:none!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  white-space:normal!important;
+  word-break:break-word!important;
+  overflow-wrap:anywhere!important;
+  text-align:center!important;
+  font-size:7.3px!important;
+  line-height:1.18!important;
+  margin:0!important;
+}
+
+/* If existing code uses ellipsis/clamp, disable it only in calendar cells */
+#page-holidays .h32-calendar>div:not(.head) *{
+  -webkit-line-clamp:unset!important;
+  line-clamp:unset!important;
+}
+#page-holidays .h32-calendar>div:not(.head) [style*="overflow"]{
+  overflow:visible!important;
+}
+
+/* Keep dots/badges inside the square without covering text */
+#page-holidays .h32-calendar .holiday:after{
+  position:static!important;
+  display:block!important;
+  margin:2px auto 0!important;
+  flex:0 0 auto!important;
+}
+#page-holidays .h32-calendar .day-dots,
+#page-holidays .h32-calendar .event-dots{
+  position:static!important;
+  margin-top:2px!important;
+  min-height:7px!important;
+  display:flex!important;
+  justify-content:center!important;
+  align-items:center!important;
+  gap:3px!important;
+}
+
+/* Slightly more room while preserving square cells */
+#page-holidays .h32-calendar-card{
+  overflow:visible!important;
+}
+#page-holidays .h32-calendar{
+  overflow:visible!important;
+}
+
+/* Upcoming list: suppress decorative emoji glyphs if an old emoji remains
+   beside the new pastel icon. The item icon itself stays pastel. */
+#page-holidays .h32-upcoming .h32-event-icon{
+  overflow:hidden!important;
+  color:var(--h329-pink)!important;
+  line-height:0!important;
+}
+#page-holidays .h32-upcoming .h32-event-icon > *{
+  display:none!important;
+}
+
+/* Avoid duplicated header icon/glyphs while keeping heading text */
+#page-holidays .h32-upcoming-card h3 > span:not(.h32-head-icon),
+#page-holidays .h32-summary-card h3 > span:not(.h32-head-icon),
+#page-holidays .h32-calendar-card h3 > span:not(.h32-head-icon){
+  font-size:inherit!important;
+}
+
+/* Fix duplicate wording in add/clear buttons created by legacy glyph text:
+   visually show only the generated single label from V32.9 */
+#page-holidays .h32-form-actions .h32-add,
+#page-holidays .h32-form-actions .h32-clear{
+  overflow:hidden!important;
+  white-space:nowrap!important;
+}
+
+/* iPad / desktop: full text in the square cells */
+@media (min-width:761px){
+  #page-holidays .h32-calendar>div:not(.head){
+    padding:4px 3px 5px!important;
+  }
+  #page-holidays .h32-calendar .day-label,
+  #page-holidays .h32-calendar .holiday-name,
+  #page-holidays .h32-calendar .event-name,
+  #page-holidays .h32-calendar>div:not(.head)>small,
+  #page-holidays .h32-calendar>div:not(.head) .label{
+    font-size:6.8px!important;
+    line-height:1.12!important;
+  }
+}
+
+/* Phone: keep existing one-column layout and make cell text readable */
+@media (max-width:760px){
+  #page-holidays .h32-calendar>div:not(.head){
+    padding:4px 3px 5px!important;
+  }
+  #page-holidays .h32-calendar .day-label,
+  #page-holidays .h32-calendar .holiday-name,
+  #page-holidays .h32-calendar .event-name,
+  #page-holidays .h32-calendar>div:not(.head)>small,
+  #page-holidays .h32-calendar>div:not(.head) .label{
+    font-size:7px!important;
+    line-height:1.14!important;
+  }
+}
