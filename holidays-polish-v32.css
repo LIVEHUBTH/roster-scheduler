@@ -321,3 +321,295 @@
     min-height:33px!important;
   }
 }
+
+
+/* =========================================================
+   HOLIDAYS V32.9 — SQUARE CALENDAR + PASTEL ICONS ONLY
+   Scope ONLY: #page-holidays
+   1) Calendar frame square; surrounding cards balanced
+   2) All visible page icons converted to pastel treatment
+   3) Page title black, same scale as other pages; title icon yellow pastel
+   NO Sidebar / system / other pages / layout structure changes
+   ========================================================= */
+
+#page-holidays{
+  --h329-pink:#ed79a6;
+  --h329-mint:#58bea8;
+  --h329-lav:#8f78dc;
+  --h329-blue:#59add2;
+  --h329-yellow:#e7b74f;
+  --h329-orange:#e99666;
+  --h329-ink:#3f4658;
+
+  --h329-calendar:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='4' y='5' width='16' height='15' rx='3' fill='none' stroke='black' stroke-width='2'/%3E%3Cpath d='M8 3v4M16 3v4M4 9h16' stroke='black' stroke-width='2' stroke-linecap='round'/%3E%3Cpath d='M8 12h3v3H8zM13 12h3v3h-3zM8 16h3v2H8zM13 16h3v2h-3z' fill='black'/%3E%3C/svg%3E");
+  --h329-gift:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 10h16v10H4V10Zm-1-4h18v5H3V6Z' fill='none' stroke='black' stroke-width='2' stroke-linejoin='round'/%3E%3Cpath d='M12 6v14' stroke='black' stroke-width='2'/%3E%3Cpath d='M12 6c-3-4-6-3-6-1 0 2 3 2 6 1Zm0 0c3-4 6-3 6-1 0 2-3 2-6 1Z' fill='none' stroke='black' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E");
+  --h329-chart:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 19V9h3v10H5Zm6 0V4h3v15h-3Zm6 0v-7h3v7h-3Z' fill='black'/%3E%3C/svg%3E");
+  --h329-check:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='4' y='4' width='16' height='16' rx='4' fill='none' stroke='black' stroke-width='2'/%3E%3Cpath d='m8 12 2.5 2.5L16 9' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  --h329-edit:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m5 16-1 4 4-1L19 8l-3-3L5 16Z' fill='none' stroke='black' stroke-width='2' stroke-linejoin='round'/%3E%3Cpath d='m14 7 3 3' stroke='black' stroke-width='2'/%3E%3C/svg%3E");
+  --h329-note:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='5' y='3' width='14' height='18' rx='2' fill='none' stroke='black' stroke-width='2'/%3E%3Cpath d='M8 8h8M8 12h8M8 16h5' stroke='black' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+  --h329-history:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 8H2V5' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M4 8a9 9 0 1 1-1 6' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'/%3E%3Cpath d='M12 7v5l3 2' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+  --h329-plus:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='9' fill='none' stroke='black' stroke-width='2'/%3E%3Cpath d='M12 8v8M8 12h8' stroke='black' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+  --h329-trash:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 7h10l-1 13H8L7 7Zm-2 0h14M9 7l1-3h4l1 3' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+  --h329-save:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 4h12l2 2v14H5V4Z' fill='none' stroke='black' stroke-width='2'/%3E%3Cpath d='M8 4v6h8V4M9 15h6v5H9z' fill='none' stroke='black' stroke-width='2'/%3E%3C/svg%3E");
+}
+
+/* 1) Square calendar frame and balanced top cards */
+#page-holidays .h32-top-grid{
+  align-items:stretch!important;
+}
+
+#page-holidays .h32-calendar-card{
+  aspect-ratio:1 / 1!important;
+  width:100%!important;
+  min-height:0!important;
+  display:flex!important;
+  flex-direction:column!important;
+}
+
+#page-holidays .h32-calendar-card .h32-calendar{
+  flex:1 1 auto!important;
+  min-height:0!important;
+  align-content:stretch!important;
+}
+
+#page-holidays .h32-calendar-card .h32-calendar>div:not(.head){
+  aspect-ratio:1 / 1!important;
+  min-height:0!important;
+  height:auto!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+
+#page-holidays .h32-side-stack{
+  height:100%!important;
+}
+#page-holidays .h32-side-stack>.h32-card{
+  flex:1 1 0!important;
+}
+#page-holidays .h32-summary-card{
+  flex:.78 1 0!important;
+}
+#page-holidays .h32-upcoming-card{
+  flex:1.22 1 0!important;
+}
+
+/* Balance bottom cards to a consistent visual height */
+#page-holidays .h32-bottom-grid{
+  align-items:stretch!important;
+}
+#page-holidays .h32-bottom-grid>.h32-card{
+  height:100%!important;
+}
+
+/* 3) Main page title: black like other pages, normal scale */
+#page-holidays .h32-title-wrap h2{
+  color:var(--h329-ink)!important;
+  font-size:22px!important;
+  font-weight:900!important;
+  line-height:1.15!important;
+}
+#page-holidays .h32-title-wrap p{
+  color:#8b92a1!important;
+  font-size:10px!important;
+}
+
+/* Main title icon: yellow pastel */
+#page-holidays .h32-title-icon{
+  position:relative!important;
+  font-size:0!important;
+  color:var(--h329-yellow)!important;
+  background:#fff7df!important;
+  border:1px solid #f4e2ad!important;
+}
+#page-holidays .h32-title-icon::before{
+  content:"";
+  width:24px;
+  height:24px;
+  display:block;
+  background:currentColor;
+  -webkit-mask:var(--h329-gift) center/contain no-repeat;
+  mask:var(--h329-gift) center/contain no-repeat;
+}
+
+/* 2) Every section header icon -> pastel SVG */
+#page-holidays .h32-head-icon{
+  position:relative!important;
+  font-size:0!important;
+  display:inline-grid!important;
+  place-items:center!important;
+}
+#page-holidays .h32-head-icon::before{
+  content:"";
+  width:16px;
+  height:16px;
+  display:block;
+  background:currentColor;
+}
+#page-holidays .h32-head-icon.pink{color:var(--h329-pink)!important;background:#fff0f5!important}
+#page-holidays .h32-head-icon.mint{color:var(--h329-mint)!important;background:#ebfaf5!important}
+#page-holidays .h32-head-icon.yellow{color:var(--h329-yellow)!important;background:#fff7df!important}
+
+#page-holidays .h32-calendar-card .h32-head-icon::before{
+  -webkit-mask:var(--h329-calendar) center/contain no-repeat;
+  mask:var(--h329-calendar) center/contain no-repeat;
+}
+#page-holidays .h32-summary-card .h32-head-icon::before{
+  -webkit-mask:var(--h329-chart) center/contain no-repeat;
+  mask:var(--h329-chart) center/contain no-repeat;
+}
+#page-holidays .h32-upcoming-card .h32-head-icon::before{
+  -webkit-mask:var(--h329-check) center/contain no-repeat;
+  mask:var(--h329-check) center/contain no-repeat;
+}
+#page-holidays .h32-form-card .h32-head-icon::before{
+  -webkit-mask:var(--h329-edit) center/contain no-repeat;
+  mask:var(--h329-edit) center/contain no-repeat;
+}
+#page-holidays .h32-note-card .h32-head-icon::before{
+  -webkit-mask:var(--h329-note) center/contain no-repeat;
+  mask:var(--h329-note) center/contain no-repeat;
+}
+#page-holidays .h32-audit-card .h32-head-icon::before{
+  -webkit-mask:var(--h329-history) center/contain no-repeat;
+  mask:var(--h329-history) center/contain no-repeat;
+}
+
+/* Form action icons -> pastel */
+#page-holidays .h32-form-actions button{
+  position:relative!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:7px!important;
+}
+#page-holidays .h32-form-actions button::before{
+  content:"";
+  width:18px;
+  height:18px;
+  flex:0 0 18px;
+  display:block;
+  background:currentColor;
+}
+#page-holidays .h32-add::before{
+  -webkit-mask:var(--h329-plus) center/contain no-repeat;
+  mask:var(--h329-plus) center/contain no-repeat;
+}
+#page-holidays .h32-clear::before{
+  -webkit-mask:var(--h329-trash) center/contain no-repeat;
+  mask:var(--h329-trash) center/contain no-repeat;
+}
+/* hide original leading glyphs visually without changing button text/function */
+#page-holidays .h32-add,
+#page-holidays .h32-clear{
+  font-size:0!important;
+}
+#page-holidays .h32-add::after{
+  content:"เพิ่มวันหยุด";
+  font-size:9px;
+  font-weight:900;
+}
+#page-holidays .h32-clear::after{
+  content:"ล้างค่า";
+  font-size:9px;
+  font-weight:900;
+}
+
+/* Auto-save note icon pastel */
+#page-holidays .h32-save-note{
+  position:relative!important;
+  padding-left:32px!important;
+}
+#page-holidays .h32-save-note::before{
+  content:"";
+  position:absolute;
+  left:9px;
+  top:50%;
+  transform:translateY(-50%);
+  width:16px;
+  height:16px;
+  background:var(--h329-mint);
+  -webkit-mask:var(--h329-save) center/contain no-repeat;
+  mask:var(--h329-save) center/contain no-repeat;
+}
+
+/* Make generic audit avatars pastel instead of emoji-heavy */
+#page-holidays .h32-audit-avatar{
+  font-size:0!important;
+  color:var(--h329-lav)!important;
+  background:#f3efff!important;
+}
+#page-holidays .h32-audit-avatar::before{
+  content:"";
+  width:17px;
+  height:17px;
+  display:block;
+  background:currentColor;
+  -webkit-mask:var(--h329-history) center/contain no-repeat;
+  mask:var(--h329-history) center/contain no-repeat;
+}
+
+/* Upcoming list icons, where present, pastel */
+#page-holidays .h32-event-icon{
+  font-size:0!important;
+  color:var(--h329-pink)!important;
+  background:#fff0f5!important;
+}
+#page-holidays .h32-event-icon::before{
+  content:"";
+  width:18px;
+  height:18px;
+  display:block;
+  background:currentColor;
+  -webkit-mask:var(--h329-calendar) center/contain no-repeat;
+  mask:var(--h329-calendar) center/contain no-repeat;
+}
+
+/* Upcoming/footer icon text blocks: pastel icon marker */
+#page-holidays .h32-upcoming-foot{
+  position:relative!important;
+  padding-left:30px!important;
+}
+#page-holidays .h32-upcoming-foot::before{
+  content:"";
+  position:absolute;
+  left:9px;
+  top:50%;
+  transform:translateY(-50%);
+  width:15px;
+  height:15px;
+  background:var(--h329-lav);
+  -webkit-mask:var(--h329-calendar) center/contain no-repeat;
+  mask:var(--h329-calendar) center/contain no-repeat;
+}
+
+/* Normalize calendar title/icon tones */
+#page-holidays .h32-card h3{
+  color:var(--h329-ink)!important;
+}
+
+/* keep weekday/holiday titles readable; page title no red */
+#page-holidays .h32-title-wrap h2,
+#page-holidays .h32-card h3{
+  text-shadow:none!important;
+}
+
+/* iPad / desktop retain same layout; only square sizing */
+@media (min-width:761px){
+  #page-holidays .h32-calendar-card{
+    max-height:none!important;
+  }
+}
+
+/* Phone: preserve existing one-column layout; do not force a huge square page card */
+@media (max-width:760px){
+  #page-holidays .h32-calendar-card{
+    aspect-ratio:auto!important;
+  }
+  #page-holidays .h32-calendar-card .h32-calendar>div:not(.head){
+    aspect-ratio:1 / 1!important;
+  }
+  #page-holidays .h32-title-wrap h2{
+    font-size:20px!important;
+  }
+}
