@@ -1,4 +1,4 @@
-/* HOLIDAYS V32.7 — stable calendar render + pastel holiday dashboard */
+/* HOLIDAYS V32.6 — stable calendar render + pastel holiday dashboard */
 #page-holidays{background:#fff!important}
 #page-holidays .h32-shell{
   width:100%;max-width:1480px;margin:0 auto;padding:18px 22px 32px;
@@ -940,3 +940,200 @@
 #page-holidays #holidayCalendarV24{display:grid!important;grid-template-columns:repeat(7,minmax(0,1fr))!important;visibility:visible!important;opacity:1!important;min-height:390px!important;}
 #page-holidays #holidayCalendarV24 .h32-day{display:flex!important;visibility:visible!important;opacity:1!important;color:#354052!important;}
 #page-holidays #holidayCalendarV24 .h32-day-number{display:block!important;visibility:visible!important;opacity:1!important;}
+
+/* =========================================================
+   V32.8 — COMPACT DATE CELLS + DAY DETAIL POPUP
+   Scope: #page-holidays only.
+   IMPORTANT: no sidebar / other page / global responsive layout changes.
+   ========================================================= */
+
+/* Keep the calendar card independent from the height of the right column.
+   This is the key fix that keeps August/long-list months the same height
+   as the compact September reference. */
+#page-holidays .h32-calendar-card{
+  align-self:start!important;
+  height:auto!important;
+}
+
+/* Fixed calendar row height so every month keeps the same compact cell size. */
+#page-holidays #holidayCalendarV24{
+  grid-template-rows:repeat(6,64px)!important;
+  min-height:0!important;
+  height:auto!important;
+  align-content:start!important;
+  overflow:visible!important;
+}
+#page-holidays #holidayCalendarV24 .h32-day{
+  height:64px!important;
+  min-height:64px!important;
+  max-height:64px!important;
+  padding:5px 4px 4px!important;
+  justify-content:flex-start!important;
+}
+#page-holidays #holidayCalendarV24 .h32-day-number{
+  flex:0 0 auto!important;
+}
+#page-holidays #holidayCalendarV24 .h32-day-caption{
+  min-height:12px!important;
+  max-height:12px!important;
+  margin-top:3px!important;
+  font-size:7.5px!important;
+  line-height:12px!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+#page-holidays #holidayCalendarV24 .h32-day-markers{
+  min-height:10px!important;
+  max-height:12px!important;
+  margin-top:auto!important;
+  flex-wrap:nowrap!important;
+}
+
+/* Preserve the existing responsive structure; only the calendar cells
+   become proportionally compact at the same existing breakpoints. */
+@media(max-width:1024px){
+  #page-holidays #holidayCalendarV24{
+    grid-template-rows:repeat(6,58px)!important;
+  }
+  #page-holidays #holidayCalendarV24 .h32-day{
+    height:58px!important;
+    min-height:58px!important;
+    max-height:58px!important;
+  }
+  #page-holidays #holidayCalendarV24 .h32-day-caption{
+    font-size:7px!important;
+  }
+}
+@media(max-width:620px){
+  #page-holidays #holidayCalendarV24{
+    grid-template-rows:repeat(6,48px)!important;
+  }
+  #page-holidays #holidayCalendarV24 .h32-day{
+    height:48px!important;
+    min-height:48px!important;
+    max-height:48px!important;
+    padding:3px 2px!important;
+  }
+  #page-holidays #holidayCalendarV24 .h32-day-caption{
+    min-height:10px!important;
+    max-height:10px!important;
+    line-height:10px!important;
+    font-size:6.5px!important;
+  }
+}
+
+/* Day detail popup — page-local, no global modal styles. */
+#page-holidays .h32-day-popup[hidden]{display:none!important}
+#page-holidays .h32-day-popup{
+  position:fixed!important;
+  inset:0!important;
+  z-index:2147483000!important;
+  display:grid!important;
+  place-items:center!important;
+  padding:18px!important;
+  background:rgba(52,58,74,.28)!important;
+  backdrop-filter:blur(3px)!important;
+  -webkit-backdrop-filter:blur(3px)!important;
+}
+#page-holidays .h32-day-popup-card{
+  width:min(440px,calc(100vw - 28px))!important;
+  max-height:min(72vh,620px)!important;
+  overflow:auto!important;
+  border:1px solid #f0e4dc!important;
+  border-radius:22px!important;
+  background:#fff!important;
+  box-shadow:0 20px 55px rgba(63,55,70,.18)!important;
+  padding:18px!important;
+  color:#394257!important;
+}
+#page-holidays .h32-day-popup-head{
+  display:flex!important;
+  align-items:flex-start!important;
+  justify-content:space-between!important;
+  gap:12px!important;
+  margin-bottom:14px!important;
+}
+#page-holidays .h32-day-popup-date{
+  min-width:0!important;
+}
+#page-holidays .h32-day-popup-date small{
+  display:block!important;
+  margin-bottom:4px!important;
+  color:#9aa2af!important;
+  font-size:11px!important;
+  font-weight:700!important;
+}
+#page-holidays .h32-day-popup-date strong{
+  display:block!important;
+  color:#3b4355!important;
+  font-size:19px!important;
+  line-height:1.35!important;
+}
+#page-holidays .h32-day-popup-close{
+  width:34px!important;
+  height:34px!important;
+  min-width:34px!important;
+  border:1px solid #f1dce5!important;
+  border-radius:11px!important;
+  background:#fff4f8!important;
+  color:#df6a96!important;
+  font-size:18px!important;
+  line-height:1!important;
+  padding:0!important;
+}
+#page-holidays .h32-day-popup-list{
+  display:grid!important;
+  gap:9px!important;
+}
+#page-holidays .h32-day-popup-item{
+  display:grid!important;
+  grid-template-columns:auto minmax(0,1fr)!important;
+  gap:9px!important;
+  align-items:start!important;
+  padding:10px 11px!important;
+  border:1px solid #eee9e5!important;
+  border-radius:14px!important;
+  background:#fff!important;
+}
+#page-holidays .h32-day-popup-item .h32-type-badge{
+  margin-top:1px!important;
+}
+#page-holidays .h32-day-popup-item b{
+  display:block!important;
+  font-size:12px!important;
+  line-height:1.55!important;
+  color:#41495a!important;
+}
+#page-holidays .h32-day-popup-empty{
+  padding:18px 12px!important;
+  border-radius:14px!important;
+  background:#faf9fb!important;
+  color:#8d95a3!important;
+  text-align:center!important;
+  font-size:12px!important;
+}
+#page-holidays .h32-day-popup-actions{
+  display:flex!important;
+  justify-content:flex-end!important;
+  gap:8px!important;
+  margin-top:14px!important;
+}
+#page-holidays .h32-day-popup-actions button{
+  min-height:36px!important;
+  padding:7px 13px!important;
+  border-radius:11px!important;
+  font-size:11px!important;
+  font-weight:800!important;
+}
+#page-holidays .h32-popup-edit{
+  border:1px solid #e1d5f7!important;
+  background:#f6f1ff!important;
+  color:#8061cb!important;
+}
+#page-holidays .h32-popup-done{
+  border:1px solid #f3d2df!important;
+  background:#fff2f7!important;
+  color:#dd6391!important;
+}
+

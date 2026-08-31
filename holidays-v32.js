@@ -1,5 +1,4 @@
-/* BUILD: HOLIDAYS V32.9.9 REFERENCE SIZE + MONTH NAV FIX */
-/* HOLIDAYS V32.6 — independent calendar render + reliable month navigation */
+/* HOLIDAYS V32.8 — compact calendar cells + full day detail popup */
 (function(){
   'use strict';
 
@@ -30,42 +29,26 @@
   function pad(n){return String(n).padStart(2,'0')}
   function iso(y,m,d){return y+'-'+pad(m+1)+'-'+pad(d)}
   function current(){
-    /* V32.9.9: the scheduler's real month/year controls are #month and #year.
-       Read them first so Prev / Next / month picker always follow the
-       selected month instead of falling back to today's month. */
-    var ms=$('month');
-    var yi=$('year');
-
-    var m=ms?parseInt(ms.value,10):NaN;
-    var ty=yi?parseInt(yi.value,10):NaN;
-
-    if(isFinite(m)&&m>=0&&m<=11&&isFinite(ty)){
-      var y=ty>2400?ty-543:ty;
-      return {year:y,month:m,thaiYear:y+543,key:y+'-'+pad(m+1)};
-    }
-
     try{
       if(B&&typeof B.current==='function'){
         var c=B.current();
         if(c&&isFinite(Number(c.year))&&isFinite(Number(c.month))){
-          c.year=Number(c.year);
-          c.month=Number(c.month);
+          c.year=Number(c.year); c.month=Number(c.month);
           c.thaiYear=Number(c.thaiYear||c.year+543);
           c.key=c.key||(c.year+'-'+pad(c.month+1));
           return c;
         }
       }
     }catch(e){}
-
-    var d=new Date();
-    return {
-      year:d.getFullYear(),
-      month:d.getMonth(),
-      thaiYear:d.getFullYear()+543,
-      key:d.getFullYear()+'-'+pad(d.getMonth()+1)
-    };
+    var ms=document.getElementById('monthSelect');
+    var yi=document.getElementById('yearInput');
+    var m=ms?parseInt(ms.value,10):(new Date()).getMonth();
+    var ty=yi?parseInt(yi.value,10):(new Date()).getFullYear()+543;
+    if(!isFinite(m)||m<0||m>11)m=(new Date()).getMonth();
+    if(!isFinite(ty))ty=(new Date()).getFullYear()+543;
+    var y=ty>2400?ty-543:ty;
+    return {year:y,month:m,thaiYear:y+543,key:y+'-'+pad(m+1)};
   }
-
   function typeLabel(t){
     return t==='substitute'?'วันหยุดชดเชย':
       t==='special'?'วันหยุดพิเศษ':
@@ -136,22 +119,20 @@
 
   function iconFor(name,type,kind){
     var s=String(name||'');
-    if(kind==='buddhist')return 'lotus';
+    if(kind==='buddhist')return '🧘‍♂️';
     if(kind==='important'){
-      if(/รพี|กฎหมาย|ยุติธรรม|ศาล|ประชาธิปไตย|รัฐธรรมนูญ/.test(s))return 'scales';
-      if(/สตรี|สงกรานต์|พืชมงคล|ดอกไม้|ชมพู/.test(s))return 'flower';
-      if(/แม่|วันแม่|ราชินี|เฉลิมพระชนมพรรษา/.test(s))return 'crown';
-      if(/ชาติ|ธง|แรงงาน|ฉัตรมงคล|สื่อสาร|สัตวแพทย์|วันเด็ก/.test(s))return 'flag';
-      return 'spark';
+      if(/พยาบาล|มหิดล|สาธารณสุข/.test(s))return '🩺';
+      if(/วิทยาศาสตร์/.test(s))return '🔬';
+      if(/รพี|ประชาธิปไตย|รัฐธรรมนูญ/.test(s))return '⚖️';
+      if(/สตรี|แม่/.test(s))return '🌸';
+      return '📌';
     }
-    if(/พรรษา|มาฆ|วิสาข|อาสาฬห|บูชา|วันพระ/.test(s))return 'lotus';
-    if(/แม่|วันแม่|ราชินี|เฉลิมพระชนมพรรษา/.test(s))return 'crown';
-    if(/รพี|กฎหมาย|ยุติธรรม|ศาล|รัฐธรรมนูญ/.test(s))return 'scales';
-    if(/สตรี|สงกรานต์|พืชมงคล|ดอกไม้|ชมพู/.test(s))return 'flower';
-    if(/ชาติ|ธง|แรงงาน|ฉัตรมงคล|จักรี|สื่อสาร|สัตวแพทย์/.test(s))return 'flag';
-    if(type==='substitute')return 'refresh';
-    if(type==='special')return 'spark';
-    return 'calendar';
+    if(/วิสาข|มาฆ|อาสาฬห|เข้าพรรษา/.test(s))return '🛕';
+    if(/ฉัตรมงคล|จักรี|ราช|นวมินทร|ปิย/.test(s))return '👑';
+    if(/พืชมงคล/.test(s))return '🌾';
+    if(/แม่|พ่อ|เฉลิม/.test(s))return '🎗️';
+    if(/สงกรานต์/.test(s))return '💦';
+    return type==='special'?'✨':type==='substitute'?'🌟':'🎁';
   }
 
   function seedOfficial2569(){
@@ -229,15 +210,136 @@
     ].join('');
   }
 
+  function compactDayName(name,kind){
+    var s=String(name||'').trim();
+    if(kind==='buddhist')return 'วันพระ';
+    if(!s)return kind==='important'?'วันสำคัญ':'วันหยุด';
+
+    /* Familiar short labels keep the calendar readable without changing
+       the full stored holiday/important-day text. */
+    var map=[
+      [/ขึ้นปีใหม่/,'ปีใหม่'],
+      [/มาฆบูชา/,'มาฆบูชา'],
+      [/จักรี/,'จักรี'],
+      [/สงกรานต์/,'สงกรานต์'],
+      [/ฉัตรมงคล/,'ฉัตรมงคล'],
+      [/พืชมงคล/,'พืชมงคล'],
+      [/วิสาขบูชา/,'วิสาขบูชา'],
+      [/อาสาฬหบูชา/,'อาสาฬหฯ'],
+      [/เข้าพรรษา/,'เข้าพรรษา'],
+      [/พระบรมราชินี/,'พระราชินี'],
+      [/พระเจ้าอยู่หัว/,'ร.10'],
+      [/พระบรมราชชนนี|วันแม่/,'วันแม่'],
+      [/นวมินทรมหาราช/,'นวมินทรฯ'],
+      [/ปิยมหาราช/,'ปิยมหาราช'],
+      [/วันชาติ|วันพ่อ|ร\.9/,'วันพ่อ'],
+      [/รัฐธรรมนูญ/,'รัฐธรรมนูญ'],
+      [/สิ้นปี/,'สิ้นปี'],
+      [/สตรีไทย/,'สตรีไทย'],
+      [/สื่อสารแห่งชาติ/,'สื่อสารฯ'],
+      [/สัตวแพทย์ไทย/,'สัตวแพทย์'],
+      [/สันติภาพไทย/,'สันติภาพ'],
+      [/วิทยาศาสตร์/,'วิทย์ฯ'],
+      [/สารทจีน/,'สารทจีน'],
+      [/มหิดล/,'มหิดล'],
+      [/เยาวชน/,'เยาวชน'],
+      [/ธงชาติไทย/,'ธงชาติ'],
+      [/ลอยกระทง/,'ลอยกระทง'],
+      [/คริสต์มาส/,'คริสต์มาส']
+    ];
+    for(var i=0;i<map.length;i++)if(map[i][0].test(s))return map[i][1];
+
+    s=s.replace(/^วันหยุดชดเชย/,'ชดเชย').replace(/^วันหยุดราชการ/,'หยุดราชการ').replace(/^วัน/,'');
+    if(s.length>10)s=s.slice(0,9)+'…';
+    return s||'วันหยุด';
+  }
+
   function shortCalendarCaption(evs){
     if(!evs||!evs.length)return '';
     var holiday=evs.find(function(x){return x.kind==='holiday'});
     var important=evs.find(function(x){return x.kind==='important'});
     var buddhist=evs.find(function(x){return x.kind==='buddhist'});
-    if(holiday)return holiday.name||'วันหยุด';
-    if(important)return important.name||'วันสำคัญ';
+    if(holiday)return compactDayName(holiday.name,'holiday');
+    if(important)return compactDayName(important.name,'important');
     if(buddhist)return 'วันพระ';
     return '';
+  }
+
+  function formatThaiDateFull(k){
+    var p=k.split('-'),d=parseInt(p[2],10),m=parseInt(p[1],10),y=parseInt(p[0],10)+543;
+    var dayNames=['วันอาทิตย์','วันจันทร์','วันอังคาร','วันพุธ','วันพฤหัสบดี','วันศุกร์','วันเสาร์'];
+    var monthNames=['','มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+    var wd=new Date(+p[0],m-1,d).getDay();
+    return dayNames[wd]+'ที่ '+d+' '+monthNames[m]+' '+y;
+  }
+
+  function ensureDayPopup(){
+    var page=$('page-holidays');
+    if(!page)return null;
+    var popup=$('holidayDayPopupV328');
+    if(popup)return popup;
+
+    popup=document.createElement('div');
+    popup.id='holidayDayPopupV328';
+    popup.className='h32-day-popup';
+    popup.hidden=true;
+    popup.innerHTML=''+
+      '<div class="h32-day-popup-card" role="dialog" aria-modal="true" aria-labelledby="holidayDayPopupTitleV328">'+
+        '<div class="h32-day-popup-head">'+
+          '<div class="h32-day-popup-date"><small>รายละเอียดวันที่</small><strong id="holidayDayPopupTitleV328"></strong></div>'+
+          '<button type="button" class="h32-day-popup-close" aria-label="ปิด">×</button>'+
+        '</div>'+
+        '<div class="h32-day-popup-list" id="holidayDayPopupListV328"></div>'+
+        '<div class="h32-day-popup-actions" id="holidayDayPopupActionsV328"></div>'+
+      '</div>';
+    page.appendChild(popup);
+
+    var close=popup.querySelector('.h32-day-popup-close');
+    if(close)close.onclick=closeDayPopup;
+    popup.addEventListener('click',function(ev){if(ev.target===popup)closeDayPopup()});
+    document.addEventListener('keydown',function(ev){if(ev.key==='Escape'&&!popup.hidden)closeDayPopup()});
+    return popup;
+  }
+
+  function closeDayPopup(){
+    var popup=$('holidayDayPopupV328');
+    if(popup)popup.hidden=true;
+  }
+
+  function openDayPopup(key){
+    var popup=ensureDayPopup();if(!popup)return;
+    var title=$('holidayDayPopupTitleV328');
+    var list=$('holidayDayPopupListV328');
+    var actions=$('holidayDayPopupActionsV328');
+    var evs=eventsForDate(key);
+    var h=(state().holidays||{})[key];
+
+    if(title)title.textContent=formatThaiDateFull(key);
+    if(list){
+      if(!evs.length){
+        list.innerHTML='<div class="h32-day-popup-empty">ไม่มีวันหยุด วันพระ หรือวันสำคัญในวันนี้</div>';
+      }else{
+        list.innerHTML=evs.map(function(x){
+          var type=x.kind==='holiday'?(x.type||'official'):x.kind;
+          var label=x.kind==='holiday'?typeLabel(type):(x.kind==='buddhist'?'วันพระ':'วันสำคัญ');
+          return '<div class="h32-day-popup-item">'+
+            '<span class="h32-type-badge '+esc(type)+'">'+esc(label)+'</span>'+
+            '<b>'+esc(x.name)+'</b>'+
+          '</div>';
+        }).join('');
+      }
+    }
+    if(actions){
+      actions.innerHTML=(h?'<button type="button" class="h32-popup-edit">แก้ไขวันหยุด</button>':'')+
+        '<button type="button" class="h32-popup-done">ปิด</button>';
+      var editBtn=actions.querySelector('.h32-popup-edit');
+      var doneBtn=actions.querySelector('.h32-popup-done');
+      if(editBtn)editBtn.onclick=function(){closeDayPopup();loadEdit(key)};
+      if(doneBtn)doneBtn.onclick=closeDayPopup;
+    }
+    popup.hidden=false;
+    var closeBtn=popup.querySelector('.h32-day-popup-close');
+    if(closeBtn)setTimeout(function(){try{closeBtn.focus()}catch(e){}},0);
   }
 
   function renderCalendarV322(){
@@ -305,8 +407,7 @@
       btn.addEventListener('click',function(){
         var key=this.dataset.date;
         if($('holidayDate'))$('holidayDate').value=key;
-        var h=(state().holidays||{})[key];
-        if(h&&key.indexOf(current().key+'-')===0)loadEdit(key);
+        openDayPopup(key);
       });
     });
   }
@@ -335,7 +436,7 @@
     var show=all?keys:keys.slice(0,5);
     if(!show.length){
       box.innerHTML='<div style="display:block;padding:18px;text-align:center;color:#9aa1ad">เดือนนี้ยังไม่มีรายการวันหยุดหรือวันสำคัญ</div>';
-      if($('holidayUpcomingFootV32'))$('holidayUpcomingFootV32').textContent='ไม่มีรายการในเดือนนี้';
+      if($('holidayUpcomingFootV32'))$('holidayUpcomingFootV32').textContent='▦ ไม่มีรายการในเดือนนี้';
       return;
     }
     box.innerHTML=show.map(function(k){
@@ -345,15 +446,14 @@
       var type=holiday?(holiday.type||'official'):(buddhist?'buddhist':'important');
       var label=holiday?typeLabel(type):(buddhist?'วันพระ':'วันสำคัญ');
       var edit=holiday?'<button type="button" class="h32-edit-event" data-edit="'+k+'">แก้ไข</button>':'';
-      var iconKey=iconFor(main&&main.name,type,main&&main.kind);
-      return '<div data-key="'+k+'" class="h32-up-item">'+
-        '<span class="h32-event-icon icon-'+iconKey+' '+type+'" aria-hidden="true"></span>'+
+      return '<div data-key="'+k+'">'+
+        '<span class="h32-event-icon">'+iconFor(main&&main.name,type,main&&main.kind)+'</span>'+
         '<span class="h32-event-name"><b>'+esc(names)+'</b></span>'+
         '<span class="h32-event-date">'+esc(formatThaiDate(k))+'</span>'+
         '<span class="h32-type-badge '+type+'">'+label+'</span>'+edit+'</div>';
     }).join('');
     box.querySelectorAll('[data-edit]').forEach(function(btn){btn.onclick=function(){loadEdit(this.dataset.edit)}});
-    if($('holidayUpcomingFootV32'))$('holidayUpcomingFootV32').textContent='มีวันหยุด/วันพระ/วันสำคัญ '+keys.length+' วันที่ในเดือนนี้';
+    if($('holidayUpcomingFootV32'))$('holidayUpcomingFootV32').textContent='▦ มีวันหยุด/วันพระ/วันสำคัญ '+keys.length+' วันที่ในเดือนนี้';
   }
 
   function renderAudit(){
@@ -419,42 +519,8 @@
     setTimeout(refresh,20);
   }
 
-  function setHolidayMonthV3296(year,month){
-    year=Number(year);
-    month=Number(month);
-    if(!isFinite(year)||!isFinite(month))return;
-
-    if(month<0){month=11;year--;}
-    if(month>11){month=0;year++;}
-
-    var monthCtl=$('month');
-    var yearCtl=$('year');
-
-    if(monthCtl)monthCtl.value=String(month);
-    if(yearCtl)yearCtl.value=String(year+543);
-
-    /* Keep the scheduler engine synchronized, but do not depend on
-       the old #monthSelect / #yearInput controls. */
-    try{
-      if(B&&typeof B.setMonth==='function'){
-        B.setMonth(year,month);
-      }else{
-        if(B&&typeof B.renderSheet==='function')B.renderSheet();
-        if(B&&typeof B.renderHoliday==='function')B.renderHoliday();
-      }
-    }catch(e){
-      try{if(B&&typeof B.renderSheet==='function')B.renderSheet();}catch(_e){}
-    }
-
-    /* Render this holiday page after the controls are committed. */
-    refresh();
-    setTimeout(refresh,40);
-    setTimeout(refresh,160);
-  }
-
   function setToday(){
-    var d=new Date();
-    setHolidayMonthV3296(d.getFullYear(),d.getMonth());
+    var d=new Date();B.setMonth(d.getFullYear(),d.getMonth());setTimeout(refresh,30);
   }
 
   function wireMonthPicker(){
@@ -471,7 +537,7 @@
     input.addEventListener('change',function(){
       if(!this.value)return;
       var p=this.value.split('-'),y=parseInt(p[0],10),m=parseInt(p[1],10)-1;
-      if(isFinite(y)&&isFinite(m))setHolidayMonthV3296(y,m);
+      if(isFinite(y)&&isFinite(m)){B.setMonth(y,m);setTimeout(refresh,30)}
     });
   }
 
@@ -497,19 +563,21 @@
 
     var prev=$('holidayPrevMonthV24');
     if(prev)prev.onclick=function(ev){
-      if(ev){ev.preventDefault();ev.stopPropagation();}
-      var c=current(),m=Number(c.month)-1,y=Number(c.year);
+      if(ev)ev.preventDefault();
+      var c=current(),m=c.month-1,y=c.year;
       if(m<0){m=11;y--;}
-      setHolidayMonthV3296(y,m);
-      return false;
+      if(B&&typeof B.setMonth==='function')B.setMonth(y,m);
+      else{if($('monthSelect'))$('monthSelect').value=String(m);if($('yearInput'))$('yearInput').value=String(y+543);}
+      setTimeout(refresh,20);
     };
     var next=$('holidayNextMonthV24');
     if(next)next.onclick=function(ev){
-      if(ev){ev.preventDefault();ev.stopPropagation();}
-      var c=current(),m=Number(c.month)+1,y=Number(c.year);
+      if(ev)ev.preventDefault();
+      var c=current(),m=c.month+1,y=c.year;
       if(m>11){m=0;y++;}
-      setHolidayMonthV3296(y,m);
-      return false;
+      if(B&&typeof B.setMonth==='function')B.setMonth(y,m);
+      else{if($('monthSelect'))$('monthSelect').value=String(m);if($('yearInput'))$('yearInput').value=String(y+543);}
+      setTimeout(refresh,20);
     };
 
     wireMonthPicker();
@@ -533,7 +601,7 @@
     }
   }
 
-  window.HolidaysV32={refresh:refresh,loadEdit:loadEdit,clearForm:clearForm};
+  window.HolidaysV32={refresh:refresh,loadEdit:loadEdit,clearForm:clearForm,openDayPopup:openDayPopup,closeDayPopup:closeDayPopup};
 
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',wire,{once:true});
   else wire();
