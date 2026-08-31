@@ -1746,7 +1746,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 <link rel="stylesheet" href="rules-v31.css?v=31.1">
 <link rel="stylesheet" href="rules-polish-v31.css?v=31.3.1">
 <link rel="stylesheet" href="holidays-v32.css?v=32.5">
-<link rel="stylesheet" href="holidays-polish-v32.css?v=32.9.8">
+<link rel="stylesheet" href="holidays-polish-v32.css?v=32.9.9">
 <link rel="stylesheet" href="history-v33.css?v=33.8">
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
@@ -6561,8 +6561,8 @@ document.querySelectorAll('#page-people [data-people-filter]').forEach(function(
 if(el('rulesSaveBtnV24'))el('rulesSaveBtnV24').onclick=function(){saveConfig();setStatus('บันทึกกฎทั้งหมดแล้ว',true)};
 if(el('rulesCheckBtnV24'))el('rulesCheckBtnV24').onclick=function(){validate(true)};
 if(el('rulesResetBtnV24'))el('rulesResetBtnV24').onclick=function(){if(unitUser.role!=='admin')return;if(confirm('คืนค่ากฎหลักเป็นค่าเริ่มต้นหรือไม่?')){state.rules=DEFAULT_RULES.map(function(x){return {id:x.id,text:x.text}});saveConfig();renderRules();renderSheet()}};
-if(el('holidayPrevMonthV24'))el('holidayPrevMonthV24').onclick=function(){var m=cm()-1,y=cy();if(m<0){m=11;y--}el('monthSelect').value=String(m);el('yearInput').value=String(y+543);renderSheet();renderHolidayV24();renderHomeV24()};
-if(el('holidayNextMonthV24'))el('holidayNextMonthV24').onclick=function(){var m=cm()+1,y=cy();if(m>11){m=0;y++}el('monthSelect').value=String(m);el('yearInput').value=String(y+543);renderSheet();renderHolidayV24();renderHomeV24()};
+if(el('holidayPrevMonthV24'))el('holidayPrevMonthV24').onclick=function(e){if(e){e.preventDefault();e.stopPropagation()}var m=cm()-1,y=gy();if(m<0){m=11;y--}el('month').value=String(m);el('year').value=String(y+543);renderSheet();renderHolidayV24();renderHomeV24();return false};
+if(el('holidayNextMonthV24'))el('holidayNextMonthV24').onclick=function(e){if(e){e.preventDefault();e.stopPropagation()}var m=cm()+1,y=gy();if(m>11){m=0;y++}el('month').value=String(m);el('year').value=String(y+543);renderSheet();renderHolidayV24();renderHomeV24();return false};
 if(el('historySearchV24'))el('historySearchV24').oninput=function(){var q=this.value.toLowerCase();document.querySelectorAll('#historyMonthList .history-month-item').forEach(function(x){x.style.display=x.textContent.toLowerCase().indexOf(q)>=0?'':'none'})};
 if(el('historyStatusV24'))el('historyStatusV24').onchange=function(){var v=this.value;document.querySelectorAll('#historyMonthList .history-month-item').forEach(function(x){var t=x.textContent;x.style.display=(v==='all'||(v==='locked'&&t.indexOf('ล็อกแล้ว')>=0)||(v==='approved'&&t.indexOf('อนุมัติแล้ว')>=0)||(v==='submitted'&&t.indexOf('ส่งตรวจแล้ว')>=0)||(v==='draft'&&t.indexOf('บันทึกในระบบ')>=0))?'':'none'})};
 if(el('summaryMonthProxyV24')){el('summaryMonthProxyV24').innerHTML=MONTHS.map(function(x,i){return '<option value="'+i+'">'+x+'</option>'}).join('');el('summaryMonthProxyV24').value=String(cm());el('summaryMonthProxyV24').onchange=function(){el('monthSelect').value=this.value;renderSheet();renderSummary()}};
@@ -6744,10 +6744,12 @@ window.__ROSTER_HOLIDAYS_V32__={
   addHoliday:addHoliday,
   applyPermissions:applyUnitPermissions,
   getUser:function(){return {role:unitUser.role,name:unitUser.name,username:unitUser.username}},
-  current:function(){return {year:cy(),month:cm(),thaiYear:py(),key:currentKey()}},
+  current:function(){return {year:gy(),month:cm(),thaiYear:py(),key:currentKey()}},
   setMonth:function(year,month){
-    if(el('monthSelect'))el('monthSelect').value=String(month);
-    if(el('yearInput'))el('yearInput').value=String(year+543);
+    if(month<0){month=11;year--}
+    if(month>11){month=0;year++}
+    if(el('month'))el('month').value=String(month);
+    if(el('year'))el('year').value=String(year+543);
     renderSheet();renderHolidayV24();renderHomeV24();
   },
   escape:esc
@@ -6895,7 +6897,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   window.addEventListener('pageshow',wirePersonSaveV304);
 })();
 </script>
-<script src="holidays-v32.js?v=32.9.8"></script>
+<script src="holidays-v32.js?v=32.9.9"></script>
 <script src="history-v33.js?v=33.8"></script>
 <script src="rules-v31.js?v=31.1"></script>
 <script src="roster-v29.js?v=29.3"></script>

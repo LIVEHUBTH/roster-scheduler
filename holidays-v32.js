@@ -1,6 +1,4 @@
-/* BUILD: HOLIDAYS V32.9.8 CALENDAR SPACING + TEXT POLISH ONLY */
-/* BUILD: HOLIDAYS V32.9.7 DATE TOP-LEFT + CALENDAR BALANCE FIX */
-/* BUILD: HOLIDAYS V32.9.6 MONTH NAV + THAI TEXT + COMPACT ROW HOTFIX */
+/* BUILD: HOLIDAYS V32.9.9 REFERENCE SIZE + MONTH NAV FIX */
 /* HOLIDAYS V32.6 — independent calendar render + reliable month navigation */
 (function(){
   'use strict';
@@ -32,26 +30,42 @@
   function pad(n){return String(n).padStart(2,'0')}
   function iso(y,m,d){return y+'-'+pad(m+1)+'-'+pad(d)}
   function current(){
+    /* V32.9.9: the scheduler's real month/year controls are #month and #year.
+       Read them first so Prev / Next / month picker always follow the
+       selected month instead of falling back to today's month. */
+    var ms=$('month');
+    var yi=$('year');
+
+    var m=ms?parseInt(ms.value,10):NaN;
+    var ty=yi?parseInt(yi.value,10):NaN;
+
+    if(isFinite(m)&&m>=0&&m<=11&&isFinite(ty)){
+      var y=ty>2400?ty-543:ty;
+      return {year:y,month:m,thaiYear:y+543,key:y+'-'+pad(m+1)};
+    }
+
     try{
       if(B&&typeof B.current==='function'){
         var c=B.current();
         if(c&&isFinite(Number(c.year))&&isFinite(Number(c.month))){
-          c.year=Number(c.year); c.month=Number(c.month);
+          c.year=Number(c.year);
+          c.month=Number(c.month);
           c.thaiYear=Number(c.thaiYear||c.year+543);
           c.key=c.key||(c.year+'-'+pad(c.month+1));
           return c;
         }
       }
     }catch(e){}
-    var ms=document.getElementById('monthSelect');
-    var yi=document.getElementById('yearInput');
-    var m=ms?parseInt(ms.value,10):(new Date()).getMonth();
-    var ty=yi?parseInt(yi.value,10):(new Date()).getFullYear()+543;
-    if(!isFinite(m)||m<0||m>11)m=(new Date()).getMonth();
-    if(!isFinite(ty))ty=(new Date()).getFullYear()+543;
-    var y=ty>2400?ty-543:ty;
-    return {year:y,month:m,thaiYear:y+543,key:y+'-'+pad(m+1)};
+
+    var d=new Date();
+    return {
+      year:d.getFullYear(),
+      month:d.getMonth(),
+      thaiYear:d.getFullYear()+543,
+      key:d.getFullYear()+'-'+pad(d.getMonth()+1)
+    };
   }
+
   function typeLabel(t){
     return t==='substitute'?'วันหยุดชดเชย':
       t==='special'?'วันหยุดพิเศษ':
@@ -406,31 +420,36 @@
   }
 
   function setHolidayMonthV3296(year,month){
-    year=Number(year);month=Number(month);
+    year=Number(year);
+    month=Number(month);
     if(!isFinite(year)||!isFinite(month))return;
+
     if(month<0){month=11;year--;}
     if(month>11){month=0;year++;}
 
-    /* IMPORTANT:
-       The real application month/year controls are #month and #year.
-       Older holiday patches wrote to #monthSelect/#yearInput, which do not
-       exist in the current app and caused the calendar to stay on August. */
     var monthCtl=$('month');
     var yearCtl=$('year');
 
     if(monthCtl)monthCtl.value=String(month);
     if(yearCtl)yearCtl.value=String(year+543);
 
-    /* Keep any legacy/proxy controls synchronized if a future build has them. */
-    if($('monthSelect'))$('monthSelect').value=String(month);
-    if($('yearInput'))$('yearInput').value=String(year+543);
+    /* Keep the scheduler engine synchronized, but do not depend on
+       the old #monthSelect / #yearInput controls. */
+    try{
+      if(B&&typeof B.setMonth==='function'){
+        B.setMonth(year,month);
+      }else{
+        if(B&&typeof B.renderSheet==='function')B.renderSheet();
+        if(B&&typeof B.renderHoliday==='function')B.renderHoliday();
+      }
+    }catch(e){
+      try{if(B&&typeof B.renderSheet==='function')B.renderSheet();}catch(_e){}
+    }
 
-    try{if(B&&typeof B.renderSheet==='function')B.renderSheet()}catch(e){}
-    try{if(B&&typeof B.renderHoliday==='function')B.renderHoliday()}catch(e){}
-
-    /* Re-render this isolated page after the real controls have changed. */
-    setTimeout(refresh,20);
-    setTimeout(refresh,100);
+    /* Render this holiday page after the controls are committed. */
+    refresh();
+    setTimeout(refresh,40);
+    setTimeout(refresh,160);
   }
 
   function setToday(){
