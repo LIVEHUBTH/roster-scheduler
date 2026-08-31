@@ -1747,3 +1747,164 @@
     line-height:1.42!important;
   }
 }
+
+
+/* =========================================================
+   HOLIDAYS V32.9.7 — DATE TOP-LEFT + CALENDAR BALANCE FIX
+   Scope ONLY: #page-holidays calendar internals
+   - Date number fixed at top-left of every date cell
+   - Captions remain centered and Thai marks remain visible
+   - Markers/icons centered at bottom
+   - Restore a small 3px row gap to prevent cell overlap
+   - No Sidebar / system / other-page / responsive layout changes
+   ========================================================= */
+
+#page-holidays #holidayCalendarV24{
+  row-gap:3px!important;
+  column-gap:3px!important;
+  grid-auto-rows:minmax(50px,auto)!important;
+  align-items:stretch!important;
+}
+
+#page-holidays #holidayCalendarV24 .h32-day{
+  position:relative!important;
+  min-height:50px!important;
+  height:auto!important;
+  margin:0!important;
+  padding:17px 4px 4px!important;
+  box-sizing:border-box!important;
+  overflow:hidden!important;
+
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  text-align:center!important;
+}
+
+/* Requested: date number at the top-left corner */
+#page-holidays #holidayCalendarV24 .h32-day-number{
+  position:absolute!important;
+  top:5px!important;
+  left:6px!important;
+  right:auto!important;
+  bottom:auto!important;
+
+  margin:0!important;
+  padding:0!important;
+  width:auto!important;
+  height:auto!important;
+
+  display:block!important;
+  text-align:left!important;
+  font-size:9.8px!important;
+  line-height:1!important;
+  font-weight:900!important;
+
+  z-index:2!important;
+}
+
+/* Center holiday/event text in the usable cell area */
+#page-holidays #holidayCalendarV24 .h32-day-caption{
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+
+  margin:0!important;
+  padding:0 1px!important;
+
+  display:block!important;
+  text-align:center!important;
+
+  font-size:5.4px!important;
+  line-height:1.38!important;
+
+  white-space:normal!important;
+  word-break:normal!important;
+  overflow-wrap:break-word!important;
+
+  overflow:visible!important;
+  text-overflow:clip!important;
+  max-height:none!important;
+  -webkit-line-clamp:unset!important;
+  line-clamp:unset!important;
+
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Noto Sans Thai","Leelawadee UI",Tahoma,sans-serif!important;
+}
+
+/* Empty day label must not reserve a blank visual row */
+#page-holidays #holidayCalendarV24 .h32-day-caption:empty{
+  height:0!important;
+  min-height:0!important;
+  margin:0!important;
+  padding:0!important;
+}
+
+/* Center all dots / Buddhist-day icon at the bottom of each cell */
+#page-holidays #holidayCalendarV24 .h32-day-markers{
+  position:static!important;
+  width:100%!important;
+  min-height:8px!important;
+
+  margin-top:auto!important;
+  margin-left:0!important;
+  margin-right:0!important;
+  padding:1px 0 0!important;
+
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  align-content:center!important;
+  gap:2px!important;
+
+  text-align:center!important;
+  line-height:1!important;
+}
+
+#page-holidays #holidayCalendarV24 .h32-mini-dot,
+#page-holidays #holidayCalendarV24 .h32-buddha-mark{
+  position:static!important;
+  top:auto!important;
+  left:auto!important;
+  right:auto!important;
+  bottom:auto!important;
+  margin:0!important;
+  padding:0!important;
+  align-self:center!important;
+  flex:0 0 auto!important;
+}
+
+/* iPad/Desktop: same page layout; only internal date-cell balance */
+@media (min-width:761px){
+  #page-holidays #holidayCalendarV24{
+    grid-auto-rows:minmax(50px,auto)!important;
+  }
+  #page-holidays #holidayCalendarV24 .h32-day{
+    min-height:50px!important;
+  }
+}
+
+/* Phone: preserve existing phone page layout, only date-number position */
+@media (max-width:760px){
+  #page-holidays #holidayCalendarV24{
+    row-gap:2px!important;
+    column-gap:2px!important;
+    grid-auto-rows:minmax(44px,auto)!important;
+  }
+
+  #page-holidays #holidayCalendarV24 .h32-day{
+    min-height:44px!important;
+    padding:15px 3px 3px!important;
+  }
+
+  #page-holidays #holidayCalendarV24 .h32-day-number{
+    top:4px!important;
+    left:5px!important;
+    font-size:9px!important;
+  }
+
+  #page-holidays #holidayCalendarV24 .h32-day-caption{
+    font-size:5px!important;
+    line-height:1.36!important;
+  }
+}

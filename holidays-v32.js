@@ -1,3 +1,4 @@
+/* BUILD: HOLIDAYS V32.9.7 DATE TOP-LEFT + CALENDAR BALANCE FIX */
 /* BUILD: HOLIDAYS V32.9.6 MONTH NAV + THAI TEXT + COMPACT ROW HOTFIX */
 /* HOLIDAYS V32.6 — independent calendar render + reliable month navigation */
 (function(){
