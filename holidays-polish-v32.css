@@ -1490,3 +1490,117 @@
     min-height:38px!important;
   }
 }
+
+
+/* =========================================================
+   HOLIDAYS V32.9.5 — RESTORE DATA/CALENDAR HOTFIX
+   Scope ONLY: #page-holidays
+   Supports the reliable V32.6 independent calendar renderer.
+   Does not alter Sidebar, other systems, other pages, or responsive layout.
+   ========================================================= */
+
+/* Robust calendar uses .h32-day buttons */
+#page-holidays #holidayCalendarV24{
+  grid-template-columns:repeat(7,minmax(0,1fr))!important;
+  grid-auto-rows:minmax(42px,auto)!important;
+  gap:3px!important;
+  align-content:start!important;
+  overflow:visible!important;
+}
+
+#page-holidays #holidayCalendarV24 .h32-day{
+  min-width:0!important;
+  min-height:42px!important;
+  height:auto!important;
+  aspect-ratio:1 / 1!important;
+  padding:3px 2px!important;
+  border-radius:9px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:1px!important;
+  overflow:hidden!important;
+}
+
+#page-holidays #holidayCalendarV24 .h32-day-number{
+  font-size:9.6px!important;
+  line-height:1!important;
+  font-weight:900!important;
+  flex:0 0 auto!important;
+}
+
+#page-holidays #holidayCalendarV24 .h32-day-caption{
+  width:100%!important;
+  max-width:100%!important;
+  min-height:11px!important;
+  max-height:20px!important;
+  overflow:hidden!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+  word-break:break-word!important;
+  text-overflow:clip!important;
+  -webkit-line-clamp:2!important;
+  display:-webkit-box!important;
+  -webkit-box-orient:vertical!important;
+  text-align:center!important;
+  font-size:4.5px!important;
+  line-height:1.05!important;
+}
+
+#page-holidays #holidayCalendarV24 .h32-day-markers{
+  margin-top:auto!important;
+  min-height:6px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:2px!important;
+  flex:0 0 auto!important;
+}
+
+#page-holidays #holidayCalendarV24 .h32-mini-dot{
+  width:5px!important;
+  height:5px!important;
+  border-radius:999px!important;
+}
+
+/* Replace monk emoji marker with a small pastel lotus dot-like icon */
+#page-holidays #holidayCalendarV24 .h32-buddha-mark{
+  width:9px!important;
+  height:9px!important;
+  display:inline-block!important;
+  overflow:hidden!important;
+  font-size:0!important;
+  line-height:0!important;
+  background:#e4b94d!important;
+  -webkit-mask:var(--h329-lotus) center/contain no-repeat!important;
+  mask:var(--h329-lotus) center/contain no-repeat!important;
+}
+
+/* Keep current V32.9.4 requested compact width on iPad/Desktop */
+@media (min-width:761px){
+  #page-holidays .h32-calendar-card #holidayCalendarV24{
+    width:78%!important;
+    margin-left:auto!important;
+    margin-right:auto!important;
+  }
+}
+
+/* Phone: same original one-column layout, only internal calendar fitting */
+@media (max-width:760px){
+  #page-holidays .h32-calendar-card #holidayCalendarV24{
+    width:88%!important;
+    margin-left:auto!important;
+    margin-right:auto!important;
+    grid-auto-rows:minmax(39px,auto)!important;
+  }
+  #page-holidays #holidayCalendarV24 .h32-day{
+    min-height:39px!important;
+  }
+  #page-holidays #holidayCalendarV24 .h32-day-number{
+    font-size:9px!important;
+  }
+  #page-holidays #holidayCalendarV24 .h32-day-caption{
+    font-size:4.2px!important;
+  }
+}
