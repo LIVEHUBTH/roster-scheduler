@@ -1221,3 +1221,272 @@
   #page-holidays .h32-upcoming>div{grid-template-columns:30px minmax(0,1fr) auto!important;}
   #page-holidays .h32-type-badge{grid-column:2 / span 2;justify-self:start!important;margin-top:2px!important;}
 }
+
+
+/* =========================================================
+   HOLIDAYS V32.9.4 FINAL — ICON + CALENDAR SCALE FIX ONLY
+   Scope ONLY: #page-holidays
+   - plain pink calendar icon (no 17)
+   - one checklist icon only
+   - contextual pastel icons per upcoming holiday
+   - calendar visual area down ~22–25%
+   - no Sidebar / system / other-page / responsive structure changes
+   ========================================================= */
+
+/* 1) Plain pink calendar icon only — remove any old glyph/emoji/number */
+#page-holidays .h32-calendar-card .h32-head-icon.pink{
+  position:relative!important;
+  display:inline-grid!important;
+  place-items:center!important;
+  width:28px!important;
+  height:28px!important;
+  flex:0 0 28px!important;
+  overflow:hidden!important;
+  font-size:0!important;
+  line-height:0!important;
+  text-indent:-9999px!important;
+  color:transparent!important;
+  background:#fff0f5!important;
+  border:0!important;
+  background-image:none!important;
+}
+#page-holidays .h32-calendar-card .h32-head-icon.pink::before{
+  content:""!important;
+  position:static!important;
+  display:block!important;
+  width:16px!important;
+  height:16px!important;
+  background:#ed79a6!important;
+  -webkit-mask:var(--h329-cal-plain) center/contain no-repeat!important;
+  mask:var(--h329-cal-plain) center/contain no-repeat!important;
+}
+#page-holidays .h32-calendar-card .h32-head-icon.pink::after{
+  content:none!important;
+  display:none!important;
+}
+
+/* 2) Upcoming heading — exactly ONE pastel checklist icon */
+#page-holidays .h32-upcoming-card .h32-card-head h3{
+  display:flex!important;
+  align-items:center!important;
+  gap:8px!important;
+}
+#page-holidays .h32-upcoming-card .h32-card-head h3::before,
+#page-holidays .h32-upcoming-card .h32-card-head h3::after{
+  content:none!important;
+  display:none!important;
+}
+#page-holidays .h32-upcoming-card .h32-head-icon.pink{
+  position:relative!important;
+  display:inline-grid!important;
+  place-items:center!important;
+  width:28px!important;
+  height:28px!important;
+  flex:0 0 28px!important;
+  overflow:hidden!important;
+  font-size:0!important;
+  line-height:0!important;
+  text-indent:-9999px!important;
+  color:transparent!important;
+  background:#fff0f5!important;
+  border:0!important;
+  background-image:none!important;
+}
+#page-holidays .h32-upcoming-card .h32-head-icon.pink::before{
+  content:""!important;
+  display:block!important;
+  width:16px!important;
+  height:16px!important;
+  background:#ed79a6!important;
+  -webkit-mask:var(--h329-check) center/contain no-repeat!important;
+  mask:var(--h329-check) center/contain no-repeat!important;
+}
+#page-holidays .h32-upcoming-card .h32-head-icon.pink::after{
+  content:none!important;
+  display:none!important;
+}
+
+/* 3) Contextual pastel icons in upcoming list */
+#page-holidays .h32-upcoming .h32-event-icon{
+  width:31px!important;
+  height:31px!important;
+  min-width:31px!important;
+  border-radius:10px!important;
+  display:grid!important;
+  place-items:center!important;
+  overflow:hidden!important;
+  font-size:0!important;
+  line-height:0!important;
+  text-indent:-9999px!important;
+  border:0!important;
+}
+#page-holidays .h32-upcoming .h32-event-icon::before{
+  content:""!important;
+  width:17px!important;
+  height:17px!important;
+  display:block!important;
+  background:currentColor!important;
+}
+#page-holidays .h32-upcoming .h32-event-icon::after{
+  content:none!important;
+  display:none!important;
+}
+#page-holidays .h32-event-icon.icon-calendar{
+  color:#ed79a6!important;background:#fff0f5!important;
+}
+#page-holidays .h32-event-icon.icon-calendar::before{
+  -webkit-mask:var(--h329-cal-plain) center/contain no-repeat!important;
+  mask:var(--h329-cal-plain) center/contain no-repeat!important;
+}
+#page-holidays .h32-event-icon.icon-flower{
+  color:#ed79a6!important;background:#fff0f7!important;
+}
+#page-holidays .h32-event-icon.icon-flower::before{
+  -webkit-mask:var(--h329-flower) center/contain no-repeat!important;
+  mask:var(--h329-flower) center/contain no-repeat!important;
+}
+#page-holidays .h32-event-icon.icon-flag{
+  color:#e99666!important;background:#fff3ec!important;
+}
+#page-holidays .h32-event-icon.icon-flag::before{
+  -webkit-mask:var(--h329-flag) center/contain no-repeat!important;
+  mask:var(--h329-flag) center/contain no-repeat!important;
+}
+#page-holidays .h32-event-icon.icon-lotus{
+  color:#dfb34e!important;background:#fff8e5!important;
+}
+#page-holidays .h32-event-icon.icon-lotus::before{
+  -webkit-mask:var(--h329-lotus) center/contain no-repeat!important;
+  mask:var(--h329-lotus) center/contain no-repeat!important;
+}
+#page-holidays .h32-event-icon.icon-scales{
+  color:#8297c2!important;background:#f0f5ff!important;
+}
+#page-holidays .h32-event-icon.icon-scales::before{
+  -webkit-mask:var(--h329-scales) center/contain no-repeat!important;
+  mask:var(--h329-scales) center/contain no-repeat!important;
+}
+#page-holidays .h32-event-icon.icon-crown{
+  color:#d2a13e!important;background:#fff7e4!important;
+}
+#page-holidays .h32-event-icon.icon-crown::before{
+  -webkit-mask:var(--h329-crown) center/contain no-repeat!important;
+  mask:var(--h329-crown) center/contain no-repeat!important;
+}
+#page-holidays .h32-event-icon.icon-refresh{
+  color:#59add2!important;background:#eef8fd!important;
+}
+#page-holidays .h32-event-icon.icon-refresh::before{
+  -webkit-mask:var(--h329-refresh) center/contain no-repeat!important;
+  mask:var(--h329-refresh) center/contain no-repeat!important;
+}
+#page-holidays .h32-event-icon.icon-spark{
+  color:#8f78dc!important;background:#f4efff!important;
+}
+#page-holidays .h32-event-icon.icon-spark::before{
+  -webkit-mask:var(--h329-spark) center/contain no-repeat!important;
+  mask:var(--h329-spark) center/contain no-repeat!important;
+}
+
+/* 4) Reduce calendar itself another ~22–25% without changing page layout */
+#page-holidays .h32-calendar-card .h32-month-nav,
+#page-holidays .h32-calendar-card .h32-week-head,
+#page-holidays .h32-calendar-card #holidayCalendarV24,
+#page-holidays .h32-calendar-card .h32-legend{
+  width:78%!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+
+#page-holidays .h32-calendar-card .h32-month-nav{
+  transform:none!important;
+}
+#page-holidays .h32-month-nav button{
+  min-height:27px!important;
+  height:27px!important;
+  border-radius:9px!important;
+  padding:0 8px!important;
+  font-size:8.6px!important;
+}
+#page-holidays .h32-month-nav>button:first-child,
+#page-holidays .h32-month-nav>button:nth-child(3){
+  width:27px!important;
+  font-size:16px!important;
+}
+#page-holidays .h32-month-pill{
+  min-width:132px!important;
+  font-size:9.2px!important;
+}
+#page-holidays .h32-today{
+  min-width:42px!important;
+}
+
+#page-holidays .h32-week-head{
+  margin-top:6px!important;
+  padding-bottom:4px!important;
+  font-size:8.2px!important;
+}
+
+#page-holidays #holidayCalendarV24{
+  grid-auto-rows:minmax(40px,auto)!important;
+  gap:3px!important;
+  padding:3px 0 0!important;
+  min-height:0!important;
+}
+#page-holidays #holidayCalendarV24>div:not(.head){
+  min-height:40px!important;
+  padding:3px 2px!important;
+  border-radius:9px!important;
+}
+#page-holidays #holidayCalendarV24 .day-num,
+#page-holidays #holidayCalendarV24>div:not(.head)>b:first-child,
+#page-holidays #holidayCalendarV24>div:not(.head)>strong:first-child{
+  font-size:9.5px!important;
+  line-height:1!important;
+}
+#page-holidays #holidayCalendarV24 .day-label,
+#page-holidays #holidayCalendarV24 .holiday-name,
+#page-holidays #holidayCalendarV24 .event-name,
+#page-holidays #holidayCalendarV24>div:not(.head)>small,
+#page-holidays #holidayCalendarV24>div:not(.head) .label{
+  font-size:4.4px!important;
+  line-height:1.03!important;
+}
+#page-holidays #holidayCalendarV24 .day-dots,
+#page-holidays #holidayCalendarV24 .event-dots{
+  min-height:5px!important;
+  gap:2px!important;
+}
+#page-holidays #holidayCalendarV24 .dot,
+#page-holidays #holidayCalendarV24 .day-dots i,
+#page-holidays #holidayCalendarV24 .event-dots i,
+#page-holidays #holidayCalendarV24 .holiday:after{
+  width:5px!important;
+  height:5px!important;
+}
+#page-holidays .h32-legend{
+  gap:5px!important;
+  margin-top:6px!important;
+}
+#page-holidays .h32-legend span{
+  min-height:25px!important;
+  font-size:7px!important;
+  gap:4px!important;
+  padding:0 7px!important;
+}
+
+/* Keep responsive structure untouched; only internal scale */
+@media (max-width:760px){
+  #page-holidays .h32-calendar-card .h32-month-nav,
+  #page-holidays .h32-calendar-card .h32-week-head,
+  #page-holidays .h32-calendar-card #holidayCalendarV24,
+  #page-holidays .h32-calendar-card .h32-legend{
+    width:88%!important;
+  }
+  #page-holidays #holidayCalendarV24{
+    grid-auto-rows:minmax(38px,auto)!important;
+  }
+  #page-holidays #holidayCalendarV24>div:not(.head){
+    min-height:38px!important;
+  }
+}
