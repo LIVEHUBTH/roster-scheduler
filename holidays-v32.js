@@ -1,4 +1,4 @@
-/* HOLIDAYS V32.8 — compact calendar cells + full day detail popup */
+/* HOLIDAYS V32.9 — isolated month state + pastel upcoming icons + clean audit note */
 (function(){
   'use strict';
 
@@ -28,26 +28,56 @@
   }
   function pad(n){return String(n).padStart(2,'0')}
   function iso(y,m,d){return y+'-'+pad(m+1)+'-'+pad(d)}
-  function current(){
+
+  /* V32.9 keeps the holiday calendar month local to this page.
+     This prevents the old scheduler renderer from leaving the date grid on
+     another month while the month label has already changed. */
+  var calendarView={year:null,month:null};
+  function normalizeCalendarView(year,month){
+    year=Number(year); month=Number(month);
+    if(!isFinite(year))year=(new Date()).getFullYear();
+    if(!isFinite(month))month=(new Date()).getMonth();
+    while(month<0){month+=12;year--}
+    while(month>11){month-=12;year++}
+    return {year:year,month:month};
+  }
+  function initCalendarView(){
+    if(isFinite(calendarView.year)&&isFinite(calendarView.month))return;
+    var y=NaN,m=NaN;
     try{
       if(B&&typeof B.current==='function'){
         var c=B.current();
-        if(c&&isFinite(Number(c.year))&&isFinite(Number(c.month))){
-          c.year=Number(c.year); c.month=Number(c.month);
-          c.thaiYear=Number(c.thaiYear||c.year+543);
-          c.key=c.key||(c.year+'-'+pad(c.month+1));
-          return c;
-        }
+        if(c){y=Number(c.year);m=Number(c.month)}
       }
     }catch(e){}
-    var ms=document.getElementById('monthSelect');
-    var yi=document.getElementById('yearInput');
-    var m=ms?parseInt(ms.value,10):(new Date()).getMonth();
-    var ty=yi?parseInt(yi.value,10):(new Date()).getFullYear()+543;
-    if(!isFinite(m)||m<0||m>11)m=(new Date()).getMonth();
-    if(!isFinite(ty))ty=(new Date()).getFullYear()+543;
-    var y=ty>2400?ty-543:ty;
-    return {year:y,month:m,thaiYear:y+543,key:y+'-'+pad(m+1)};
+    if(!isFinite(m)){
+      var ms=document.getElementById('monthSelect');
+      if(ms)m=parseInt(ms.value,10);
+    }
+    if(!isFinite(y)){
+      var yi=document.getElementById('yearInput');
+      var ty=yi?parseInt(yi.value,10):NaN;
+      if(isFinite(ty))y=ty>2400?ty-543:ty;
+    }
+    var n=normalizeCalendarView(y,m);
+    calendarView.year=n.year;calendarView.month=n.month;
+  }
+  function current(){
+    initCalendarView();
+    return {
+      year:calendarView.year,
+      month:calendarView.month,
+      thaiYear:calendarView.year+543,
+      key:calendarView.year+'-'+pad(calendarView.month+1)
+    };
+  }
+  function setCalendarView(year,month){
+    var n=normalizeCalendarView(year,month);
+    calendarView.year=n.year;calendarView.month=n.month;
+    refresh();
+    /* Repaint after the legacy renderer has had a chance to finish. */
+    setTimeout(refresh,30);
+    setTimeout(refresh,160);
   }
   function typeLabel(t){
     return t==='substitute'?'วันหยุดชดเชย':
@@ -119,20 +149,22 @@
 
   function iconFor(name,type,kind){
     var s=String(name||'');
-    if(kind==='buddhist')return '🧘‍♂️';
-    if(kind==='important'){
-      if(/พยาบาล|มหิดล|สาธารณสุข/.test(s))return '🩺';
-      if(/วิทยาศาสตร์/.test(s))return '🔬';
-      if(/รพี|ประชาธิปไตย|รัฐธรรมนูญ/.test(s))return '⚖️';
-      if(/สตรี|แม่/.test(s))return '🌸';
-      return '📌';
-    }
-    if(/วิสาข|มาฆ|อาสาฬห|เข้าพรรษา/.test(s))return '🛕';
-    if(/ฉัตรมงคล|จักรี|ราช|นวมินทร|ปิย/.test(s))return '👑';
-    if(/พืชมงคล/.test(s))return '🌾';
-    if(/แม่|พ่อ|เฉลิม/.test(s))return '🎗️';
-    if(/สงกรานต์/.test(s))return '💦';
-    return type==='special'?'✨':type==='substitute'?'🌟':'🎁';
+    if(kind==='buddhist')return {glyph:'☸',tone:'yellow'};
+    if(/สตรี|แม่/.test(s))return {glyph:'✿',tone:'pink'};
+    if(/พยาบาล|มหิดล|สาธารณสุข|แพทย์|กาชาด/.test(s))return {glyph:'✚',tone:'mint'};
+    if(/วิทยาศาสตร์|นักประดิษฐ์/.test(s))return {glyph:'⚛',tone:'purple'};
+    if(/รพี|ประชาธิปไตย|รัฐธรรมนูญ|กฎหมาย/.test(s))return {glyph:'⚖',tone:'purple'};
+    if(/สื่อสาร/.test(s))return {glyph:'☎',tone:'blue'};
+    if(/สิ่งแวดล้อม|ต้นไม้|สัตว์ป่า/.test(s))return {glyph:'♧',tone:'mint'};
+    if(/พืชมงคล|เกษตร/.test(s))return {glyph:'❧',tone:'mint'};
+    if(/สงกรานต์/.test(s))return {glyph:'◌',tone:'blue'};
+    if(/ฉัตรมงคล|จักรี|ราช|นวมินทร|ปิย|เฉลิมพระชนมพรรษ/.test(s))return {glyph:'♛',tone:'orange'};
+    if(/ชาติ|ธงชาติ|พ่อ/.test(s))return {glyph:'★',tone:'blue'};
+    if(/ครู|เด็ก|เยาวชน/.test(s))return {glyph:'✎',tone:'pink'};
+    if(kind==='important')return {glyph:'✦',tone:'blue'};
+    if(type==='substitute')return {glyph:'↻',tone:'pink'};
+    if(type==='special')return {glyph:'✦',tone:'gray'};
+    return {glyph:'◆',tone:'orange'};
   }
 
   function seedOfficial2569(){
@@ -446,8 +478,9 @@
       var type=holiday?(holiday.type||'official'):(buddhist?'buddhist':'important');
       var label=holiday?typeLabel(type):(buddhist?'วันพระ':'วันสำคัญ');
       var edit=holiday?'<button type="button" class="h32-edit-event" data-edit="'+k+'">แก้ไข</button>':'';
+      var icon=iconFor(main&&main.name,type,main&&main.kind);
       return '<div data-key="'+k+'">'+
-        '<span class="h32-event-icon">'+iconFor(main&&main.name,type,main&&main.kind)+'</span>'+
+        '<span class="h32-event-icon tone-'+esc(icon.tone)+'" aria-hidden="true">'+esc(icon.glyph)+'</span>'+
         '<span class="h32-event-name"><b>'+esc(names)+'</b></span>'+
         '<span class="h32-event-date">'+esc(formatThaiDate(k))+'</span>'+
         '<span class="h32-type-badge '+type+'">'+label+'</span>'+edit+'</div>';
@@ -520,7 +553,7 @@
   }
 
   function setToday(){
-    var d=new Date();B.setMonth(d.getFullYear(),d.getMonth());setTimeout(refresh,30);
+    var d=new Date();setCalendarView(d.getFullYear(),d.getMonth());
   }
 
   function wireMonthPicker(){
@@ -537,12 +570,32 @@
     input.addEventListener('change',function(){
       if(!this.value)return;
       var p=this.value.split('-'),y=parseInt(p[0],10),m=parseInt(p[1],10)-1;
-      if(isFinite(y)&&isFinite(m)){B.setMonth(y,m);setTimeout(refresh,30)}
+      if(isFinite(y)&&isFinite(m))setCalendarView(y,m);
     });
+  }
+
+  function expectedCalendarStartKey(){
+    var c=current(),first=new Date(c.year,c.month,1);
+    var start=new Date(c.year,c.month,1-first.getDay());
+    return iso(start.getFullYear(),start.getMonth(),start.getDate());
+  }
+  function calendarMatchesView(){
+    var host=$('holidayCalendarV24');if(!host)return true;
+    var cells=host.querySelectorAll('.h32-day[data-date]');
+    return cells.length===42 && cells[0].dataset.date===expectedCalendarStartKey();
+  }
+  function installCalendarGuard(){
+    var host=$('holidayCalendarV24');
+    if(!host||host.dataset.v329Guard==='1'||!window.MutationObserver)return;
+    host.dataset.v329Guard='1';
+    new MutationObserver(function(){
+      if(!calendarMatchesView())setTimeout(renderCalendarV322,0);
+    }).observe(host,{childList:true});
   }
 
   function wire(){
     seedOfficial2569();
+    initCalendarView();
 
     var add=$('addHolidayBtn');
     if(add){add.onclick=saveFromForm;add.style.pointerEvents='auto'}
@@ -562,25 +615,18 @@
     };
 
     var prev=$('holidayPrevMonthV24');
-    if(prev)prev.onclick=function(ev){
-      if(ev)ev.preventDefault();
-      var c=current(),m=c.month-1,y=c.year;
-      if(m<0){m=11;y--;}
-      if(B&&typeof B.setMonth==='function')B.setMonth(y,m);
-      else{if($('monthSelect'))$('monthSelect').value=String(m);if($('yearInput'))$('yearInput').value=String(y+543);}
-      setTimeout(refresh,20);
-    };
+    if(prev)prev.addEventListener('click',function(ev){
+      if(ev){ev.preventDefault();ev.stopImmediatePropagation()}
+      var c=current();setCalendarView(c.year,c.month-1);
+    },true);
     var next=$('holidayNextMonthV24');
-    if(next)next.onclick=function(ev){
-      if(ev)ev.preventDefault();
-      var c=current(),m=c.month+1,y=c.year;
-      if(m>11){m=0;y++;}
-      if(B&&typeof B.setMonth==='function')B.setMonth(y,m);
-      else{if($('monthSelect'))$('monthSelect').value=String(m);if($('yearInput'))$('yearInput').value=String(y+543);}
-      setTimeout(refresh,20);
-    };
+    if(next)next.addEventListener('click',function(ev){
+      if(ev){ev.preventDefault();ev.stopImmediatePropagation()}
+      var c=current();setCalendarView(c.year,c.month+1);
+    },true);
 
     wireMonthPicker();
+    installCalendarGuard();
     refresh();
     setTimeout(refresh,120);
     setTimeout(refresh,500);

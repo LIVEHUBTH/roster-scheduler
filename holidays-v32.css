@@ -1137,3 +1137,28 @@
   color:#dd6391!important;
 }
 
+
+
+/* =========================================================
+   V32.9 — UPCOMING PASTEL ICONS + REMOVE AUTO-SAVE NOTE
+   Scope: holiday page only. No sidebar / other pages / layout changes.
+   ========================================================= */
+#page-holidays .h32-upcoming .h32-event-icon{
+  width:38px!important;
+  height:38px!important;
+  border-radius:12px!important;
+  font-size:20px!important;
+  font-weight:800!important;
+  line-height:1!important;
+  box-shadow:none!important;
+}
+#page-holidays .h32-upcoming .h32-event-icon.tone-pink{background:#fff0f6!important;color:#ea6f9d!important}
+#page-holidays .h32-upcoming .h32-event-icon.tone-orange{background:#fff2e5!important;color:#e89345!important}
+#page-holidays .h32-upcoming .h32-event-icon.tone-yellow{background:#fff8dc!important;color:#d4a92d!important}
+#page-holidays .h32-upcoming .h32-event-icon.tone-blue{background:#edf7ff!important;color:#55a7df!important}
+#page-holidays .h32-upcoming .h32-event-icon.tone-mint{background:#eaf9f4!important;color:#43af8f!important}
+#page-holidays .h32-upcoming .h32-event-icon.tone-purple{background:#f2edff!important;color:#8b70d6!important}
+#page-holidays .h32-upcoming .h32-event-icon.tone-gray{background:#f2f4f6!important;color:#8e98a7!important}
+
+/* Remove the square/icon and the whole automatic-save message line only. */
+#page-holidays .h32-save-note{display:none!important}
