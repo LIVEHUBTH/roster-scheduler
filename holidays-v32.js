@@ -251,18 +251,31 @@
 
 
   function applyCalendarIconsV323(){
-    var titleIcon=document.querySelector('#page-holidays .h32-title-icon');
+    var page=$('page-holidays');
+    if(!page)return;
+
+    var titleIcon=page.querySelector('.h32-title-icon');
     if(titleIcon){
-      titleIcon.textContent='🗓️';
+      titleIcon.textContent='▦';
+      titleIcon.classList.add('h32-main-calendar-icon');
       titleIcon.setAttribute('aria-label','ปฏิทินวันหยุด');
       titleIcon.title='ปฏิทินวันหยุด';
     }
-    var cardIcon=document.querySelector('#page-holidays .h32-head-icon.pink');
-    if(cardIcon){
-      cardIcon.textContent='📅';
-      cardIcon.setAttribute('aria-label','ปฏิทิน');
-      cardIcon.title='ปฏิทิน';
-    }
+
+    var iconMap=[
+      ['.h32-calendar-card .h32-head-icon','▦','yellow'],
+      ['.h32-summary-card .h32-head-icon','▥','mint'],
+      ['.h32-form-card .h32-head-icon','✎','pink'],
+      ['.h32-note-card .h32-head-icon','▤','orange'],
+      ['.h32-audit-card .h32-head-icon','◔','purple']
+    ];
+    iconMap.forEach(function(x){
+      var el=page.querySelector(x[0]);
+      if(!el)return;
+      el.textContent=x[1];
+      el.classList.remove('pink','mint','purple','yellow','orange');
+      el.classList.add(x[2]);
+    });
   }
 
   function renderLegendV323(){
@@ -453,7 +466,15 @@
       var markers=[];
       if(d.getDay()===6)markers.push('<i class="h32-mini-dot saturday" title="วันเสาร์"></i>');
       if(d.getDay()===0)markers.push('<i class="h32-mini-dot sunday" title="วันอาทิตย์"></i>');
-      if(hasBuddhist)markers.push('<span class="h32-buddha-mark" title="วันพระ" aria-label="วันพระ">🧘‍♂️</span>');
+      if(hasBuddhist)markers.push('<span class="h32-buddha-mark" title="วันพระ" aria-label="วันพระ">🙏</span>');
+
+      var primaryEvent=evs.find(function(x){return x.kind==='holiday'}) ||
+                       evs.find(function(x){return x.kind==='important'});
+      if(primaryEvent){
+        var dayIcon=iconFor(primaryEvent.name,primaryEvent.type,primaryEvent.kind);
+        markers.push('<span class="h32-calendar-event-icon tone-'+esc(dayIcon.tone)+'" title="'+esc(primaryEvent.name)+'" aria-label="'+esc(primaryEvent.name)+'">'+esc(dayIcon.glyph)+'</span>');
+      }
+
       if(h){
         markers.push('<i class="h32-mini-dot '+esc(h.type||'official')+'" title="'+esc(typeLabel(h.type||'official'))+'"></i>');
       }

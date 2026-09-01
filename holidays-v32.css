@@ -1440,3 +1440,255 @@
 #page-holidays.h32-phone-stack #holidayCalendarV24 .h32-day-markers{
   margin-top:auto!important;
 }
+
+
+/* =========================================================
+   V32.13 — REFERENCE-SIZE + PASTEL PAGE/EVENT ICONS
+   Scope: #page-holidays only.
+   Keeps the existing phone/iPad/Desktop column/breakpoint behavior.
+   ========================================================= */
+
+/* Main page title matches People page: 22px desktop/iPad, 19px phone. */
+#page-holidays .h32-page-head{
+  margin-bottom:10px!important;
+}
+#page-holidays .h32-title-wrap{
+  gap:12px!important;
+}
+#page-holidays .h32-title-wrap h2,
+#page-holidays h2{
+  font-size:22px!important;
+  line-height:1.15!important;
+  font-weight:900!important;
+  color:#2d3548!important;
+}
+#page-holidays .h32-title-wrap p{
+  margin-top:4px!important;
+  font-size:11px!important;
+  color:#7b8290!important;
+}
+#page-holidays .h32-title-icon{
+  width:34px!important;
+  height:34px!important;
+  border-radius:12px!important;
+  background:#fff7dc!important;
+  color:#e0aa2e!important;
+  box-shadow:none!important;
+  font-size:22px!important;
+  font-weight:900!important;
+  font-family:-apple-system,BlinkMacSystemFont,"Noto Sans Thai",Tahoma,Arial,sans-serif!important;
+}
+
+/* Pastel section icons */
+#page-holidays .h32-head-icon{
+  width:28px!important;
+  height:28px!important;
+  border-radius:9px!important;
+  font-size:16px!important;
+  font-weight:900!important;
+  box-shadow:none!important;
+}
+#page-holidays .h32-head-icon.pink{background:#fff0f6!important;color:#e86f9e!important}
+#page-holidays .h32-head-icon.mint{background:#eaf9f4!important;color:#42ad8d!important}
+#page-holidays .h32-head-icon.purple{background:#f2edff!important;color:#8b70d6!important}
+#page-holidays .h32-head-icon.yellow{background:#fff8dc!important;color:#d7a92f!important}
+#page-holidays .h32-head-icon.orange{background:#fff1e5!important;color:#e28f45!important}
+
+/* Compact the holiday dashboard to the proportions of reference image 2.
+   No grid structure or responsive breakpoint is changed. */
+@media(min-width:701px){
+  #page-holidays .h32-shell{
+    max-width:1480px!important;
+    padding:6px 10px 16px!important;
+  }
+  #page-holidays .h32-top-grid{
+    gap:12px!important;
+  }
+  #page-holidays .h32-side-stack{
+    gap:10px!important;
+  }
+  #page-holidays .h32-bottom-grid{
+    gap:12px!important;
+    margin-top:12px!important;
+  }
+  #page-holidays .h32-card{
+    padding:13px!important;
+    border-radius:18px!important;
+  }
+  #page-holidays .h32-card h3{
+    margin-bottom:10px!important;
+    font-size:16px!important;
+    gap:8px!important;
+  }
+  #page-holidays .h32-card-head.compact{
+    margin-bottom:7px!important;
+  }
+  #page-holidays .h32-month-nav button{
+    min-height:36px!important;
+    height:36px!important;
+    border-radius:11px!important;
+  }
+  #page-holidays .h32-month-nav>button:first-child,
+  #page-holidays .h32-month-nav>button:nth-child(3){
+    width:36px!important;
+    font-size:21px!important;
+  }
+  #page-holidays .h32-month-pill{
+    min-width:170px!important;
+    font-size:12px!important;
+  }
+  #page-holidays .h32-today{
+    font-size:11px!important;
+  }
+  #page-holidays .h32-week-head{
+    margin-top:8px!important;
+    padding-bottom:6px!important;
+    font-size:11px!important;
+  }
+  #page-holidays #holidayCalendarV24{
+    grid-template-rows:repeat(6,52px)!important;
+    min-height:312px!important;
+    gap:3px!important;
+    padding:5px 0 2px!important;
+  }
+  #page-holidays #holidayCalendarV24 .h32-day{
+    height:52px!important;
+    min-height:52px!important;
+    max-height:52px!important;
+    border-radius:10px!important;
+    padding:3px!important;
+  }
+  #page-holidays #holidayCalendarV24 .h32-day-number{
+    font-size:15px!important;
+  }
+  #page-holidays #holidayCalendarV24 .h32-day-caption{
+    font-size:7px!important;
+    line-height:9px!important;
+    min-height:9px!important;
+    max-height:9px!important;
+    margin-top:1px!important;
+  }
+  #page-holidays #holidayCalendarV24 .h32-day-markers{
+    min-height:12px!important;
+    max-height:12px!important;
+    gap:2px!important;
+  }
+  #page-holidays .h32-legend{
+    margin-top:6px!important;
+    gap:5px!important;
+  }
+  #page-holidays .h32-legend span{
+    min-height:30px!important;
+    padding:4px 6px!important;
+    font-size:8.5px!important;
+    border-radius:10px!important;
+  }
+  #page-holidays .h32-stat-grid{
+    gap:8px!important;
+  }
+  #page-holidays .h32-stat-grid article{
+    min-height:72px!important;
+    padding:8px!important;
+    border-radius:13px!important;
+  }
+  #page-holidays .h32-stat-grid article b{
+    font-size:24px!important;
+  }
+  #page-holidays .h32-stat-grid article span{
+    font-size:8.5px!important;
+  }
+  #page-holidays .h32-summary-note{
+    margin-top:7px!important;
+    font-size:8.5px!important;
+  }
+  #page-holidays .h32-upcoming>div{
+    padding:7px 4px!important;
+    min-height:42px!important;
+  }
+  #page-holidays .h32-upcoming .h32-event-icon{
+    width:32px!important;
+    height:32px!important;
+    border-radius:10px!important;
+    font-size:16px!important;
+  }
+  #page-holidays .h32-upcoming .h32-event-name b{
+    font-size:9.5px!important;
+  }
+  #page-holidays .h32-upcoming .h32-event-date,
+  #page-holidays .h32-upcoming .h32-type-badge{
+    font-size:8px!important;
+  }
+  #page-holidays .h32-upcoming-foot{
+    min-height:28px!important;
+    margin-top:7px!important;
+    font-size:8px!important;
+  }
+  #page-holidays .h32-form label,
+  #page-holidays .h32-note-list,
+  #page-holidays .h32-audit-list{
+    font-size:9px!important;
+  }
+}
+
+/* Calendar event chips: diverse pastel tones, shown beside the day markers. */
+#page-holidays .h32-calendar-event-icon{
+  width:15px!important;
+  height:15px!important;
+  min-width:15px!important;
+  border-radius:5px!important;
+  display:inline-grid!important;
+  place-items:center!important;
+  font-size:9px!important;
+  line-height:1!important;
+  box-shadow:none!important;
+  font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif!important;
+}
+#page-holidays .h32-calendar-event-icon.tone-pink{background:#fff0f6!important}
+#page-holidays .h32-calendar-event-icon.tone-orange{background:#fff1e5!important}
+#page-holidays .h32-calendar-event-icon.tone-yellow{background:#fff8dc!important}
+#page-holidays .h32-calendar-event-icon.tone-blue{background:#edf7ff!important}
+#page-holidays .h32-calendar-event-icon.tone-mint{background:#eaf9f4!important}
+#page-holidays .h32-calendar-event-icon.tone-purple{background:#f2edff!important}
+#page-holidays .h32-calendar-event-icon.tone-gray{background:#f2f4f6!important}
+
+/* Buddhist marker uses the same compact visual language. */
+#page-holidays .h32-buddha-mark{
+  width:15px!important;
+  height:15px!important;
+  min-width:15px!important;
+  border-radius:5px!important;
+  display:inline-grid!important;
+  place-items:center!important;
+  background:#fff8dc!important;
+  font-size:9px!important;
+  line-height:1!important;
+}
+
+/* Phone keeps the existing one-column layout. Only fine typography/icon spacing
+   is adjusted within this page. */
+@media(max-width:700px){
+  #page-holidays .h32-title-wrap h2,
+  #page-holidays h2{
+    font-size:19px!important;
+  }
+  #page-holidays .h32-title-icon{
+    width:34px!important;
+    height:34px!important;
+    font-size:21px!important;
+  }
+  #page-holidays.h32-phone-stack #holidayCalendarV24 .h32-day-caption{
+    margin-top:6px!important;
+  }
+  #page-holidays.h32-phone-stack #holidayCalendarV24 .h32-day-markers{
+    min-height:13px!important;
+    max-height:13px!important;
+    gap:2px!important;
+  }
+  #page-holidays .h32-calendar-event-icon,
+  #page-holidays .h32-buddha-mark{
+    width:13px!important;
+    height:13px!important;
+    min-width:13px!important;
+    font-size:8px!important;
+  }
+}
