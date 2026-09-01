@@ -29,7 +29,7 @@
       check:'<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="20" fill="#d8f7e7"/><path d="m23 32 6 6 12-13" fill="none" stroke="#34ad82" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
       send:'<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="20" fill="#ddecff"/><path d="m20 32 24-11-7 22-6-8-11-3Z" fill="#6aa8ef"/></svg>',
       edit:'<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="20" fill="#ffedc8"/><path d="m23 40 2-8 13-13 6 6-13 13-8 2Z" fill="#e0a526"/><path d="m36 21 6 6" fill="none" stroke="#bd8610" stroke-width="3" stroke-linecap="round"/></svg>',
-      history:'<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="34" r="18" fill="#dff9f0"/><path d="M32 24v11l8 5" fill="none" stroke="#43b890" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M19 18c3-5 8-8 14-8 8 0 15 5 18 12" fill="none" stroke="#f279a6" stroke-width="4.2" stroke-linecap="round"/><path d="M17 18h8v8" fill="none" stroke="#f279a6" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+      history:'<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="34" r="18" fill="#eaf6ff"/><path d="M32 24v11l8 5" fill="none" stroke="#58a9df" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M19 18c3-5 8-8 14-8 8 0 15 5 18 12" fill="none" stroke="#79bff0" stroke-width="4.2" stroke-linecap="round"/><path d="M17 18h8v8" fill="none" stroke="#79bff0" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
     };
     return icons[name]||'';
   }
@@ -125,12 +125,46 @@
 
   function statusIcon(s){if(s==='locked')return '🔒';if(s==='approved')return '✅';if(s==='submitted')return '📨';return '📝'}
 
+  function downloadRosterCsv(y,m){
+    var d=B.getMonth?B.getMonth(y,m):null;
+    if(!d){alert('ไม่พบข้อมูลตารางเวรย้อนหลังของเดือนนี้');return}
+    var assignments=d.assignments||{};
+    var people=Array.isArray(d.peopleSnapshot)?d.peopleSnapshot:[];
+    var personMap={};
+    people.forEach(function(p){personMap[p.id]=p.name||p.id||''});
+    var slots=[
+      ['v1','เวร1'],['v2','เวร2'],['ot1','OT1'],['ot2','OT2'],
+      ['s1d','SDMC1 เช้า'],['s1n','SDMC1 บ่าย-ดึก'],
+      ['s2d','SDMC2 เช้า'],['s2n','SDMC2 บ่าย-ดึก'],
+      ['s3d','SDMC3 เช้า'],['s3n','SDMC3 บ่าย-ดึก'],
+      ['s4d','SDMC4 เช้า'],['s4n','SDMC4 บ่าย-ดึก'],
+      ['s5','SDMC5 เช้า-บ่าย'],['s6','SDMC6 เช้า-บ่าย'],
+      ['s7','SDMC7 บ่าย'],['s8','SDMC8 บ่าย'],
+      ['e1','EXTRA1'],['e2','EXTRA2'],['e3','EXTRA3']
+    ];
+    var dayNames=['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'];
+    var gy=y-543,days=new Date(gy,m+1,0).getDate();
+    var rows=[['วันที่','วัน'].concat(slots.map(function(s){return s[1]}))];
+    for(var day=1;day<=days;day++){
+      var row=[day,dayNames[new Date(gy,m,day).getDay()]];
+      slots.forEach(function(s){
+        var pid=assignments[day+'|'+s[0]];
+        row.push(pid?(personMap[pid]||pid):'');
+      });
+      rows.push(row);
+    }
+    var csv='\ufeff'+rows.map(function(row){return row.map(function(v){return '"'+String(v==null?'':v).replace(/"/g,'""')+'"'}).join(',')}).join('\n');
+    var blob=new Blob([csv],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+    a.href=url;a.download='ตารางเวร_'+(MONTHS[m]||String(m+1))+'_'+y+'.csv';
+    document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url)},1200);
+  }
+
   function renderRows(){
     var body=$('historyRowsV33');if(!body)return;
     var start=(page-1)*pageSize,slice=filtered.slice(start,start+pageSize);
-    body.innerHTML=slice.length?slice.map(function(r){return '<tr><td><div class="h33-month-cell"><span class="h33-month-ico h33-calendar-pink">'+iconSvg('calendarPink')+'</span><span>'+esc(MONTHS[r.month])+' '+r.year+'</span></div></td><td>'+esc(r.unit)+'</td><td><span class="h33-status '+r.status+'">'+statusIcon(r.status)+' '+statusLabel(r.status)+'</span></td><td><div class="h33-user"><span class="h33-avatar">👩🏻</span><span>'+esc(r.scheduler)+'</span></div></td><td>'+fmt(r.savedAt)+'</td><td>'+fmt(r.approvedAt)+'</td><td>'+fmt(r.lockedAt)+'</td><td>'+esc(r.note)+'</td><td><div class="h33-row-actions"><button class="h33-open" data-open="'+r.year+'|'+r.month+'">เปิดดู</button><button class="h33-more" data-more="'+r.year+'|'+r.month+'">⋮</button></div></td></tr>'}).join(''):'<tr><td colspan="9" style="text-align:center;padding:34px;color:#98a1af">ไม่พบประวัติการจัดเวรตามตัวกรอง</td></tr>';
+    body.innerHTML=slice.length?slice.map(function(r){return '<tr><td><div class="h33-month-cell"><span class="h33-month-ico h33-calendar-pink">'+iconSvg('calendarPink')+'</span><span>'+esc(MONTHS[r.month])+' '+r.year+'</span></div></td><td>'+esc(r.unit)+'</td><td><span class="h33-status '+r.status+'">'+statusIcon(r.status)+' '+statusLabel(r.status)+'</span></td><td><div class="h33-user"><span class="h33-avatar">👩🏻</span><span>'+esc(r.scheduler)+'</span></div></td><td>'+fmt(r.savedAt)+'</td><td>'+fmt(r.approvedAt)+'</td><td>'+fmt(r.lockedAt)+'</td><td>'+esc(r.note)+'</td><td><div class="h33-row-actions"><button class="h33-open" data-open="'+r.year+'|'+r.month+'">เปิดดู</button><button class="h33-download" data-download="'+r.year+'|'+r.month+'" title="ดาวน์โหลดตารางเวรย้อนหลัง" aria-label="ดาวน์โหลดตารางเวรย้อนหลัง">↓</button></div></td></tr>'}).join(''):'<tr><td colspan="9" style="text-align:center;padding:34px;color:#98a1af">ไม่พบประวัติการจัดเวรตามตัวกรอง</td></tr>';
     body.querySelectorAll('[data-open]').forEach(function(b){b.onclick=function(){var p=this.dataset.open.split('|');openRecord(+p[0],+p[1],'roster')}});
-    body.querySelectorAll('[data-more]').forEach(function(b){b.onclick=function(){var p=this.dataset.more.split('|');if(confirm('เปิดตารางสรุปจำนวนเวรของเดือนนี้หรือไม่?'))openRecord(+p[0],+p[1],'summary')}});
+    body.querySelectorAll('[data-download]').forEach(function(b){b.onclick=function(){var p=this.dataset.download.split('|');downloadRosterCsv(+p[0],+p[1])}});
     if($('historyRangeV33'))$('historyRangeV33').textContent='แสดง '+(slice.length?(start+1):0)+' - '+Math.min(start+pageSize,filtered.length)+' จาก '+filtered.length+' รายการ';
     renderPager();
   }
