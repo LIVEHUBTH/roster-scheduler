@@ -177,24 +177,27 @@
 
   function iconFor(name,type,kind){
     var s=String(name||'');
-    if(kind==='buddhist')return {glyph:'☸',tone:'yellow'};
-    if(/ปีใหม่|คริสต์มาส|ลอยกระทง/.test(s))return {glyph:'✦',tone:'pink'};
-    if(/สตรี|แม่/.test(s))return {glyph:'✿',tone:'pink'};
-    if(/พยาบาล|มหิดล|สาธารณสุข|แพทย์|กาชาด|อนามัย/.test(s))return {glyph:'✚',tone:'mint'};
-    if(/วิทยาศาสตร์|นักประดิษฐ์/.test(s))return {glyph:'⚛',tone:'purple'};
-    if(/รพี|ประชาธิปไตย|รัฐธรรมนูญ|กฎหมาย/.test(s))return {glyph:'⚖',tone:'purple'};
-    if(/สื่อสาร/.test(s))return {glyph:'☎',tone:'blue'};
-    if(/สิ่งแวดล้อม|ต้นไม้|สัตว์ป่า|โลก/.test(s))return {glyph:'♧',tone:'mint'};
-    if(/พืชมงคล|เกษตร/.test(s))return {glyph:'❧',tone:'mint'};
-    if(/สงกรานต์/.test(s))return {glyph:'◌',tone:'blue'};
-    if(/ฉัตรมงคล|จักรี|ราช|นวมินทร|ปิย|เฉลิมพระชนมพรรษ/.test(s))return {glyph:'♛',tone:'orange'};
-    if(/ชาติ|ธงชาติ|พ่อ|กองทัพ|ตำรวจ|ลูกเสือ/.test(s))return {glyph:'★',tone:'blue'};
-    if(/ครู|เด็ก|เยาวชน/.test(s))return {glyph:'✎',tone:'pink'};
-    if(/แรงงาน/.test(s))return {glyph:'⚒',tone:'orange'};
-    if(kind==='important')return {glyph:'✦',tone:'blue'};
-    if(type==='substitute')return {glyph:'↻',tone:'pink'};
-    if(type==='special')return {glyph:'✦',tone:'gray'};
-    return {glyph:'◆',tone:'orange'};
+    if(kind==='buddhist')return {glyph:'🙏',tone:'yellow'};
+    if(/ปีใหม่|คริสต์มาส/.test(s))return {glyph:'🎉',tone:'pink'};
+    if(/ลอยกระทง/.test(s))return {glyph:'🪷',tone:'pink'};
+    if(/สตรี|แม่/.test(s))return {glyph:'🌸',tone:'pink'};
+    if(/พยาบาล|มหิดล|สาธารณสุข|แพทย์|กาชาด|อนามัย|สัตวแพทย์/.test(s))return {glyph:'🩺',tone:'mint'};
+    if(/วิทยาศาสตร์|นักประดิษฐ์/.test(s))return {glyph:'🔬',tone:'purple'};
+    if(/รพี|ประชาธิปไตย|รัฐธรรมนูญ|กฎหมาย/.test(s))return {glyph:'⚖️',tone:'purple'};
+    if(/สื่อสาร/.test(s))return {glyph:'📡',tone:'blue'};
+    if(/สิ่งแวดล้อม|ต้นไม้|สัตว์ป่า|โลก/.test(s))return {glyph:'🌿',tone:'mint'};
+    if(/พืชมงคล|เกษตร/.test(s))return {glyph:'🌾',tone:'mint'};
+    if(/สงกรานต์/.test(s))return {glyph:'💦',tone:'blue'};
+    if(/ฉัตรมงคล|จักรี|ราช|นวมินทร|ปิย|เฉลิมพระชนมพรรษ/.test(s))return {glyph:'👑',tone:'orange'};
+    if(/ชาติ|ธงชาติ|พ่อ|กองทัพ|ตำรวจ|ลูกเสือ/.test(s))return {glyph:'🇹🇭',tone:'blue'};
+    if(/ครู|เด็ก|เยาวชน/.test(s))return {glyph:'🎓',tone:'pink'};
+    if(/แรงงาน/.test(s))return {glyph:'🛠️',tone:'orange'};
+    if(/ช้าง/.test(s))return {glyph:'🐘',tone:'mint'};
+    if(/ภาษาไทย|สุนทรภู่/.test(s))return {glyph:'📚',tone:'blue'};
+    if(kind==='important')return {glyph:'📌',tone:'blue'};
+    if(type==='substitute')return {glyph:'🔁',tone:'pink'};
+    if(type==='special')return {glyph:'✨',tone:'gray'};
+    return {glyph:'📅',tone:'orange'};
   }
 
   function seedOfficial2569(){
@@ -671,6 +674,26 @@
     }).observe(host,{childList:true});
   }
 
+
+  function isPhoneViewport(){
+    var ua=(navigator.userAgent||'').toLowerCase();
+    var isPhoneUA=/(iphone|ipod|android.*mobile|windows phone|mobile)/i.test(ua);
+    var isTabletUA=/(ipad|tablet|android(?!.*mobile))/i.test(ua);
+    if(isTabletUA)return false;
+    if(isPhoneUA)return true;
+    try{
+      return window.innerWidth<=520 && window.matchMedia && window.matchMedia('(pointer:coarse)').matches;
+    }catch(e){
+      return window.innerWidth<=520;
+    }
+  }
+
+  function applyPhoneStackMode(){
+    var page=$('page-holidays');
+    if(!page)return;
+    page.classList.toggle('h32-phone-stack', !!isPhoneViewport());
+  }
+
   function wire(){
     seedOfficial2569();
     initCalendarView();
@@ -705,6 +728,7 @@
 
     wireMonthPicker();
     installCalendarGuard();
+    applyPhoneStackMode();
     refresh();
     setTimeout(refresh,120);
     setTimeout(refresh,500);
@@ -730,7 +754,8 @@
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',wire,{once:true});
   else wire();
 
-  window.addEventListener('pageshow',function(){setTimeout(refresh,60)});
+  window.addEventListener('pageshow',function(){applyPhoneStackMode();setTimeout(refresh,60)});
+  window.addEventListener('resize',function(){applyPhoneStackMode()});
   }
 
   startHolidaysV325();

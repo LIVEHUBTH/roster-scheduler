@@ -1258,3 +1258,121 @@
   line-height:1.5!important;
   grid-template-columns:none!important;
 }
+
+
+/* =========================================================
+   V32.11 — CALENDAR HEIGHT BALANCE + PHONE STACK FIX
+   Scope: #page-holidays only. No sidebar / other pages / layout changes.
+   ========================================================= */
+
+/* Bring the bottom of the calendar card up so it visually ends closer to
+   the upcoming-holidays card, while preserving the existing 2-column iPad/
+   desktop composition. */
+#page-holidays .h32-top-grid{align-items:start!important}
+#page-holidays .h32-calendar-card{
+  align-self:start!important;
+  padding-bottom:12px!important;
+}
+#page-holidays #holidayCalendarV24{
+  grid-template-rows:repeat(6,60px)!important;
+}
+#page-holidays #holidayCalendarV24 .h32-day{
+  height:60px!important;
+  min-height:60px!important;
+  max-height:60px!important;
+  padding:4px 4px 4px!important;
+}
+#page-holidays #holidayCalendarV24 .h32-day-caption{
+  min-height:11px!important;
+  max-height:11px!important;
+  line-height:11px!important;
+  margin-top:2px!important;
+}
+#page-holidays #holidayCalendarV24 .h32-day-markers{
+  min-height:10px!important;
+  max-height:10px!important;
+}
+#page-holidays .h32-legend{
+  margin-top:8px!important;
+  gap:6px!important;
+}
+#page-holidays .h32-legend span{
+  min-height:34px!important;
+  padding:5px 7px!important;
+}
+
+/* Upcoming-list icon styling remains pastel but the glyphs are more specific
+   to each holiday / event type. */
+#page-holidays .h32-upcoming .h32-event-icon{
+  border-radius:12px!important;
+  font-size:18px!important;
+}
+
+/* iPad sizing tune: keep the card slightly more compact than before. */
+@media(max-width:1024px){
+  #page-holidays #holidayCalendarV24{grid-template-rows:repeat(6,56px)!important}
+  #page-holidays #holidayCalendarV24 .h32-day{
+    height:56px!important;
+    min-height:56px!important;
+    max-height:56px!important;
+  }
+  #page-holidays .h32-legend span{min-height:32px!important}
+}
+
+/* Hard phone-only stack mode. This is activated from holidays-v32.js only on
+   phone user agents so iPad/Desktop stay on their current layout. */
+#page-holidays.h32-phone-stack .h32-top-grid,
+#page-holidays.h32-phone-stack .h32-bottom-grid{
+  grid-template-columns:1fr!important;
+}
+#page-holidays.h32-phone-stack .h32-side-stack{
+  grid-template-rows:auto auto!important;
+}
+#page-holidays.h32-phone-stack .h32-card-head{
+  align-items:stretch!important;
+  flex-direction:column!important;
+}
+#page-holidays.h32-phone-stack .h32-month-nav,
+#page-holidays.h32-phone-stack .h32-calendar-card .h32-month-nav{
+  width:100%!important;
+  margin:0!important;
+  display:grid!important;
+  grid-template-columns:36px minmax(0,1fr) 36px 54px!important;
+  gap:6px!important;
+}
+#page-holidays.h32-phone-stack .h32-month-pill,
+#page-holidays.h32-phone-stack .h32-calendar-card .h32-month-pill{
+  width:100%!important;
+  min-width:0!important;
+}
+#page-holidays.h32-phone-stack .h32-calendar-card .h32-today{
+  width:54px!important;
+  padding:0 5px!important;
+  font-size:11px!important;
+}
+#page-holidays.h32-phone-stack #holidayCalendarV24{
+  grid-template-rows:repeat(6,48px)!important;
+}
+#page-holidays.h32-phone-stack #holidayCalendarV24 .h32-day{
+  height:48px!important;
+  min-height:48px!important;
+  max-height:48px!important;
+  padding:3px 2px!important;
+}
+#page-holidays.h32-phone-stack #holidayCalendarV24 .h32-day-number{font-size:15px!important}
+#page-holidays.h32-phone-stack #holidayCalendarV24 .h32-day-caption{
+  min-height:10px!important;
+  max-height:10px!important;
+  line-height:10px!important;
+  font-size:6.5px!important;
+}
+#page-holidays.h32-phone-stack .h32-upcoming>div{
+  grid-template-columns:38px minmax(0,1fr) auto!important;
+}
+#page-holidays.h32-phone-stack .h32-upcoming .h32-type-badge{
+  grid-column:2 / 4!important;
+  justify-self:start!important;
+}
+#page-holidays.h32-phone-stack .h32-form-actions{
+  grid-template-columns:1fr!important;
+}
