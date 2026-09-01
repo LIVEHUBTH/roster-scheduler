@@ -1863,3 +1863,32 @@
     margin-top:auto!important;
   }
 }
+
+
+/* =========================================================
+   V32.16 — BOTTOM CARD WIDTH / HEIGHT TUNE ONLY
+   Scope: #page-holidays only. No sidebar / other pages / breakpoint changes.
+   ========================================================= */
+@media(min-width:701px){
+  /* Keep the left form card close to its current width, widen the notes card,
+     and make the history card slightly narrower. */
+  #page-holidays .h32-bottom-grid{
+    grid-template-columns:minmax(0,.94fr) minmax(0,1.04fr) minmax(0,.94fr)!important;
+    align-items:stretch!important;
+  }
+
+  /* Shorten all three bottom cards equally. */
+  #page-holidays .h32-bottom-grid > .h32-card,
+  #page-holidays .h32-bottom-grid > .h32-form-card,
+  #page-holidays .h32-bottom-grid > .h32-note-card,
+  #page-holidays .h32-bottom-grid > .h32-audit-card{
+    min-height:276px!important;
+  }
+
+  /* Give the note text the full available width so it wraps less. */
+  #page-holidays .h32-note-card .h32-note-list,
+  #page-holidays .h32-note-card .h32-note-list > div{
+    width:100%!important;
+    min-width:0!important;
+  }
+}
