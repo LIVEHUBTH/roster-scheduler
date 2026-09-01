@@ -159,7 +159,11 @@
       '</tr>'+ 
     '</thead>';
   }
+  function historyDateKey(r,d){return (r.year-543)+'-'+String(r.month+1).padStart(2,'0')+'-'+String(d).padStart(2,'0')}
+  function holidayMap(){try{return B.getHolidays?B.getHolidays():{}}catch(e){return {}}}
+  function holidayInfoFor(r,d){var h=holidayMap();return h&&h[historyDateKey(r,d)]||null}
   function rowClassFor(r,d){
+    if(holidayInfoFor(r,d))return 'holiday';
     var wd=new Date(r.year-543,r.month,d).getDay();
     return wd===0?'sun':wd===6?'sat':'';
   }
@@ -170,7 +174,7 @@
       '<div class="h33-roster-table-wrap"><table class="h33-full-roster-table">'+rosterHeadHtml()+'<tbody>';
     for(var d=1;d<=days;d++){
       var rowClass=rowClassFor(r,d);
-      h+='<tr class="'+rowClass+'"><td class="h33-date-cell"><b>'+esc(thaiDay(r.year,r.month,d))+d+'</b></td>';
+      var hol=holidayInfoFor(r,d); h+='<tr class="'+rowClass+'"><td class="h33-date-cell"><b>'+esc(thaiDay(r.year,r.month,d))+d+'</b>'+(hol?'<small class="h33-holiday-name">'+esc(hol.name||'นักขัตฤกษ์')+'</small>':'')+'</td>';
       slots.forEach(function(s){var pid=a[keyFor(d,s.id)];h+='<td>'+(pid?esc(historyName(data,pid)):'–')+'</td>'});
       h+='</tr>';
     }
@@ -185,7 +189,7 @@
     wrap.style.position='fixed';
     wrap.style.left='-12000px';
     wrap.style.top='0';
-    wrap.style.width='1900px';
+    wrap.style.width='1700px';
     wrap.style.background='#fff';
     wrap.style.padding='0';
     wrap.innerHTML='<div class="h33-pdf-title">ตารางเวร เดือน'+esc(MONTHS[r.month])+' พ.ศ. '+esc(r.year)+'</div>'+buildHistoryRosterTableHtml(r,true);
@@ -193,7 +197,7 @@
     var table=wrap.querySelector('.h33-full-roster-table');
     if(table){
       table.style.minWidth='0';
-      table.style.width='1900px';
+      table.style.width='1700px';
       table.style.tableLayout='fixed';
       table.style.borderCollapse='collapse';
       table.style.background='#fff';
@@ -236,7 +240,7 @@
     var wrap=prepareHistoryRosterPdfNode(r),table=wrap.querySelector('table');
     requestAnimationFrame(function(){
       autoFillHistoryPdfHeight(wrap,table);
-      html2canvas(wrap,{scale:2,useCORS:true,backgroundColor:'#fff',logging:false,windowWidth:1900}).then(function(canvas){
+      html2canvas(wrap,{scale:2,useCORS:true,backgroundColor:'#fff',logging:false,windowWidth:1700}).then(function(canvas){
         var pdf=new window.jspdf.jsPDF({orientation:'landscape',unit:'mm',format:'a4',compress:true});
         var pw=pdf.internal.pageSize.getWidth(),ph=pdf.internal.pageSize.getHeight();
         var left=10,top=10,right=10,bottom=10,maxW=pw-left-right,maxH=ph-top-bottom;

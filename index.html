@@ -6761,6 +6761,7 @@ window.__ROSTER_HISTORY_V33__={
   getUnit:function(){return {name:(state.unitInfo&&state.unitInfo.name)||'หน่วยงานหลัก',scheduler:(state.unitInfo&&state.unitInfo.scheduler)||unitUser.name||'ผู้จัดตารางเวร'}},
   getUser:function(){return {name:unitUser.name||'',role:unitUser.role||''}},
   getMonth:function(yThai,m){return savedMonth(historyKeyFromThaiYear(yThai,m))},
+  getHolidays:function(){return state.holidays||{}},
   getYearRecords:function(yThai){var a=[];for(var m=0;m<12;m++){var d=savedMonth(historyKeyFromThaiYear(yThai,m));if(d)a.push({month:m,data:d})}return a},
   getAvailableYears:function(){var set={};for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i)||'';var mm=k.match(/^roster_month_v7_(\\d{4})-(\\d{2})$/);if(mm)set[parseInt(mm[1],10)+543]=1}set[py()]=1;return Object.keys(set).map(Number).sort(function(a,b){return b-a})},
   openMonth:function(yThai,m,type){openSystemHistoryMonth(yThai,m,type||'roster')},

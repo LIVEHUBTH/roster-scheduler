@@ -637,4 +637,27 @@ body > .h33-viewer.h33-history-modal-global .h33-h-extra{background:#edc3d2!impo
 body > .h33-viewer.h33-history-modal-global .h33-full-roster-table tr.sat td{background:#f4f8ff!important}
 body > .h33-viewer.h33-history-modal-global .h33-full-roster-table tr.sun td{background:#fff3f7!important}
 
-/* HISTORY V33.14 — no visual layout change; data/PDF fixes are in JS only. */
+
+/* =========================================================
+   HISTORY V33.14 — HOLIDAY ROWS + 10MM PDF MARGINS ONLY
+   Scope: history roster viewer/PDF only. No sidebar or responsive layout edits.
+   ========================================================= */
+body > .h33-viewer.h33-history-modal-global .h33-full-roster-table tr.holiday td{
+  background:#fff0b8!important;
+}
+body > .h33-viewer.h33-history-modal-global .h33-full-roster-table tr.holiday td.h33-date-cell{
+  background:#ffe59a!important;
+}
+body > .h33-viewer.h33-history-modal-global .h33-holiday-name{
+  display:block!important;
+  margin-top:1px!important;
+  font-size:6.8px!important;
+  line-height:1.05!important;
+  font-weight:800!important;
+  color:#9c7510!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+.h33-pdf-capture .h33-full-roster-table tr.holiday td{background:#e6e6e6!important}
+.h33-pdf-capture .h33-holiday-name{display:block!important;font-size:8px!important;line-height:1!important;font-weight:800!important;color:#111!important;white-space:nowrap!important;overflow:hidden!important}
