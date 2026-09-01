@@ -138,6 +138,23 @@
   }
   function keyFor(d,sid){return d+'|'+sid}
   function thaiDay(yThai,m,d){var w=new Date(yThai-543,m,d).getDay();return ['อ.','จ.','อ.','พ.','พฤ.','ศ.','ส.'][w]}
+  function buildHistoryRosterTableHtml(r){
+    var data=r&&r.data||{},a=data.assignments||{},slots=slotDefs(),days=new Date(r.year-543,r.month+1,0).getDate();
+    var h='<div class="h33-full-roster-title">ตารางเวร เดือน'+esc(MONTHS[r.month])+' พ.ศ. '+esc(r.year)+'</div>'+
+      '<div class="h33-full-roster-wrap"><table class="h33-full-roster-table"><thead><tr><th>วันที่</th><th>วัน</th>';
+    slots.forEach(function(s){h+='<th>'+esc(s.label)+'</th>'});
+    h+='</tr></thead><tbody>';
+    for(var d=1;d<=days;d++){
+      var wd=new Date(r.year-543,r.month,d).getDay(),rowClass=wd===0?' sun':wd===6?' sat':'';
+      h+='<tr class="'+rowClass+'"><td>'+d+'</td><td>'+esc(thaiDay(r.year,r.month,d))+'</td>';
+      slots.forEach(function(s){var pid=a[keyFor(d,s.id)];h+='<td>'+(pid?esc(historyName(data,pid)):'–')+'</td>'});
+      h+='</tr>';
+    }
+    h+='</tbody></table></div>';
+    if(data.pdfNote)h+='<div class="h33-full-roster-note"><b>หมายเหตุ:</b> '+esc(data.pdfNote)+'</div>';
+    return h;
+  }
+
   function prepareHistoryRosterPdfNode(r){
     var data=r.data||{},a=data.assignments||{},slots=slotDefs(),days=new Date(r.year-543,r.month+1,0).getDate();
     var wrap=document.createElement('div');
@@ -173,7 +190,7 @@
   function renderRows(){
     var body=$('historyRowsV33');if(!body)return;
     var start=(page-1)*pageSize,slice=filtered.slice(start,start+pageSize);
-    body.innerHTML=slice.length?slice.map(function(r){return '<tr><td><div class="h33-month-cell"><span class="h33-month-ico h33-calendar-pink">'+iconSvg('calendarPink')+'</span><span>'+esc(MONTHS[r.month])+' '+r.year+'</span></div></td><td>'+esc(r.unit)+'</td><td><span class="h33-status '+r.status+'">'+statusIcon(r.status)+' '+statusLabel(r.status)+'</span></td><td><div class="h33-user"><span class="h33-avatar">👩🏻</span><span>'+esc(r.scheduler)+'</span></div></td><td>'+fmt(r.savedAt)+'</td><td>'+fmt(r.approvedAt)+'</td><td>'+fmt(r.lockedAt)+'</td><td>'+esc(r.note)+'</td><td><div class="h33-row-actions"><button class="h33-open" data-open="'+r.year+'|'+r.month+'">เปิดดู</button><button class="h33-more h33-download" title="ดาวน์โหลด PDF ตารางเวร" aria-label="ดาวน์โหลด PDF ตารางเวร" data-download="'+r.year+'|'+r.month+'">↓</button></div></td></tr>'}).join(''):'<tr><td colspan="9" style="text-align:center;padding:34px;color:#98a1af">ไม่พบประวัติการจัดเวรตามตัวกรอง</td></tr>';
+    body.innerHTML=slice.length?slice.map(function(r){return '<tr><td><div class="h33-month-cell"><span class="h33-month-ico h33-calendar-pink">'+iconSvg('calendarPink')+'</span><span>'+esc(MONTHS[r.month])+' '+r.year+'</span></div></td><td>'+esc(r.unit)+'</td><td><span class="h33-status '+r.status+'">'+statusIcon(r.status)+' '+statusLabel(r.status)+'</span></td><td><div class="h33-user"><span class="h33-avatar">👩🏻</span><span>'+esc(r.scheduler)+'</span></div></td><td>'+fmt(r.savedAt)+'</td><td>'+fmt(r.approvedAt)+'</td><td>'+fmt(r.lockedAt)+'</td><td>'+esc(r.note)+'</td><td><div class="h33-row-actions"><button class="h33-open" title="เปิดตารางเวรเต็มหน้า" data-open="'+r.year+'|'+r.month+'">เปิดดู</button><button class="h33-more h33-download" title="ดาวน์โหลด PDF ตารางเวร" aria-label="ดาวน์โหลด PDF ตารางเวร" data-download="'+r.year+'|'+r.month+'">↓</button></div></td></tr>'}).join(''):'<tr><td colspan="9" style="text-align:center;padding:34px;color:#98a1af">ไม่พบประวัติการจัดเวรตามตัวกรอง</td></tr>';
     body.querySelectorAll('[data-open]').forEach(function(b){b.onclick=function(){var p=this.dataset.open.split('|');openRecord(+p[0],+p[1],'roster')}});
     body.querySelectorAll('[data-download]').forEach(function(b){b.onclick=function(){var p=this.dataset.download.split('|'),y=+p[0],m=+p[1],r=records.find(function(x){return x.year===y&&x.month===m});if(r)saveHistoryRosterPdf(r)}});
     if($('historyRangeV33'))$('historyRangeV33').textContent='แสดง '+(slice.length?(start+1):0)+' - '+Math.min(start+pageSize,filtered.length)+' จาก '+filtered.length+' รายการ';
@@ -195,9 +212,14 @@
 
   function openRecord(y,m,type){
     addRecent(y,m);
+    var r=records.find(function(x){return x.year===y&&x.month===m});
     var v=$('historyViewer'),t=$('historyViewerTitle'),b=$('historyViewerBody');
-    if(v&&t&&b){t.textContent=(type==='summary'?'ตารางหลักการเฉลี่ยเวร':'ตารางรันเวร')+' • '+(MONTHS[m]||'')+' พ.ศ. '+y;b.innerHTML='<div class="h33-loading">กำลังเปิดข้อมูล...</div>';v.classList.add('show');}
-    try{if(B.openMonth)B.openMonth(y,m,type||'roster')}catch(err){console.error('history open error',err);if(b)b.innerHTML='<div class="h33-loading">ไม่สามารถเปิดดูตารางได้</div>'}
+    if(!v||!t||!b)return;
+    if(!r||!r.data){t.textContent='ตารางรันเวร';b.innerHTML='<div class="h33-loading">ไม่พบข้อมูลตารางเวรของเดือนนี้</div>';v.classList.add('show');return}
+    t.textContent='ตารางรันเวร • '+(MONTHS[m]||'')+' พ.ศ. '+y;
+    b.innerHTML=buildHistoryRosterTableHtml(r);
+    v.classList.add('show');
+    document.documentElement.classList.add('h33-history-viewer-open');
   }
 
   function renderRecent(){
@@ -224,7 +246,7 @@
     if($('historyPageSizeV33'))$('historyPageSizeV33').onchange=function(){pageSize=+this.value||5;page=1;renderRows()};
     if($('historyRecentAllV33'))$('historyRecentAllV33').onclick=function(){recentAll=!recentAll;this.textContent=recentAll?'ย่อรายการ':'ดูทั้งหมด';renderRecent()};
     if($('historyAuditAllV33'))$('historyAuditAllV33').onclick=function(){auditAll=!auditAll;this.textContent=auditAll?'ย่อรายการ':'ดูทั้งหมด';renderAudit()};
-    if($('historyCloseViewerBtn'))$('historyCloseViewerBtn').onclick=function(){var v=$('historyViewer');if(v)v.classList.remove('show')};
+    if($('historyCloseViewerBtn'))$('historyCloseViewerBtn').onclick=function(){var v=$('historyViewer');if(v)v.classList.remove('show');document.documentElement.classList.remove('h33-history-viewer-open')};
   }
 
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',wire,{once:true});else wire();
