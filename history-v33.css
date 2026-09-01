@@ -636,3 +636,5 @@ body > .h33-viewer.h33-history-modal-global .h33-h-s78{background:#c9eadc!import
 body > .h33-viewer.h33-history-modal-global .h33-h-extra{background:#edc3d2!important}
 body > .h33-viewer.h33-history-modal-global .h33-full-roster-table tr.sat td{background:#f4f8ff!important}
 body > .h33-viewer.h33-history-modal-global .h33-full-roster-table tr.sun td{background:#fff3f7!important}
+
+/* HISTORY V33.14 — no visual layout change; data/PDF fixes are in JS only. */

@@ -134,8 +134,8 @@
       {id:'s2d',label:'SDMC2 เช้า',group:'s2',sub:'เช้า',time:'8.00-16.00'},{id:'s2n',label:'SDMC2 บ่าย-ดึก',group:'s2',sub:'บ่าย-ดึก',time:'16.00-8.00'},
       {id:'s3d',label:'SDMC3 เช้า',group:'s3',sub:'เช้า',time:'8.00-16.00'},{id:'s3n',label:'SDMC3 บ่าย-ดึก',group:'s3',sub:'บ่าย-ดึก',time:'16.00-8.00'},
       {id:'s4d',label:'SDMC4 เช้า',group:'s4',sub:'เช้า',time:'8.00-16.00'},{id:'s4n',label:'SDMC4 บ่าย-ดึก',group:'s4',sub:'บ่าย-ดึก',time:'16.00-8.00'},
-      {id:'s5l',label:'SDMC5 เช้า-บ่าย',group:'s56',sub:'SDMC5',time:'เช้า-บ่าย'},{id:'s6l',label:'SDMC6 เช้า-บ่าย',group:'s56',sub:'SDMC6',time:'เช้า-บ่าย'},
-      {id:'s7e',label:'SDMC7 บ่าย',group:'s78',sub:'SDMC7',time:'บ่าย'},{id:'s8e',label:'SDMC8 บ่าย',group:'s78',sub:'SDMC8',time:'บ่าย'},
+      {id:'s5',label:'SDMC5 เช้า-บ่าย',group:'s56',sub:'SDMC5',time:'7.00-23.00'},{id:'s6',label:'SDMC6 เช้า-บ่าย',group:'s56',sub:'SDMC6',time:'7.00-23.00'},
+      {id:'s7',label:'SDMC7 บ่าย',group:'s78',sub:'SDMC7',time:'16.00-24.00'},{id:'s8',label:'SDMC8 บ่าย',group:'s78',sub:'SDMC8',time:'16.00-24.00'},
       {id:'e1',label:'EXTRA1',group:'extra',sub:'',time:''},{id:'e2',label:'EXTRA2',group:'extra',sub:'',time:''},{id:'e3',label:'EXTRA3',group:'extra',sub:'',time:''}
     ];
   }
@@ -155,7 +155,7 @@
       '</tr>'+ 
       '<tr class="h33-roster-time-row">'+
         '<th class="h33-h-s1">8.00-16.00</th><th class="h33-h-s1">16.00-8.00</th><th class="h33-h-s2">8.00-16.00</th><th class="h33-h-s2">16.00-8.00</th><th class="h33-h-s3">8.00-16.00</th><th class="h33-h-s3">16.00-8.00</th><th class="h33-h-s4">8.00-16.00</th><th class="h33-h-s4">16.00-8.00</th>'+ 
-        '<th class="h33-h-s56">เช้า-บ่าย</th><th class="h33-h-s56">เช้า-บ่าย</th><th class="h33-h-s78">บ่าย</th><th class="h33-h-s78">บ่าย</th>'+ 
+        '<th class="h33-h-s56">7.00-23.00</th><th class="h33-h-s56">7.00-23.00</th><th class="h33-h-s78">16.00-24.00</th><th class="h33-h-s78">16.00-24.00</th>'+ 
       '</tr>'+ 
     '</thead>';
   }
@@ -170,7 +170,7 @@
       '<div class="h33-roster-table-wrap"><table class="h33-full-roster-table">'+rosterHeadHtml()+'<tbody>';
     for(var d=1;d<=days;d++){
       var rowClass=rowClassFor(r,d);
-      h+='<tr class="'+rowClass+'"><td class="h33-date-cell"><b>'+esc(thaiDay(r.year,r.month,d))+'.'+d+'</b></td>';
+      h+='<tr class="'+rowClass+'"><td class="h33-date-cell"><b>'+esc(thaiDay(r.year,r.month,d))+d+'</b></td>';
       slots.forEach(function(s){var pid=a[keyFor(d,s.id)];h+='<td>'+(pid?esc(historyName(data,pid)):'–')+'</td>'});
       h+='</tr>';
     }
@@ -185,7 +185,7 @@
     wrap.style.position='fixed';
     wrap.style.left='-12000px';
     wrap.style.top='0';
-    wrap.style.width='1700px';
+    wrap.style.width='1900px';
     wrap.style.background='#fff';
     wrap.style.padding='0';
     wrap.innerHTML='<div class="h33-pdf-title">ตารางเวร เดือน'+esc(MONTHS[r.month])+' พ.ศ. '+esc(r.year)+'</div>'+buildHistoryRosterTableHtml(r,true);
@@ -193,7 +193,7 @@
     var table=wrap.querySelector('.h33-full-roster-table');
     if(table){
       table.style.minWidth='0';
-      table.style.width='1700px';
+      table.style.width='1900px';
       table.style.tableLayout='fixed';
       table.style.borderCollapse='collapse';
       table.style.background='#fff';
@@ -218,7 +218,7 @@
     return wrap;
   }
   function autoFillHistoryPdfHeight(wrap,table){
-    var printableRatio=182/277;
+    var printableRatio=190/277;
     var targetHeight=wrap.scrollWidth*printableRatio;
     var currentHeight=wrap.scrollHeight;
     if(currentHeight>=targetHeight||!table)return;
@@ -236,10 +236,10 @@
     var wrap=prepareHistoryRosterPdfNode(r),table=wrap.querySelector('table');
     requestAnimationFrame(function(){
       autoFillHistoryPdfHeight(wrap,table);
-      html2canvas(wrap,{scale:2,useCORS:true,backgroundColor:'#fff',logging:false,windowWidth:1700}).then(function(canvas){
+      html2canvas(wrap,{scale:2,useCORS:true,backgroundColor:'#fff',logging:false,windowWidth:1900}).then(function(canvas){
         var pdf=new window.jspdf.jsPDF({orientation:'landscape',unit:'mm',format:'a4',compress:true});
         var pw=pdf.internal.pageSize.getWidth(),ph=pdf.internal.pageSize.getHeight();
-        var left=10,top=15,right=10,bottom=13,maxW=pw-left-right,maxH=ph-top-bottom;
+        var left=10,top=10,right=10,bottom=10,maxW=pw-left-right,maxH=ph-top-bottom;
         var ratio=Math.min(maxW/canvas.width,maxH/canvas.height),w=canvas.width*ratio,h=canvas.height*ratio;
         var x=left+(maxW-w)/2,y=top+(maxH-h)/2;
         pdf.addImage(canvas.toDataURL('image/jpeg',0.98),'JPEG',x,y,w,h,undefined,'FAST');
