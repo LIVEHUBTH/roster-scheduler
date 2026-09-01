@@ -1376,3 +1376,67 @@
 #page-holidays.h32-phone-stack .h32-form-actions{
   grid-template-columns:1fr!important;
 }
+
+
+/* =========================================================
+   V32.12 — BALANCED TOP ROW + UPCOMING ICON HARDENING + PHONE TEXT SPACING
+   Scope: #page-holidays only. No sidebar / other pages / layout changes.
+   ========================================================= */
+
+/* On iPad/Desktop keep both top cards ending at the same bottom line.
+   Only this page is affected. */
+@media(min-width:701px){
+  #page-holidays:not(.h32-phone-stack) .h32-top-grid{
+    align-items:stretch!important;
+  }
+  #page-holidays:not(.h32-phone-stack) .h32-side-stack{
+    height:100%!important;
+    min-height:0!important;
+    grid-template-rows:auto minmax(0,1fr)!important;
+  }
+  #page-holidays:not(.h32-phone-stack) .h32-side-stack > .h32-card:last-child{
+    height:100%!important;
+    min-height:0!important;
+    display:flex!important;
+    flex-direction:column!important;
+  }
+  #page-holidays:not(.h32-phone-stack) .h32-side-stack > .h32-card:last-child .h32-upcoming{
+    flex:1 1 auto!important;
+    align-content:start!important;
+  }
+  #page-holidays:not(.h32-phone-stack) .h32-side-stack > .h32-card:last-child .h32-upcoming-foot{
+    margin-top:auto!important;
+  }
+  #page-holidays:not(.h32-phone-stack) .h32-calendar-card{
+    height:100%!important;
+    padding-bottom:14px!important;
+  }
+}
+
+/* Specific pastel-icon presentation for the upcoming list. */
+#page-holidays .h32-upcoming .h32-event-icon{
+  display:grid!important;
+  place-items:center!important;
+  border-radius:12px!important;
+  font-size:18px!important;
+  line-height:1!important;
+  font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif!important;
+}
+
+/* Phone: separate day number and caption a bit more so they no longer overlap. */
+#page-holidays.h32-phone-stack #holidayCalendarV24 .h32-day{
+  padding-top:5px!important;
+}
+#page-holidays.h32-phone-stack #holidayCalendarV24 .h32-day-number{
+  margin-top:1px!important;
+  line-height:1!important;
+}
+#page-holidays.h32-phone-stack #holidayCalendarV24 .h32-day-caption{
+  margin-top:5px!important;
+  min-height:11px!important;
+  max-height:11px!important;
+  line-height:11px!important;
+}
+#page-holidays.h32-phone-stack #holidayCalendarV24 .h32-day-markers{
+  margin-top:auto!important;
+}

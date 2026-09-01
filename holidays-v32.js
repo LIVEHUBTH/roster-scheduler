@@ -178,14 +178,15 @@
   function iconFor(name,type,kind){
     var s=String(name||'');
     if(kind==='buddhist')return {glyph:'🙏',tone:'yellow'};
-    if(/ปีใหม่|คริสต์มาส/.test(s))return {glyph:'🎉',tone:'pink'};
+    if(/ขึ้นปีใหม่|ปีใหม่/.test(s))return {glyph:'🎉',tone:'pink'};
+    if(/คริสต์มาส/.test(s))return {glyph:'🎄',tone:'pink'};
     if(/ลอยกระทง/.test(s))return {glyph:'🪷',tone:'pink'};
     if(/สตรี|แม่/.test(s))return {glyph:'🌸',tone:'pink'};
     if(/พยาบาล|มหิดล|สาธารณสุข|แพทย์|กาชาด|อนามัย|สัตวแพทย์/.test(s))return {glyph:'🩺',tone:'mint'};
     if(/วิทยาศาสตร์|นักประดิษฐ์/.test(s))return {glyph:'🔬',tone:'purple'};
     if(/รพี|ประชาธิปไตย|รัฐธรรมนูญ|กฎหมาย/.test(s))return {glyph:'⚖️',tone:'purple'};
     if(/สื่อสาร/.test(s))return {glyph:'📡',tone:'blue'};
-    if(/สิ่งแวดล้อม|ต้นไม้|สัตว์ป่า|โลก/.test(s))return {glyph:'🌿',tone:'mint'};
+    if(/สิ่งแวดล้อม|ต้นไม้|สัตว์ป่า|โลก|นาคะเสถียร/.test(s))return {glyph:'🌿',tone:'mint'};
     if(/พืชมงคล|เกษตร/.test(s))return {glyph:'🌾',tone:'mint'};
     if(/สงกรานต์/.test(s))return {glyph:'💦',tone:'blue'};
     if(/ฉัตรมงคล|จักรี|ราช|นวมินทร|ปิย|เฉลิมพระชนมพรรษ/.test(s))return {glyph:'👑',tone:'orange'};
@@ -194,9 +195,13 @@
     if(/แรงงาน/.test(s))return {glyph:'🛠️',tone:'orange'};
     if(/ช้าง/.test(s))return {glyph:'🐘',tone:'mint'};
     if(/ภาษาไทย|สุนทรภู่/.test(s))return {glyph:'📚',tone:'blue'};
+    if(/กีฬา/.test(s))return {glyph:'🏅',tone:'blue'};
+    if(/สารทจีน/.test(s))return {glyph:'🥮',tone:'orange'};
+    if(/มาฆบูชา|วิสาขบูชา|อาสาฬหบูชา|เข้าพรรษา|ออกพรรษา/.test(s))return {glyph:'🙏',tone:'yellow'};
     if(kind==='important')return {glyph:'📌',tone:'blue'};
     if(type==='substitute')return {glyph:'🔁',tone:'pink'};
     if(type==='special')return {glyph:'✨',tone:'gray'};
+    if(type==='official')return {glyph:'🎌',tone:'orange'};
     return {glyph:'📅',tone:'orange'};
   }
 
@@ -511,7 +516,7 @@
       var type=holiday?(holiday.type||'official'):(buddhist?'buddhist':'important');
       var label=holiday?typeLabel(type):(buddhist?'วันพระ':'วันสำคัญ');
       var edit=holiday?'<button type="button" class="h32-edit-event" data-edit="'+k+'">แก้ไข</button>':'';
-      var icon=iconFor(main&&main.name,type,main&&main.kind);
+      var icon=iconFor(names,type,main&&main.kind);
       return '<div data-key="'+k+'">'+
         '<span class="h32-event-icon tone-'+esc(icon.tone)+'" aria-hidden="true">'+esc(icon.glyph)+'</span>'+
         '<span class="h32-event-name"><b>'+esc(names)+'</b></span>'+
