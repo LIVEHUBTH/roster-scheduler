@@ -1803,3 +1803,63 @@
     font-size:7px!important;
   }
 }
+
+
+/* =========================================================
+   V32.15 — BOTTOM 3 CARDS EQUAL HEIGHT + DATE FIELD ALIGN ONLY
+   Scope: #page-holidays only. No sidebar / other pages / layout changes.
+   ========================================================= */
+
+/* 1) Organize the add/edit holiday form: make the date field width visually
+   equal to the holiday name field above and the type field below. */
+#page-holidays .h32-form label{
+  width:100%!important;
+}
+#page-holidays .h32-form input,
+#page-holidays .h32-form select,
+#page-holidays .h32-form #holidayName,
+#page-holidays .h32-form #holidayDate,
+#page-holidays .h32-form #holidayTypeV24{
+  width:100%!important;
+  max-width:100%!important;
+  box-sizing:border-box!important;
+  display:block!important;
+  min-height:41px!important;
+  height:41px!important;
+  padding:0 12px!important;
+}
+#page-holidays .h32-form #holidayDate{
+  -webkit-appearance:none!important;
+  appearance:none!important;
+}
+
+/* 2) Make the 3 bottom cards equal height on iPad/Desktop only, without
+   changing the responsive layout system. */
+@media(min-width:701px){
+  #page-holidays .h32-bottom-grid{
+    align-items:stretch!important;
+  }
+  #page-holidays .h32-bottom-grid > .h32-card,
+  #page-holidays .h32-bottom-grid > .h32-form-card,
+  #page-holidays .h32-bottom-grid > .h32-note-card,
+  #page-holidays .h32-bottom-grid > .h32-audit-card{
+    height:100%!important;
+    min-height:320px!important;
+    display:flex!important;
+    flex-direction:column!important;
+  }
+  #page-holidays .h32-bottom-grid > .h32-card .h32-card-head,
+  #page-holidays .h32-bottom-grid > .h32-form-card .h32-card-head,
+  #page-holidays .h32-bottom-grid > .h32-note-card .h32-card-head,
+  #page-holidays .h32-bottom-grid > .h32-audit-card .h32-card-head{
+    flex:0 0 auto!important;
+  }
+  #page-holidays .h32-form,
+  #page-holidays .h32-note-list,
+  #page-holidays .h32-audit-list{
+    flex:1 1 auto!important;
+  }
+  #page-holidays .h32-audit-card .h32-save-note{
+    margin-top:auto!important;
+  }
+}
