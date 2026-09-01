@@ -182,19 +182,64 @@
   function prepareHistoryRosterPdfNode(r){
     var wrap=document.createElement('div');
     wrap.className='h33-pdf-capture';
+    wrap.style.position='fixed';
+    wrap.style.left='-12000px';
+    wrap.style.top='0';
+    wrap.style.width='1700px';
+    wrap.style.background='#fff';
+    wrap.style.padding='0';
     wrap.innerHTML='<div class="h33-pdf-title">ตารางเวร เดือน'+esc(MONTHS[r.month])+' พ.ศ. '+esc(r.year)+'</div>'+buildHistoryRosterTableHtml(r,true);
+
+    var table=wrap.querySelector('.h33-full-roster-table');
+    if(table){
+      table.style.minWidth='0';
+      table.style.width='1700px';
+      table.style.tableLayout='fixed';
+      table.style.borderCollapse='collapse';
+      table.style.background='#fff';
+      table.querySelectorAll('th').forEach(function(th){
+        th.style.position='static';th.style.fontWeight='800';th.style.fontSize='12.5px';th.style.lineHeight='1.08';th.style.padding='1.5px';th.style.height='23px';th.style.whiteSpace='nowrap';th.style.color='#111';
+      });
+      table.querySelectorAll('td').forEach(function(td){
+        td.style.position='static';td.style.fontWeight='400';td.style.fontSize='12.2px';td.style.lineHeight='1.06';td.style.padding='1px';td.style.height='23px';td.style.whiteSpace='nowrap';td.style.color='#111';
+      });
+      table.querySelectorAll('tbody tr').forEach(function(row){
+        var shade=row.classList.contains('sat')||row.classList.contains('sun')||row.classList.contains('holiday');
+        row.querySelectorAll('td').forEach(function(td){td.style.background=shade?'#e6e6e6':'#fff';td.style.color='#111'});
+      });
+    }
+    var title=wrap.querySelector('.h33-pdf-title');
+    if(title){title.style.textAlign='center';title.style.fontWeight='800';title.style.fontSize='21px';title.style.lineHeight='1.1';title.style.padding='4px 0 8px';title.style.color='#111'}
+    var meta=wrap.querySelector('.h33-roster-meta');if(meta)meta.style.display='none';
+    var sheet=wrap.querySelector('.h33-roster-sheet');if(sheet){sheet.style.padding='0';sheet.style.border='0';sheet.style.borderRadius='0'}
+    var tw=wrap.querySelector('.h33-roster-table-wrap');if(tw){tw.style.overflow='visible';tw.style.border='0';tw.style.borderRadius='0'}
+    var note=wrap.querySelector('.h33-full-roster-note');if(note){note.style.marginTop='6px';note.style.fontSize='13px';note.style.lineHeight='1.25';note.style.color='#111';note.style.textAlign='left'}
     document.body.appendChild(wrap);
     return wrap;
+  }
+  function autoFillHistoryPdfHeight(wrap,table){
+    var printableRatio=182/277;
+    var targetHeight=wrap.scrollWidth*printableRatio;
+    var currentHeight=wrap.scrollHeight;
+    if(currentHeight>=targetHeight||!table)return;
+    var rows=table.querySelectorAll('tbody tr');
+    if(!rows.length)return;
+    var extra=(targetHeight-currentHeight)/rows.length;
+    rows.forEach(function(row){
+      var h=row.getBoundingClientRect().height+extra;
+      row.querySelectorAll('td').forEach(function(td){td.style.height=h+'px';td.style.verticalAlign='middle'});
+    });
   }
   function saveHistoryRosterPdf(r){
     if(!r||!r.data)return;
     if(!(window.html2canvas&&window.jspdf&&window.jspdf.jsPDF)){alert('ไม่สามารถสร้าง PDF ได้ในขณะนี้');return}
-    var wrap=prepareHistoryRosterPdfNode(r);
+    var wrap=prepareHistoryRosterPdfNode(r),table=wrap.querySelector('table');
     requestAnimationFrame(function(){
-      html2canvas(wrap,{scale:2,useCORS:true,backgroundColor:'#fff',logging:false,windowWidth:2300,scrollX:0,scrollY:0}).then(function(canvas){
+      autoFillHistoryPdfHeight(wrap,table);
+      html2canvas(wrap,{scale:2,useCORS:true,backgroundColor:'#fff',logging:false,windowWidth:1700}).then(function(canvas){
         var pdf=new window.jspdf.jsPDF({orientation:'landscape',unit:'mm',format:'a4',compress:true});
         var pw=pdf.internal.pageSize.getWidth(),ph=pdf.internal.pageSize.getHeight();
-        var left=7,right=7,top=7,bottom=7,maxW=pw-left-right,maxH=ph-top-bottom;
+        var left=10,top=15,right=10,bottom=13,maxW=pw-left-right,maxH=ph-top-bottom;
         var ratio=Math.min(maxW/canvas.width,maxH/canvas.height),w=canvas.width*ratio,h=canvas.height*ratio;
         var x=left+(maxW-w)/2,y=top+(maxH-h)/2;
         pdf.addImage(canvas.toDataURL('image/jpeg',0.98),'JPEG',x,y,w,h,undefined,'FAST');
@@ -232,10 +277,12 @@
     var r=records.find(function(x){return x.year===y&&x.month===m});
     var v=$('historyViewer'),t=$('historyViewerTitle'),b=$('historyViewerBody');
     if(!v||!t||!b)return;
-    if(!r||!r.data){t.textContent='ตารางรันเวร';b.innerHTML='<div class="h33-loading">ไม่พบข้อมูลตารางเวรของเดือนนี้</div>';v.classList.add('show');return}
+    if(!r||!r.data){t.textContent='ตารางรันเวร';b.innerHTML='<div class="h33-loading">ไม่พบข้อมูลตารางเวรของเดือนนี้</div>';if(v.parentNode!==document.body)document.body.appendChild(v);v.classList.add('show');v.classList.add('h33-history-modal-global');return}
     t.textContent='ตารางรันเวร • '+(MONTHS[m]||'')+' พ.ศ. '+y;
     b.innerHTML=buildHistoryRosterTableHtml(r,false);
+    if(v.parentNode!==document.body)document.body.appendChild(v);
     v.classList.add('show');
+    v.classList.add('h33-history-modal-global');
     document.documentElement.classList.add('h33-history-viewer-open');
   }
 
