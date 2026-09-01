@@ -1904,3 +1904,30 @@
   padding:0!important;
   line-height:1.35!important;
 }
+
+
+/* =========================================================
+   V32.18 — AUDIT "VIEW ALL" SAME-LINE FIX ONLY
+   Scope: #page-holidays .h32-audit-card only.
+   No sidebar / other pages / responsive layout changes.
+   ========================================================= */
+#page-holidays .h32-audit-card .h32-card-head{
+  display:flex!important;
+  flex-direction:row!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  flex-wrap:nowrap!important;
+  gap:6px!important;
+}
+#page-holidays .h32-audit-card .h32-card-head h3{
+  min-width:0!important;
+  margin:0!important;
+  white-space:nowrap!important;
+}
+#page-holidays #holidayAuditAllV32{
+  flex:0 0 auto!important;
+  white-space:nowrap!important;
+  width:auto!important;
+  min-width:max-content!important;
+  margin-left:auto!important;
+}
