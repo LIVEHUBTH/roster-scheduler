@@ -29,7 +29,7 @@
       check:'<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="20" fill="#d8f7e7"/><path d="m23 32 6 6 12-13" fill="none" stroke="#34ad82" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
       send:'<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="20" fill="#ddecff"/><path d="m20 32 24-11-7 22-6-8-11-3Z" fill="#6aa8ef"/></svg>',
       edit:'<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="20" fill="#ffedc8"/><path d="m23 40 2-8 13-13 6 6-13 13-8 2Z" fill="#e0a526"/><path d="m36 21 6 6" fill="none" stroke="#bd8610" stroke-width="3" stroke-linecap="round"/></svg>',
-      history:'<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="34" r="18" fill="#eaf6ff"/><path d="M32 24v11l8 5" fill="none" stroke="#58a9df" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M19 18c3-5 8-8 14-8 8 0 15 5 18 12" fill="none" stroke="#79bff0" stroke-width="4.2" stroke-linecap="round"/><path d="M17 18h8v8" fill="none" stroke="#79bff0" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+      history:'<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="22" fill="#eaf5ff"/><circle cx="32" cy="32" r="16" fill="#fff" stroke="#69aee8" stroke-width="4"/><path d="M32 21v12l8 5" fill="none" stroke="#4b98d6" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="32" cy="32" r="2.8" fill="#4b98d6"/></svg>'
     };
     return icons[name]||'';
   }
@@ -125,46 +125,57 @@
 
   function statusIcon(s){if(s==='locked')return '🔒';if(s==='approved')return '✅';if(s==='submitted')return '📨';return '📝'}
 
-  function downloadRosterCsv(y,m){
-    var d=B.getMonth?B.getMonth(y,m):null;
-    if(!d){alert('ไม่พบข้อมูลตารางเวรย้อนหลังของเดือนนี้');return}
-    var assignments=d.assignments||{};
-    var people=Array.isArray(d.peopleSnapshot)?d.peopleSnapshot:[];
-    var personMap={};
-    people.forEach(function(p){personMap[p.id]=p.name||p.id||''});
-    var slots=[
-      ['v1','เวร1'],['v2','เวร2'],['ot1','OT1'],['ot2','OT2'],
-      ['s1d','SDMC1 เช้า'],['s1n','SDMC1 บ่าย-ดึก'],
-      ['s2d','SDMC2 เช้า'],['s2n','SDMC2 บ่าย-ดึก'],
-      ['s3d','SDMC3 เช้า'],['s3n','SDMC3 บ่าย-ดึก'],
-      ['s4d','SDMC4 เช้า'],['s4n','SDMC4 บ่าย-ดึก'],
-      ['s5','SDMC5 เช้า-บ่าย'],['s6','SDMC6 เช้า-บ่าย'],
-      ['s7','SDMC7 บ่าย'],['s8','SDMC8 บ่าย'],
-      ['e1','EXTRA1'],['e2','EXTRA2'],['e3','EXTRA3']
+  function historyPeople(data){return Array.isArray(data&&data.peopleSnapshot)?data.peopleSnapshot:[]}
+  function historyName(data,pid){var p=historyPeople(data).find(function(x){return x.id===pid});return p?p.name:(pid||'–')}
+  function slotDefs(){
+    return [
+      {id:'v1',label:'เวร1'},{id:'v2',label:'เวร2'},{id:'ot1',label:'OT1'},{id:'ot2',label:'OT2'},
+      {id:'s1d',label:'SDMC1 เช้า'},{id:'s1n',label:'SDMC1 บ่าย-ดึก'},{id:'s2d',label:'SDMC2 เช้า'},{id:'s2n',label:'SDMC2 บ่าย-ดึก'},
+      {id:'s3d',label:'SDMC3 เช้า'},{id:'s3n',label:'SDMC3 บ่าย-ดึก'},{id:'s4d',label:'SDMC4 เช้า'},{id:'s4n',label:'SDMC4 บ่าย-ดึก'},
+      {id:'s5l',label:'SDMC5 เช้า-บ่าย'},{id:'s6l',label:'SDMC6 เช้า-บ่าย'},{id:'s7e',label:'SDMC7 บ่าย'},{id:'s8e',label:'SDMC8 บ่าย'},
+      {id:'e1',label:'EXTRA1'},{id:'e2',label:'EXTRA2'},{id:'e3',label:'EXTRA3'}
     ];
-    var dayNames=['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'];
-    var gy=y-543,days=new Date(gy,m+1,0).getDate();
-    var rows=[['วันที่','วัน'].concat(slots.map(function(s){return s[1]}))];
-    for(var day=1;day<=days;day++){
-      var row=[day,dayNames[new Date(gy,m,day).getDay()]];
-      slots.forEach(function(s){
-        var pid=assignments[day+'|'+s[0]];
-        row.push(pid?(personMap[pid]||pid):'');
-      });
-      rows.push(row);
-    }
-    var csv='\ufeff'+rows.map(function(row){return row.map(function(v){return '"'+String(v==null?'':v).replace(/"/g,'""')+'"'}).join(',')}).join('\n');
-    var blob=new Blob([csv],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');
-    a.href=url;a.download='ตารางเวร_'+(MONTHS[m]||String(m+1))+'_'+y+'.csv';
-    document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url)},1200);
+  }
+  function keyFor(d,sid){return d+'|'+sid}
+  function thaiDay(yThai,m,d){var w=new Date(yThai-543,m,d).getDay();return ['อ.','จ.','อ.','พ.','พฤ.','ศ.','ส.'][w]}
+  function prepareHistoryRosterPdfNode(r){
+    var data=r.data||{},a=data.assignments||{},slots=slotDefs(),days=new Date(r.year-543,r.month+1,0).getDate();
+    var wrap=document.createElement('div');
+    wrap.style.position='fixed';wrap.style.left='-12000px';wrap.style.top='0';wrap.style.width='1700px';wrap.style.background='#fff';wrap.style.padding='0';
+    var table=document.createElement('table');table.style.minWidth='0';table.style.width='1700px';table.style.tableLayout='fixed';table.style.borderCollapse='collapse';table.style.background='#fff';table.style.fontFamily='-apple-system,BlinkMacSystemFont,"Noto Sans Thai",Tahoma,Arial,sans-serif';
+    var cap=document.createElement('caption');cap.textContent='ตารางเวร เดือน'+MONTHS[r.month]+' พ.ศ. '+r.year;cap.style.fontSize='21px';cap.style.fontWeight='800';cap.style.padding='4px 0 8px';table.appendChild(cap);
+    var thead=document.createElement('thead'),tr=document.createElement('tr');['วันที่','วัน'].concat(slots.map(function(s){return s.label})).forEach(function(t){var th=document.createElement('th');th.textContent=t;th.style.position='static';th.style.fontWeight='800';th.style.fontSize='12.5px';th.style.lineHeight='1.08';th.style.padding='1.5px';th.style.height='23px';th.style.whiteSpace='nowrap';th.style.background='#e7e7ea';th.style.color='#111';th.style.border='1px solid #999';tr.appendChild(th)});thead.appendChild(tr);table.appendChild(thead);
+    var tbody=document.createElement('tbody');
+    for(var d=1;d<=days;d++){var row=document.createElement('tr');var wd=new Date(r.year-543,r.month,d).getDay();var shade=(wd===0||wd===6);[''+d,thaiDay(r.year,r.month,d)].concat(slots.map(function(s){var pid=a[keyFor(d,s.id)];return pid?historyName(data,pid):'–'})).forEach(function(v,i){var td=document.createElement('td');td.textContent=v;td.style.position='static';td.style.fontWeight=i===0?'800':'400';td.style.fontSize='12.2px';td.style.lineHeight='1.06';td.style.padding='1px';td.style.height='23px';td.style.whiteSpace='nowrap';td.style.textAlign='center';td.style.border='1px solid #999';td.style.background=shade?'#e6e6e6':'#fff';td.style.color='#111';if(i===0){td.style.width='50px';td.style.minWidth='50px';td.style.maxWidth='50px'}row.appendChild(td)});tbody.appendChild(row)}
+    table.appendChild(tbody);wrap.appendChild(table);
+    var noteBox=document.createElement('div');noteBox.style.marginTop='6px';noteBox.style.fontFamily='-apple-system,BlinkMacSystemFont,"Noto Sans Thai",Tahoma,Arial,sans-serif';noteBox.style.fontSize='13px';noteBox.style.lineHeight='1.25';noteBox.style.color='#111';noteBox.style.textAlign='left';noteBox.style.whiteSpace='pre-wrap';noteBox.innerHTML='<b>หมายเหตุ:</b> '+esc((data.pdfNote||'-'));wrap.appendChild(noteBox);
+    document.body.appendChild(wrap);return wrap;
+  }
+  function saveHistoryRosterPdf(r){
+    if(!r||!r.data)return;
+    if(!(window.html2canvas&&window.jspdf&&window.jspdf.jsPDF)){alert('ไม่สามารถสร้าง PDF ได้ในขณะนี้');return}
+    var wrap=prepareHistoryRosterPdfNode(r),table=wrap.querySelector('table');
+    requestAnimationFrame(function(){
+      try{
+        var targetHeight=wrap.scrollWidth*(182/277),currentHeight=wrap.scrollHeight,rows=table.querySelectorAll('tbody tr');
+        if(currentHeight<targetHeight&&rows.length){var extra=(targetHeight-currentHeight)/rows.length;rows.forEach(function(row){var h=row.getBoundingClientRect().height+extra;row.querySelectorAll('td').forEach(function(td){td.style.height=h+'px';td.style.verticalAlign='middle'})})}
+      }catch(e){}
+      html2canvas(wrap,{scale:2,useCORS:true,backgroundColor:'#fff',logging:false,windowWidth:1700}).then(function(canvas){
+        var pdf=new window.jspdf.jsPDF({orientation:'landscape',unit:'mm',format:'a4',compress:true});
+        var pw=pdf.internal.pageSize.getWidth(),ph=pdf.internal.pageSize.getHeight(),maxW=pw-20,maxH=ph-28,scale=Math.min(maxW/canvas.width,maxH/canvas.height),w=canvas.width*scale,h=canvas.height*scale;
+        pdf.addImage(canvas.toDataURL('image/jpeg',0.98),'JPEG',10,15,w,h,undefined,'FAST');
+        pdf.save('ตารางเวร_'+MONTHS[r.month]+'_'+r.year+'.pdf');
+        try{document.body.removeChild(wrap)}catch(e){}
+      }).catch(function(err){try{document.body.removeChild(wrap)}catch(e){}alert('สร้าง PDF ไม่สำเร็จ: '+err.message)});
+    });
   }
 
   function renderRows(){
     var body=$('historyRowsV33');if(!body)return;
     var start=(page-1)*pageSize,slice=filtered.slice(start,start+pageSize);
-    body.innerHTML=slice.length?slice.map(function(r){return '<tr><td><div class="h33-month-cell"><span class="h33-month-ico h33-calendar-pink">'+iconSvg('calendarPink')+'</span><span>'+esc(MONTHS[r.month])+' '+r.year+'</span></div></td><td>'+esc(r.unit)+'</td><td><span class="h33-status '+r.status+'">'+statusIcon(r.status)+' '+statusLabel(r.status)+'</span></td><td><div class="h33-user"><span class="h33-avatar">👩🏻</span><span>'+esc(r.scheduler)+'</span></div></td><td>'+fmt(r.savedAt)+'</td><td>'+fmt(r.approvedAt)+'</td><td>'+fmt(r.lockedAt)+'</td><td>'+esc(r.note)+'</td><td><div class="h33-row-actions"><button class="h33-open" data-open="'+r.year+'|'+r.month+'">เปิดดู</button><button class="h33-download" data-download="'+r.year+'|'+r.month+'" title="ดาวน์โหลดตารางเวรย้อนหลัง" aria-label="ดาวน์โหลดตารางเวรย้อนหลัง">↓</button></div></td></tr>'}).join(''):'<tr><td colspan="9" style="text-align:center;padding:34px;color:#98a1af">ไม่พบประวัติการจัดเวรตามตัวกรอง</td></tr>';
+    body.innerHTML=slice.length?slice.map(function(r){return '<tr><td><div class="h33-month-cell"><span class="h33-month-ico h33-calendar-pink">'+iconSvg('calendarPink')+'</span><span>'+esc(MONTHS[r.month])+' '+r.year+'</span></div></td><td>'+esc(r.unit)+'</td><td><span class="h33-status '+r.status+'">'+statusIcon(r.status)+' '+statusLabel(r.status)+'</span></td><td><div class="h33-user"><span class="h33-avatar">👩🏻</span><span>'+esc(r.scheduler)+'</span></div></td><td>'+fmt(r.savedAt)+'</td><td>'+fmt(r.approvedAt)+'</td><td>'+fmt(r.lockedAt)+'</td><td>'+esc(r.note)+'</td><td><div class="h33-row-actions"><button class="h33-open" data-open="'+r.year+'|'+r.month+'">เปิดดู</button><button class="h33-more h33-download" title="ดาวน์โหลด PDF ตารางเวร" aria-label="ดาวน์โหลด PDF ตารางเวร" data-download="'+r.year+'|'+r.month+'">↓</button></div></td></tr>'}).join(''):'<tr><td colspan="9" style="text-align:center;padding:34px;color:#98a1af">ไม่พบประวัติการจัดเวรตามตัวกรอง</td></tr>';
     body.querySelectorAll('[data-open]').forEach(function(b){b.onclick=function(){var p=this.dataset.open.split('|');openRecord(+p[0],+p[1],'roster')}});
-    body.querySelectorAll('[data-download]').forEach(function(b){b.onclick=function(){var p=this.dataset.download.split('|');downloadRosterCsv(+p[0],+p[1])}});
+    body.querySelectorAll('[data-download]').forEach(function(b){b.onclick=function(){var p=this.dataset.download.split('|'),y=+p[0],m=+p[1],r=records.find(function(x){return x.year===y&&x.month===m});if(r)saveHistoryRosterPdf(r)}});
     if($('historyRangeV33'))$('historyRangeV33').textContent='แสดง '+(slice.length?(start+1):0)+' - '+Math.min(start+pageSize,filtered.length)+' จาก '+filtered.length+' รายการ';
     renderPager();
   }
