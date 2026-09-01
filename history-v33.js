@@ -129,58 +129,75 @@
   function historyName(data,pid){var p=historyPeople(data).find(function(x){return x.id===pid});return p?p.name:(pid||'–')}
   function slotDefs(){
     return [
-      {id:'v1',label:'เวร1'},{id:'v2',label:'เวร2'},{id:'ot1',label:'OT1'},{id:'ot2',label:'OT2'},
-      {id:'s1d',label:'SDMC1 เช้า'},{id:'s1n',label:'SDMC1 บ่าย-ดึก'},{id:'s2d',label:'SDMC2 เช้า'},{id:'s2n',label:'SDMC2 บ่าย-ดึก'},
-      {id:'s3d',label:'SDMC3 เช้า'},{id:'s3n',label:'SDMC3 บ่าย-ดึก'},{id:'s4d',label:'SDMC4 เช้า'},{id:'s4n',label:'SDMC4 บ่าย-ดึก'},
-      {id:'s5l',label:'SDMC5 เช้า-บ่าย'},{id:'s6l',label:'SDMC6 เช้า-บ่าย'},{id:'s7e',label:'SDMC7 บ่าย'},{id:'s8e',label:'SDMC8 บ่าย'},
-      {id:'e1',label:'EXTRA1'},{id:'e2',label:'EXTRA2'},{id:'e3',label:'EXTRA3'}
+      {id:'v1',label:'เวร1',group:'base',sub:'',time:''},{id:'v2',label:'เวร2',group:'base',sub:'',time:''},{id:'ot1',label:'OT1',group:'ot',sub:'',time:''},{id:'ot2',label:'OT2',group:'ot',sub:'',time:''},
+      {id:'s1d',label:'SDMC1 เช้า',group:'s1',sub:'เช้า',time:'8.00-16.00'},{id:'s1n',label:'SDMC1 บ่าย-ดึก',group:'s1',sub:'บ่าย-ดึก',time:'16.00-8.00'},
+      {id:'s2d',label:'SDMC2 เช้า',group:'s2',sub:'เช้า',time:'8.00-16.00'},{id:'s2n',label:'SDMC2 บ่าย-ดึก',group:'s2',sub:'บ่าย-ดึก',time:'16.00-8.00'},
+      {id:'s3d',label:'SDMC3 เช้า',group:'s3',sub:'เช้า',time:'8.00-16.00'},{id:'s3n',label:'SDMC3 บ่าย-ดึก',group:'s3',sub:'บ่าย-ดึก',time:'16.00-8.00'},
+      {id:'s4d',label:'SDMC4 เช้า',group:'s4',sub:'เช้า',time:'8.00-16.00'},{id:'s4n',label:'SDMC4 บ่าย-ดึก',group:'s4',sub:'บ่าย-ดึก',time:'16.00-8.00'},
+      {id:'s5l',label:'SDMC5 เช้า-บ่าย',group:'s56',sub:'SDMC5',time:'เช้า-บ่าย'},{id:'s6l',label:'SDMC6 เช้า-บ่าย',group:'s56',sub:'SDMC6',time:'เช้า-บ่าย'},
+      {id:'s7e',label:'SDMC7 บ่าย',group:'s78',sub:'SDMC7',time:'บ่าย'},{id:'s8e',label:'SDMC8 บ่าย',group:'s78',sub:'SDMC8',time:'บ่าย'},
+      {id:'e1',label:'EXTRA1',group:'extra',sub:'',time:''},{id:'e2',label:'EXTRA2',group:'extra',sub:'',time:''},{id:'e3',label:'EXTRA3',group:'extra',sub:'',time:''}
     ];
   }
   function keyFor(d,sid){return d+'|'+sid}
   function thaiDay(yThai,m,d){var w=new Date(yThai-543,m,d).getDay();return ['อ.','จ.','อ.','พ.','พฤ.','ศ.','ส.'][w]}
-  function buildHistoryRosterTableHtml(r){
+  function rosterHeadHtml(){
+    return '<thead>'+ 
+      '<tr class="h33-roster-group-row">'+
+        '<th class="h33-h-date" rowspan="3">วันที่</th><th class="h33-h-v" rowspan="3">เวร1</th><th class="h33-h-v" rowspan="3">เวร2</th><th class="h33-h-ot" rowspan="3">OT1</th><th class="h33-h-ot" rowspan="3">OT2</th>'+
+        '<th class="h33-h-s1" colspan="2">SDMC1</th><th class="h33-h-s2" colspan="2">SDMC2</th><th class="h33-h-s3" colspan="2">SDMC3</th><th class="h33-h-s4" colspan="2">SDMC4</th>'+
+        '<th class="h33-h-s56" colspan="2">SDMC5–6</th><th class="h33-h-s78" colspan="2">SDMC7–8</th>'+
+        '<th class="h33-h-extra" rowspan="3">EXTRA1</th><th class="h33-h-extra" rowspan="3">EXTRA2</th><th class="h33-h-extra" rowspan="3">EXTRA3</th>'+ 
+      '</tr>'+ 
+      '<tr class="h33-roster-sub-row">'+
+        '<th class="h33-h-s1">เช้า</th><th class="h33-h-s1">บ่าย-ดึก</th><th class="h33-h-s2">เช้า</th><th class="h33-h-s2">บ่าย-ดึก</th><th class="h33-h-s3">เช้า</th><th class="h33-h-s3">บ่าย-ดึก</th><th class="h33-h-s4">เช้า</th><th class="h33-h-s4">บ่าย-ดึก</th>'+ 
+        '<th class="h33-h-s56">SDMC5</th><th class="h33-h-s56">SDMC6</th><th class="h33-h-s78">SDMC7</th><th class="h33-h-s78">SDMC8</th>'+ 
+      '</tr>'+ 
+      '<tr class="h33-roster-time-row">'+
+        '<th class="h33-h-s1">8.00-16.00</th><th class="h33-h-s1">16.00-8.00</th><th class="h33-h-s2">8.00-16.00</th><th class="h33-h-s2">16.00-8.00</th><th class="h33-h-s3">8.00-16.00</th><th class="h33-h-s3">16.00-8.00</th><th class="h33-h-s4">8.00-16.00</th><th class="h33-h-s4">16.00-8.00</th>'+ 
+        '<th class="h33-h-s56">เช้า-บ่าย</th><th class="h33-h-s56">เช้า-บ่าย</th><th class="h33-h-s78">บ่าย</th><th class="h33-h-s78">บ่าย</th>'+ 
+      '</tr>'+ 
+    '</thead>';
+  }
+  function rowClassFor(r,d){
+    var wd=new Date(r.year-543,r.month,d).getDay();
+    return wd===0?'sun':wd===6?'sat':'';
+  }
+  function buildHistoryRosterTableHtml(r,forPdf){
     var data=r&&r.data||{},a=data.assignments||{},slots=slotDefs(),days=new Date(r.year-543,r.month+1,0).getDate();
-    var h='<div class="h33-full-roster-title">ตารางเวร เดือน'+esc(MONTHS[r.month])+' พ.ศ. '+esc(r.year)+'</div>'+
-      '<div class="h33-full-roster-wrap"><table class="h33-full-roster-table"><thead><tr><th>วันที่</th><th>วัน</th>';
-    slots.forEach(function(s){h+='<th>'+esc(s.label)+'</th>'});
-    h+='</tr></thead><tbody>';
+    var h='<div class="h33-roster-sheet'+(forPdf?' h33-roster-sheet-pdf':'')+'">'+
+      '<div class="h33-roster-meta"><span>สถานะเดือน: <b>'+esc(statusLabel(r.status))+'</b></span><span>ผู้ใช้งาน: <b>'+esc(r.scheduler)+'</b></span></div>'+ 
+      '<div class="h33-roster-table-wrap"><table class="h33-full-roster-table">'+rosterHeadHtml()+'<tbody>';
     for(var d=1;d<=days;d++){
-      var wd=new Date(r.year-543,r.month,d).getDay(),rowClass=wd===0?' sun':wd===6?' sat':'';
-      h+='<tr class="'+rowClass+'"><td>'+d+'</td><td>'+esc(thaiDay(r.year,r.month,d))+'</td>';
+      var rowClass=rowClassFor(r,d);
+      h+='<tr class="'+rowClass+'"><td class="h33-date-cell"><b>'+esc(thaiDay(r.year,r.month,d))+'.'+d+'</b></td>';
       slots.forEach(function(s){var pid=a[keyFor(d,s.id)];h+='<td>'+(pid?esc(historyName(data,pid)):'–')+'</td>'});
       h+='</tr>';
     }
     h+='</tbody></table></div>';
     if(data.pdfNote)h+='<div class="h33-full-roster-note"><b>หมายเหตุ:</b> '+esc(data.pdfNote)+'</div>';
-    return h;
+    return h+'</div>';
   }
 
   function prepareHistoryRosterPdfNode(r){
-    var data=r.data||{},a=data.assignments||{},slots=slotDefs(),days=new Date(r.year-543,r.month+1,0).getDate();
     var wrap=document.createElement('div');
-    wrap.style.position='fixed';wrap.style.left='-12000px';wrap.style.top='0';wrap.style.width='1700px';wrap.style.background='#fff';wrap.style.padding='0';
-    var table=document.createElement('table');table.style.minWidth='0';table.style.width='1700px';table.style.tableLayout='fixed';table.style.borderCollapse='collapse';table.style.background='#fff';table.style.fontFamily='-apple-system,BlinkMacSystemFont,"Noto Sans Thai",Tahoma,Arial,sans-serif';
-    var cap=document.createElement('caption');cap.textContent='ตารางเวร เดือน'+MONTHS[r.month]+' พ.ศ. '+r.year;cap.style.fontSize='21px';cap.style.fontWeight='800';cap.style.padding='4px 0 8px';table.appendChild(cap);
-    var thead=document.createElement('thead'),tr=document.createElement('tr');['วันที่','วัน'].concat(slots.map(function(s){return s.label})).forEach(function(t){var th=document.createElement('th');th.textContent=t;th.style.position='static';th.style.fontWeight='800';th.style.fontSize='12.5px';th.style.lineHeight='1.08';th.style.padding='1.5px';th.style.height='23px';th.style.whiteSpace='nowrap';th.style.background='#e7e7ea';th.style.color='#111';th.style.border='1px solid #999';tr.appendChild(th)});thead.appendChild(tr);table.appendChild(thead);
-    var tbody=document.createElement('tbody');
-    for(var d=1;d<=days;d++){var row=document.createElement('tr');var wd=new Date(r.year-543,r.month,d).getDay();var shade=(wd===0||wd===6);[''+d,thaiDay(r.year,r.month,d)].concat(slots.map(function(s){var pid=a[keyFor(d,s.id)];return pid?historyName(data,pid):'–'})).forEach(function(v,i){var td=document.createElement('td');td.textContent=v;td.style.position='static';td.style.fontWeight=i===0?'800':'400';td.style.fontSize='12.2px';td.style.lineHeight='1.06';td.style.padding='1px';td.style.height='23px';td.style.whiteSpace='nowrap';td.style.textAlign='center';td.style.border='1px solid #999';td.style.background=shade?'#e6e6e6':'#fff';td.style.color='#111';if(i===0){td.style.width='50px';td.style.minWidth='50px';td.style.maxWidth='50px'}row.appendChild(td)});tbody.appendChild(row)}
-    table.appendChild(tbody);wrap.appendChild(table);
-    var noteBox=document.createElement('div');noteBox.style.marginTop='6px';noteBox.style.fontFamily='-apple-system,BlinkMacSystemFont,"Noto Sans Thai",Tahoma,Arial,sans-serif';noteBox.style.fontSize='13px';noteBox.style.lineHeight='1.25';noteBox.style.color='#111';noteBox.style.textAlign='left';noteBox.style.whiteSpace='pre-wrap';noteBox.innerHTML='<b>หมายเหตุ:</b> '+esc((data.pdfNote||'-'));wrap.appendChild(noteBox);
-    document.body.appendChild(wrap);return wrap;
+    wrap.className='h33-pdf-capture';
+    wrap.innerHTML='<div class="h33-pdf-title">ตารางเวร เดือน'+esc(MONTHS[r.month])+' พ.ศ. '+esc(r.year)+'</div>'+buildHistoryRosterTableHtml(r,true);
+    document.body.appendChild(wrap);
+    return wrap;
   }
   function saveHistoryRosterPdf(r){
     if(!r||!r.data)return;
     if(!(window.html2canvas&&window.jspdf&&window.jspdf.jsPDF)){alert('ไม่สามารถสร้าง PDF ได้ในขณะนี้');return}
-    var wrap=prepareHistoryRosterPdfNode(r),table=wrap.querySelector('table');
+    var wrap=prepareHistoryRosterPdfNode(r);
     requestAnimationFrame(function(){
-      try{
-        var targetHeight=wrap.scrollWidth*(182/277),currentHeight=wrap.scrollHeight,rows=table.querySelectorAll('tbody tr');
-        if(currentHeight<targetHeight&&rows.length){var extra=(targetHeight-currentHeight)/rows.length;rows.forEach(function(row){var h=row.getBoundingClientRect().height+extra;row.querySelectorAll('td').forEach(function(td){td.style.height=h+'px';td.style.verticalAlign='middle'})})}
-      }catch(e){}
-      html2canvas(wrap,{scale:2,useCORS:true,backgroundColor:'#fff',logging:false,windowWidth:1700}).then(function(canvas){
+      html2canvas(wrap,{scale:2,useCORS:true,backgroundColor:'#fff',logging:false,windowWidth:2300,scrollX:0,scrollY:0}).then(function(canvas){
         var pdf=new window.jspdf.jsPDF({orientation:'landscape',unit:'mm',format:'a4',compress:true});
-        var pw=pdf.internal.pageSize.getWidth(),ph=pdf.internal.pageSize.getHeight(),maxW=pw-20,maxH=ph-28,scale=Math.min(maxW/canvas.width,maxH/canvas.height),w=canvas.width*scale,h=canvas.height*scale;
-        pdf.addImage(canvas.toDataURL('image/jpeg',0.98),'JPEG',10,15,w,h,undefined,'FAST');
+        var pw=pdf.internal.pageSize.getWidth(),ph=pdf.internal.pageSize.getHeight();
+        var left=7,right=7,top=7,bottom=7,maxW=pw-left-right,maxH=ph-top-bottom;
+        var ratio=Math.min(maxW/canvas.width,maxH/canvas.height),w=canvas.width*ratio,h=canvas.height*ratio;
+        var x=left+(maxW-w)/2,y=top+(maxH-h)/2;
+        pdf.addImage(canvas.toDataURL('image/jpeg',0.98),'JPEG',x,y,w,h,undefined,'FAST');
         pdf.save('ตารางเวร_'+MONTHS[r.month]+'_'+r.year+'.pdf');
         try{document.body.removeChild(wrap)}catch(e){}
       }).catch(function(err){try{document.body.removeChild(wrap)}catch(e){}alert('สร้าง PDF ไม่สำเร็จ: '+err.message)});
@@ -217,7 +234,7 @@
     if(!v||!t||!b)return;
     if(!r||!r.data){t.textContent='ตารางรันเวร';b.innerHTML='<div class="h33-loading">ไม่พบข้อมูลตารางเวรของเดือนนี้</div>';v.classList.add('show');return}
     t.textContent='ตารางรันเวร • '+(MONTHS[m]||'')+' พ.ศ. '+y;
-    b.innerHTML=buildHistoryRosterTableHtml(r);
+    b.innerHTML=buildHistoryRosterTableHtml(r,false);
     v.classList.add('show');
     document.documentElement.classList.add('h33-history-viewer-open');
   }

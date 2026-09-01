@@ -438,3 +438,140 @@ html.h33-history-viewer-open{overflow:hidden!important}
   font-size:11px!important;
   color:#4e586a!important;
 }
+
+
+/* =========================================================
+   HISTORY V33.12 — HISTORY ROSTER MODAL MATCHES MAIN ROSTER + SAME PDF TABLE
+   Scope: #page-history only. Sidebar / other pages / responsive layout untouched.
+   ========================================================= */
+
+/* Open-view panel: popup style like the existing detail dialog, not a new page. */
+#page-history .h33-viewer.show{
+  position:fixed!important;
+  inset:20px!important;
+  border:1px solid #e5e8ed!important;
+  border-radius:18px!important;
+  box-shadow:0 22px 70px rgba(39,48,64,.22)!important;
+  background:#f8f9fb!important;
+  overflow:hidden!important;
+}
+#page-history .h33-viewer.show .history-viewer-head{
+  flex:0 0 52px!important;
+  height:52px!important;
+  padding:0 12px 0 16px!important;
+  background:#f2f3f5!important;
+  border-bottom:1px solid #e3e6eb!important;
+}
+#page-history .h33-viewer.show .history-viewer-head b{
+  font-size:14px!important;
+  color:#364158!important;
+}
+#page-history .h33-viewer.show #historyCloseViewerBtn{
+  width:34px!important;
+  min-width:34px!important;
+  height:34px!important;
+  padding:0!important;
+  border-radius:50%!important;
+  font-size:0!important;
+  position:relative!important;
+}
+#page-history .h33-viewer.show #historyCloseViewerBtn:before,
+#page-history .h33-viewer.show #historyCloseViewerBtn:after{
+  content:""!important;
+  position:absolute!important;
+  left:10px!important;
+  top:16px!important;
+  width:14px!important;
+  height:2px!important;
+  background:#df5d8d!important;
+  border-radius:2px!important;
+}
+#page-history .h33-viewer.show #historyCloseViewerBtn:before{transform:rotate(45deg)!important}
+#page-history .h33-viewer.show #historyCloseViewerBtn:after{transform:rotate(-45deg)!important}
+#page-history .h33-viewer.show .history-viewer-scroll{
+  padding:10px!important;
+  background:#f8f9fb!important;
+}
+#page-history .h33-roster-sheet{
+  width:100%!important;
+  background:#fff!important;
+  border:1px solid #ece9ef!important;
+  border-radius:14px!important;
+  padding:9px!important;
+}
+#page-history .h33-roster-meta{
+  display:flex!important;
+  align-items:center!important;
+  gap:12px!important;
+  flex-wrap:wrap!important;
+  padding:3px 4px 8px!important;
+  font-size:9px!important;
+  color:#7a8394!important;
+}
+#page-history .h33-roster-meta b{color:#4c5668!important}
+#page-history .h33-roster-table-wrap{
+  width:100%!important;
+  overflow:auto!important;
+  -webkit-overflow-scrolling:touch!important;
+  border:1px solid #ece9ef!important;
+  border-radius:12px!important;
+  background:#fff!important;
+}
+#page-history .h33-full-roster-table{
+  min-width:1900px!important;
+  width:100%!important;
+  border-collapse:collapse!important;
+  table-layout:fixed!important;
+  font-size:9px!important;
+  background:#fff!important;
+}
+#page-history .h33-full-roster-table th,
+#page-history .h33-full-roster-table td{
+  height:31px!important;
+  padding:3px 4px!important;
+  text-align:center!important;
+  border:1px solid #e2e1e6!important;
+  color:#3d485a!important;
+  white-space:nowrap!important;
+}
+#page-history .h33-full-roster-table th{font-weight:900!important}
+#page-history .h33-full-roster-table .h33-h-date{background:#f7cfdf!important;width:68px!important}
+#page-history .h33-full-roster-table .h33-h-v{background:#efd6e5!important}
+#page-history .h33-full-roster-table .h33-h-ot{background:#f6e5ca!important}
+#page-history .h33-full-roster-table .h33-h-s1{background:#f3ef9f!important}
+#page-history .h33-full-roster-table .h33-h-s2{background:#cfead9!important}
+#page-history .h33-full-roster-table .h33-h-s3{background:#d9e8f7!important}
+#page-history .h33-full-roster-table .h33-h-s4{background:#eadcf5!important}
+#page-history .h33-full-roster-table .h33-h-s56{background:#fde5b7!important}
+#page-history .h33-full-roster-table .h33-h-s78{background:#d9f0eb!important}
+#page-history .h33-full-roster-table .h33-h-extra{background:#f7d6e3!important}
+#page-history .h33-full-roster-table .h33-roster-sub-row th{font-size:8.2px!important}
+#page-history .h33-full-roster-table .h33-roster-time-row th{font-size:7.5px!important;height:24px!important}
+#page-history .h33-full-roster-table .h33-date-cell{font-weight:900!important;background:#fff!important}
+#page-history .h33-full-roster-table tr.sat td{background:#fff3c8!important}
+#page-history .h33-full-roster-table tr.sun td{background:#ffe4eb!important}
+#page-history .h33-full-roster-note{padding:8px 4px 2px!important;font-size:9px!important;color:#687284!important}
+
+/* PDF capture uses exactly the same grouped roster structure and data. */
+.h33-pdf-capture{
+  position:fixed!important;
+  left:-20000px!important;
+  top:0!important;
+  width:2300px!important;
+  padding:12px!important;
+  background:#fff!important;
+  color:#111!important;
+  font-family:-apple-system,BlinkMacSystemFont,"Noto Sans Thai",Tahoma,Arial,sans-serif!important;
+}
+.h33-pdf-capture .h33-pdf-title{text-align:center;font-size:21px;font-weight:900;margin:0 0 8px}
+.h33-pdf-capture .h33-roster-sheet{width:100%;padding:0;background:#fff}
+.h33-pdf-capture .h33-roster-meta{display:flex;gap:18px;font-size:12px;margin-bottom:6px;color:#333}
+.h33-pdf-capture .h33-roster-table-wrap{width:100%;overflow:visible}
+.h33-pdf-capture .h33-full-roster-table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:10px}
+.h33-pdf-capture .h33-full-roster-table th,.h33-pdf-capture .h33-full-roster-table td{border:1px solid #aaa;text-align:center;padding:2px;height:25px;white-space:nowrap;color:#111}
+.h33-pdf-capture .h33-full-roster-table th{font-weight:800}
+.h33-pdf-capture .h33-h-date{background:#f7cfdf}.h33-pdf-capture .h33-h-v{background:#efd6e5}.h33-pdf-capture .h33-h-ot{background:#f6e5ca}
+.h33-pdf-capture .h33-h-s1{background:#f3ef9f}.h33-pdf-capture .h33-h-s2{background:#cfead9}.h33-pdf-capture .h33-h-s3{background:#d9e8f7}.h33-pdf-capture .h33-h-s4{background:#eadcf5}
+.h33-pdf-capture .h33-h-s56{background:#fde5b7}.h33-pdf-capture .h33-h-s78{background:#d9f0eb}.h33-pdf-capture .h33-h-extra{background:#f7d6e3}
+.h33-pdf-capture tr.sat td{background:#fff3c8}.h33-pdf-capture tr.sun td{background:#ffe4eb}
+.h33-pdf-capture .h33-full-roster-note{margin-top:6px;font-size:11px}
