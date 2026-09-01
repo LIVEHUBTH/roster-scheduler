@@ -1,4 +1,4 @@
-/* HOLIDAYS V32.9 — isolated month state + pastel upcoming icons + clean audit note */
+/* HOLIDAYS V32.10 — stable B.E. month picker + restored upcoming pastel icons */
 (function(){
   'use strict';
 
@@ -33,32 +33,60 @@
      This prevents the old scheduler renderer from leaving the date grid on
      another month while the month label has already changed. */
   var calendarView={year:null,month:null};
+  function validGregorianYear(y){
+    y=Number(y);
+    return isFinite(y)&&y>=1900&&y<=2200;
+  }
+  function validMonth(m){
+    m=Number(m);
+    return isFinite(m)&&m>=0&&m<=11;
+  }
   function normalizeCalendarView(year,month){
     year=Number(year); month=Number(month);
-    if(!isFinite(year))year=(new Date()).getFullYear();
+    if(!validGregorianYear(year))year=(new Date()).getFullYear();
     if(!isFinite(month))month=(new Date()).getMonth();
     while(month<0){month+=12;year--}
     while(month>11){month-=12;year++}
+    if(!validGregorianYear(year))year=(new Date()).getFullYear();
     return {year:year,month:month};
   }
+  function yearFromInputValue(v){
+    var n=parseInt(v,10);
+    if(!isFinite(n))return NaN;
+    if(n>=2400&&n<=2800)return n-543;
+    if(validGregorianYear(n))return n;
+    return NaN;
+  }
   function initCalendarView(){
-    if(isFinite(calendarView.year)&&isFinite(calendarView.month))return;
+    if(validGregorianYear(calendarView.year)&&validMonth(calendarView.month))return;
     var y=NaN,m=NaN;
+
+    /* Read the legacy bridge only when the values are sensible.
+       A stale/invalid year such as 0 must never become พ.ศ. 543. */
     try{
       if(B&&typeof B.current==='function'){
         var c=B.current();
-        if(c){y=Number(c.year);m=Number(c.month)}
+        if(c){
+          var by=Number(c.year),bm=Number(c.month);
+          if(validGregorianYear(by))y=by;
+          if(validMonth(bm))m=bm;
+        }
       }
     }catch(e){}
-    if(!isFinite(m)){
-      var ms=document.getElementById('monthSelect');
-      if(ms)m=parseInt(ms.value,10);
+
+    var ms=document.getElementById('monthSelect');
+    var yi=document.getElementById('yearInput');
+    if(!validMonth(m)&&ms){
+      var mm=parseInt(ms.value,10);
+      if(validMonth(mm))m=mm;
     }
-    if(!isFinite(y)){
-      var yi=document.getElementById('yearInput');
-      var ty=yi?parseInt(yi.value,10):NaN;
-      if(isFinite(ty))y=ty>2400?ty-543:ty;
-    }
+    if(!validGregorianYear(y)&&yi)y=yearFromInputValue(yi.value);
+
+    /* Preserve a valid selected month, but always recover an invalid year
+       to the real current Gregorian year. */
+    if(!validGregorianYear(y))y=(new Date()).getFullYear();
+    if(!validMonth(m))m=(new Date()).getMonth();
+
     var n=normalizeCalendarView(y,m);
     calendarView.year=n.year;calendarView.month=n.month;
   }
@@ -150,17 +178,19 @@
   function iconFor(name,type,kind){
     var s=String(name||'');
     if(kind==='buddhist')return {glyph:'☸',tone:'yellow'};
+    if(/ปีใหม่|คริสต์มาส|ลอยกระทง/.test(s))return {glyph:'✦',tone:'pink'};
     if(/สตรี|แม่/.test(s))return {glyph:'✿',tone:'pink'};
-    if(/พยาบาล|มหิดล|สาธารณสุข|แพทย์|กาชาด/.test(s))return {glyph:'✚',tone:'mint'};
+    if(/พยาบาล|มหิดล|สาธารณสุข|แพทย์|กาชาด|อนามัย/.test(s))return {glyph:'✚',tone:'mint'};
     if(/วิทยาศาสตร์|นักประดิษฐ์/.test(s))return {glyph:'⚛',tone:'purple'};
     if(/รพี|ประชาธิปไตย|รัฐธรรมนูญ|กฎหมาย/.test(s))return {glyph:'⚖',tone:'purple'};
     if(/สื่อสาร/.test(s))return {glyph:'☎',tone:'blue'};
-    if(/สิ่งแวดล้อม|ต้นไม้|สัตว์ป่า/.test(s))return {glyph:'♧',tone:'mint'};
+    if(/สิ่งแวดล้อม|ต้นไม้|สัตว์ป่า|โลก/.test(s))return {glyph:'♧',tone:'mint'};
     if(/พืชมงคล|เกษตร/.test(s))return {glyph:'❧',tone:'mint'};
     if(/สงกรานต์/.test(s))return {glyph:'◌',tone:'blue'};
     if(/ฉัตรมงคล|จักรี|ราช|นวมินทร|ปิย|เฉลิมพระชนมพรรษ/.test(s))return {glyph:'♛',tone:'orange'};
-    if(/ชาติ|ธงชาติ|พ่อ/.test(s))return {glyph:'★',tone:'blue'};
+    if(/ชาติ|ธงชาติ|พ่อ|กองทัพ|ตำรวจ|ลูกเสือ/.test(s))return {glyph:'★',tone:'blue'};
     if(/ครู|เด็ก|เยาวชน/.test(s))return {glyph:'✎',tone:'pink'};
+    if(/แรงงาน/.test(s))return {glyph:'⚒',tone:'orange'};
     if(kind==='important')return {glyph:'✦',tone:'blue'};
     if(type==='substitute')return {glyph:'↻',tone:'pink'};
     if(type==='special')return {glyph:'✦',tone:'gray'};
@@ -467,7 +497,7 @@
     var keys=monthDates(),all=$('holidayShowAllV32')&&$('holidayShowAllV32').dataset.all==='1';
     var show=all?keys:keys.slice(0,5);
     if(!show.length){
-      box.innerHTML='<div style="display:block;padding:18px;text-align:center;color:#9aa1ad">เดือนนี้ยังไม่มีรายการวันหยุดหรือวันสำคัญ</div>';
+      box.innerHTML='<div class="h32-upcoming-empty">เดือนนี้ยังไม่มีรายการวันหยุดหรือวันสำคัญ</div>';
       if($('holidayUpcomingFootV32'))$('holidayUpcomingFootV32').textContent='▦ ไม่มีรายการในเดือนนี้';
       return;
     }
@@ -556,22 +586,70 @@
     var d=new Date();setCalendarView(d.getFullYear(),d.getMonth());
   }
 
+  function ensureMonthPickerDialog(){
+    var existing=$('holidayMonthDialogV3210');
+    if(existing)return existing;
+    var page=$('page-holidays');
+    if(!page)return null;
+
+    var months=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+    var overlay=document.createElement('div');
+    overlay.id='holidayMonthDialogV3210';
+    overlay.className='h32-month-dialog';
+    overlay.hidden=true;
+    overlay.innerHTML=''+
+      '<div class="h32-month-dialog-card" role="dialog" aria-modal="true" aria-labelledby="holidayMonthDialogTitleV3210">'+
+        '<div class="h32-month-dialog-head">'+
+          '<div><small>เลือกเดือนที่ต้องการดู</small><strong id="holidayMonthDialogTitleV3210">เดือน / ปี พ.ศ.</strong></div>'+
+          '<button type="button" class="h32-month-dialog-x" aria-label="ปิด">×</button>'+
+        '</div>'+
+        '<div class="h32-month-dialog-fields">'+
+          '<label>เดือน<select id="holidayMonthSelectV3210">'+months.map(function(x,i){return '<option value="'+i+'">'+x+'</option>'}).join('')+'</select></label>'+
+          '<label>ปี พ.ศ.<input id="holidayYearSelectV3210" type="number" inputmode="numeric" min="2500" max="2800" step="1"></label>'+
+        '</div>'+
+        '<div class="h32-month-dialog-actions">'+
+          '<button type="button" class="h32-month-dialog-cancel">ยกเลิก</button>'+
+          '<button type="button" class="h32-month-dialog-apply">เลือกเดือน</button>'+
+        '</div>'+
+      '</div>';
+    page.appendChild(overlay);
+
+    function close(){overlay.hidden=true}
+    overlay.querySelector('.h32-month-dialog-x').onclick=close;
+    overlay.querySelector('.h32-month-dialog-cancel').onclick=close;
+    overlay.addEventListener('click',function(ev){if(ev.target===overlay)close()});
+    overlay.querySelector('.h32-month-dialog-apply').onclick=function(){
+      var m=parseInt($('holidayMonthSelectV3210').value,10);
+      var ty=parseInt($('holidayYearSelectV3210').value,10);
+      if(!validMonth(m)){alert('กรุณาเลือกเดือน');return}
+      if(!isFinite(ty)||ty<2500||ty>2800){alert('กรุณากรอกปี พ.ศ. ระหว่าง 2500–2800');return}
+      close();
+      setCalendarView(ty-543,m);
+    };
+    overlay.querySelector('#holidayYearSelectV3210').addEventListener('keydown',function(ev){
+      if(ev.key==='Enter'){ev.preventDefault();overlay.querySelector('.h32-month-dialog-apply').click()}
+    });
+    return overlay;
+  }
+
+  function openMonthPickerDialog(){
+    var overlay=ensureMonthPickerDialog();if(!overlay)return;
+    var c=current();
+    var ms=$('holidayMonthSelectV3210'),yi=$('holidayYearSelectV3210');
+    if(ms)ms.value=String(c.month);
+    if(yi)yi.value=String(c.thaiYear);
+    overlay.hidden=false;
+    setTimeout(function(){if(ms)ms.focus()},0);
+  }
+
   function wireMonthPicker(){
     var btn=$('holidayMonthPickerV32');if(!btn)return;
-    var input=document.createElement('input');
-    input.type='month';input.setAttribute('aria-label','เลือกเดือน');
-    input.style.position='fixed';input.style.left='-9999px';input.style.top='-9999px';
-    document.body.appendChild(input);
-    btn.addEventListener('click',function(){
-      var c=current();input.value=c.year+'-'+pad(c.month+1);
-      if(typeof input.showPicker==='function'){try{input.showPicker();return}catch(e){}}
-      input.click();
-    });
-    input.addEventListener('change',function(){
-      if(!this.value)return;
-      var p=this.value.split('-'),y=parseInt(p[0],10),m=parseInt(p[1],10)-1;
-      if(isFinite(y)&&isFinite(m))setCalendarView(y,m);
-    });
+    /* Capture phase blocks any legacy native month picker on this button only. */
+    btn.addEventListener('click',function(ev){
+      if(ev){ev.preventDefault();ev.stopImmediatePropagation()}
+      openMonthPickerDialog();
+    },true);
+    btn.setAttribute('aria-haspopup','dialog');
   }
 
   function expectedCalendarStartKey(){
@@ -647,7 +725,7 @@
     }
   }
 
-  window.HolidaysV32={refresh:refresh,loadEdit:loadEdit,clearForm:clearForm,openDayPopup:openDayPopup,closeDayPopup:closeDayPopup};
+  window.HolidaysV32={refresh:refresh,loadEdit:loadEdit,clearForm:clearForm,openDayPopup:openDayPopup,closeDayPopup:closeDayPopup,openMonthPicker:openMonthPickerDialog};
 
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',wire,{once:true});
   else wire();
