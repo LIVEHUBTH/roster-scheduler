@@ -1892,3 +1892,15 @@
     min-width:0!important;
   }
 }
+
+
+/* V32.17 — note list spacing only; holiday page scoped */
+#page-holidays .h32-note-card .h32-note-list{
+  gap:5px!important;
+  align-content:start!important;
+}
+#page-holidays .h32-note-card .h32-note-list>div{
+  margin:0!important;
+  padding:0!important;
+  line-height:1.35!important;
+}
