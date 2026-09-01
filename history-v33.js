@@ -189,7 +189,7 @@
     wrap.style.position='fixed';
     wrap.style.left='-12000px';
     wrap.style.top='0';
-    wrap.style.width='1700px';
+    wrap.style.width='1800px';
     wrap.style.background='#fff';
     wrap.style.padding='0';
     wrap.innerHTML='<div class="h33-pdf-title">ตารางเวร เดือน'+esc(MONTHS[r.month])+' พ.ศ. '+esc(r.year)+'</div>'+buildHistoryRosterTableHtml(r,true);
@@ -197,15 +197,15 @@
     var table=wrap.querySelector('.h33-full-roster-table');
     if(table){
       table.style.minWidth='0';
-      table.style.width='1700px';
+      table.style.width='1800px';
       table.style.tableLayout='fixed';
       table.style.borderCollapse='collapse';
       table.style.background='#fff';
       table.querySelectorAll('th').forEach(function(th){
-        th.style.position='static';th.style.fontWeight='800';th.style.fontSize='12.5px';th.style.lineHeight='1.08';th.style.padding='1.5px';th.style.height='23px';th.style.whiteSpace='nowrap';th.style.color='#111';
+        th.style.position='static';th.style.fontWeight='800';th.style.fontSize='13.5px';th.style.lineHeight='1.08';th.style.padding='1.7px';th.style.height='25px';th.style.whiteSpace='nowrap';th.style.color='#111';
       });
       table.querySelectorAll('td').forEach(function(td){
-        td.style.position='static';td.style.fontWeight='400';td.style.fontSize='12.2px';td.style.lineHeight='1.06';td.style.padding='1px';td.style.height='23px';td.style.whiteSpace='nowrap';td.style.color='#111';
+        td.style.position='static';td.style.fontWeight='400';td.style.fontSize='13.1px';td.style.lineHeight='1.06';td.style.padding='1.2px';td.style.height='25px';td.style.whiteSpace='nowrap';td.style.color='#111';
       });
       table.querySelectorAll('tbody tr').forEach(function(row){
         var shade=row.classList.contains('sat')||row.classList.contains('sun')||row.classList.contains('holiday');
@@ -213,10 +213,10 @@
       });
     }
     var title=wrap.querySelector('.h33-pdf-title');
-    if(title){title.style.textAlign='center';title.style.fontWeight='800';title.style.fontSize='21px';title.style.lineHeight='1.1';title.style.padding='4px 0 8px';title.style.color='#111'}
+    if(title){title.style.textAlign='center';title.style.fontWeight='800';title.style.fontSize='23px';title.style.lineHeight='1.1';title.style.padding='4px 0 8px';title.style.color='#111'}
     var meta=wrap.querySelector('.h33-roster-meta');if(meta)meta.style.display='none';
-    var sheet=wrap.querySelector('.h33-roster-sheet');if(sheet){sheet.style.padding='0';sheet.style.border='0';sheet.style.borderRadius='0'}
-    var tw=wrap.querySelector('.h33-roster-table-wrap');if(tw){tw.style.overflow='visible';tw.style.border='0';tw.style.borderRadius='0'}
+    var sheet=wrap.querySelector('.h33-roster-sheet');if(sheet){sheet.style.padding='0';sheet.style.border='0';sheet.style.borderRadius='0';sheet.style.width='1800px';sheet.style.maxWidth='none'}
+    var tw=wrap.querySelector('.h33-roster-table-wrap');if(tw){tw.style.overflow='visible';tw.style.border='0';tw.style.borderRadius='0';tw.style.width='1800px';tw.style.maxWidth='none'}
     var note=wrap.querySelector('.h33-full-roster-note');if(note){note.style.marginTop='6px';note.style.fontSize='13px';note.style.lineHeight='1.25';note.style.color='#111';note.style.textAlign='left'}
     document.body.appendChild(wrap);
     return wrap;
@@ -240,13 +240,13 @@
     var wrap=prepareHistoryRosterPdfNode(r),table=wrap.querySelector('table');
     requestAnimationFrame(function(){
       autoFillHistoryPdfHeight(wrap,table);
-      html2canvas(wrap,{scale:2,useCORS:true,backgroundColor:'#fff',logging:false,windowWidth:1700}).then(function(canvas){
+      html2canvas(wrap,{scale:2,useCORS:true,backgroundColor:'#fff',logging:false,windowWidth:1800,width:1800}).then(function(canvas){
         var pdf=new window.jspdf.jsPDF({orientation:'landscape',unit:'mm',format:'a4',compress:true});
         var pw=pdf.internal.pageSize.getWidth(),ph=pdf.internal.pageSize.getHeight();
         var left=10,top=10,right=10,bottom=10,maxW=pw-left-right,maxH=ph-top-bottom;
-        var ratio=Math.min(maxW/canvas.width,maxH/canvas.height),w=canvas.width*ratio,h=canvas.height*ratio;
-        var x=left+(maxW-w)/2,y=top+(maxH-h)/2;
-        pdf.addImage(canvas.toDataURL('image/jpeg',0.98),'JPEG',x,y,w,h,undefined,'FAST');
+        /* V33.15: fill the printable A4 landscape area exactly: 10 mm on all four sides. */
+        var x=left,y=top,w=maxW,h=maxH;
+        pdf.addImage(canvas.toDataURL('image/jpeg',0.99),'JPEG',x,y,w,h,undefined,'FAST');
         pdf.save('ตารางเวร_'+MONTHS[r.month]+'_'+r.year+'.pdf');
         try{document.body.removeChild(wrap)}catch(e){}
       }).catch(function(err){try{document.body.removeChild(wrap)}catch(e){}alert('สร้าง PDF ไม่สำเร็จ: '+err.message)});
