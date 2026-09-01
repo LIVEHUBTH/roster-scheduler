@@ -1931,3 +1931,34 @@
   min-width:max-content!important;
   margin-left:auto!important;
 }
+
+
+/* =========================================================
+   V32.19 — IPAD/DESKTOP BOTTOM CARDS HEIGHT + HEADER TEXT ONLY
+   Scope: #page-holidays only. Phone layout untouched.
+   ========================================================= */
+@media(min-width:701px){
+  /* Reduce the three bottom cards equally so they end higher on iPad/Desktop. */
+  #page-holidays .h32-bottom-grid > .h32-card,
+  #page-holidays .h32-bottom-grid > .h32-form-card,
+  #page-holidays .h32-bottom-grid > .h32-note-card,
+  #page-holidays .h32-bottom-grid > .h32-audit-card{
+    min-height:246px!important;
+  }
+
+  /* Slightly reduce only the bottom-card headings so History + View all
+     remain cleanly on one line without overlap. */
+  #page-holidays .h32-bottom-grid .h32-card h3,
+  #page-holidays .h32-bottom-grid .h32-card-head h3{
+    font-size:14px!important;
+    line-height:1.15!important;
+  }
+  #page-holidays .h32-audit-card .h32-card-head{
+    gap:5px!important;
+  }
+  #page-holidays #holidayAuditAllV32{
+    min-height:34px!important;
+    padding:6px 10px!important;
+    font-size:9px!important;
+  }
+}
