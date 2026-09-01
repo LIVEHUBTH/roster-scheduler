@@ -1692,3 +1692,114 @@
     font-size:8px!important;
   }
 }
+
+
+/* =========================================================
+   V32.14 — EXACT PASTEL ICON SET + PHONE CALENDAR ICON VISIBILITY
+   Scope: #page-holidays only. No sidebar / other pages / breakpoints changed.
+   ========================================================= */
+
+/* main title icon: pastel yellow calendar */
+#page-holidays .h32-title-icon{
+  background:#fff7dc!important;
+  color:#ddb13a!important;
+}
+
+/* card header icons in requested pastel tones */
+#page-holidays .h32-head-icon.blue{background:#edf7ff!important;color:#58a8de!important}
+#page-holidays .h32-head-icon.mint{background:#eaf9f4!important;color:#42ad8d!important}
+#page-holidays .h32-head-icon.pink{background:#fff0f6!important;color:#e86f9e!important}
+#page-holidays .h32-head-icon.orange{background:#fff1e5!important;color:#e28f45!important}
+#page-holidays .h32-head-icon.purple{background:#f2edff!important;color:#8b70d6!important}
+#page-holidays .h32-svg-icon{
+  width:18px!important;
+  height:18px!important;
+  display:block!important;
+}
+#page-holidays .h32-title-icon .h32-svg-icon{
+  width:22px!important;
+  height:22px!important;
+}
+
+/* upcoming item icons: minimalist pastel chips */
+#page-holidays .h32-upcoming .h32-event-icon{
+  border-radius:10px!important;
+  box-shadow:none!important;
+  font-size:15px!important;
+  line-height:1!important;
+  display:grid!important;
+  place-items:center!important;
+}
+#page-holidays .h32-upcoming .h32-event-icon.tone-pink{background:#fff0f6!important;color:#ea6f9d!important}
+#page-holidays .h32-upcoming .h32-event-icon.tone-orange{background:#fff2e5!important;color:#e89345!important}
+#page-holidays .h32-upcoming .h32-event-icon.tone-yellow{background:#fff8dc!important;color:#d4a92d!important}
+#page-holidays .h32-upcoming .h32-event-icon.tone-blue{background:#edf7ff!important;color:#55a7df!important}
+#page-holidays .h32-upcoming .h32-event-icon.tone-mint{background:#eaf9f4!important;color:#43af8f!important}
+#page-holidays .h32-upcoming .h32-event-icon.tone-purple{background:#f2edff!important;color:#8b70d6!important}
+#page-holidays .h32-upcoming .h32-event-icon.tone-gray{background:#f2f4f6!important;color:#8e98a7!important}
+
+/* calendar event icons: colorful pastel chips shown like the Buddhist icon */
+#page-holidays .h32-calendar-event-icon{
+  width:15px!important;
+  height:15px!important;
+  min-width:15px!important;
+  border-radius:5px!important;
+  display:inline-grid!important;
+  place-items:center!important;
+  font-size:9px!important;
+  line-height:1!important;
+  box-shadow:none!important;
+  font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif!important;
+}
+#page-holidays .h32-calendar-event-icon.tone-pink{background:#fff0f6!important;color:#ea6f9d!important}
+#page-holidays .h32-calendar-event-icon.tone-orange{background:#fff1e5!important;color:#e89345!important}
+#page-holidays .h32-calendar-event-icon.tone-yellow{background:#fff8dc!important;color:#d4a92d!important}
+#page-holidays .h32-calendar-event-icon.tone-blue{background:#edf7ff!important;color:#55a7df!important}
+#page-holidays .h32-calendar-event-icon.tone-mint{background:#eaf9f4!important;color:#43af8f!important}
+#page-holidays .h32-calendar-event-icon.tone-purple{background:#f2edff!important;color:#8b70d6!important}
+#page-holidays .h32-calendar-event-icon.tone-gray{background:#f2f4f6!important;color:#8e98a7!important}
+#page-holidays .h32-buddha-mark{
+  background:#fff8dc!important;
+  color:#d4a92d!important;
+}
+
+/* phone only: preserve layout, just ensure bottom icons are visible */
+@media(max-width:700px){
+  #page-holidays.h32-phone-stack #holidayCalendarV24{
+    grid-template-rows:repeat(6,56px)!important;
+  }
+  #page-holidays.h32-phone-stack #holidayCalendarV24 .h32-day{
+    height:56px!important;
+    min-height:56px!important;
+    max-height:56px!important;
+    padding:3px 2px 4px!important;
+  }
+  #page-holidays.h32-phone-stack #holidayCalendarV24 .h32-day-caption{
+    -webkit-line-clamp:1!important;
+    line-clamp:1!important;
+    margin-top:5px!important;
+    min-height:8px!important;
+    max-height:8px!important;
+    line-height:8px!important;
+    font-size:6px!important;
+  }
+  #page-holidays.h32-phone-stack #holidayCalendarV24 .h32-day-markers{
+    min-height:14px!important;
+    max-height:14px!important;
+    margin-top:2px!important;
+    gap:1px!important;
+    overflow:visible!important;
+  }
+  #page-holidays.h32-phone-stack #holidayCalendarV24 .h32-mini-dot{
+    width:5px!important;
+    height:5px!important;
+    flex:0 0 5px!important;
+  }
+  #page-holidays.h32-phone-stack .h32-calendar-event-icon,
+  #page-holidays.h32-phone-stack .h32-buddha-mark{
+    width:12px!important;
+    height:12px!important;
+    min-width:12px!important;
+    font-size:7px!important;
+  }
+}

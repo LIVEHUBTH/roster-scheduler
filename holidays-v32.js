@@ -190,19 +190,21 @@
     if(/พืชมงคล|เกษตร/.test(s))return {glyph:'🌾',tone:'mint'};
     if(/สงกรานต์/.test(s))return {glyph:'💦',tone:'blue'};
     if(/ฉัตรมงคล|จักรี|ราช|นวมินทร|ปิย|เฉลิมพระชนมพรรษ/.test(s))return {glyph:'👑',tone:'orange'};
-    if(/ชาติ|ธงชาติ|พ่อ|กองทัพ|ตำรวจ|ลูกเสือ/.test(s))return {glyph:'🇹🇭',tone:'blue'};
+    if(/ชาติ|ธงชาติ|พ่อ|กองทัพ|ตำรวจ|เสรีไทย|ลูกเสือ/.test(s))return {glyph:'🇹🇭',tone:'blue'};
     if(/ครู|เด็ก|เยาวชน/.test(s))return {glyph:'🎓',tone:'pink'};
     if(/แรงงาน/.test(s))return {glyph:'🛠️',tone:'orange'};
     if(/ช้าง/.test(s))return {glyph:'🐘',tone:'mint'};
     if(/ภาษาไทย|สุนทรภู่/.test(s))return {glyph:'📚',tone:'blue'};
     if(/กีฬา/.test(s))return {glyph:'🏅',tone:'blue'};
     if(/สารทจีน/.test(s))return {glyph:'🥮',tone:'orange'};
+    if(/อาหาร|ข้าว/.test(s))return {glyph:'🍚',tone:'orange'};
+    if(/ดอกไม้|ชมพูพันธ์ทิพย์/.test(s))return {glyph:'🌼',tone:'pink'};
     if(/มาฆบูชา|วิสาขบูชา|อาสาฬหบูชา|เข้าพรรษา|ออกพรรษา/.test(s))return {glyph:'🙏',tone:'yellow'};
     if(kind==='important')return {glyph:'📌',tone:'blue'};
     if(type==='substitute')return {glyph:'🔁',tone:'pink'};
     if(type==='special')return {glyph:'✨',tone:'gray'};
     if(type==='official')return {glyph:'🎌',tone:'orange'};
-    return {glyph:'📅',tone:'orange'};
+    return {glyph:'📅',tone:'blue'};
   }
 
   function seedOfficial2569(){
@@ -250,30 +252,42 @@
   }
 
 
+  function svgIconMarkup(kind){
+    var icons={
+      page:'<svg viewBox="0 0 24 24" aria-hidden="true" class="h32-svg-icon"><rect x="4" y="5" width="16" height="15" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 3.8v3.4M16 3.8v3.4M4 9.2h16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M8 12h2M12 12h2M16 12h0M8 15h2M12 15h2M16 15h0" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>',
+      calendar:'<svg viewBox="0 0 24 24" aria-hidden="true" class="h32-svg-icon"><rect x="4" y="5" width="16" height="15" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 3.8v3.4M16 3.8v3.4M4 9.2h16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
+      summary:'<svg viewBox="0 0 24 24" aria-hidden="true" class="h32-svg-icon"><path d="M6 18V11M12 18V6M18 18V9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M4 18h16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
+      pencil:'<svg viewBox="0 0 24 24" aria-hidden="true" class="h32-svg-icon"><path d="M5 18.5l3.5-.7 8.4-8.4-2.8-2.8-8.4 8.4-.7 3.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12.8 6.6l2.8 2.8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
+      note:'<svg viewBox="0 0 24 24" aria-hidden="true" class="h32-svg-icon"><rect x="6" y="4.5" width="12" height="15" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9 9h6M9 12h6M9 15h4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>',
+      history:'<svg viewBox="0 0 24 24" aria-hidden="true" class="h32-svg-icon"><path d="M7 7H4v3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.2 10.2A7 7 0 1 0 12 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M12 8.5v4l2.7 1.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+    };
+    return icons[kind]||icons.calendar;
+  }
+
   function applyCalendarIconsV323(){
     var page=$('page-holidays');
     if(!page)return;
 
     var titleIcon=page.querySelector('.h32-title-icon');
     if(titleIcon){
-      titleIcon.textContent='▦';
+      titleIcon.innerHTML=svgIconMarkup('page');
       titleIcon.classList.add('h32-main-calendar-icon');
-      titleIcon.setAttribute('aria-label','ปฏิทินวันหยุด');
-      titleIcon.title='ปฏิทินวันหยุด';
+      titleIcon.setAttribute('aria-label','วันหยุด/นักขัตฤกษ์');
+      titleIcon.title='วันหยุด/นักขัตฤกษ์';
     }
 
     var iconMap=[
-      ['.h32-calendar-card .h32-head-icon','▦','yellow'],
-      ['.h32-summary-card .h32-head-icon','▥','mint'],
-      ['.h32-form-card .h32-head-icon','✎','pink'],
-      ['.h32-note-card .h32-head-icon','▤','orange'],
-      ['.h32-audit-card .h32-head-icon','◔','purple']
+      ['.h32-calendar-card .h32-head-icon','calendar','blue'],
+      ['.h32-summary-card .h32-head-icon','summary','mint'],
+      ['.h32-form-card .h32-head-icon','pencil','pink'],
+      ['.h32-note-card .h32-head-icon','note','orange'],
+      ['.h32-audit-card .h32-head-icon','history','purple']
     ];
     iconMap.forEach(function(x){
       var el=page.querySelector(x[0]);
       if(!el)return;
-      el.textContent=x[1];
-      el.classList.remove('pink','mint','purple','yellow','orange');
+      el.innerHTML=svgIconMarkup(x[1]);
+      el.classList.remove('pink','mint','purple','yellow','orange','blue');
       el.classList.add(x[2]);
     });
   }
