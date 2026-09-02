@@ -31,12 +31,57 @@
   function userMap(){try{return JSON.parse(localStorage.getItem(MAPKEY)||'{}')||{}}catch(e){return {}}} function saveMap(m){localStorage.setItem(MAPKEY,JSON.stringify(m))}
   function unitUserCount(id){var m=userMap(),c=0;users.forEach(function(u){if((m[u.id]||m[u.username]||'pacu-sk')===id)c++});return c}
   function roleLabel(r){return {admin:'ผู้ดูแลระบบ',approver:'หัวหน้าหน่วยงาน',scheduler:'ผู้จัดตาราง',viewer:'ผู้ดูตาราง'}[r]||r}
+  function userRef(u){return String((u&&(u.id||u.userId||u._id||u.username))||'')}
+  function actionIcon(type){
+    var m={
+      edit:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 18.5l3.6-.8 8.5-8.5-2.8-2.8-8.5 8.5-.8 3.6Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m12.9 6.4 2.8 2.8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
+      view:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="5.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m15 15 4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
+      on:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.2 8.6a6.5 6.5 0 1 0 9.6 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M12 4.5v7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
+      off:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.2 8.6a6.5 6.5 0 1 0 9.6 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M12 4.5v7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>'
+    };
+    return m[type]||m.view;
+  }
   function fmt(v){if(!v)return'-';try{return new Date(v).toLocaleString('th-TH',{dateStyle:'medium',timeStyle:'short'})}catch(e){return v}}
   async function loadUsers(){try{var d=await api('/api/admin/users',{method:'GET'});users=d.users||[];renderStats();renderUsers();renderInfo()}catch(e){users=[];renderStats();renderUsers();toast('โหลดบัญชีผู้ใช้ไม่ได้: '+e.message)}}
   function renderStats(){q('#u36StatUsers').textContent=users.length;q('#u36StatActive').textContent=users.filter(function(x){return x.isActive}).length;q('#u36StatPending').textContent=users.filter(function(x){return !x.isActive}).length}
-  function renderUsers(){var host=q('#u36UsersBody');if(!host)return;var m=userMap(),u=current();var rows=users.filter(function(x){return (m[x.id]||m[x.username]||'pacu-sk')===u.id});host.innerHTML=rows.length?rows.map(function(x,i){return '<tr><td><div class="u36-person"><span class="u36-avatar">'+(['👩🏻','👩🏻‍⚕️','👨🏻','👩🏼'][i%4])+'</span><span><b>'+esc(x.displayName||x.username)+'</b><small>@'+esc(x.username)+'</small></span></div></td><td>'+esc(u.group||'งานการพยาบาล')+'</td><td><span class="u36-role '+esc(x.role)+'">'+esc(roleLabel(x.role))+'</span></td><td><span class="u36-status '+(x.isActive?'on':'off')+'"><i></i>'+(x.isActive?'ใช้งาน':'ปิดใช้งาน')+'</span></td><td>'+esc(fmt(x.lastLoginAt||x.updatedAt))+'</td><td><div class="u36-manage"><button class="u36-icon-btn edit" data-edit-user="'+esc(x.id)+'">✎</button><button class="u36-icon-btn key" data-key-user="'+esc(x.id)+'">⌕</button><button class="u36-icon-btn more" data-toggle-user="'+esc(x.id)+'" data-active="'+(x.isActive?'1':'0')+'">⋮</button></div></td></tr>'}).join(''):'<tr><td colspan="6" class="u36-empty">ยังไม่มีบัญชีผู้ใช้ในหน่วยงานนี้</td></tr>';qa('[data-toggle-user]',host).forEach(function(b){b.onclick=toggleUser});qa('[data-edit-user]',host).forEach(function(b){b.onclick=function(){openEditUser(this.dataset.editUser)}});qa('[data-key-user]',host).forEach(function(b){b.onclick=function(){openPassword(this.dataset.keyUser)}})}
+  function renderUsers(){
+    var host=q('#u36UsersBody');if(!host)return;
+    var m=userMap(),u=current();
+    var rows=users.filter(function(x){return (m[x.id]||m[x.userId]||m[x._id]||m[x.username]||'pacu-sk')===u.id});
+    host.innerHTML=rows.length?rows.map(function(x,i){
+      var ref=userRef(x);
+      return '<tr>'+
+        '<td><div class="u36-person"><span class="u36-avatar">'+(['👩🏻','👩🏻‍⚕️','👨🏻','👩🏼'][i%4])+'</span><span><b>'+esc(x.displayName||x.username)+'</b><small>@'+esc(x.username||'')+'</small></span></div></td>'+
+        '<td>'+esc(u.group||'งานการพยาบาล')+'</td>'+
+        '<td><span class="u36-role '+esc(x.role)+'">'+esc(roleLabel(x.role))+'</span></td>'+
+        '<td><span class="u36-status '+(x.isActive?'on':'off')+'"><i></i>'+(x.isActive?'ใช้งาน':'ปิดใช้งาน')+'</span></td>'+
+        '<td>'+esc(fmt(x.lastLoginAt||x.updatedAt))+'</td>'+
+        '<td><div class="u36-manage">'+
+          '<button type="button" class="u36-icon-btn edit" data-edit-user="'+esc(ref)+'" title="แก้ไขบัญชี" aria-label="แก้ไขบัญชี">'+actionIcon('edit')+'</button>'+
+          '<button type="button" class="u36-icon-btn view" data-view-user="'+esc(ref)+'" title="ดูข้อมูลบัญชี" aria-label="ดูข้อมูลบัญชี">'+actionIcon('view')+'</button>'+
+          '<button type="button" class="u36-toggle-btn '+(x.isActive?'close':'open')+'" data-toggle-user="'+esc(ref)+'" data-active="'+(x.isActive?'1':'0')+'" title="'+(x.isActive?'ปิดบัญชี':'เปิดบัญชี')+'">'+actionIcon(x.isActive?'off':'on')+'<span>'+(x.isActive?'ปิด':'เปิด')+'</span></button>'+
+        '</div></td></tr>'
+    }).join(''):'<tr><td colspan="6" class="u36-empty">ยังไม่มีบัญชีผู้ใช้ในหน่วยงานนี้</td></tr>';
+    qa('[data-toggle-user]',host).forEach(function(b){b.onclick=toggleUser});
+    qa('[data-edit-user]',host).forEach(function(b){b.onclick=function(){openEditUser(this.dataset.editUser)}});
+    qa('[data-view-user]',host).forEach(function(b){b.onclick=function(){openViewUser(this.dataset.viewUser)}});
+  }
   async function toggleUser(){var id=this.dataset.toggleUser,on=this.dataset.active==='1';try{await api('/api/admin/users/'+encodeURIComponent(id),{method:'PATCH',body:JSON.stringify({isActive:!on})});toast((on?'ปิด':'เปิด')+'บัญชีแล้ว');await loadUsers()}catch(e){toast('จัดการบัญชีไม่ได้: '+e.message)}}
-  function openEditUser(id){var u=users.find(function(x){return String(x.id)===String(id)});if(!u)return;q('#u36EditUserId').value=u.id;q('#u36EditDisplay').value=u.displayName||'';q('#u36EditRole').value=u.role||'viewer';q('#u36EditUnit').value=userMap()[u.id]||userMap()[u.username]||selected;q('#u36EditUserModal').classList.add('show')}
+  function openEditUser(id){var u=users.find(function(x){return userRef(x)===String(id)});if(!u){toast('ไม่พบข้อมูลบัญชีผู้ใช้');return}q('#u36EditUserId').value=userRef(u);q('#u36EditDisplay').value=u.displayName||'';q('#u36EditRole').value=u.role||'viewer';q('#u36EditUnit').value=userMap()[u.id]||userMap()[u.username]||selected;q('#u36EditUserModal').classList.add('show')}
+  function openViewUser(id){
+    var u=users.find(function(x){return userRef(x)===String(id)});
+    if(!u){toast('ไม่พบข้อมูลบัญชีผู้ใช้');return}
+    var m=userMap(),unitId=m[u.id]||m[u.userId]||m[u._id]||m[u.username]||selected;
+    var unit=loadUnits().find(function(x){return x.id===unitId})||current();
+    q('#u36ViewName').textContent=u.displayName||u.username||'-';
+    q('#u36ViewUsername').textContent='@'+(u.username||'-');
+    q('#u36ViewUnit').textContent=(unit&&unit.name)||'-';
+    q('#u36ViewRole').textContent=roleLabel(u.role);
+    q('#u36ViewStatus').textContent=u.isActive?'ใช้งาน':'ปิดใช้งาน';
+    q('#u36ViewLast').textContent=fmt(u.lastLoginAt||u.updatedAt);
+    q('#u36ViewEditBtn').dataset.userId=userRef(u);
+    q('#u36ViewUserModal').classList.add('show');
+  }
   function openPassword(id){q('#u36PassUserId').value=id;q('#u36NewPass').value='';q('#u36PasswordModal').classList.add('show')}
   async function saveEditUser(){var id=q('#u36EditUserId').value,payload={displayName:q('#u36EditDisplay').value.trim(),role:q('#u36EditRole').value};try{await api('/api/admin/users/'+encodeURIComponent(id),{method:'PATCH',body:JSON.stringify(payload)});var m=userMap();m[id]=q('#u36EditUnit').value;saveMap(m);q('#u36EditUserModal').classList.remove('show');toast('บันทึกบัญชีแล้ว');await loadUsers()}catch(e){toast('แก้ไขบัญชีไม่ได้: '+e.message)}}
   async function savePassword(){var id=q('#u36PassUserId').value,p=q('#u36NewPass').value;if(p.length<8){toast('รหัสผ่านต้องมีอย่างน้อย 8 ตัว');return}try{await api('/api/admin/users/'+encodeURIComponent(id),{method:'PATCH',body:JSON.stringify({password:p})});q('#u36PasswordModal').classList.remove('show');toast('เปลี่ยนรหัสผ่านแล้ว')}catch(e){toast('เปลี่ยนรหัสผ่านไม่ได้: '+e.message)}}
@@ -67,7 +112,8 @@
   function modals(){return '<div class="u36-modal" id="u36AddUnitModal"><div class="u36-modal-card"><div class="u36-modal-head"><b>เพิ่มหน่วยงาน</b><button data-close-modal>×</button></div><label class="u36-field">ชื่อหน่วยงาน<input id="u36AddUnitName" placeholder="ชื่อหน่วยงาน"></label><div class="u36-actions"><button class="u36-btn" data-close-modal>ยกเลิก</button><button class="u36-btn mint" id="u36SaveNewUnit">เพิ่มหน่วยงาน</button></div></div></div>'+ 
     '<div class="u36-modal" id="u36NewUserModal"><div class="u36-modal-card"><div class="u36-modal-head"><b>เพิ่มบัญชีผู้ใช้</b><button data-close-modal>×</button></div><div class="u36-grid"><label class="u36-field">Username<input id="u36NewUsername"></label><label class="u36-field">ชื่อที่แสดง<input id="u36NewDisplay"></label><label class="u36-field">รหัสผ่าน<input id="u36NewPassword" type="password" placeholder="อย่างน้อย 8 ตัว"></label><label class="u36-field">บทบาท<select id="u36NewRole"><option value="scheduler">ผู้จัดตาราง</option><option value="approver">หัวหน้าหน่วยงาน</option><option value="viewer">ผู้ดูตาราง</option><option value="admin">ผู้ดูแลระบบ</option></select></label><label class="u36-field">หน่วยงาน<select id="u36NewUnit"></select></label></div><div class="u36-actions"><button class="u36-btn" data-close-modal>ยกเลิก</button><button class="u36-btn mint" id="u36CreateUser">สร้างบัญชี</button></div></div></div>'+ 
     '<div class="u36-modal" id="u36EditUserModal"><div class="u36-modal-card"><div class="u36-modal-head"><b>แก้ไขบัญชีผู้ใช้</b><button data-close-modal>×</button></div><input id="u36EditUserId" type="hidden"><div class="u36-grid"><label class="u36-field">ชื่อที่แสดง<input id="u36EditDisplay"></label><label class="u36-field">บทบาท<select id="u36EditRole"><option value="scheduler">ผู้จัดตาราง</option><option value="approver">หัวหน้าหน่วยงาน</option><option value="viewer">ผู้ดูตาราง</option><option value="admin">ผู้ดูแลระบบ</option></select></label><label class="u36-field">หน่วยงาน<select id="u36EditUnit"></select></label></div><div class="u36-actions"><button class="u36-btn" data-close-modal>ยกเลิก</button><button class="u36-btn mint" id="u36SaveEditUser">บันทึก</button></div></div></div>'+ 
-    '<div class="u36-modal" id="u36PasswordModal"><div class="u36-modal-card"><div class="u36-modal-head"><b>ตั้งรหัสผ่านใหม่</b><button data-close-modal>×</button></div><input id="u36PassUserId" type="hidden"><label class="u36-field">รหัสผ่านใหม่<input id="u36NewPass" type="password" placeholder="อย่างน้อย 8 ตัว"></label><div class="u36-actions"><button class="u36-btn" data-close-modal>ยกเลิก</button><button class="u36-btn mint" id="u36SavePass">บันทึกรหัสผ่าน</button></div></div></div>'}
+    '<div class="u36-modal" id="u36PasswordModal"><div class="u36-modal-card"><div class="u36-modal-head"><b>ตั้งรหัสผ่านใหม่</b><button data-close-modal>×</button></div><input id="u36PassUserId" type="hidden"><label class="u36-field">รหัสผ่านใหม่<input id="u36NewPass" type="password" placeholder="อย่างน้อย 8 ตัว"></label><div class="u36-actions"><button class="u36-btn" data-close-modal>ยกเลิก</button><button class="u36-btn mint" id="u36SavePass">บันทึกรหัสผ่าน</button></div></div></div>'+
+    '<div class="u36-modal" id="u36ViewUserModal"><div class="u36-modal-card u36-view-card"><div class="u36-modal-head"><b>ข้อมูลบัญชีผู้ใช้งาน</b><button data-close-modal>×</button></div><div class="u36-view-user-head"><span class="u36-view-user-icon">'+icon('users')+'</span><div><b id="u36ViewName">-</b><small id="u36ViewUsername">@-</small></div></div><div class="u36-view-grid"><div><small>หน่วยงาน</small><b id="u36ViewUnit">-</b></div><div><small>บทบาท</small><b id="u36ViewRole">-</b></div><div><small>สถานะ</small><b id="u36ViewStatus">-</b></div><div><small>เข้าใช้ล่าสุด</small><b id="u36ViewLast">-</b></div></div><div class="u36-actions"><button class="u36-btn" data-close-modal>ปิด</button><button type="button" class="u36-btn u36-view-edit" id="u36ViewEditBtn">'+actionIcon('edit')+' แก้ไขบัญชี</button></div></div></div>'}
   function wire(){
     var sel=q('#u36UnitSelect');
     if(sel)sel.onchange=function(){selected=this.value;renderInfo();renderUsers()};
@@ -83,6 +129,11 @@
     q('#u36CreateUser').onclick=createUser;
     q('#u36SaveEditUser').onclick=saveEditUser;
     q('#u36SavePass').onclick=savePassword;
+    q('#u36ViewEditBtn').onclick=function(){
+      var id=this.dataset.userId;
+      q('#u36ViewUserModal').classList.remove('show');
+      openEditUser(id);
+    };
     qa('[data-close-modal]').forEach(function(b){b.onclick=function(){var m=this.closest('.u36-modal');if(m)m.classList.remove('show')}});
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(mount,120)});else setTimeout(mount,120);

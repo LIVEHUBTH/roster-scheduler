@@ -239,3 +239,116 @@
   cursor:pointer;
   white-space:nowrap;
 }
+
+
+/* =========================================================
+   UNIT V36.3 — MINIMAL PASTEL ICONS + WORKING EDIT/VIEW/OPEN-CLOSE
+   Scope: #page-internal only. No sidebar / other page / layout changes.
+   ========================================================= */
+
+/* Minimal SVG icons */
+#page-internal .u36-icon-btn svg,
+#page-internal .u36-toggle-btn svg,
+#page-internal .u36-view-edit svg{
+  width:15px!important;
+  height:15px!important;
+  display:block!important;
+  flex:none!important;
+}
+#page-internal .u36-icon-btn{
+  font-size:0!important;
+  box-shadow:none!important;
+}
+#page-internal .u36-icon-btn.edit{
+  color:#8b70d6!important;
+  background:#f4f0ff!important;
+  border-color:#ded5f8!important;
+}
+#page-internal .u36-icon-btn.view{
+  color:#55a7df!important;
+  background:#eef8ff!important;
+  border-color:#d4eafb!important;
+}
+
+/* Replace the old three-dot action with a clear pastel Open/Close button. */
+#page-internal .u36-toggle-btn{
+  height:28px!important;
+  min-width:54px!important;
+  padding:0 7px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:4px!important;
+  border-radius:8px!important;
+  border:1px solid!important;
+  background:#fff!important;
+  font-size:8px!important;
+  font-weight:900!important;
+  cursor:pointer!important;
+  white-space:nowrap!important;
+  box-shadow:none!important;
+}
+#page-internal .u36-toggle-btn.close{
+  color:#dd6b7b!important;
+  background:#fff2f4!important;
+  border-color:#f3d4d9!important;
+}
+#page-internal .u36-toggle-btn.open{
+  color:#36a887!important;
+  background:#eefaf6!important;
+  border-color:#d1eee5!important;
+}
+
+/* Read-only account detail modal */
+#page-internal .u36-view-card{width:min(440px,100%)!important}
+#page-internal .u36-view-user-head{
+  display:flex!important;
+  align-items:center!important;
+  gap:10px!important;
+  padding:10px!important;
+  margin-bottom:10px!important;
+  border:1px solid #eee8f0!important;
+  border-radius:12px!important;
+  background:#fdfcff!important;
+}
+#page-internal .u36-view-user-icon{
+  width:38px!important;
+  height:38px!important;
+  border-radius:11px!important;
+  display:grid!important;
+  place-items:center!important;
+  background:#fff0f6!important;
+  color:#e45f92!important;
+  flex:none!important;
+}
+#page-internal .u36-view-user-icon svg{width:20px!important;height:20px!important}
+#page-internal .u36-view-user-head b{display:block!important;font-size:12px!important;color:#33405a!important}
+#page-internal .u36-view-user-head small{display:block!important;margin-top:2px!important;font-size:8px!important;color:#9299a6!important}
+#page-internal .u36-view-grid{
+  display:grid!important;
+  grid-template-columns:1fr 1fr!important;
+  gap:8px!important;
+}
+#page-internal .u36-view-grid>div{
+  padding:9px 10px!important;
+  border:1px solid #eee9ed!important;
+  border-radius:10px!important;
+  background:#fff!important;
+}
+#page-internal .u36-view-grid small{display:block!important;font-size:8px!important;color:#9299a6!important;margin-bottom:3px!important}
+#page-internal .u36-view-grid b{font-size:9px!important;color:#4a556b!important}
+#page-internal .u36-view-edit{
+  display:inline-flex!important;
+  align-items:center!important;
+  gap:5px!important;
+  color:#805fde!important;
+  border-color:#ded5f8!important;
+  background:#f7f4ff!important;
+}
+
+/* Existing page icons stay SVG-based and receive soft pastel presentation. */
+#page-internal .u36-main-icon,
+#page-internal .u36-unit-badge,
+#page-internal .u36-stat-ico{
+  box-shadow:none!important;
+}
