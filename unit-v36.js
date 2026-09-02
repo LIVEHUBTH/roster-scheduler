@@ -39,7 +39,8 @@
       on:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.2 8.6a6.5 6.5 0 1 0 9.6 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M12 4.5v7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
       off:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.2 8.6a6.5 6.5 0 1 0 9.6 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M12 4.5v7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
       image:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="9" cy="10" r="1.6" fill="currentColor"/><path d="m6.5 17 4.1-4.2 2.7 2.5 2.3-2.2 2.4 3.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-      save:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4.5h11.5L19.5 7v12.5H5V4.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 4.5v5h7v-5M8 19v-6h8v6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>'
+      save:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4.5h11.5L19.5 7v12.5H5V4.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 4.5v5h7v-5M8 19v-6h8v6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>',
+      delete:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h14M9 7V4.8h6V7M8 10v7M12 10v7M16 10v7M7 7l.7 13h8.6L17 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>'
     };
     return m[type]||m.view;
   }
@@ -51,7 +52,7 @@
     var m=userMap(),u=current();
     var rows=users.filter(function(x){return (m[x.id]||m[x.userId]||m[x._id]||m[x.username]||'pacu-sk')===u.id});
     host.innerHTML=rows.length?rows.map(function(x,i){
-      var ref=userRef(x);
+      var ref=userRef(x),gi=users.indexOf(x);
       return '<tr>'+
         '<td><div class="u36-person"><span class="u36-avatar">'+(['👩🏻','👩🏻‍⚕️','👨🏻','👩🏼'][i%4])+'</span><span><b>'+esc(x.displayName||x.username)+'</b><small>@'+esc(x.username||'')+'</small></span></div></td>'+
         '<td>'+esc(u.group||'งานการพยาบาล')+'</td>'+
@@ -59,14 +60,16 @@
         '<td><span class="u36-status '+(x.isActive?'on':'off')+'"><i></i>'+(x.isActive?'ใช้งาน':'ปิดใช้งาน')+'</span></td>'+
         '<td>'+esc(fmt(x.lastLoginAt||x.updatedAt))+'</td>'+
         '<td><div class="u36-manage">'+
-          '<button type="button" class="u36-icon-btn edit" data-edit-user="'+esc(ref)+'" data-user-index="'+i+'" title="แก้ไขบัญชี" aria-label="แก้ไขบัญชี">'+actionIcon('edit')+'</button>'+
-          '<button type="button" class="u36-icon-btn view" data-view-user="'+esc(ref)+'" data-user-index="'+i+'" title="ดูข้อมูลบัญชี" aria-label="ดูข้อมูลบัญชี">'+actionIcon('view')+'</button>'+
+          '<button type="button" class="u36-icon-btn edit" data-edit-user="'+esc(ref)+'" data-user-index="'+gi+'" title="แก้ไขบัญชี" aria-label="แก้ไขบัญชี">'+actionIcon('edit')+'</button>'+
+          '<button type="button" class="u36-icon-btn view" data-view-user="'+esc(ref)+'" data-user-index="'+gi+'" title="ดูข้อมูลบัญชี" aria-label="ดูข้อมูลบัญชี">'+actionIcon('view')+'</button>'+
+          '<button type="button" class="u36-icon-btn delete" data-delete-user="'+esc(ref)+'" data-user-index="'+gi+'" title="ลบบัญชีผู้ใช้" aria-label="ลบบัญชีผู้ใช้">'+actionIcon('delete')+'</button>'+
           '<button type="button" class="u36-toggle-btn '+(x.isActive?'close':'open')+'" data-toggle-user="'+esc(ref)+'" data-active="'+(x.isActive?'1':'0')+'" title="'+(x.isActive?'ปิดบัญชี':'เปิดบัญชี')+'">'+actionIcon(x.isActive?'off':'on')+'<span>'+(x.isActive?'ปิด':'เปิด')+'</span></button>'+
         '</div></td></tr>'
     }).join(''):'<tr><td colspan="6" class="u36-empty">ยังไม่มีบัญชีผู้ใช้ในหน่วยงานนี้</td></tr>';
     qa('[data-toggle-user]',host).forEach(function(b){b.onclick=toggleUser});
     qa('[data-edit-user]',host).forEach(function(b){b.onclick=function(ev){if(ev){ev.preventDefault();ev.stopPropagation()}openEditFromButton(this)}});
     qa('[data-view-user]',host).forEach(function(b){b.onclick=function(ev){if(ev){ev.preventDefault();ev.stopPropagation()}openViewFromButton(this)}});
+    qa('[data-delete-user]',host).forEach(function(b){b.onclick=function(ev){if(ev){ev.preventDefault();ev.stopPropagation()}deleteUserFromButton(this)}});
   }
   function userByIndex(v){
     var i=parseInt(v,10);
@@ -98,8 +101,29 @@
     q('#u36ViewEditBtn').dataset.userIndex=btn.dataset.userIndex;
     q('#u36ViewUserModal').classList.add('show');
   }
+  async function deleteUserFromButton(btn){
+    var u=userByIndex(btn&&btn.dataset.userIndex);
+    if(!u){
+      var ref=btn&&btn.dataset.deleteUser;
+      u=users.find(function(x){return userRef(x)===String(ref)});
+    }
+    if(!u){toast('ไม่พบข้อมูลบัญชีผู้ใช้');return}
+    var id=userRef(u),label=u.displayName||u.username||'บัญชีนี้';
+    if(!id){toast('บัญชีนี้ไม่มีรหัสผู้ใช้สำหรับลบ');return}
+    if(!window.confirm('ลบบัญชี '+label+' ใช่หรือไม่?\nการลบไม่สามารถย้อนกลับได้'))return;
+    try{
+      await api('/api/admin/users/'+encodeURIComponent(id),{method:'DELETE'});
+      var m=userMap();
+      [u.id,u.userId,u._id,u.username,id].forEach(function(k){if(k!=null)delete m[k]});
+      saveMap(m);
+      toast('ลบบัญชีผู้ใช้แล้ว');
+      await loadUsers();
+    }catch(e){
+      toast('ลบบัญชีไม่ได้: '+e.message);
+    }
+  }
   async function toggleUser(){var id=this.dataset.toggleUser,on=this.dataset.active==='1';try{await api('/api/admin/users/'+encodeURIComponent(id),{method:'PATCH',body:JSON.stringify({isActive:!on})});toast((on?'ปิด':'เปิด')+'บัญชีแล้ว');await loadUsers()}catch(e){toast('จัดการบัญชีไม่ได้: '+e.message)}}
-  function openEditUser(id){var u=users.find(function(x){return userRef(x)===String(id)});if(!u){toast('ไม่พบข้อมูลบัญชีผู้ใช้');return}q('#u36EditUserId').value=userRef(u);q('#u36EditDisplay').value=u.displayName||'';q('#u36EditRole').value=u.role||'viewer';q('#u36EditUnit').value=userMap()[u.id]||userMap()[u.username]||selected;q('#u36EditUserModal').classList.add('show')}
+  function openEditUser(id){var u=users.find(function(x){return userRef(x)===String(id)});if(!u){toast('ไม่พบข้อมูลบัญชีผู้ใช้');return}q('#u36EditUserId').value=userRef(u);q('#u36EditDisplay').value=u.displayName||'';q('#u36EditRole').value=u.role||'viewer';var mm=userMap();q('#u36EditUnit').value=mm[u.id]||mm[u.userId]||mm[u._id]||mm[u.username]||selected;q('#u36EditUserModal').classList.add('show')}
   function openViewUser(id){
     var u=users.find(function(x){return userRef(x)===String(id)});
     if(!u){toast('ไม่พบข้อมูลบัญชีผู้ใช้');return}
@@ -180,6 +204,8 @@
         if(edit){ev.preventDefault();ev.stopImmediatePropagation();openEditFromButton(edit);return}
         var view=ev.target.closest&&ev.target.closest('[data-view-user]');
         if(view){ev.preventDefault();ev.stopImmediatePropagation();openViewFromButton(view);return}
+        var del=ev.target.closest&&ev.target.closest('[data-delete-user]');
+        if(del){ev.preventDefault();ev.stopImmediatePropagation();deleteUserFromButton(del);return}
       },true);
     }
   }

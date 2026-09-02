@@ -403,3 +403,30 @@
   display:block!important;
   pointer-events:none!important;
 }
+
+
+/* =========================================================
+   UNIT V36.5 — FIX EDIT/VIEW MODALS + DELETE USER BUTTON ONLY
+   Scope: #page-internal only. No sidebar / other page / layout changes.
+   ========================================================= */
+#page-internal .u36-modal.show{
+  display:flex!important;
+}
+#page-internal .u36-icon-btn{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:0!important;
+}
+#page-internal .u36-icon-btn svg{
+  width:15px!important;
+  height:15px!important;
+  display:block!important;
+  margin:0!important;
+  pointer-events:none!important;
+}
+#page-internal .u36-icon-btn.delete{
+  color:#df6c82!important;
+  background:#fff2f5!important;
+  border-color:#f2d2da!important;
+}
