@@ -189,7 +189,7 @@
     wrap.style.position='fixed';
     wrap.style.left='-12000px';
     wrap.style.top='0';
-    wrap.style.width='1800px';
+    wrap.style.width='1804px';
     wrap.style.background='#fff';
     wrap.style.padding='0';
     wrap.innerHTML='<div class="h33-pdf-title">ตารางเวร เดือน'+esc(MONTHS[r.month])+' พ.ศ. '+esc(r.year)+'</div>'+buildHistoryRosterTableHtml(r,true);
@@ -211,12 +211,16 @@
         var shade=row.classList.contains('sat')||row.classList.contains('sun')||row.classList.contains('holiday');
         row.querySelectorAll('td').forEach(function(td){td.style.background=shade?'#e6e6e6':'#fff';td.style.color='#111'});
       });
+      table.querySelectorAll('tr').forEach(function(row){
+        var last=row.lastElementChild;
+        if(last){last.style.borderRight='1.5px solid #888';last.style.boxSizing='border-box'}
+      });
     }
     var title=wrap.querySelector('.h33-pdf-title');
-    if(title){title.style.textAlign='center';title.style.fontWeight='800';title.style.fontSize='23px';title.style.lineHeight='1.1';title.style.padding='4px 0 8px';title.style.color='#111'}
+    if(title){title.style.display='flex';title.style.alignItems='center';title.style.justifyContent='center';title.style.width='1800px';title.style.margin='0';title.style.textAlign='center';title.style.fontWeight='800';title.style.fontSize='23px';title.style.lineHeight='1.1';title.style.padding='4px 0 8px';title.style.color='#111';title.style.boxSizing='border-box'}
     var meta=wrap.querySelector('.h33-roster-meta');if(meta)meta.style.display='none';
-    var sheet=wrap.querySelector('.h33-roster-sheet');if(sheet){sheet.style.padding='0';sheet.style.border='0';sheet.style.borderRadius='0';sheet.style.width='1800px';sheet.style.maxWidth='none'}
-    var tw=wrap.querySelector('.h33-roster-table-wrap');if(tw){tw.style.overflow='visible';tw.style.border='0';tw.style.borderRadius='0';tw.style.width='1800px';tw.style.maxWidth='none'}
+    var sheet=wrap.querySelector('.h33-roster-sheet');if(sheet){sheet.style.padding='0';sheet.style.border='0';sheet.style.borderRadius='0';sheet.style.width='1800px';sheet.style.maxWidth='none';sheet.style.margin='0'}
+    var tw=wrap.querySelector('.h33-roster-table-wrap');if(tw){tw.style.overflow='visible';tw.style.border='0';tw.style.borderRadius='0';tw.style.width='1800px';tw.style.maxWidth='none';tw.style.margin='0'}
     var note=wrap.querySelector('.h33-full-roster-note');if(note){note.style.marginTop='6px';note.style.fontSize='13px';note.style.lineHeight='1.25';note.style.color='#111';note.style.textAlign='left'}
     document.body.appendChild(wrap);
     return wrap;
@@ -240,7 +244,7 @@
     var wrap=prepareHistoryRosterPdfNode(r),table=wrap.querySelector('table');
     requestAnimationFrame(function(){
       autoFillHistoryPdfHeight(wrap,table);
-      html2canvas(wrap,{scale:2,useCORS:true,backgroundColor:'#fff',logging:false,windowWidth:1800,width:1800}).then(function(canvas){
+      html2canvas(wrap,{scale:2,useCORS:true,backgroundColor:'#fff',logging:false,windowWidth:1804,width:1804}).then(function(canvas){
         var pdf=new window.jspdf.jsPDF({orientation:'landscape',unit:'mm',format:'a4',compress:true});
         var pw=pdf.internal.pageSize.getWidth(),ph=pdf.internal.pageSize.getHeight();
         var left=10,top=10,right=10,bottom=10,maxW=pw-left-right,maxH=ph-top-bottom;
