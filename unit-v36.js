@@ -37,7 +37,9 @@
       edit:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 18.5l3.6-.8 8.5-8.5-2.8-2.8-8.5 8.5-.8 3.6Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m12.9 6.4 2.8 2.8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
       view:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="5.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m15 15 4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
       on:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.2 8.6a6.5 6.5 0 1 0 9.6 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M12 4.5v7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
-      off:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.2 8.6a6.5 6.5 0 1 0 9.6 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M12 4.5v7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>'
+      off:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.2 8.6a6.5 6.5 0 1 0 9.6 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M12 4.5v7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
+      image:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="9" cy="10" r="1.6" fill="currentColor"/><path d="m6.5 17 4.1-4.2 2.7 2.5 2.3-2.2 2.4 3.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+      save:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4.5h11.5L19.5 7v12.5H5V4.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 4.5v5h7v-5M8 19v-6h8v6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>'
     };
     return m[type]||m.view;
   }
@@ -57,14 +59,44 @@
         '<td><span class="u36-status '+(x.isActive?'on':'off')+'"><i></i>'+(x.isActive?'ใช้งาน':'ปิดใช้งาน')+'</span></td>'+
         '<td>'+esc(fmt(x.lastLoginAt||x.updatedAt))+'</td>'+
         '<td><div class="u36-manage">'+
-          '<button type="button" class="u36-icon-btn edit" data-edit-user="'+esc(ref)+'" title="แก้ไขบัญชี" aria-label="แก้ไขบัญชี">'+actionIcon('edit')+'</button>'+
-          '<button type="button" class="u36-icon-btn view" data-view-user="'+esc(ref)+'" title="ดูข้อมูลบัญชี" aria-label="ดูข้อมูลบัญชี">'+actionIcon('view')+'</button>'+
+          '<button type="button" class="u36-icon-btn edit" data-edit-user="'+esc(ref)+'" data-user-index="'+i+'" title="แก้ไขบัญชี" aria-label="แก้ไขบัญชี">'+actionIcon('edit')+'</button>'+
+          '<button type="button" class="u36-icon-btn view" data-view-user="'+esc(ref)+'" data-user-index="'+i+'" title="ดูข้อมูลบัญชี" aria-label="ดูข้อมูลบัญชี">'+actionIcon('view')+'</button>'+
           '<button type="button" class="u36-toggle-btn '+(x.isActive?'close':'open')+'" data-toggle-user="'+esc(ref)+'" data-active="'+(x.isActive?'1':'0')+'" title="'+(x.isActive?'ปิดบัญชี':'เปิดบัญชี')+'">'+actionIcon(x.isActive?'off':'on')+'<span>'+(x.isActive?'ปิด':'เปิด')+'</span></button>'+
         '</div></td></tr>'
     }).join(''):'<tr><td colspan="6" class="u36-empty">ยังไม่มีบัญชีผู้ใช้ในหน่วยงานนี้</td></tr>';
     qa('[data-toggle-user]',host).forEach(function(b){b.onclick=toggleUser});
-    qa('[data-edit-user]',host).forEach(function(b){b.onclick=function(){openEditUser(this.dataset.editUser)}});
-    qa('[data-view-user]',host).forEach(function(b){b.onclick=function(){openViewUser(this.dataset.viewUser)}});
+    qa('[data-edit-user]',host).forEach(function(b){b.onclick=function(ev){if(ev){ev.preventDefault();ev.stopPropagation()}openEditFromButton(this)}});
+    qa('[data-view-user]',host).forEach(function(b){b.onclick=function(ev){if(ev){ev.preventDefault();ev.stopPropagation()}openViewFromButton(this)}});
+  }
+  function userByIndex(v){
+    var i=parseInt(v,10);
+    return Number.isFinite(i)&&i>=0&&i<users.length?users[i]:null;
+  }
+  function openEditFromButton(btn){
+    var u=userByIndex(btn&&btn.dataset.userIndex);
+    if(!u){openEditUser(btn&&btn.dataset.editUser);return}
+    populateUnitSelects();
+    q('#u36EditUserId').value=userRef(u);
+    q('#u36EditDisplay').value=u.displayName||'';
+    q('#u36EditRole').value=u.role||'viewer';
+    var m=userMap();
+    q('#u36EditUnit').value=m[u.id]||m[u.userId]||m[u._id]||m[u.username]||selected;
+    q('#u36EditUserModal').classList.add('show');
+  }
+  function openViewFromButton(btn){
+    var u=userByIndex(btn&&btn.dataset.userIndex);
+    if(!u){openViewUser(btn&&btn.dataset.viewUser);return}
+    var m=userMap(),unitId=m[u.id]||m[u.userId]||m[u._id]||m[u.username]||selected;
+    var unit=loadUnits().find(function(x){return x.id===unitId})||current();
+    q('#u36ViewName').textContent=u.displayName||u.username||'-';
+    q('#u36ViewUsername').textContent='@'+(u.username||'-');
+    q('#u36ViewUnit').textContent=(unit&&unit.name)||'-';
+    q('#u36ViewRole').textContent=roleLabel(u.role);
+    q('#u36ViewStatus').textContent=u.isActive?'ใช้งาน':'ปิดใช้งาน';
+    q('#u36ViewLast').textContent=fmt(u.lastLoginAt||u.updatedAt);
+    q('#u36ViewEditBtn').dataset.userId=userRef(u);
+    q('#u36ViewEditBtn').dataset.userIndex=btn.dataset.userIndex;
+    q('#u36ViewUserModal').classList.add('show');
   }
   async function toggleUser(){var id=this.dataset.toggleUser,on=this.dataset.active==='1';try{await api('/api/admin/users/'+encodeURIComponent(id),{method:'PATCH',body:JSON.stringify({isActive:!on})});toast((on?'ปิด':'เปิด')+'บัญชีแล้ว');await loadUsers()}catch(e){toast('จัดการบัญชีไม่ได้: '+e.message)}}
   function openEditUser(id){var u=users.find(function(x){return userRef(x)===String(id)});if(!u){toast('ไม่พบข้อมูลบัญชีผู้ใช้');return}q('#u36EditUserId').value=userRef(u);q('#u36EditDisplay').value=u.displayName||'';q('#u36EditRole').value=u.role||'viewer';q('#u36EditUnit').value=userMap()[u.id]||userMap()[u.username]||selected;q('#u36EditUserModal').classList.add('show')}
@@ -106,7 +138,7 @@
     '<div class="u36-stats"><div class="u36-stat purple"><span class="u36-stat-ico">'+icon('building')+'</span><div><small>หน่วยงานทั้งหมด</small><b id="u36StatUnits">7</b></div></div><div class="u36-stat pink"><span class="u36-stat-ico">'+icon('users')+'</span><div><small>ผู้ใช้งานทั้งหมด</small><b id="u36StatUsers">0</b></div></div><div class="u36-stat mint"><span class="u36-stat-ico">'+icon('users')+'</span><div><small>กำลังใช้งาน</small><b id="u36StatActive">0</b></div></div><div class="u36-stat orange"><span class="u36-stat-ico">'+icon('clock')+'</span><div><small>รอเปิดใช้งาน</small><b id="u36StatPending">0</b></div></div></div>'+
     '<section class="u36-card u36-info-card"><div class="u36-content-head"><div class="u36-title-row"><span class="u36-unit-badge">'+icon('bed')+'</span><div><h3 id="u36SelectedName">PACU SK</h3><p id="u36SelectedMeta">งานการพยาบาล • ผู้ใช้งาน 0 คน</p></div></div><div class="u36-head-actions"><select id="u36UnitSelect" class="u36-unit-select" aria-label="เลือกหน่วยงาน"></select><button class="u36-add-unit-inline" id="u36AddUnitBtn">＋ เพิ่มหน่วยงาน</button><button class="u36-edit-btn" id="u36EditInfoBtn">✎ แก้ไขข้อมูล</button><button class="u36-delete-unit-btn" id="u36DeleteUnitBtn">⌫ ลบหน่วยงาน</button></div></div>'+
     '<div class="u36-section-title"><b>ข้อมูลหน่วยงาน</b></div>'+
-    '<div class="u36-form"><div class="u36-grid"><label class="u36-field">ชื่อหน่วยงาน / กลุ่มงาน<input id="u36_name" placeholder="เช่น กลุ่มงานวิสัญญีวิทยา"></label><label class="u36-field">โรงพยาบาล / องค์กร<input id="u36_organization" placeholder="ชื่อโรงพยาบาลหรือองค์กร"></label><label class="u36-field">หัวหน้าหน่วยงาน<input id="u36_head" placeholder="ชื่อหัวหน้าหน่วยงาน"></label><label class="u36-field">ผู้รับผิดชอบจัดตารางเวร<input id="u36_scheduler" placeholder="ชื่อผู้จัดตารางเวร"></label><label class="u36-field">โทรศัพท์ / เบอร์ติดต่อ<input id="u36_phone" placeholder="ไม่บังคับ"></label><label class="u36-field">อีเมล / ช่องทางติดต่อ<input id="u36_contact" placeholder="ไม่บังคับ"></label></div><div class="u36-logo-row"><div class="u36-logo-preview"><span id="u36LogoPh">🏥</span><img id="u36LogoImg" style="display:none"></div><div class="u36-logo-copy"><b>โลโก้หน่วยงาน</b><small>รองรับรูปภาพจาก Photos/Files</small><button class="u36-btn pink" id="u36ChooseLogoBtn">▧ เลือกรูปโลโก้</button><input id="u36LogoFile" type="file" accept="image/*" hidden></div></div><div class="u36-actions"><button class="u36-btn" id="u36CancelInfo">ยกเลิก</button><button class="u36-btn mint" id="u36SaveInfo">▣ บันทึกข้อมูลหน่วยงาน</button></div></div></section>'+
+    '<div class="u36-form"><div class="u36-grid"><label class="u36-field">ชื่อหน่วยงาน / กลุ่มงาน<input id="u36_name" placeholder="เช่น กลุ่มงานวิสัญญีวิทยา"></label><label class="u36-field">โรงพยาบาล / องค์กร<input id="u36_organization" placeholder="ชื่อโรงพยาบาลหรือองค์กร"></label><label class="u36-field">หัวหน้าหน่วยงาน<input id="u36_head" placeholder="ชื่อหัวหน้าหน่วยงาน"></label><label class="u36-field">ผู้รับผิดชอบจัดตารางเวร<input id="u36_scheduler" placeholder="ชื่อผู้จัดตารางเวร"></label><label class="u36-field">โทรศัพท์ / เบอร์ติดต่อ<input id="u36_phone" placeholder="ไม่บังคับ"></label><label class="u36-field">อีเมล / ช่องทางติดต่อ<input id="u36_contact" placeholder="ไม่บังคับ"></label></div><div class="u36-logo-row"><div class="u36-logo-preview"><span id="u36LogoPh">🏥</span><img id="u36LogoImg" style="display:none"></div><div class="u36-logo-copy"><b>โลโก้หน่วยงาน</b><small>รองรับรูปภาพจาก Photos/Files</small><button class="u36-btn pink u36-logo-pick-btn" id="u36ChooseLogoBtn">'+actionIcon('image')+'<span>เลือกรูปโลโก้</span></button><input id="u36LogoFile" type="file" accept="image/*" hidden></div></div><div class="u36-actions"><button class="u36-btn" id="u36CancelInfo">ยกเลิก</button><button class="u36-btn mint u36-save-info-btn" id="u36SaveInfo">'+actionIcon('save')+'<span>บันทึกข้อมูลหน่วยงาน</span></button></div></div></section>'+
     '<section class="u36-card u36-accounts-card"><div class="u36-account-head"><div><h3>จัดการบัญชีผู้ใช้งาน</h3><p>บัญชีผู้ใช้งานของหน่วยงานที่เลือก</p></div><button id="u36AddUserBtn">＋ เพิ่มบัญชีผู้ใช้</button></div><div class="u36-table-wrap"><table class="u36-table"><thead><tr><th>ผู้ใช้งาน</th><th>หน่วยงาน</th><th>บทบาท</th><th>สถานะ</th><th>เข้าใช้ล่าสุด</th><th>จัดการ</th></tr></thead><tbody id="u36UsersBody"></tbody></table></div></section>'+
     modals()+'<div class="u36-toast" id="u36Toast"></div>'}
   function modals(){return '<div class="u36-modal" id="u36AddUnitModal"><div class="u36-modal-card"><div class="u36-modal-head"><b>เพิ่มหน่วยงาน</b><button data-close-modal>×</button></div><label class="u36-field">ชื่อหน่วยงาน<input id="u36AddUnitName" placeholder="ชื่อหน่วยงาน"></label><div class="u36-actions"><button class="u36-btn" data-close-modal>ยกเลิก</button><button class="u36-btn mint" id="u36SaveNewUnit">เพิ่มหน่วยงาน</button></div></div></div>'+ 
@@ -129,12 +161,27 @@
     q('#u36CreateUser').onclick=createUser;
     q('#u36SaveEditUser').onclick=saveEditUser;
     q('#u36SavePass').onclick=savePassword;
-    q('#u36ViewEditBtn').onclick=function(){
-      var id=this.dataset.userId;
+    q('#u36ViewEditBtn').onclick=function(ev){
+      if(ev){ev.preventDefault();ev.stopPropagation()}
+      var i=this.dataset.userIndex;
       q('#u36ViewUserModal').classList.remove('show');
-      openEditUser(id);
+      if(i!==undefined&&i!==''){
+        openEditFromButton({dataset:{userIndex:i,editUser:this.dataset.userId}});
+      }else{
+        openEditUser(this.dataset.userId);
+      }
     };
     qa('[data-close-modal]').forEach(function(b){b.onclick=function(){var m=this.closest('.u36-modal');if(m)m.classList.remove('show')}});
+    var page=q('#page-internal');
+    if(page&&!page.dataset.u364Actions){
+      page.dataset.u364Actions='1';
+      page.addEventListener('click',function(ev){
+        var edit=ev.target.closest&&ev.target.closest('[data-edit-user]');
+        if(edit){ev.preventDefault();ev.stopImmediatePropagation();openEditFromButton(edit);return}
+        var view=ev.target.closest&&ev.target.closest('[data-view-user]');
+        if(view){ev.preventDefault();ev.stopImmediatePropagation();openViewFromButton(view);return}
+      },true);
+    }
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(mount,120)});else setTimeout(mount,120);
 })();

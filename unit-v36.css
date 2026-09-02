@@ -352,3 +352,54 @@
 #page-internal .u36-stat-ico{
   box-shadow:none!important;
 }
+
+
+/* =========================================================
+   UNIT V36.4 — PASTEL LOGO/SAVE ICONS + WORKING CENTERED USER ACTIONS ONLY
+   Scope: #page-internal only. No sidebar / other page / layout changes.
+   ========================================================= */
+
+#page-internal #u36ChooseLogoBtn.u36-logo-pick-btn{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:6px!important;
+  color:#df5c90!important;
+  background:#fff3f7!important;
+  border-color:#f2cfdd!important;
+}
+#page-internal #u36ChooseLogoBtn.u36-logo-pick-btn svg{
+  width:15px!important;height:15px!important;display:block!important;flex:none!important
+}
+
+#page-internal #u36SaveInfo.u36-save-info-btn{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:6px!important;
+  color:#35a887!important;
+  background:#eefaf6!important;
+  border-color:#cfece3!important;
+}
+#page-internal #u36SaveInfo.u36-save-info-btn svg{
+  width:15px!important;height:15px!important;display:block!important;flex:none!important
+}
+
+#page-internal .u36-manage{align-items:center!important}
+#page-internal .u36-icon-btn.edit,
+#page-internal .u36-icon-btn.view{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:0!important;
+  line-height:1!important;
+  text-align:center!important;
+}
+#page-internal .u36-icon-btn.edit svg,
+#page-internal .u36-icon-btn.view svg{
+  width:15px!important;
+  height:15px!important;
+  margin:0!important;
+  display:block!important;
+  pointer-events:none!important;
+}
