@@ -197,3 +197,45 @@
   #page-internal .u36-info-card,
   #page-internal .u36-accounts-card{padding:14px}
 }
+
+
+/* =========================================================
+   UNIT V36.2 — EXPAND PAGE AREA + MOVE HEADER UP + UNIT DELETE ONLY
+   Scope: #page-internal only. No sidebar / other page / breakpoint changes.
+   ========================================================= */
+
+/* Expand the unit-management working area to the available page frame
+   and move the page heading upward to the requested red guide. */
+#page-internal{
+  padding:6px 8px 10px!important;
+}
+#page-internal .u36-app{
+  width:100%!important;
+  max-width:none!important;
+  margin:0!important;
+  padding:0!important;
+}
+#page-internal .u36-head{
+  margin-top:0!important;
+  margin-bottom:10px!important;
+}
+#page-internal .u36-stats,
+#page-internal .u36-info-card,
+#page-internal .u36-accounts-card{
+  width:100%!important;
+  max-width:none!important;
+}
+
+/* Functional delete-unit action, kept inside this page only. */
+#page-internal .u36-delete-unit-btn{
+  height:34px;
+  padding:0 12px;
+  border:1px solid #f2ccd5;
+  border-radius:9px;
+  background:#fff7f8;
+  color:#d95d73;
+  font-size:9px;
+  font-weight:900;
+  cursor:pointer;
+  white-space:nowrap;
+}
