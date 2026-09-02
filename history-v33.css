@@ -661,3 +661,11 @@ body > .h33-viewer.h33-history-modal-global .h33-holiday-name{
 }
 .h33-pdf-capture .h33-full-roster-table tr.holiday td{background:#e6e6e6!important}
 .h33-pdf-capture .h33-holiday-name{display:block!important;font-size:8px!important;line-height:1!important;font-weight:800!important;color:#111!important;white-space:nowrap!important;overflow:hidden!important}
+
+/* =========================================================
+   HISTORY V33.17 — REMOVE FILTER CARD TOP SEPARATOR ONLY
+   Scope: #page-history only. No sidebar / other pages / layout changes.
+   ========================================================= */
+#page-history .h33-filter-card{
+  border-top:0!important;
+}
