@@ -669,3 +669,20 @@ body > .h33-viewer.h33-history-modal-global .h33-holiday-name{
 #page-history .h33-filter-card{
   border-top:0!important;
 }
+
+
+/* =========================================================
+   HISTORY V33.18 — REMOVE ONLY THE EXTRA HEADER SEPARATOR
+   Scope: #page-history only.
+   Keep the filter-card frame intact; no sidebar/layout changes.
+   ========================================================= */
+#page-history .h33-page-head{
+  border-bottom:0!important;
+  box-shadow:none!important;
+}
+
+/* V33.17 removed the card's top edge while chasing the separator.
+   Restore the actual filter-card frame so only the extra line is gone. */
+#page-history .h33-filter-card{
+  border-top:1px solid var(--h-line)!important;
+}
