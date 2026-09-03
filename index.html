@@ -2589,15 +2589,22 @@ body.p306-people-open .p306-topbar-title{
 }
 </style>
 
-<style id="people-v307-remove-white-outer-cards-only">
-/* PEOPLE V30.7 — remove ONLY the two white outer frames indicated by user.
-   Inner statistic cards, filters, table, colors, spacing, functions and layout stay unchanged. */
-#page-people .p30-summary-card,
-#page-people .p30-table-card{
+
+<style id="people-v308-pink-background-around-sections-only">
+/* PEOPLE V30.8 — restore summary frame; remove only white page surface indicated by arrows.
+   Inner cards, summary frame, table frame, colors, spacing, functions and responsive layout stay unchanged. */
+
+#page-people,
+#page-people .p30-shell{
   background:transparent!important;
   background-image:none!important;
-  border-color:transparent!important;
-  box-shadow:none!important;
+}
+
+/* Do not alter the summary/table cards themselves. Explicitly neutralize V30.7 behavior if cached CSS persists. */
+#page-people .p30-summary-card,
+#page-people .p30-table-card{
+  border-color:revert;
+  box-shadow:revert;
 }
 </style>
 </head>
