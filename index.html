@@ -2944,64 +2944,58 @@ body.p306-people-open #page-people.active{
 }
 </style>
 
-<style id="global-v384-home-visual-width-match-people-only">
+<style id="global-v385-home-exact-people-edges-only">
 /* =========================================================
-   GLOBAL V38.4 — HOME VISUAL WIDTH = PEOPLE REFERENCE
-   Requested correction only.
+   GLOBAL V38.5 — HOME OUTER SIZE ONLY
 
-   From the supplied same-phone screenshots:
-   - PEOPLE visible frame uses about 95% of the available width.
-   - HOME visible frame uses only about 86%.
-   => HOME is visually about 10% too narrow.
+   Root cause found:
+   home-v27.css uses higher-specificity selectors:
+     html body #page-home
+     html body #page-home .v244-home-shell
+   Therefore earlier #page-home overrides could lose even with !important.
 
-   iPad HOME also remains smaller because of legacy scale(.86).
-
-   This patch changes ONLY Home outer visual width.
-   It does NOT target Sidebar, other pages, inner grids/cards/functions.
+   This patch uses the SAME/HIGHER specificity and changes ONLY
+   Home outer width / horizontal margins / horizontal padding.
+   People is the reference:
+     width:100%; max-width:1480px; margin:0 auto; padding-left/right:0
    ========================================================= */
 
-/* PHONE — enlarge only the outer Home canvas to the same visual edge as People.
-   110.5% is the measured correction from the supplied screenshots.
-   Center the extra width equally left/right. */
-@media (max-width:700px){
-  #page-home{
-    width:110.5%!important;
-    max-width:none!important;
-    margin-left:-5.25%!important;
-    margin-right:-5.25%!important;
-    padding-left:0!important;
-    padding-right:0!important;
-    box-sizing:border-box!important;
-  }
-
-  #page-home .v244-home-shell{
-    width:100%!important;
-    max-width:none!important;
-    margin:0!important;
-    padding-left:0!important;
-    padding-right:0!important;
-    transform:none!important;
-    transform-origin:top left!important;
-  }
+/* ALL VIEWPORTS — exact People outer edge */
+html body #page-home{
+  box-sizing:border-box!important;
+  width:100%!important;
+  max-width:1480px!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+  padding-left:0!important;
+  padding-right:0!important;
 }
 
-/* iPAD — legacy scale(.86) is the reason Home is still visibly smaller.
-   Remove ONLY that uniform scale and return Home to the same 100% visual width
-   as People. Existing Home grids, card sizes, responsive breakpoints and
-   vertical behavior remain otherwise untouched. */
-@media (min-width:701px) and (max-width:1100px){
-  #page-home{
+/* Home shell fills that exact page width.
+   Do not alter its internal grid/rows/gaps/heights. */
+html body #page-home .v244-home-shell{
+  box-sizing:border-box!important;
+  width:100%!important;
+  max-width:100%!important;
+  margin-left:0!important;
+  margin-right:0!important;
+  padding-left:0!important;
+  padding-right:0!important;
+  transform:none!important;
+  transform-origin:top left!important;
+}
+
+/* PHONE — same outer edge behavior as People */
+@media (max-width:599px){
+  html body #page-home{
     width:100%!important;
-    max-width:1480px!important;
-    margin-left:auto!important;
-    margin-right:auto!important;
+    max-width:none!important;
+    margin-left:0!important;
+    margin-right:0!important;
     padding-left:0!important;
     padding-right:0!important;
   }
-
-  #page-home .v244-home-shell{
-    transform:none!important;
-    transform-origin:top left!important;
+  html body #page-home .v244-home-shell{
     width:100%!important;
     max-width:100%!important;
     margin-left:0!important;
@@ -3009,22 +3003,37 @@ body.p306-people-open #page-people.active{
   }
 }
 
-/* Desktop — keep the same People outer-width reference; no scaling. */
-@media (min-width:1101px){
-  #page-home{
+/* iPad portrait — remove Home's old "100% - 18px" width only */
+@media (min-width:600px) and (max-width:833px){
+  html body #page-home{
     width:100%!important;
     max-width:1480px!important;
     margin-left:auto!important;
     margin-right:auto!important;
-  }
-  #page-home .v244-home-shell{
-    transform:none!important;
-    width:100%!important;
-    max-width:100%!important;
+    padding-left:0!important;
+    padding-right:0!important;
   }
 }
 
-/* Preserve requested white-strip cleanup on every page root. */
+/* iPad landscape + desktop — full available content width, capped like People */
+@media (min-width:834px){
+  html body #page-home{
+    width:100%!important;
+    max-width:1480px!important;
+    margin-left:auto!important;
+    margin-right:auto!important;
+    padding-left:0!important;
+    padding-right:0!important;
+  }
+  html body #page-home .v244-home-shell{
+    width:100%!important;
+    max-width:100%!important;
+    margin-left:0!important;
+    margin-right:0!important;
+  }
+}
+
+/* Keep the requested page-root white strip cleanup. */
 :is(
   #page-home.active,
   #page-roster.active,
@@ -3040,7 +3049,7 @@ body.p306-people-open #page-people.active{
   clip-path:none!important;
 }
 
-/* People remains the reference and stays transparent. */
+/* People stays transparent exactly as requested. */
 #page-people,
 #page-people.active,
 #page-people .p30-shell{
