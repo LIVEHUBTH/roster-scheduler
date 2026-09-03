@@ -2392,6 +2392,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 <link rel="stylesheet" href="summary-v34.css?v=34.8">
 <link rel="stylesheet" href="sidebar-v35.css?v=35.5.14.5-ipad-desktop-mascot-8mm-gap">
   <link rel="stylesheet" href="unit-v36.css?v=36.6">
+<link rel="stylesheet" href="settings-v37.css?v=37.0">
 </head>
 <body>
 
@@ -3483,77 +3484,183 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 </section>
 
 <section class="page-view" id="page-settings" data-view="settings">
-  <div class="v24-page-title"><div><h2>⚙ ตั้งค่าโปรแกรม</h2><p>ปรับแต่งการทำงานของโปรแกรมให้เหมาะกับความต้องการ</p></div></div>
-  <div class="v24-settings-tabs"><button class="active">⚙ ทั่วไป</button><button>▦ รูปแบบตาราง</button><button>⚙ การตั้งค่าการจัดเวร</button><button>🔔 การแจ้งเตือน</button><button>◔ สำรองข้อมูล</button><button>ⓘ เกี่ยวกับโปรแกรม</button></div>
-  <div class="v24-settings-grid">
-    <div class="v24-card">
-      <h3>🏢 ข้อมูลหน่วยงาน</h3>
-      <label>ชื่อหน่วยงาน<input id="settingsUnitNameV24" type="text"></label>
-      <label>โรงพยาบาล / องค์กร<input id="settingsOrgV24" type="text"></label>
-      <label>หัวหน้าหน่วยงาน<input id="settingsHeadV24" type="text"></label>
-      <label>ผู้จัดตาราง<input id="settingsSchedulerV24" type="text"></label>
-      <button id="settingsSaveUnitV24">▣ บันทึกข้อมูลหน่วยงาน</button>
-    </div>
-    <div class="v24-card">
-      <h3>🗓 ตั้งค่าวันและเวลา</h3>
-      <label>รูปแบบวันที่<select id="settingsDateFormatV24"><option value="thai">วัน/เดือน/ปี พ.ศ.</option><option value="iso">YYYY-MM-DD</option></select></label>
-      <label>สัปดาห์เริ่มต้นที่<select id="settingsWeekStartV24"><option value="1">วันจันทร์</option><option value="0">วันอาทิตย์</option></select></label>
-      <div class="v24-two-fields"><label>เวลาเริ่มงาน<input id="settingsWorkStartV24" type="time" value="08:00"></label><label>เวลาสิ้นสุด<input id="settingsWorkEndV24" type="time" value="16:00"></label></div>
-      <label>เขตเวลา<input value="(UTC+07:00) กรุงเทพฯ" disabled></label>
-      <button id="settingsSaveTimeV24">▣ บันทึกการตั้งค่าวันเวลา</button>
-    </div>
-    <div class="v24-card">
-      <h3>🖍 สไตล์และธีม</h3>
-      <label>ธีมหลัก<div class="v24-color-row"><button data-v24-color="#ff6b9d"></button><button data-v24-color="#9a73df"></button><button data-v24-color="#298fe5"></button><button data-v24-color="#27b28c"></button><button data-v24-color="#f7a51c"></button></div></label>
-      <label>สีพื้นหลัง<input id="settingsBgV24" value="#FFFFFF" disabled></label>
-      <label>ขนาดตัวอักษร<select id="settingsFontV24"><option value="small">เล็ก</option><option value="medium" selected>กลาง</option><option value="large">ใหญ่</option></select></label>
-      <button id="settingsSaveStyleV24" class="mint-btn">▣ บันทึกการตั้งค่าสไตล์</button>
-    </div>
-    <div class="v24-card">
-      <h3>🛡 การตั้งค่าการจัดเวร</h3>
-      <div class="v24-switch-row"><span>ใช้กฎพักหลังเวรบ่าย-ดึก</span><input type="checkbox" checked disabled></div>
-      <div class="v24-switch-row"><span>รายชื่อสุดท้ายเฉพาะ EXTRA1–3</span><input type="checkbox" checked disabled></div>
-      <div class="v24-switch-row"><span>เป้าหมายความสมดุล</span><select id="settingsBalanceV24"><option>ความสมดุลสูง</option><option>ปานกลาง</option></select></div>
-      <div class="v24-switch-row"><span>จำนวนวันล่วงหน้า</span><select id="settingsHorizonV24"><option>31 วัน</option><option>60 วัน</option></select></div>
-      <button id="settingsGoRulesV24">▣ เปิดหน้ากฎการจัดเวร</button>
-    </div>
-    <div class="v24-card">
-      <h3>☁ การสำรองข้อมูลและกู้คืน</h3>
-      <div class="cloud-title-row"><div><small>Cloud Sync</small></div><div class="cloud-badge">Cloud Sync</div></div>
-      <label>Cloud API URL<input id="cloudApiUrl" type="url"></label>
-      <input id="cloudToken" type="hidden">
-      <input id="cloudAuthDisplay" type="hidden" value="ใช้บัญชี Login ที่เข้าสู่ระบบ">
-      <div class="v24-button-stack"><button id="cloudConnectBtn">เชื่อมฐานข้อมูล</button><button id="cloudUploadBtn">☁ สำรองข้อมูลตอนนี้</button><button id="cloudDownloadBtn">⇩ กู้คืนข้อมูลออนไลน์</button></div>
-      <div id="cloudStatus" class="history-info">ยังไม่ได้เชื่อมฐานข้อมูลออนไลน์</div>
-    </div>
-    <div class="v24-card">
-      <h3>🔔 การแจ้งเตือน</h3>
-      <div class="v24-check-list"><label><input id="notifyRunV24" type="checkbox" checked> แจ้งเตือนเมื่อรันตารางเสร็จ</label><label><input id="notifyConflictV24" type="checkbox" checked> แจ้งเตือนเมื่อตรวจพบข้อขัดแย้ง</label><label><input id="notifyHolidayV24" type="checkbox" checked> แจ้งเตือนวันหยุดล่วงหน้า</label><label><input id="notifyDeadlineV24" type="checkbox" checked> แจ้งเตือนก่อนกำหนดจัดเวร</label></div>
-    </div>
-    <div class="v24-card">
-      <h3>🖥 การตั้งค่าการแสดงผล</h3>
-      <div class="v24-check-list"><label><input id="displayWeekendV24" type="checkbox" checked> แสดงสีวันเสาร์-อาทิตย์</label><label><input id="displayHolidayV24" type="checkbox" checked> แสดงสีวันหยุด</label><label><input id="displayWatermarkV24" type="checkbox" checked> แสดงลายน้ำ</label></div>
-      <label>จำนวนแถวเริ่มต้นในตาราง<select id="displayRowsV24"><option>35 แถว</option><option>50 แถว</option></select></label>
-    </div>
-    <div class="v24-card">
-      <h3>🗄 จัดการข้อมูลระบบ</h3>
-      <div class="v24-manage-grid"><button id="settingsClearV24">🗑 ล้างตารางเดือนนี้</button><button id="settingsResetV24">↻ รีเซ็ตค่าหน้าจอ</button><button id="settingsPeopleV24">👥 จัดการข้อมูลพนักงาน</button><button id="settingsValidateV24">🔗 ตรวจสอบความสมบูรณ์ข้อมูล</button></div>
-    </div>
-    <div class="v24-card admin-password-card" id="adminPasswordCard" style="display:none">
-      <h3>🔐 เปลี่ยนรหัสผ่านแอดมิน</h3>
-      <div class="admin-password-fields">
-        <label>รหัสผ่านปัจจุบัน<input id="settingsCurrentPassword" type="password" autocomplete="current-password" placeholder="กรอกรหัสผ่านปัจจุบัน"></label>
-        <label>รหัสผ่านใหม่<input id="settingsNewPassword" type="password" autocomplete="new-password" placeholder="อย่างน้อย 8 ตัวอักษร"></label>
-        <label>ยืนยันรหัสผ่านใหม่<input id="settingsConfirmPassword" type="password" autocomplete="new-password" placeholder="กรอกรหัสผ่านใหม่อีกครั้ง"></label>
+  <div class="s37-shell">
+    <div class="s37-page-head">
+      <div>
+        <h2>ตั้งค่าโปรแกรม</h2>
+        <p>ปรับแต่งการทำงานของโปรแกรมให้ตรงกับความต้องการ</p>
       </div>
-      <div class="admin-password-actions">
-        <button id="settingsChangePasswordBtn" type="button">🔐 บันทึกรหัสผ่านใหม่</button>
-        <span id="settingsPasswordStatus"></span>
-      </div>
-      <p class="admin-password-note">สำหรับบัญชี Admin เท่านั้น • รหัสผ่านใหม่ต้องมีอย่างน้อย 8 ตัวอักษร</p>
     </div>
-    <div class="v24-card v24-about">
-      <h3>ⓘ เกี่ยวกับโปรแกรม</h3><b>รับตารางเวร</b><p>ระบบจัดตารางเวรอัตโนมัติ พร้อม Workflow และ Cloud Sync</p><small></small>
+
+    <div class="s37-tabs" role="tablist" aria-label="หมวดการตั้งค่า">
+      <button type="button" class="s37-tab active" data-s37-tab="general"><span class="s37-tab-icon pink">⚙</span><b>ตั้งค่าทั่วไป</b></button>
+      <button type="button" class="s37-tab" data-s37-tab="roster"><span class="s37-tab-icon mint">▦</span><b>ตั้งค่าการจัดเวร</b></button>
+      <button type="button" class="s37-tab" data-s37-tab="display"><span class="s37-tab-icon purple">◉</span><b>การแสดงผล</b></button>
+      <button type="button" class="s37-tab" data-s37-tab="notify"><span class="s37-tab-icon yellow">♢</span><b>การแจ้งเตือน</b></button>
+      <button type="button" class="s37-tab" data-s37-tab="backup"><span class="s37-tab-icon blue">☁</span><b>สำรองข้อมูล</b></button>
+      <button type="button" class="s37-tab" data-s37-tab="about"><span class="s37-tab-icon rose">ⓘ</span><b>เกี่ยวกับโปรแกรม</b></button>
+    </div>
+
+    <div class="s37-panel active" data-s37-panel="general">
+      <div class="s37-main-grid">
+        <div class="s37-column">
+          <section class="s37-card s37-program-card">
+            <h3><span class="s37-icon cyan">▤</span>ข้อมูลโปรแกรม</h3>
+            <div class="s37-program-layout">
+              <div class="s37-fields">
+                <label>ชื่อโปรแกรม<input id="settingsProgramNameV37" type="text" value="โปรแกรมรันตารางเวร"></label>
+                <label>ชื่อหน่วยงาน<input id="settingsUnitNameV24" type="text"></label>
+                <div class="s37-two">
+                  <label>เวอร์ชัน<input id="settingsVersionV37" type="text" value="V 3.7.0" readonly></label>
+                  <label>ภาษาหลัก<select id="settingsLanguageV37"><option value="th">🇹🇭 ภาษาไทย</option></select></label>
+                </div>
+              </div>
+              <div class="s37-calendar-art" aria-hidden="true"><div class="s37-cal-top"></div><div class="s37-cal-grid"><i></i><i>✓</i><i>✓</i><i>✓</i><i></i><i>✓</i></div><span>⚙</span></div>
+            </div>
+            <div class="s37-hidden-unit-fields" aria-hidden="true">
+              <input id="settingsOrgV24" type="hidden"><input id="settingsHeadV24" type="hidden"><input id="settingsSchedulerV24" type="hidden">
+            </div>
+            <button id="settingsSaveUnitV24" type="button" class="s37-hidden-button">บันทึกข้อมูลหน่วยงาน</button>
+          </section>
+
+          <section class="s37-card">
+            <h3><span class="s37-icon blue">◷</span>ตั้งค่าวันและเวลา</h3>
+            <div class="s37-four">
+              <label>ปี พ.ศ. เริ่มต้น<input id="settingsStartYearV37" type="number" value="2569" min="2500" max="2700"></label>
+              <label>สัปดาห์เริ่มต้นวัน<select id="settingsWeekStartV24"><option value="1">วันจันทร์</option><option value="0">วันอาทิตย์</option></select></label>
+              <label>รูปแบบวันที่<select id="settingsDateFormatV24"><option value="thai">วัน-เดือน-ปี (24/08/2569)</option><option value="iso">YYYY-MM-DD</option></select></label>
+              <label>เขตเวลา<select id="settingsTimezoneV37"><option value="Asia/Bangkok">(GMT+07:00) กรุงเทพมหานคร</option></select></label>
+            </div>
+            <div class="s37-hidden-time-fields"><input id="settingsWorkStartV24" type="time" value="08:00"><input id="settingsWorkEndV24" type="time" value="16:00"></div>
+            <button id="settingsSaveTimeV24" type="button" class="s37-hidden-button">บันทึกวันเวลา</button>
+          </section>
+
+          <section class="s37-card">
+            <h3><span class="s37-icon mint">◉</span>ตั้งค่าอื่น ๆ</h3>
+            <div class="s37-setting-list">
+              <label class="s37-setting-row"><span class="s37-mini mint">☁</span><span><b>เปิดใช้งานการสำรองข้อมูลอัตโนมัติ</b><small>สำรองข้อมูลทุกวันเวลา 02:00 น.</small></span><input id="settingsAutoBackupV37" class="s37-switch" type="checkbox" checked></label>
+              <label class="s37-setting-row"><span class="s37-mini purple">▣</span><span><b>ล็อกการแก้ไขตารางเวรหลังบันทึก</b><small>ป้องกันการแก้ไขข้อมูลโดยไม่ตั้งใจ</small></span><input id="settingsLockAfterSaveV37" class="s37-switch" type="checkbox"></label>
+              <label class="s37-setting-row"><span class="s37-mini yellow">△</span><span><b>แสดงคำเตือนเมื่อมีการจัดเวรซ้ำ</b><small>ตรวจสอบการจัดเวรซ้ำในวันเดียวกัน</small></span><input id="settingsDuplicateWarningV37" class="s37-switch" type="checkbox" checked></label>
+              <label class="s37-setting-row"><span class="s37-mini pink">◌</span><span><b>สลับสีเสาร์-อาทิตย์ ในตารางเวร</b><small>เน้นสีวันหยุดสุดสัปดาห์ในตาราง</small></span><input id="settingsWeekendAlternateV37" class="s37-switch" type="checkbox" checked></label>
+            </div>
+          </section>
+        </div>
+
+        <div class="s37-column">
+          <section class="s37-card">
+            <h3><span class="s37-icon mint">◉</span>ตัวอย่างการแสดงผล</h3>
+            <div class="s37-preview-wrap">
+              <table class="s37-preview"><thead><tr><th></th><th>จ.</th><th>อ.</th><th>พ.</th><th>พฤ.</th><th>ศ.</th><th class="sat">ส.</th><th class="sun">อา.</th></tr></thead><tbody><tr><th>1</th><td>เวร1</td><td class="ot">OT1</td><td class="morning">SDMC<br>เช้า1</td><td>–</td><td>เวร2</td><td class="ot">OT2</td><td class="night">SDMC<br>บ่าย-ดึก1</td></tr><tr><th>2</th><td class="ot">OT2</td><td class="morning">SDMC<br>เช้า2</td><td>เวร1</td><td>เวร2</td><td class="ot">OT1</td><td>เวร1</td><td class="ot">OT2</td></tr></tbody></table>
+              <div class="s37-legend"><span><i class="pink"></i>เวร</span><span><i class="blue"></i>OT</span><span><i class="mint"></i>SDMC เช้า</span><span><i class="purple"></i>SDMC บ่าย-ดึก</span></div>
+            </div>
+          </section>
+
+          <section class="s37-card">
+            <h3><span class="s37-icon purple">▦</span>สีประจำโปรแกรม</h3>
+            <p class="s37-card-sub">เลือกชุดสีของโปรแกรม</p>
+            <div class="s37-theme-row">
+              <button type="button" class="s37-theme active" data-v24-color="#f36f9f" data-theme="pink"><i></i></button>
+              <button type="button" class="s37-theme" data-v24-color="#6fa8e8" data-theme="blue"><i></i></button>
+              <button type="button" class="s37-theme" data-v24-color="#2fb79c" data-theme="mint"><i></i></button>
+              <button type="button" class="s37-theme" data-v24-color="#9b7add" data-theme="purple"><i></i></button>
+              <button type="button" class="s37-theme" data-v24-color="#e7ad4c" data-theme="yellow"><i></i></button>
+              <button type="button" class="s37-theme" data-v24-color="#ed8b6f" data-theme="peach"><i></i></button>
+            </div>
+            <input id="settingsBgV24" type="hidden" value="#FFFFFF"><select id="settingsFontV24" class="s37-hidden-select"><option value="small">เล็ก</option><option value="medium" selected>กลาง</option><option value="large">ใหญ่</option></select>
+            <button id="settingsSaveStyleV24" type="button" class="s37-hidden-button">บันทึกสไตล์</button>
+          </section>
+
+          <section class="s37-card">
+            <h3><span class="s37-icon blue">▣</span>การตั้งค่าการพิมพ์</h3>
+            <div class="s37-two">
+              <label>ขนาดกระดาษเริ่มต้น<select id="settingsPrintPaperV37"><option value="a4-landscape">A4 (แนวนอน)</option><option value="a4-portrait">A4 (แนวตั้ง)</option></select></label>
+              <label>ขนาดตัวอักษรเริ่มต้น<select id="settingsPrintFontV37"><option value="normal">ปกติ</option><option value="small">เล็ก</option><option value="large">ใหญ่</option></select></label>
+            </div>
+            <label class="s37-inline-switch"><span>พิมพ์เส้นตาราง</span><input id="settingsPrintGridV37" class="s37-switch" type="checkbox" checked></label>
+          </section>
+
+          <div class="s37-save-row">
+            <button type="button" id="settingsSaveAllV37" class="s37-primary">✓ บันทึกการตั้งค่า</button>
+            <button type="button" id="settingsResetAllV37" class="s37-secondary">↻ รีเซ็ตเป็นค่าเริ่มต้น</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="s37-panel" data-s37-panel="roster">
+      <div class="s37-panel-grid">
+        <section class="s37-card">
+          <h3><span class="s37-icon mint">▦</span>การตั้งค่าการจัดเวร</h3>
+          <div class="s37-setting-list">
+            <div class="s37-setting-row"><span class="s37-mini mint">✓</span><span><b>ใช้กฎพักหลังเวรบ่าย-ดึก</b><small>ใช้กฎหลักของระบบจัดตารางเวร</small></span><input type="checkbox" checked disabled></div>
+            <div class="s37-setting-row"><span class="s37-mini pink">✓</span><span><b>รายชื่อสุดท้ายเฉพาะ EXTRA1–3</b><small>คงกฎเฉพาะบุคลากรรายชื่อสุดท้าย</small></span><input type="checkbox" checked disabled></div>
+          </div>
+          <div class="s37-two s37-gap-top">
+            <label>เป้าหมายความสมดุล<select id="settingsBalanceV24"><option>ความสมดุลสูง</option><option>ปานกลาง</option></select></label>
+            <label>จำนวนวันล่วงหน้า<select id="settingsHorizonV24"><option>31 วัน</option><option>60 วัน</option></select></label>
+          </div>
+          <button id="settingsGoRulesV24" type="button" class="s37-soft-button">▣ เปิดหน้ากฎการจัดเวร</button>
+        </section>
+        <section class="s37-card">
+          <h3><span class="s37-icon yellow">△</span>เครื่องมือจัดการตาราง</h3>
+          <p class="s37-card-sub">คำสั่งเหล่านี้เชื่อมกับข้อมูลตารางเวรปัจจุบัน</p>
+          <div class="s37-manage-grid"><button id="settingsClearV24" type="button">⌫ ล้างตารางเดือนนี้</button><button id="settingsValidateV24" type="button">✓ ตรวจสอบความสมบูรณ์ข้อมูล</button><button id="settingsPeopleV24" type="button">♙ จัดการข้อมูลพนักงาน</button><button id="settingsResetV24" type="button">↻ รีเซ็ตค่าหน้าจอ</button></div>
+        </section>
+      </div>
+    </div>
+
+    <div class="s37-panel" data-s37-panel="display">
+      <div class="s37-panel-grid">
+        <section class="s37-card">
+          <h3><span class="s37-icon purple">◉</span>การตั้งค่าการแสดงผล</h3>
+          <div class="s37-check-list"><label><input id="displayWeekendV24" type="checkbox" checked><span>แสดงสีวันเสาร์-อาทิตย์</span></label><label><input id="displayHolidayV24" type="checkbox" checked><span>แสดงสีวันหยุด</span></label><label><input id="displayWatermarkV24" type="checkbox" checked><span>แสดงลายน้ำ</span></label></div>
+          <label class="s37-gap-top">จำนวนแถวเริ่มต้นในตาราง<select id="displayRowsV24"><option>35 แถว</option><option>50 แถว</option></select></label>
+        </section>
+        <section class="s37-card">
+          <h3><span class="s37-icon blue">▣</span>การพิมพ์และรูปแบบ</h3>
+          <p class="s37-card-sub">ค่าที่เลือกในหน้าทั่วไปจะถูกบันทึกเป็นค่าเริ่มต้นสำหรับการพิมพ์</p>
+          <div class="s37-summary-lines"><div><span>กระดาษ</span><b id="settingsPrintPaperSummaryV37">A4 (แนวนอน)</b></div><div><span>ตัวอักษร</span><b id="settingsPrintFontSummaryV37">ปกติ</b></div><div><span>เส้นตาราง</span><b id="settingsPrintGridSummaryV37">เปิด</b></div></div>
+        </section>
+      </div>
+    </div>
+
+    <div class="s37-panel" data-s37-panel="notify">
+      <div class="s37-panel-grid">
+        <section class="s37-card">
+          <h3><span class="s37-icon yellow">♢</span>การแจ้งเตือน</h3>
+          <div class="s37-check-list large"><label><input id="notifyRunV24" type="checkbox" checked><span>แจ้งเตือนเมื่อรันตารางเสร็จ</span></label><label><input id="notifyConflictV24" type="checkbox" checked><span>แจ้งเตือนเมื่อตรวจพบข้อขัดแย้ง</span></label><label><input id="notifyHolidayV24" type="checkbox" checked><span>แจ้งเตือนวันหยุดล่วงหน้า</span></label><label><input id="notifyDeadlineV24" type="checkbox" checked><span>แจ้งเตือนก่อนกำหนดจัดเวร</span></label></div>
+        </section>
+        <section class="s37-card s37-notify-info"><h3><span class="s37-icon pink">ⓘ</span>สถานะการแจ้งเตือน</h3><p>การตั้งค่าจะถูกบันทึกในอุปกรณ์นี้ และใช้กับบัญชีที่กำลังเข้าสู่ระบบ</p><div class="s37-status-pill">พร้อมใช้งาน</div></section>
+      </div>
+    </div>
+
+    <div class="s37-panel" data-s37-panel="backup">
+      <div class="s37-panel-grid">
+        <section class="s37-card">
+          <h3><span class="s37-icon blue">☁</span>การสำรองข้อมูลและกู้คืน</h3>
+          <div class="s37-cloud-head"><div><b>Cloud Sync</b><small>เชื่อมต่อข้อมูลกับฐานข้อมูลออนไลน์</small></div><span class="s37-status-pill mint">Cloud Sync</span></div>
+          <label>Cloud API URL<input id="cloudApiUrl" type="url"></label>
+          <input id="cloudToken" type="hidden"><input id="cloudAuthDisplay" type="hidden" value="ใช้บัญชี Login ที่เข้าสู่ระบบ">
+          <div class="s37-button-stack"><button id="cloudConnectBtn" type="button">เชื่อมฐานข้อมูล</button><button id="cloudUploadBtn" type="button">☁ สำรองข้อมูลตอนนี้</button><button id="cloudDownloadBtn" type="button">⇩ กู้คืนข้อมูลออนไลน์</button></div>
+          <div id="cloudStatus" class="s37-cloud-status">ยังไม่ได้เชื่อมฐานข้อมูลออนไลน์</div>
+        </section>
+        <section class="s37-card">
+          <h3><span class="s37-icon mint">▤</span>จัดการข้อมูลระบบ</h3>
+          <div class="s37-manage-grid"><button type="button" data-s37-proxy="settingsClearV24">⌫ ล้างตารางเดือนนี้</button><button type="button" data-s37-proxy="settingsResetV24">↻ รีเซ็ตค่าหน้าจอ</button><button type="button" data-s37-proxy="settingsPeopleV24">♙ จัดการข้อมูลพนักงาน</button><button type="button" data-s37-proxy="settingsValidateV24">✓ ตรวจสอบความสมบูรณ์ข้อมูล</button></div>
+        </section>
+      </div>
+    </div>
+
+    <div class="s37-panel" data-s37-panel="about">
+      <div class="s37-panel-grid">
+        <section class="s37-card admin-password-card" id="adminPasswordCard" style="display:none">
+          <h3><span class="s37-icon pink">▣</span>เปลี่ยนรหัสผ่านแอดมิน</h3>
+          <div class="admin-password-fields"><label>รหัสผ่านปัจจุบัน<input id="settingsCurrentPassword" type="password" autocomplete="current-password" placeholder="กรอกรหัสผ่านปัจจุบัน"></label><label>รหัสผ่านใหม่<input id="settingsNewPassword" type="password" autocomplete="new-password" placeholder="อย่างน้อย 8 ตัวอักษร"></label><label>ยืนยันรหัสผ่านใหม่<input id="settingsConfirmPassword" type="password" autocomplete="new-password" placeholder="กรอกรหัสผ่านใหม่อีกครั้ง"></label></div>
+          <div class="admin-password-actions"><button id="settingsChangePasswordBtn" type="button">▣ บันทึกรหัสผ่านใหม่</button><span id="settingsPasswordStatus"></span></div>
+          <p class="admin-password-note">สำหรับบัญชี Admin เท่านั้น • รหัสผ่านใหม่ต้องมีอย่างน้อย 8 ตัวอักษร</p>
+        </section>
+        <section class="s37-card s37-about-card"><h3><span class="s37-icon rose">ⓘ</span>เกี่ยวกับโปรแกรม</h3><b>รับตารางเวร</b><p>ระบบจัดตารางเวรอัตโนมัติ พร้อม Workflow และ Cloud Sync</p><div class="s37-about-version">V 3.7.0</div></section>
+      </div>
     </div>
   </div>
 </section>
@@ -5523,7 +5630,9 @@ function saveSummaryPDF(){
     });
   });
 }
-function printSummary(){var table=el('summaryTable');if(!table)return;var win=window.open('','_blank');if(!win)return;var title='ตารางหลักการเฉลี่ยเวร เดือน'+MONTHS[cm()]+' พ.ศ. '+py();win.document.write('<!DOCTYPE html><html lang="th"><head><meta charset="utf-8"><title>'+title+'</title><style>@page{size:A4 landscape;margin:15mm 10mm 13mm 10mm}body{font-family:-apple-system,BlinkMacSystemFont,"Noto Sans Thai",Tahoma,Arial,sans-serif;margin:0}h2{text-align:center;font-size:15px}table{border-collapse:collapse;width:100%;font-size:6px}th,td{border:1px solid #999;padding:1.5px;text-align:center;white-space:nowrap;color:#111!important}td{background:#fff!important}th{background:#e7e7ea!important}tfoot td{background:#ededed!important}</style></head><body><h2>'+title+'</h2>'+table.outerHTML+'<script>window.onload=function(){window.print()}<\/script></body></html>');win.document.close()}
+function printSummary(){var table=el('summaryTable');if(!table)return;var win=window.open('','_blank');if(!win)return;var title='ตารางหลักการเฉลี่ยเวร เดือน'+MONTHS[cm()]+' พ.ศ. '+py();win.document.write('<!DOCTYPE html><html lang="th"><head><meta charset="utf-8"><title>'+title+'</title><style>@page{size:A4 landscape;margin:15mm 10mm 13mm 10mm}body{font-family:-apple-system,BlinkMacSystemFont,"Noto Sans Thai",Tahoma,Arial,sans-serif;margin:0}h2{text-align:center;font-size:15px}table{border-collapse:collapse;width:100%;font-size:6px}th,td{border:1px solid #999;padding:1.5px;text-align:center;white-space:nowrap;color:#111!important}td{background:#fff!important}th{background:#e7e7ea!important}tfoot td{background:#ededed!important}</style><link rel="stylesheet" href="settings-v37.css?v=37.0">
+</head><body><h2>'+title+'</h2>'+table.outerHTML+'<script>window.onload=function(){window.print()}<\/script><script src="settings-v37.js?v=37.0"></script>
+</body></html>');win.document.close()}
 function openSummaryPdf(){el('summaryPdfFile').click()}
 
 function normalizeUrl(v){return String(v||'').trim().replace(/\/+$/,'')}
@@ -6906,5 +7015,6 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <script src="home-v26.js?v=28.5"></script>
 
 <script src="summary-v34.js?v=34.8"></script>
-<script src="unit-v36.js?v=36.5"></script></body>
+<script src="unit-v36.js?v=36.5"></script><script src="settings-v37.js?v=37.0"></script>
+</body>
 </html>
