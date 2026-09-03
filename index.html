@@ -2392,7 +2392,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 <link rel="stylesheet" href="summary-v34.css?v=34.8">
 <link rel="stylesheet" href="sidebar-v35.css?v=35.5.14.5-ipad-desktop-mascot-8mm-gap">
   <link rel="stylesheet" href="unit-v36.css?v=36.6">
-<link rel="stylesheet" href="settings-v37.css?v=37.2">
+<link rel="stylesheet" href="settings-v37.css?v=37.3">
 </head>
 <body>
 
@@ -3595,17 +3595,19 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
               </div>
               <div class="s37-direction-choice">
                 <span>ทิศทางการไล่สี</span>
-                <div class="s37-direction-grid">
-                  <button type="button" class="active" data-s37-dir="135deg"><i class="diag-down"></i><b>↘</b><small>ซ้ายบน → ขวาล่าง</small></button>
-                  <button type="button" data-s37-dir="45deg"><i class="diag-up"></i><b>↗</b><small>ซ้ายล่าง → ขวาบน</small></button>
-                  <button type="button" data-s37-dir="90deg"><i class="horizontal"></i><b>→</b><small>ซ้าย → ขวา</small></button>
-                  <button type="button" data-s37-dir="180deg"><i class="vertical"></i><b>↓</b><small>บน → ล่าง</small></button>
+                <div class="s37-direction-grid s37-direction-grid-8" aria-label="เลือกทิศทางการไล่สี">
+                  <button type="button" class="active" data-s37-dir="0deg" aria-label="ไล่สีจากล่างขึ้นบน"><i style="--dir:0deg"></i></button>
+                  <button type="button" data-s37-dir="45deg" aria-label="ไล่สีทแยงขึ้นขวา"><i style="--dir:45deg"></i></button>
+                  <button type="button" data-s37-dir="90deg" aria-label="ไล่สีจากซ้ายไปขวา"><i style="--dir:90deg"></i></button>
+                  <button type="button" data-s37-dir="135deg" aria-label="ไล่สีทแยงลงขวา"><i style="--dir:135deg"></i></button>
+                  <button type="button" data-s37-dir="180deg" aria-label="ไล่สีจากบนลงล่าง"><i style="--dir:180deg"></i></button>
+                  <button type="button" data-s37-dir="225deg" aria-label="ไล่สีทแยงลงซ้าย"><i style="--dir:225deg"></i></button>
+                  <button type="button" data-s37-dir="270deg" aria-label="ไล่สีจากขวาไปซ้าย"><i style="--dir:270deg"></i></button>
+                  <button type="button" data-s37-dir="315deg" aria-label="ไล่สีทแยงขึ้นซ้าย"><i style="--dir:315deg"></i></button>
                 </div>
                 <select id="settingsGradientDirectionV37" class="s37-hidden-select">
-                  <option value="135deg">ซ้ายบน → ขวาล่าง</option>
-                  <option value="45deg">ซ้ายล่าง → ขวาบน</option>
-                  <option value="90deg">ซ้าย → ขวา</option>
-                  <option value="180deg">บน → ล่าง</option>
+                  <option value="0deg">0</option><option value="45deg">45</option><option value="90deg">90</option><option value="135deg">135</option>
+                  <option value="180deg">180</option><option value="225deg">225</option><option value="270deg">270</option><option value="315deg">315</option>
                 </select>
               </div>
             </div>
@@ -7056,6 +7058,6 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <script src="home-v26.js?v=28.5"></script>
 
 <script src="summary-v34.js?v=34.8"></script>
-<script src="unit-v36.js?v=36.5"></script><script src="settings-v37.js?v=37.2"></script>
+<script src="unit-v36.js?v=36.5"></script><script src="settings-v37.js?v=37.3"></script>
 </body>
 </html>

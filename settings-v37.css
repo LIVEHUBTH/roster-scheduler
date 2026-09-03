@@ -246,3 +246,178 @@ html body.s37-theme-applied #page-settings .s37-card{background:rgba(255,255,255
   #page-settings .s37-custom-colors{grid-template-columns:1fr!important}
   #page-settings .s37-direction-grid{grid-template-columns:1fr 1fr!important}
 }
+
+
+/* =========================================================
+   SETTINGS V37.3 — FUNCTION RESTORE + 8 DIRECTIONS + PHONE TOPBAR
+   ========================================================= */
+
+/* Visual-only 8 direction samples: no arrows or captions. */
+#page-settings .s37-direction-grid-8{
+  display:grid!important;
+  grid-template-columns:repeat(8,minmax(0,1fr))!important;
+  gap:7px!important;
+}
+#page-settings .s37-direction-grid-8 button{
+  min-width:0!important;
+  width:100%!important;
+  height:46px!important;
+  min-height:46px!important;
+  padding:5px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  border:1px solid #e6e4ea!important;
+  border-radius:9px!important;
+  background:#fff!important;
+  cursor:pointer!important;
+}
+#page-settings .s37-direction-grid-8 button i{
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  border-radius:6px!important;
+  background:linear-gradient(var(--dir),var(--s37-demo-c1,#f6b1ca),var(--s37-demo-c2,#aee5d7),var(--s37-demo-c3,#c5d9f6))!important;
+}
+#page-settings .s37-direction-grid-8 button.active{
+  border-color:#e96f9d!important;
+  box-shadow:0 0 0 2px rgba(233,111,157,.13)!important;
+  background:#fff7fa!important;
+}
+
+/* Tone buttons must look and behave selectable. */
+#page-settings .s37-segment button{
+  pointer-events:auto!important;
+  position:relative!important;
+  z-index:2!important;
+}
+#page-settings .s37-segment button.active{
+  color:#e45f91!important;
+  background:#fff!important;
+  border:1px solid #f1cfdb!important;
+}
+
+/* Restore all pastel SVG icon visibility. */
+#page-settings .s37-svg,
+.s37-topbar-title .s37-svg{
+  display:block!important;
+  fill:none!important;
+  stroke:currentColor!important;
+  stroke-width:1.8!important;
+  stroke-linecap:round!important;
+  stroke-linejoin:round!important;
+}
+#page-settings .s37-tab-icon,
+#page-settings .s37-icon,
+#page-settings .s37-mini{
+  overflow:visible!important;
+}
+
+/* Top title gear: pastel pink outline, never black. */
+.s37-topbar-title .s37-topbar-gear{
+  background:#fff3f8!important;
+  border:1px solid #f2ccdc!important;
+  color:#ea6b9b!important;
+}
+.s37-topbar-title .s37-topbar-gear .s37-svg{
+  stroke:#ea6b9b!important;
+}
+
+/* Theme applies to the actual current shell selectors without changing dimensions. */
+html body.s37-theme-applied{
+  background-image:var(--s37-body-gradient)!important;
+  background-color:#fff!important;
+}
+html body.s37-theme-applied #appSidebar,
+html body.s37-theme-applied .sidebar{
+  background-image:var(--s37-sidebar-gradient)!important;
+  background-color:transparent!important;
+}
+html body.s37-theme-applied .main-shell{
+  background-image:var(--s37-content-gradient)!important;
+  background-color:transparent!important;
+}
+html body.s37-theme-applied .main-shell > header,
+html body.s37-theme-applied header.topbar,
+html body.s37-theme-applied header{
+  background-image:var(--s37-top-gradient)!important;
+  background-color:transparent!important;
+}
+
+/* Phone settings topbar: clean two-row balance only while settings is open. */
+@media (max-width:700px){
+  body.s37-settings-open .main-shell>header{
+    min-height:116px!important;
+    height:auto!important;
+  }
+  body.s37-settings-open .header-wrap{
+    min-height:116px!important;
+    height:auto!important;
+    padding:10px 14px!important;
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) auto!important;
+    grid-template-rows:48px 48px!important;
+    gap:0 10px!important;
+    align-items:center!important;
+  }
+  body.s37-settings-open .header-clean-left{
+    grid-column:1/-1!important;
+    grid-row:1!important;
+    width:100%!important;
+    display:grid!important;
+    grid-template-columns:44px minmax(0,1fr)!important;
+    gap:9px!important;
+    align-items:center!important;
+  }
+  body.s37-settings-open .mobile-menu-btn{
+    grid-column:1!important;
+    width:44px!important;
+    height:44px!important;
+    margin:0!important;
+    align-self:center!important;
+  }
+  body.s37-settings-open .s37-topbar-title{
+    grid-column:2!important;
+    width:100%!important;
+    min-width:0!important;
+    display:grid!important;
+    grid-template-columns:38px minmax(0,1fr)!important;
+    gap:8px!important;
+    align-items:center!important;
+  }
+  body.s37-settings-open .s37-topbar-title .s37-topbar-gear{
+    width:38px!important;height:38px!important;
+  }
+  body.s37-settings-open .s37-topbar-title-copy{
+    min-width:0!important;
+  }
+  body.s37-settings-open .s37-topbar-title-copy b{
+    font-size:13px!important;
+    line-height:1.15!important;
+    white-space:nowrap!important;
+  }
+  body.s37-settings-open .s37-topbar-title-copy small{
+    display:block!important;
+    font-size:7.5px!important;
+    line-height:1.2!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+  body.s37-settings-open .header-right{
+    grid-column:1/-1!important;
+    grid-row:2!important;
+    width:100%!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:flex-end!important;
+    gap:8px!important;
+    margin:0!important;
+  }
+  #page-settings .s37-direction-grid-8{
+    grid-template-columns:repeat(4,1fr)!important;
+  }
+  #page-settings .s37-direction-grid-8 button{
+    height:48px!important;
+  }
+}
