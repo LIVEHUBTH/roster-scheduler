@@ -2592,45 +2592,35 @@ body.p306-people-open .p306-topbar-title{
 
 
 
-<style id="people-v310-light-gray-borders-program-background-only">
+
+<style id="people-v311-remove-white-parent-layer-only">
 /* =========================================================
-   PEOPLE V30.10 — people page only
-   - light-gray borders like roster page
-   - remove white surfaces behind frames
-   - reveal current program background/theme
-   - no layout / function / sidebar changes
+   PEOPLE V30.11 — remove ONLY the remaining white parent layer
+   while the People page is active.
+   - Keep all people cards and their pastel fills unchanged
+   - Keep light gray frame borders
+   - Do not alter Sidebar / other pages / responsive layout
    ========================================================= */
 
-#page-people{
-  --p310-line:#e3e6eb;
-  background:var(
-    --s37-content-gradient,
-    linear-gradient(135deg,#fff5f8 0%,#fff9fb 52%,#f7fbfa 100%)
-  )!important;
-  background-image:var(
-    --s37-content-gradient,
-    linear-gradient(135deg,#fff5f8 0%,#fff9fb 52%,#f7fbfa 100%)
-  )!important;
-}
-
+/* People page itself: transparent so it shows the real program background. */
+#page-people,
 #page-people .p30-shell{
   background:transparent!important;
   background-image:none!important;
 }
 
-/* Keep every requested outer frame, but remove its white fill. */
+/* Keep existing people frames, but remove white outer fills only. */
 #page-people .p30-card,
 #page-people .p30-summary-card,
 #page-people .p30-table-card,
 #page-people .p30-bottom-card{
   background:transparent!important;
   background-image:none!important;
-  border-color:var(--p310-line)!important;
+  border-color:#e3e6eb!important;
   box-shadow:none!important;
 }
 
-/* Remove only white surfaces immediately behind the content.
-   Existing pastel statistic/action fills remain untouched. */
+/* Remove white surfaces immediately behind sections. */
 #page-people .p30-card-head,
 #page-people .p30-stat-grid,
 #page-people .p30-filterbar,
@@ -2640,7 +2630,7 @@ body.p306-people-open .p306-topbar-title{
   background-image:none!important;
 }
 
-/* Light-gray border tone for all visible frames/controls on this page. */
+/* Keep all visible borders light gray, matching roster page tone. */
 #page-people .p30-stat,
 #page-people .p30-action,
 #page-people .p30-search,
@@ -2659,10 +2649,28 @@ body.p306-people-open .p306-topbar-title{
 #page-people .p30-modal-card,
 #page-people .p30-modal-body input,
 #page-people .p30-modal-body select{
-  border-color:var(--p310-line)!important;
+  border-color:#e3e6eb!important;
 }
 
-/* Do NOT change the existing pastel fills inside cards. */
+/* IMPORTANT:
+   The white band in the photo comes from the parent app surface.
+   Make it transparent ONLY while People page is open. */
+body.p306-people-open .main-shell,
+body.p306-people-open .app,
+body.p306-people-open main.app{
+  background:transparent!important;
+  background-image:none!important;
+}
+
+/* Preserve the actual program/theme background on body. */
+body.p306-people-open{
+  background-image:var(
+    --s37-body-gradient,
+    linear-gradient(135deg,#fff3f7 0%,#fff8fa 52%,#f6fbf9 100%)
+  )!important;
+}
+
+/* Do not disturb existing pastel inner card fills. */
 #page-people .p30-stat,
 #page-people .p30-action,
 #page-people .p30-filter-btn,
