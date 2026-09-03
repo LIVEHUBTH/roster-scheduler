@@ -2502,6 +2502,92 @@ body.r29-roster-open .r29-topbar-title{
   }
 }
 </style>
+
+<style id="people-v306-transparent-topbar-wording-only">
+/* =========================================================
+   PEOPLE V30.6 — people page only
+   - show program background behind existing cards
+   - move existing people title/icon to Top bar
+   - no card color/layout changes
+   ========================================================= */
+
+#page-people,
+#page-people .p30-shell{
+  background:transparent!important;
+  background-image:none!important;
+}
+
+/* Original title is mirrored into Top bar; hide only its old position. */
+#page-people .p30-page-title{
+  display:none!important;
+}
+
+.p306-topbar-title{
+  display:none;
+  align-items:center;
+  gap:9px;
+  min-width:0;
+}
+body.p306-people-open .p306-topbar-title{
+  display:flex;
+}
+.p306-topbar-title .p306-topbar-icon{
+  width:40px;
+  height:40px;
+  flex:0 0 40px;
+  display:grid;
+  place-items:center;
+}
+.p306-topbar-title .p306-topbar-icon .p30-title-icon{
+  width:40px!important;
+  height:40px!important;
+  margin:0!important;
+  padding:0!important;
+}
+.p306-topbar-title .p306-topbar-icon .p30-title-icon svg{
+  width:40px!important;
+  height:40px!important;
+  display:block!important;
+}
+.p306-topbar-copy{
+  display:grid;
+  gap:2px;
+  min-width:0;
+}
+.p306-topbar-copy b{
+  color:#26334b;
+  font-size:16px;
+  line-height:1.1;
+  white-space:nowrap;
+}
+.p306-topbar-copy small{
+  color:#8b93a3;
+  font-size:9px;
+  line-height:1.2;
+  white-space:nowrap;
+}
+
+@media(max-width:700px){
+  .p306-topbar-title{gap:7px}
+  .p306-topbar-title .p306-topbar-icon,
+  .p306-topbar-title .p306-topbar-icon .p30-title-icon{
+    width:34px!important;
+    height:34px!important;
+    flex-basis:34px!important;
+  }
+  .p306-topbar-title .p306-topbar-icon .p30-title-icon svg{
+    width:34px!important;
+    height:34px!important;
+  }
+  .p306-topbar-copy b{font-size:12px}
+  .p306-topbar-copy small{
+    font-size:7px;
+    max-width:190px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+}
+</style>
 </head>
 <body>
 
@@ -2533,7 +2619,7 @@ body.r29-roster-open .r29-topbar-title{
   <nav class="side-nav v24-side-nav sidebar-v35" aria-label="เมนูหลัก">
     <a href="#home" data-page="home" class="active"><span class="ico nav-svg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.2 12 4l9 7.2"/><path d="M5.5 10.2V20h13v-9.8"/><path d="M9.5 20v-6h5v6"/></svg></span><span class="nav-label">หน้าหลัก</span></a>
     <a href="#roster" data-page="roster"><span class="ico nav-svg"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 9h18"/><path d="M7 13h2M11 13h2M15 13h2M7 17h2M11 17h2M15 17h2"/></svg></span><span class="nav-label">ตารางเวร</span></a>
-    <a href="#people" data-page="people"><span class="ico nav-svg"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3.5 20v-2.3A4.7 4.7 0 0 1 8.2 13h1.6a4.7 4.7 0 0 1 4.7 4.7V20"/><path d="M14.5 14.2a4 4 0 0 1 6 3.5V20"/></svg></span><span class="nav-label">ข้อมูลพนักงาน</span></a>
+    <a href="#people" data-page="people"><span class="ico nav-svg"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3.5 20v-2.3A4.7 4.7 0 0 1 8.2 13h1.6a4.7 4.7 0 0 1 4.7 4.7V20"/><path d="M14.5 14.2a4 4 0 0 1 6 3.5V20"/></svg></span><span class="nav-label">ข้อมูลบุคลากร</span></a>
     <a href="#rules" data-page="rules"><span class="ico nav-svg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 19 6v5.3c0 4.4-2.8 7.8-7 9.7-4.2-1.9-7-5.3-7-9.7V6l7-3Z"/><path d="m9 12 2 2 4-4"/></svg></span><span class="nav-label">กฎการจัดเวร</span></a>
     <a href="#holidays" data-page="holidays"><span class="ico nav-svg"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 9h18"/><path d="M8 13h3v3H8zM14 13h3v3h-3z"/></svg></span><span class="nav-label">วันหยุด/นักขัตฤกษ์</span></a>
     <a href="#history" data-page="history"><span class="ico nav-svg"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.5 2M5.7 5.7 4 4"/></svg></span><span class="nav-label">ประวัติการจัดเวร</span></a>
@@ -2959,14 +3045,14 @@ body.r29-roster-open .r29-topbar-title{
       <div class="p30-title-icon" aria-hidden="true">
         <svg viewBox="0 0 48 48"><circle cx="17" cy="18" r="7" fill="#9b7de3"/><circle cx="31" cy="20" r="6" fill="#b8a3ef"/><path d="M6 38c1-9 7-14 14-14s13 5 14 14" fill="#9b7de3"/><path d="M25 38c.7-7 5-11 10-11 5 0 9 4 10 11" fill="#cbbcf4"/></svg>
       </div>
-      <div><h2>ข้อมูลพนักงาน</h2><p>จัดการข้อมูลบุคลากรทั้งหมดในระบบ</p></div>
+      <div><h2>ข้อมูลบุคลากร</h2><p>จัดการข้อมูลบุคลากรทั้งหมดในระบบ</p></div>
     </div>
 
     <section class="p30-card p30-summary-card">
       <div class="p30-card-head">
-        <div><h3>สรุปข้อมูลพนักงาน</h3></div>
+        <div><h3>สรุปข้อมูลบุคลากร</h3></div>
         <div class="p30-head-actions">
-          <button id="addPersonBtn" class="p30-action purple"><span class="p305-icon purple" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="9" cy="9" r="4" fill="currentColor"/><path d="M3 20c.6-4.6 2.8-7 6-7s5.4 2.4 6 7H3Z" fill="currentColor" opacity=".8"/><path d="M18 8v7M14.5 11.5h7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><span>เพิ่มพนักงาน</span></button>
+          <button id="addPersonBtn" class="p30-action purple"><span class="p305-icon purple" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="9" cy="9" r="4" fill="currentColor"/><path d="M3 20c.6-4.6 2.8-7 6-7s5.4 2.4 6 7H3Z" fill="currentColor" opacity=".8"/><path d="M18 8v7M14.5 11.5h7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><span>เพิ่มบุคลากร</span></button>
           <button id="peopleImportBtnV30" class="p30-action mint"><span class="p305-icon mint" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 17v3h14v-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M12 4v11m0-11-4 4m4-4 4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>นำเข้าข้อมูล</span></button>
           <button id="peopleExportBtn" class="p30-action pink"><span class="p305-icon pink" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 17v3h14v-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M12 15V4m0 11-4-4m4 4 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>ส่งออกข้อมูล</span></button>
           <input id="peopleImportFileV30" type="file" accept=".csv,text/csv" hidden>
@@ -2999,7 +3085,7 @@ body.r29-roster-open .r29-topbar-title{
 
     <section class="p30-card p30-table-card">
       <div class="p30-filterbar">
-        <label class="p30-search"><span>⌕</span><input id="peopleSearchV24" type="search" placeholder="ค้นหาชื่อพนักงาน, รหัส, ตำแหน่ง, แผนก..."></label>
+        <label class="p30-search"><span>⌕</span><input id="peopleSearchV24" type="search" placeholder="ค้นหาชื่อบุคลากร, รหัส, ตำแหน่ง, แผนก..."></label>
         <select id="peopleDeptFilterV30"><option value="all">แผนกทั้งหมด</option></select>
         <select id="peopleStatusFilterV30"><option value="all">สถานะทั้งหมด</option><option value="active">ใช้งาน</option><option value="inactive">ปิดใช้งาน</option></select>
         <select id="peopleTypeFilterV24"><option value="all">ประเภททั้งหมด</option><option value="general">ปกติ</option><option value="extra">EXTRA1–3</option></select>
@@ -3010,7 +3096,7 @@ body.r29-roster-open .r29-topbar-title{
       <div class="p30-table-wrap">
         <table class="p30-table">
           <thead><tr>
-            <th>ลำดับ</th><th>รหัสพนักงาน</th><th>ชื่อ-นามสกุล</th><th>ตำแหน่ง</th><th>แผนก</th><th>ประเภท</th><th>สถานะ</th><th>เวรเฉลี่ย/เดือน</th><th>จัดการ</th>
+            <th>ลำดับ</th><th>รหัสบุคลากร</th><th>ชื่อ-นามสกุล</th><th>ตำแหน่ง</th><th>แผนก</th><th>ประเภท</th><th>สถานะ</th><th>เวรเฉลี่ย/เดือน</th><th>จัดการ</th>
           </tr></thead>
           <tbody id="peopleTableBodyV24"></tbody>
         </table>
@@ -3030,7 +3116,7 @@ body.r29-roster-open .r29-topbar-title{
 
     <section class="p30-bottom-grid">
       <article class="p30-card p30-bottom-card">
-        <h3>ประเภทพนักงาน</h3>
+        <h3>ประเภทบุคลากร</h3>
         <div class="p30-type-line"><span class="p30-pill general">● ปกติ</span><span>สามารถจัดเวรได้ทุกประเภท</span><b id="peopleGeneralBottom">0 คน</b></div>
         <div class="p30-type-line"><span class="p30-pill extra">● EXTRA1–3</span><span>จัดได้เฉพาะเวร EXTRA1–3</span><b id="peopleExtraBottom">0 คน</b></div>
       </article>
@@ -3043,7 +3129,7 @@ body.r29-roster-open .r29-topbar-title{
       </article>
       <article class="p30-card p30-bottom-card p30-quick">
         <h3>จัดการรวดเร็ว</h3>
-        <button id="peopleGroupDeptBtnV30"><span class="p305-icon blue" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="8" cy="9" r="3" fill="currentColor"/><circle cx="16" cy="9" r="3" fill="currentColor" opacity=".72"/><path d="M3 19c.4-4 2-6 5-6s4.6 2 5 6H3Z" fill="currentColor"/><path d="M11 19c.4-4 2-6 5-6s4.6 2 5 6H11Z" fill="currentColor" opacity=".72"/></svg></span><span>จัดกลุ่มพนักงานตามแผนก</span></button>
+        <button id="peopleGroupDeptBtnV30"><span class="p305-icon blue" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="8" cy="9" r="3" fill="currentColor"/><circle cx="16" cy="9" r="3" fill="currentColor" opacity=".72"/><path d="M3 19c.4-4 2-6 5-6s4.6 2 5 6H3Z" fill="currentColor"/><path d="M11 19c.4-4 2-6 5-6s4.6 2 5 6H11Z" fill="currentColor" opacity=".72"/></svg></span><span>จัดกลุ่มบุคลากรตามแผนก</span></button>
         <button id="peopleGoRulesBtn"><span class="p305-icon yellow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 19 6v5c0 4.6-2.9 7.7-7 10-4.1-2.3-7-5.4-7-10V6l7-3Z" fill="currentColor"/><path d="m9 12 2 2 4-5" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>ตั้งค่าตำแหน่งและสิทธิ์</span></button>
         <button id="peopleGoHistoryBtn"><span class="p305-icon lav" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M6 5H3v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>ประวัติการเปลี่ยนแปลง</span></button>
       </article>
@@ -3053,10 +3139,10 @@ body.r29-roster-open .r29-topbar-title{
   <div id="personModalV30" class="p30-modal" aria-hidden="true">
     <div class="p30-modal-backdrop" data-person-close></div>
     <div class="p30-modal-card" role="dialog" aria-modal="true" aria-labelledby="personModalTitleV30">
-      <div class="p30-modal-head"><div><h3 id="personModalTitleV30">ข้อมูลพนักงาน</h3><p id="personModalSubV30">เพิ่มหรือแก้ไขข้อมูลบุคลากร</p></div><button type="button" data-person-close>×</button></div>
+      <div class="p30-modal-head"><div><h3 id="personModalTitleV30">ข้อมูลบุคลากร</h3><p id="personModalSubV30">เพิ่มหรือแก้ไขข้อมูลบุคลากร</p></div><button type="button" data-person-close>×</button></div>
       <div class="p30-modal-body">
         <input id="personEditIdV30" type="hidden">
-        <label>รหัสพนักงาน<input id="personCodeV30" type="text" placeholder="เช่น EMP001"></label>
+        <label>รหัสบุคลากร<input id="personCodeV30" type="text" placeholder="เช่น EMP001"></label>
         <label class="wide">ชื่อ-นามสกุล<input id="personNameV30" type="text" placeholder="ชื่อ-นามสกุล"></label>
         <label>ตำแหน่ง<input id="personPositionV30" type="text" placeholder="ตำแหน่ง"></label>
         <label>แผนก<input id="personDeptV30" type="text" placeholder="แผนก / หน่วยงาน"></label>
@@ -7218,6 +7304,75 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
     sync();
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',wire,{once:true});else wire();
+  window.addEventListener('pageshow',sync);
+  window.addEventListener('hashchange',function(){setTimeout(sync,0)});
+  document.addEventListener('click',function(e){
+    if(e.target.closest&&e.target.closest('[data-page]'))setTimeout(sync,10);
+  },true);
+})();
+</script>
+
+<script id="people-v306-topbar-only">
+(function(){
+  'use strict';
+  function q(id){return document.getElementById(id)}
+
+  function makeTitle(){
+    var left=document.querySelector('.header-clean-left');
+    var source=document.querySelector('#page-people .p30-page-title');
+    if(!left||!source)return;
+
+    var existing=q('p306TopbarTitle');
+    if(existing)return existing;
+
+    var icon=source.querySelector('.p30-title-icon');
+    var sourceTitle=source.querySelector('h2');
+    var sourceSub=source.querySelector('p');
+
+    var box=document.createElement('div');
+    box.id='p306TopbarTitle';
+    box.className='p306-topbar-title';
+
+    var iconWrap=document.createElement('span');
+    iconWrap.className='p306-topbar-icon';
+    if(icon)iconWrap.appendChild(icon.cloneNode(true));
+
+    var copy=document.createElement('span');
+    copy.className='p306-topbar-copy';
+    var title=document.createElement('b');
+    title.textContent=sourceTitle?sourceTitle.textContent:'ข้อมูลบุคลากร';
+    var sub=document.createElement('small');
+    sub.textContent=sourceSub?sourceSub.textContent:'จัดการข้อมูลบุคลากรทั้งหมดในระบบ';
+    copy.appendChild(title);
+    copy.appendChild(sub);
+
+    box.appendChild(iconWrap);
+    box.appendChild(copy);
+    left.appendChild(box);
+    return box;
+  }
+
+  function sync(){
+    var page=q('page-people');
+    var on=!!(page&&page.classList.contains('active'));
+    document.body.classList.toggle('p306-people-open',on);
+    if(on)makeTitle();
+  }
+
+  function wire(){
+    makeTitle();
+    var page=q('page-people');
+    if(page&&window.MutationObserver){
+      new MutationObserver(sync).observe(page,{attributes:true,attributeFilter:['class']});
+    }
+    sync();
+  }
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',wire,{once:true});
+  }else{
+    wire();
+  }
   window.addEventListener('pageshow',sync);
   window.addEventListener('hashchange',function(){setTimeout(sync,0)});
   document.addEventListener('click',function(e){
