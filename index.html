@@ -2392,7 +2392,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 <link rel="stylesheet" href="summary-v34.css?v=34.8">
 <link rel="stylesheet" href="sidebar-v35.css?v=35.5.14.5-ipad-desktop-mascot-8mm-gap">
   <link rel="stylesheet" href="unit-v36.css?v=36.6">
-<link rel="stylesheet" href="settings-v37.css?v=37.0">
+<link rel="stylesheet" href="settings-v37.css?v=37.0.1">
 </head>
 <body>
 
@@ -5630,9 +5630,7 @@ function saveSummaryPDF(){
     });
   });
 }
-function printSummary(){var table=el('summaryTable');if(!table)return;var win=window.open('','_blank');if(!win)return;var title='ตารางหลักการเฉลี่ยเวร เดือน'+MONTHS[cm()]+' พ.ศ. '+py();win.document.write('<!DOCTYPE html><html lang="th"><head><meta charset="utf-8"><title>'+title+'</title><style>@page{size:A4 landscape;margin:15mm 10mm 13mm 10mm}body{font-family:-apple-system,BlinkMacSystemFont,"Noto Sans Thai",Tahoma,Arial,sans-serif;margin:0}h2{text-align:center;font-size:15px}table{border-collapse:collapse;width:100%;font-size:6px}th,td{border:1px solid #999;padding:1.5px;text-align:center;white-space:nowrap;color:#111!important}td{background:#fff!important}th{background:#e7e7ea!important}tfoot td{background:#ededed!important}</style><link rel="stylesheet" href="settings-v37.css?v=37.0">
-</head><body><h2>'+title+'</h2>'+table.outerHTML+'<script>window.onload=function(){window.print()}<\/script><script src="settings-v37.js?v=37.0"></script>
-</body></html>');win.document.close()}
+function printSummary(){var table=el('summaryTable');if(!table)return;var win=window.open('','_blank');if(!win)return;var title='ตารางหลักการเฉลี่ยเวร เดือน'+MONTHS[cm()]+' พ.ศ. '+py();win.document.write('<!DOCTYPE html><html lang="th"><head><meta charset="utf-8"><title>'+title+'</title><style>@page{size:A4 landscape;margin:15mm 10mm 13mm 10mm}body{font-family:-apple-system,BlinkMacSystemFont,"Noto Sans Thai",Tahoma,Arial,sans-serif;margin:0}h2{text-align:center;font-size:15px}table{border-collapse:collapse;width:100%;font-size:6px}th,td{border:1px solid #999;padding:1.5px;text-align:center;white-space:nowrap;color:#111!important}td{background:#fff!important}th{background:#e7e7ea!important}tfoot td{background:#ededed!important}</style></head><body><h2>'+title+'</h2>'+table.outerHTML+'<script>window.onload=function(){window.print()}<\/script></body></html>');win.document.close()}
 function openSummaryPdf(){el('summaryPdfFile').click()}
 
 function normalizeUrl(v){return String(v||'').trim().replace(/\/+$/,'')}
@@ -7015,6 +7013,6 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <script src="home-v26.js?v=28.5"></script>
 
 <script src="summary-v34.js?v=34.8"></script>
-<script src="unit-v36.js?v=36.5"></script><script src="settings-v37.js?v=37.0"></script>
+<script src="unit-v36.js?v=36.5"></script><script src="settings-v37.js?v=37.0.1"></script>
 </body>
 </html>
