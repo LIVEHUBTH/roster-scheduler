@@ -114,3 +114,135 @@ body.s37-theme-applied header{background:linear-gradient(var(--s37-global-dir,13
 @media (max-width:700px){
  .s37-topbar-title{gap:7px}.s37-topbar-title .s37-topbar-gear{width:34px;height:34px;flex-basis:34px;border-radius:10px}.s37-topbar-title .s37-topbar-gear svg{width:18px;height:18px}.s37-topbar-title-copy b{font-size:12px}.s37-topbar-title-copy small{font-size:7px;max-width:155px;overflow:hidden;text-overflow:ellipsis}.s37-app-preview{height:215px!important;grid-template-columns:62px minmax(0,1fr)!important}
 }
+
+
+/* =========================================================
+   SETTINGS V37.2 — GLOBAL LIVE THEME FIX + MULTI-TONE + DIRECTION PREVIEWS
+   No sidebar structure/layout change; only user-selected colors.
+   ========================================================= */
+
+/* Pink pastel line gear in top title (fix inherited black SVG). */
+.s37-topbar-title .s37-topbar-gear{
+  background:#fff3f8!important;
+  color:#e96899!important;
+  border-color:#f3cddd!important;
+}
+.s37-topbar-title .s37-topbar-gear .s37-svg{
+  width:22px!important;height:22px!important;
+  display:block!important;
+  fill:none!important;
+  stroke:currentColor!important;
+  stroke-width:1.8!important;
+  stroke-linecap:round!important;
+  stroke-linejoin:round!important;
+}
+
+/* More preset colors. */
+#page-settings .s37-theme-row{grid-template-columns:repeat(6,minmax(0,1fr));}
+#page-settings .s37-theme[data-theme=rose] i{background:linear-gradient(135deg,#ef7db1 0 48%,#d9c5f3 48%)}
+#page-settings .s37-theme[data-theme=aqua] i{background:linear-gradient(135deg,#68c5d3 0 48%,#c7eddc 48%)}
+#page-settings .s37-theme[data-theme=green] i{background:linear-gradient(135deg,#7fcf91 0 48%,#f1dea2 48%)}
+#page-settings .s37-theme[data-theme=orange] i{background:linear-gradient(135deg,#f2a65a 0 48%,#f5b5a6 48%)}
+#page-settings .s37-theme[data-theme=indigo] i{background:linear-gradient(135deg,#7e8fd8 0 48%,#d7c6ef 48%)}
+#page-settings .s37-theme[data-theme=gray] i{background:linear-gradient(135deg,#a7aebd 0 48%,#eadde5 48%)}
+
+/* 1 / 2 / 3 tone controls. */
+#page-settings .s37-theme-controls{margin-top:13px;display:grid;gap:12px}
+#page-settings .s37-tone-choice,#page-settings .s37-direction-choice{display:grid;gap:7px}
+#page-settings .s37-tone-choice>span,#page-settings .s37-direction-choice>span{font-size:10px;font-weight:900;color:#586276}
+#page-settings .s37-segment{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:4px;border:1px solid #e7e5eb;border-radius:10px;background:#fafbfc}
+#page-settings .s37-segment button{height:34px;border:0;border-radius:7px;background:transparent;color:#7b8392;font-size:9px;font-weight:900;cursor:pointer}
+#page-settings .s37-segment button.active{background:#fff;color:#df648f;box-shadow:0 2px 8px rgba(60,70,90,.08)}
+#page-settings .s37-custom-colors{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+#page-settings .s37-custom-colors label{display:grid;grid-template-columns:1fr 38px;align-items:center;gap:6px;height:42px;padding:0 8px;border:1px solid #e5e5eb;border-radius:9px;background:#fff}
+#page-settings .s37-custom-colors input[type=color]{width:30px!important;height:30px!important;border:0!important;border-radius:8px!important;padding:0!important;background:transparent!important}
+#page-settings .s37-custom-colors.is-1 .tone2,#page-settings .s37-custom-colors.is-1 .tone3{display:none}
+#page-settings .s37-custom-colors.is-2 .tone3{display:none}
+
+/* Direction shown as visual mini examples. */
+#page-settings .s37-direction-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+#page-settings .s37-direction-grid button{min-width:0;min-height:66px;padding:7px 5px;border:1px solid #e6e4ea;border-radius:9px;background:#fff;display:grid;grid-template-columns:34px 22px;grid-template-rows:22px auto;align-items:center;justify-content:center;gap:2px 3px;color:#606b7e;cursor:pointer}
+#page-settings .s37-direction-grid button i{grid-row:1;grid-column:1;width:34px;height:20px;border-radius:6px;background:linear-gradient(135deg,var(--s37-demo-c1,#f6b1ca),var(--s37-demo-c2,#aee5d7),var(--s37-demo-c3,#c5d9f6))}
+#page-settings .s37-direction-grid button i.diag-up{background:linear-gradient(45deg,var(--s37-demo-c1,#f6b1ca),var(--s37-demo-c2,#aee5d7),var(--s37-demo-c3,#c5d9f6))}
+#page-settings .s37-direction-grid button i.horizontal{background:linear-gradient(90deg,var(--s37-demo-c1,#f6b1ca),var(--s37-demo-c2,#aee5d7),var(--s37-demo-c3,#c5d9f6))}
+#page-settings .s37-direction-grid button i.vertical{background:linear-gradient(180deg,var(--s37-demo-c1,#f6b1ca),var(--s37-demo-c2,#aee5d7),var(--s37-demo-c3,#c5d9f6))}
+#page-settings .s37-direction-grid button b{grid-row:1;grid-column:2;font-size:14px}
+#page-settings .s37-direction-grid button small{grid-row:2;grid-column:1/-1;font-size:7px;line-height:1.2;color:#8b93a2}
+#page-settings .s37-direction-grid button.active{border-color:#ed92b4;background:#fff7fa;color:#e46796;box-shadow:0 0 0 2px rgba(237,146,180,.08)}
+
+/* User-selected global colors: specificity beats existing !important rules. */
+html body.s37-theme-applied{
+  background:var(--s37-body-gradient)!important;
+}
+html body.s37-theme-applied #appSidebar.sidebar{
+  background:var(--s37-sidebar-gradient)!important;
+  background-image:var(--s37-sidebar-gradient)!important;
+}
+html body.s37-theme-applied .main-shell,
+html body.s37-theme-applied main.app,
+html body.s37-theme-applied .page-view{
+  background:var(--s37-content-gradient)!important;
+  background-image:var(--s37-content-gradient)!important;
+}
+html body.s37-theme-applied .main-shell>header{
+  background:var(--s37-top-gradient)!important;
+  background-image:var(--s37-top-gradient)!important;
+}
+/* Keep cards readable while allowing the page background to show around them. */
+html body.s37-theme-applied #page-settings .s37-card{background:rgba(255,255,255,.92)!important}
+
+/* Settings top bar on phone: balanced two rows, without changing other pages. */
+@media (max-width:700px){
+  body.s37-settings-open .main-shell>header{min-height:118px!important;padding:0!important}
+  body.s37-settings-open .header-wrap{
+    min-height:118px!important;
+    padding:10px 14px!important;
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) auto!important;
+    grid-template-rows:auto auto!important;
+    align-items:center!important;
+    column-gap:10px!important;
+    row-gap:8px!important;
+  }
+  body.s37-settings-open .header-clean-left{
+    grid-column:1/-1!important;
+    grid-row:1!important;
+    display:grid!important;
+    grid-template-columns:42px minmax(0,1fr)!important;
+    align-items:center!important;
+    gap:10px!important;
+    min-width:0!important;
+  }
+  body.s37-settings-open .mobile-menu-btn{
+    grid-column:1!important;
+    margin:0!important;
+    width:42px!important;
+    height:42px!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+  }
+  body.s37-settings-open .s37-topbar-title{
+    grid-column:2!important;
+    min-width:0!important;
+    display:flex!important;
+    align-items:center!important;
+    gap:8px!important;
+  }
+  body.s37-settings-open .s37-topbar-title .s37-topbar-gear{width:38px!important;height:38px!important;flex:0 0 38px!important}
+  body.s37-settings-open .s37-topbar-title-copy b{font-size:13px!important}
+  body.s37-settings-open .s37-topbar-title-copy small{font-size:7.5px!important;max-width:none!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+  body.s37-settings-open .header-right{
+    grid-column:1/-1!important;
+    grid-row:2!important;
+    width:100%!important;
+    display:flex!important;
+    justify-content:flex-end!important;
+    align-items:center!important;
+    gap:8px!important;
+  }
+  body.s37-settings-open .header-user-status{max-width:210px!important}
+  #page-settings .s37-theme-row{grid-template-columns:repeat(4,1fr)!important}
+  #page-settings .s37-custom-colors{grid-template-columns:1fr!important}
+  #page-settings .s37-direction-grid{grid-template-columns:1fr 1fr!important}
+}

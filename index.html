@@ -2392,7 +2392,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 <link rel="stylesheet" href="summary-v34.css?v=34.8">
 <link rel="stylesheet" href="sidebar-v35.css?v=35.5.14.5-ipad-desktop-mascot-8mm-gap">
   <link rel="stylesheet" href="unit-v36.css?v=36.6">
-<link rel="stylesheet" href="settings-v37.css?v=37.1">
+<link rel="stylesheet" href="settings-v37.css?v=37.2">
 </head>
 <body>
 
@@ -3566,22 +3566,48 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
             <h3><span class="s37-icon purple">▦</span>สีประจำโปรแกรม</h3>
             <p class="s37-card-sub">เลือกชุดสีของโปรแกรม</p>
             <div class="s37-theme-row">
-              <button type="button" class="s37-theme active" data-v24-color="#f36f9f" data-theme="pink"><i></i></button>
-              <button type="button" class="s37-theme" data-v24-color="#6fa8e8" data-theme="blue"><i></i></button>
-              <button type="button" class="s37-theme" data-v24-color="#2fb79c" data-theme="mint"><i></i></button>
-              <button type="button" class="s37-theme" data-v24-color="#9b7add" data-theme="purple"><i></i></button>
-              <button type="button" class="s37-theme" data-v24-color="#e7ad4c" data-theme="yellow"><i></i></button>
-              <button type="button" class="s37-theme" data-v24-color="#ed8b6f" data-theme="peach"><i></i></button>
+              <button type="button" class="s37-theme active" data-v24-color="#f36f9f" data-theme="pink" data-c1="#f36f9f" data-c2="#8fdcc8" data-c3="#b9d7f4" aria-label="ชมพู มิ้นต์ ฟ้า"><i></i></button>
+              <button type="button" class="s37-theme" data-v24-color="#6fa8e8" data-theme="blue" data-c1="#6fa8e8" data-c2="#b8d8f6" data-c3="#d9cdf6" aria-label="ฟ้า"><i></i></button>
+              <button type="button" class="s37-theme" data-v24-color="#2fb79c" data-theme="mint" data-c1="#2fb79c" data-c2="#9bdfd0" data-c3="#c8eaf4" aria-label="เขียวมิ้นต์"><i></i></button>
+              <button type="button" class="s37-theme" data-v24-color="#9b7add" data-theme="purple" data-c1="#9b7add" data-c2="#d2c0f2" data-c3="#f2c7db" aria-label="ม่วง"><i></i></button>
+              <button type="button" class="s37-theme" data-v24-color="#e7ad4c" data-theme="yellow" data-c1="#e7ad4c" data-c2="#f7d998" data-c3="#f6c4b6" aria-label="เหลือง"><i></i></button>
+              <button type="button" class="s37-theme" data-v24-color="#ed8b6f" data-theme="peach" data-c1="#ed8b6f" data-c2="#f5baa8" data-c3="#f3c7d7" aria-label="พีช"><i></i></button>
+              <button type="button" class="s37-theme" data-v24-color="#ef7db1" data-theme="rose" data-c1="#ef7db1" data-c2="#f5b7d1" data-c3="#d9c5f3" aria-label="โรส"><i></i></button>
+              <button type="button" class="s37-theme" data-v24-color="#68c5d3" data-theme="aqua" data-c1="#68c5d3" data-c2="#a8e0e7" data-c3="#c7eddc" aria-label="อควา"><i></i></button>
+              <button type="button" class="s37-theme" data-v24-color="#7fcf91" data-theme="green" data-c1="#7fcf91" data-c2="#bde5a9" data-c3="#f1dea2" aria-label="เขียว"><i></i></button>
+              <button type="button" class="s37-theme" data-v24-color="#f2a65a" data-theme="orange" data-c1="#f2a65a" data-c2="#f6ca88" data-c3="#f5b5a6" aria-label="ส้ม"><i></i></button>
+              <button type="button" class="s37-theme" data-v24-color="#7e8fd8" data-theme="indigo" data-c1="#7e8fd8" data-c2="#b7c1ef" data-c3="#d7c6ef" aria-label="อินดิโก"><i></i></button>
+              <button type="button" class="s37-theme" data-v24-color="#a7aebd" data-theme="gray" data-c1="#a7aebd" data-c2="#d4d8e0" data-c3="#eadde5" aria-label="เทาพาสเทล"><i></i></button>
             </div>
             <div class="s37-theme-controls">
-              <label>ทิศทางการไล่สี
-                <select id="settingsGradientDirectionV37">
-                  <option value="135deg">↘ ซ้ายบน → ขวาล่าง</option>
-                  <option value="45deg">↗ ซ้ายล่าง → ขวาบน</option>
-                  <option value="90deg">→ ซ้าย → ขวา</option>
-                  <option value="180deg">↓ บน → ล่าง</option>
+              <div class="s37-tone-choice">
+                <span>จำนวนโทนสี</span>
+                <div class="s37-segment" role="group" aria-label="จำนวนโทนสี">
+                  <button type="button" class="active" data-s37-tones="1">1 โทน</button>
+                  <button type="button" data-s37-tones="2">2 โทน</button>
+                  <button type="button" data-s37-tones="3">3 โทน</button>
+                </div>
+              </div>
+              <div class="s37-custom-colors">
+                <label>สีที่ 1<input id="settingsThemeColor1V37" type="color" value="#f36f9f"></label>
+                <label class="tone2">สีที่ 2<input id="settingsThemeColor2V37" type="color" value="#8fdcc8"></label>
+                <label class="tone3">สีที่ 3<input id="settingsThemeColor3V37" type="color" value="#b9d7f4"></label>
+              </div>
+              <div class="s37-direction-choice">
+                <span>ทิศทางการไล่สี</span>
+                <div class="s37-direction-grid">
+                  <button type="button" class="active" data-s37-dir="135deg"><i class="diag-down"></i><b>↘</b><small>ซ้ายบน → ขวาล่าง</small></button>
+                  <button type="button" data-s37-dir="45deg"><i class="diag-up"></i><b>↗</b><small>ซ้ายล่าง → ขวาบน</small></button>
+                  <button type="button" data-s37-dir="90deg"><i class="horizontal"></i><b>→</b><small>ซ้าย → ขวา</small></button>
+                  <button type="button" data-s37-dir="180deg"><i class="vertical"></i><b>↓</b><small>บน → ล่าง</small></button>
+                </div>
+                <select id="settingsGradientDirectionV37" class="s37-hidden-select">
+                  <option value="135deg">ซ้ายบน → ขวาล่าง</option>
+                  <option value="45deg">ซ้ายล่าง → ขวาบน</option>
+                  <option value="90deg">ซ้าย → ขวา</option>
+                  <option value="180deg">บน → ล่าง</option>
                 </select>
-              </label>
+              </div>
             </div>
             <input id="settingsBgV24" type="hidden" value="#FFFFFF"><select id="settingsFontV24" class="s37-hidden-select"><option value="small">เล็ก</option><option value="medium" selected>กลาง</option><option value="large">ใหญ่</option></select>
             <button id="settingsSaveStyleV24" type="button" class="s37-hidden-button">บันทึกสไตล์</button>
@@ -7030,6 +7056,6 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <script src="home-v26.js?v=28.5"></script>
 
 <script src="summary-v34.js?v=34.8"></script>
-<script src="unit-v36.js?v=36.5"></script><script src="settings-v37.js?v=37.1"></script>
+<script src="unit-v36.js?v=36.5"></script><script src="settings-v37.js?v=37.2"></script>
 </body>
 </html>
