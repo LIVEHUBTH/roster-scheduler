@@ -2674,6 +2674,20 @@ body.p306-people-open #page-people .p30-shell{
   background-image:revert;
 }
 </style>
+
+<style id="people-v313-remove-active-white-bleed-only">
+/* PEOPLE V30.13 — exact remaining white strip fix.
+   Source people-v30.css has:
+   #page-people.active{box-shadow:0 0 0 100vmax #fff;clip-path:inset(0 -100vmax)}
+   That huge white box-shadow is the visible white band.
+   Disable it ONLY on People page. */
+body.p306-people-open #page-people.active{
+  box-shadow:none!important;
+  clip-path:none!important;
+  background:transparent!important;
+  background-image:none!important;
+}
+</style>
 </head>
 <body>
 
