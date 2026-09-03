@@ -2827,6 +2827,122 @@ body.p306-people-open #page-people.active{
   }
 }
 </style>
+
+<style id="global-v383-exact-request-only">
+/* =========================================================
+   GLOBAL V38.3 — EXACT REQUEST ONLY
+
+   1) HOME: outer width/left-right edge follows PEOPLE.
+      - No inner Home grid/card/component changes.
+      - Phone: no extra Home-only horizontal padding.
+      - iPad: keep the existing .86 scale, but compensate width exactly.
+
+   2) ALL PAGES: disable page-root WHITE box-shadow.
+   3) ALL PAGES: disable page-root clip-path used with white strip.
+   4) PEOPLE: keep page root transparent to show program background.
+
+   IMPORTANT:
+   - Sidebar is not targeted.
+   - No inner component layout is changed.
+   - No functions/JS are changed.
+   ========================================================= */
+
+/* ---------- 2 + 3: ALL PAGE ROOTS ONLY ---------- */
+:is(
+  #page-home.active,
+  #page-roster.active,
+  #page-people.active,
+  #page-rules.active,
+  #page-holidays.active,
+  #page-history.active,
+  #page-summary.active,
+  #page-internal.active,
+  #page-settings.active
+){
+  box-shadow:none!important;
+  clip-path:none!important;
+}
+
+/* ---------- 4: PEOPLE ROOT TRANSPARENT ONLY ---------- */
+#page-people,
+#page-people.active,
+#page-people .p30-shell{
+  background:transparent!important;
+  background-image:none!important;
+}
+
+/* ---------- 1: HOME OUTER EDGE = PEOPLE ---------- */
+/* PEOPLE reference:
+   max-width:1480px; margin:0 auto; padding:0
+*/
+#page-home{
+  box-sizing:border-box!important;
+  width:100%!important;
+  max-width:1480px!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+  padding-left:0!important;
+  padding-right:0!important;
+}
+
+/* Home shell must consume the full People-equivalent content width.
+   No changes to its internal display/grid/flex/card rules. */
+#page-home .v244-home-shell{
+  box-sizing:border-box!important;
+  max-width:none!important;
+  margin-left:0!important;
+  margin-right:0!important;
+  padding-left:0!important;
+  padding-right:0!important;
+}
+
+/* PHONE:
+   remove Home-only side inset.
+   Keep all existing phone stacking/grid rules untouched. */
+@media (max-width:700px){
+  #page-home{
+    padding-left:0!important;
+    padding-right:0!important;
+  }
+  #page-home .v244-home-shell{
+    transform:none!important;
+    width:100%!important;
+    max-width:100%!important;
+    margin-left:0!important;
+    margin-right:0!important;
+  }
+}
+
+/* iPAD:
+   Existing Home uses scale(.86). 100/.86 = 116.279069...
+   Use the exact compensation so the VISIBLE shell width equals 100%
+   of the same content area used by PEOPLE. */
+@media (min-width:701px) and (max-width:1100px){
+  #page-home{
+    padding-left:0!important;
+    padding-right:0!important;
+  }
+  #page-home .v244-home-shell{
+    transform:scale(.86)!important;
+    transform-origin:top left!important;
+    width:calc(100% / .86)!important;
+    max-width:none!important;
+    margin-left:0!important;
+    margin-right:0!important;
+  }
+}
+
+/* DESKTOP:
+   only normalize the outer edge; preserve Home desktop layout itself. */
+@media (min-width:1101px){
+  #page-home .v244-home-shell{
+    width:100%!important;
+    max-width:100%!important;
+    margin-left:0!important;
+    margin-right:0!important;
+  }
+}
+</style>
 </head>
 <body>
 
