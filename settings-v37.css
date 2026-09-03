@@ -54,3 +54,63 @@
  #page-settings .s37-setting-row{grid-template-columns:34px minmax(0,1fr) auto;gap:9px;padding:11px 0}.s37-setting-row b{font-size:10px}.s37-setting-row small{font-size:8.5px;line-height:1.4}
  #page-settings .s37-preview-wrap{overflow-x:auto}.s37-preview{min-width:610px}.s37-legend{min-width:610px;justify-content:flex-start!important}.s37-theme-row{grid-template-columns:repeat(3,1fr);gap:8px}.s37-theme{height:50px}.s37-save-row{grid-template-columns:1fr;gap:8px}.s37-primary,.s37-secondary{min-height:45px}.s37-manage-grid{grid-template-columns:1fr 1fr;gap:8px}.s37-manage-grid button{font-size:9px;min-height:54px}.s37-cloud-head{align-items:flex-start}.s37-about-card{min-height:210px}
 }
+
+
+/* =========================================================
+   SETTINGS V37.1 — MINIMAL PASTEL ICONS + TOPBAR TITLE + LIVE THEME
+   Scope: settings module UI; theme is applied globally only after user chooses/saves it.
+   No structural sidebar/page layout changes.
+   ========================================================= */
+
+/* Top-bar title shown only while Settings is active. */
+.header-clean-left{display:flex;align-items:center;gap:10px;min-width:0}
+.s37-topbar-title{display:none;align-items:center;gap:10px;min-width:0}
+body.s37-settings-open .s37-topbar-title{display:flex}
+.s37-topbar-title .s37-topbar-gear{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:#fff0f6;color:#e75d91;border:1px solid #f5d6e2;flex:0 0 42px}
+.s37-topbar-title .s37-topbar-gear svg{width:22px;height:22px}
+.s37-topbar-title-copy{display:grid;gap:2px;min-width:0}
+.s37-topbar-title-copy b{font-size:16px;line-height:1.1;color:#26334b;white-space:nowrap}
+.s37-topbar-title-copy small{font-size:9px;color:#8b93a3;white-space:nowrap}
+
+/* Minimal SVG icon system. */
+#page-settings .s37-svg{width:18px;height:18px;display:block;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+#page-settings .s37-tab-icon,#page-settings .s37-icon,#page-settings .s37-mini{font-size:0!important}
+#page-settings .s37-tab-icon .s37-svg{width:18px;height:18px}
+#page-settings .s37-icon .s37-svg{width:16px;height:16px}
+#page-settings .s37-mini .s37-svg{width:16px;height:16px}
+#page-settings button .s37-svg{width:15px;height:15px;display:inline-block;vertical-align:-2px;margin-right:5px}
+
+/* Pastel button icon colors remain minimal. */
+#page-settings .s37-manage-grid button:nth-child(1){color:#df6d83;background:#fff3f5;border-color:#f3d7de}
+#page-settings .s37-manage-grid button:nth-child(2){color:#8470cf;background:#f5f2ff;border-color:#e4dcf7}
+#page-settings .s37-manage-grid button:nth-child(3){color:#49a98e;background:#effaf6;border-color:#d5eee6}
+#page-settings .s37-manage-grid button:nth-child(4){color:#5b9bd1;background:#f0f7fd;border-color:#d8e9f7}
+#page-settings .s37-button-stack button:nth-child(1){color:#4a9bc8;background:#eef8fd}
+#page-settings .s37-button-stack button:nth-child(2){color:#42a98c;background:#eefaf6}
+#page-settings .s37-button-stack button:nth-child(3){color:#8a72cf;background:#f5f1fd}
+
+/* Theme controls. */
+#page-settings .s37-theme-controls{margin-top:12px;display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
+#page-settings .s37-theme-controls label{margin:0}
+
+/* Overall-program live preview. */
+#page-settings .s37-app-preview{height:250px;display:grid;grid-template-columns:78px minmax(0,1fr);overflow:hidden;background:var(--s37-preview-bg,#fff8fb);border:1px solid #ebe7ed}
+#page-settings .s37-preview-sidebar{padding:14px 10px;display:grid;align-content:start;gap:10px;background:linear-gradient(var(--s37-preview-dir,135deg),var(--s37-preview-a,#fff0f6),var(--s37-preview-b,#eefaf6));border-right:1px solid rgba(100,100,120,.08)}
+#page-settings .s37-preview-sidebar span{width:34px;height:34px;border-radius:11px;background:#fff;margin:0 auto 6px;box-shadow:0 2px 7px rgba(0,0,0,.05)}
+#page-settings .s37-preview-sidebar b{height:10px;border-radius:999px;background:rgba(255,255,255,.78)}
+#page-settings .s37-preview-app{display:grid;grid-template-rows:43px 1fr;min-width:0}
+#page-settings .s37-preview-topbar{display:flex;align-items:center;justify-content:space-between;padding:0 12px;background:linear-gradient(var(--s37-preview-dir,135deg),var(--s37-preview-a,#fff0f6),var(--s37-preview-b,#eefaf6));border-bottom:1px solid rgba(100,100,120,.08)}
+#page-settings .s37-preview-topbar span{width:95px;height:10px;border-radius:999px;background:rgba(255,255,255,.84)}#page-settings .s37-preview-topbar i{width:24px;height:24px;border-radius:50%;background:#fff}
+#page-settings .s37-preview-content{padding:12px;background:linear-gradient(var(--s37-preview-dir,135deg),var(--s37-preview-bg,#fffafa),#fff);display:grid;align-content:start;gap:10px}
+#page-settings .s37-preview-title{display:grid;gap:5px}.s37-preview-title b{width:130px;height:11px;border-radius:999px;background:#354057}.s37-preview-title span{width:180px;height:7px;border-radius:999px;background:#c9ced8}
+#page-settings .s37-preview-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.s37-preview-cards i{height:42px;border-radius:9px;border:1px solid rgba(100,100,120,.08);background:rgba(255,255,255,.86)}
+#page-settings .s37-preview-table{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#e8e8ee;border:1px solid #e8e8ee;border-radius:7px;overflow:hidden}.s37-preview-table .head{grid-column:1/-1;height:18px;background:linear-gradient(var(--s37-preview-dir,135deg),var(--s37-preview-a,#f7c9d9),var(--s37-preview-b,#ccefe5))}.s37-preview-table>div:not(.head){height:18px;background:rgba(255,255,255,.95)}
+
+/* Theme is global by user request, but only visual colors change; no layout rules. */
+body.s37-theme-applied{background:linear-gradient(var(--s37-global-dir,135deg),var(--s37-global-bg-a,#fffafd),var(--s37-global-bg-b,#f7fbff))!important}
+body.s37-theme-applied .sidebar{background:linear-gradient(var(--s37-global-dir,135deg),var(--s37-global-side-a,#fff4f8),var(--s37-global-side-b,#f2fbf8))!important}
+body.s37-theme-applied header{background:linear-gradient(var(--s37-global-dir,135deg),var(--s37-global-top-a,#fff7fa),var(--s37-global-top-b,#f4fbf9))!important}
+
+@media (max-width:700px){
+ .s37-topbar-title{gap:7px}.s37-topbar-title .s37-topbar-gear{width:34px;height:34px;flex-basis:34px;border-radius:10px}.s37-topbar-title .s37-topbar-gear svg{width:18px;height:18px}.s37-topbar-title-copy b{font-size:12px}.s37-topbar-title-copy small{font-size:7px;max-width:155px;overflow:hidden;text-overflow:ellipsis}.s37-app-preview{height:215px!important;grid-template-columns:62px minmax(0,1fr)!important}
+}

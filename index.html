@@ -2392,7 +2392,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 <link rel="stylesheet" href="summary-v34.css?v=34.8">
 <link rel="stylesheet" href="sidebar-v35.css?v=35.5.14.5-ipad-desktop-mascot-8mm-gap">
   <link rel="stylesheet" href="unit-v36.css?v=36.6">
-<link rel="stylesheet" href="settings-v37.css?v=37.0.1">
+<link rel="stylesheet" href="settings-v37.css?v=37.1">
 </head>
 <body>
 
@@ -3485,14 +3485,7 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
 
 <section class="page-view" id="page-settings" data-view="settings">
   <div class="s37-shell">
-    <div class="s37-page-head">
-      <div>
-        <h2>ตั้งค่าโปรแกรม</h2>
-        <p>ปรับแต่งการทำงานของโปรแกรมให้ตรงกับความต้องการ</p>
-      </div>
-    </div>
-
-    <div class="s37-tabs" role="tablist" aria-label="หมวดการตั้งค่า">
+<div class="s37-tabs" role="tablist" aria-label="หมวดการตั้งค่า">
       <button type="button" class="s37-tab active" data-s37-tab="general"><span class="s37-tab-icon pink">⚙</span><b>ตั้งค่าทั่วไป</b></button>
       <button type="button" class="s37-tab" data-s37-tab="roster"><span class="s37-tab-icon mint">▦</span><b>ตั้งค่าการจัดเวร</b></button>
       <button type="button" class="s37-tab" data-s37-tab="display"><span class="s37-tab-icon purple">◉</span><b>การแสดงผล</b></button>
@@ -3549,9 +3542,23 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
         <div class="s37-column">
           <section class="s37-card">
             <h3><span class="s37-icon mint">◉</span>ตัวอย่างการแสดงผล</h3>
-            <div class="s37-preview-wrap">
-              <table class="s37-preview"><thead><tr><th></th><th>จ.</th><th>อ.</th><th>พ.</th><th>พฤ.</th><th>ศ.</th><th class="sat">ส.</th><th class="sun">อา.</th></tr></thead><tbody><tr><th>1</th><td>เวร1</td><td class="ot">OT1</td><td class="morning">SDMC<br>เช้า1</td><td>–</td><td>เวร2</td><td class="ot">OT2</td><td class="night">SDMC<br>บ่าย-ดึก1</td></tr><tr><th>2</th><td class="ot">OT2</td><td class="morning">SDMC<br>เช้า2</td><td>เวร1</td><td>เวร2</td><td class="ot">OT1</td><td>เวร1</td><td class="ot">OT2</td></tr></tbody></table>
-              <div class="s37-legend"><span><i class="pink"></i>เวร</span><span><i class="blue"></i>OT</span><span><i class="mint"></i>SDMC เช้า</span><span><i class="purple"></i>SDMC บ่าย-ดึก</span></div>
+            <div class="s37-preview-wrap s37-app-preview" id="settingsThemePreviewV37">
+              <div class="s37-preview-sidebar">
+                <span></span><b></b><b></b><b></b><b></b><b></b>
+              </div>
+              <div class="s37-preview-app">
+                <div class="s37-preview-topbar"><span></span><i></i></div>
+                <div class="s37-preview-content">
+                  <div class="s37-preview-title"><b></b><span></span></div>
+                  <div class="s37-preview-cards"><i></i><i></i><i></i><i></i></div>
+                  <div class="s37-preview-table">
+                    <div class="head"></div>
+                    <div></div><div></div><div></div><div></div>
+                    <div></div><div></div><div></div><div></div>
+                    <div></div><div></div><div></div><div></div>
+                  </div>
+                </div>
+              </div>
             </div>
           </section>
 
@@ -3565,6 +3572,16 @@ header{background:#fff!important;border-bottom:1px solid #f2ece6!important}
               <button type="button" class="s37-theme" data-v24-color="#9b7add" data-theme="purple"><i></i></button>
               <button type="button" class="s37-theme" data-v24-color="#e7ad4c" data-theme="yellow"><i></i></button>
               <button type="button" class="s37-theme" data-v24-color="#ed8b6f" data-theme="peach"><i></i></button>
+            </div>
+            <div class="s37-theme-controls">
+              <label>ทิศทางการไล่สี
+                <select id="settingsGradientDirectionV37">
+                  <option value="135deg">↘ ซ้ายบน → ขวาล่าง</option>
+                  <option value="45deg">↗ ซ้ายล่าง → ขวาบน</option>
+                  <option value="90deg">→ ซ้าย → ขวา</option>
+                  <option value="180deg">↓ บน → ล่าง</option>
+                </select>
+              </label>
             </div>
             <input id="settingsBgV24" type="hidden" value="#FFFFFF"><select id="settingsFontV24" class="s37-hidden-select"><option value="small">เล็ก</option><option value="medium" selected>กลาง</option><option value="large">ใหญ่</option></select>
             <button id="settingsSaveStyleV24" type="button" class="s37-hidden-button">บันทึกสไตล์</button>
@@ -7013,6 +7030,6 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <script src="home-v26.js?v=28.5"></script>
 
 <script src="summary-v34.js?v=34.8"></script>
-<script src="unit-v36.js?v=36.5"></script><script src="settings-v37.js?v=37.0.1"></script>
+<script src="unit-v36.js?v=36.5"></script><script src="settings-v37.js?v=37.1"></script>
 </body>
 </html>
