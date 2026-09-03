@@ -2807,6 +2807,26 @@ body.p306-people-open #page-people.active{
   }
 }
 </style>
+
+<style id="home-v382-ipad-width-match-people-only">
+/* =========================================================
+   HOME V38.2 — iPad width correction ONLY
+
+   Existing Home iPad layout intentionally uses:
+     transform: scale(.86)
+   The previous global width normalization changed its compensating
+   width from 116.28% to 100%, so Home became visually ~14% narrower.
+
+   Restore ONLY the compensating width on iPad.
+   No Sidebar / cards / grids / functions / desktop / phone changes.
+   ========================================================= */
+@media (min-width:701px) and (max-width:1100px){
+  #page-home .v244-home-shell{
+    width:116.28%!important;
+    max-width:none!important;
+  }
+}
+</style>
 </head>
 <body>
 
