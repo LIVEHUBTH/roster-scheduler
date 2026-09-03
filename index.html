@@ -2689,22 +2689,32 @@ body.p306-people-open #page-people.active{
 }
 </style>
 
-<style id="global-v380-program-background-equal-gutters-only">
+<style id="global-v381-other-pages-match-people-only">
 /* =========================================================
-   GLOBAL V38.0 — ONLY the two requested visual rules:
-   1) Remove the white page-level surface behind all page frames so
-      the current program background/theme is visible.
-   2) Make left/right content gutters equal on every page.
-   Sidebar structure, inner cards, functions and responsive component
-   layouts are not changed.
+   GLOBAL V38.1 — OTHER PAGES ONLY
+   PEOPLE V30.13 remains the untouched reference.
+
+   Requested changes only:
+   1) Other pages use the same outer width / left-right edge as People.
+   2) Remove page-level white strip/background so program theme shows through.
+   3) Do not change Sidebar.
+   4) Do not change inner component/grid/function layout.
    ========================================================= */
 
 :root{
-  --v380-content-gutter:24px;
+  --v381-reference-width:1480px;
 }
 
-/* Keep the actual program/theme background at the outer application layer. */
-.app-shell{
+:is(
+  body:has(#page-home.active),
+  body:has(#page-roster.active),
+  body:has(#page-rules.active),
+  body:has(#page-holidays.active),
+  body:has(#page-history.active),
+  body:has(#page-summary.active),
+  body:has(#page-internal.active),
+  body:has(#page-settings.active)
+) .app-shell{
   background:var(
     --s37-content-gradient,
     linear-gradient(135deg,#fff0f5 0%,#fff7fa 52%,#f7fbfa 100%)
@@ -2715,85 +2725,86 @@ body.p306-people-open #page-people.active{
   )!important;
 }
 
-/* Remove ONLY page-level white/cream layers that sit behind page frames. */
-.main-shell,
-.app,
-main.app,
-.page-view,
-#page-home,
-#page-roster,
-#page-people,
-#page-rules,
-#page-holidays,
-#page-history,
-#page-summary,
-#page-internal,
-#page-settings{
+:is(
+  body:has(#page-home.active),
+  body:has(#page-roster.active),
+  body:has(#page-rules.active),
+  body:has(#page-holidays.active),
+  body:has(#page-history.active),
+  body:has(#page-summary.active),
+  body:has(#page-internal.active),
+  body:has(#page-settings.active)
+) :is(.main-shell,.app,main.app){
   background:transparent!important;
   background-image:none!important;
 }
 
-/* Disable any full-width white bleed used by a page root. */
-.page-view.active,
-#page-home.active,
-#page-roster.active,
-#page-people.active,
-#page-rules.active,
-#page-holidays.active,
-#page-history.active,
-#page-summary.active,
-#page-internal.active,
-#page-settings.active{
+:is(
+  #page-home,
+  #page-roster,
+  #page-rules,
+  #page-holidays,
+  #page-history,
+  #page-summary,
+  #page-internal,
+  #page-settings
+){
+  box-sizing:border-box!important;
+  width:100%!important;
+  max-width:var(--v381-reference-width)!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+  padding-left:0!important;
+  padding-right:0!important;
+  background:transparent!important;
+  background-image:none!important;
+}
+
+:is(
+  #page-home.active,
+  #page-roster.active,
+  #page-rules.active,
+  #page-holidays.active,
+  #page-history.active,
+  #page-summary.active,
+  #page-internal.active,
+  #page-settings.active
+){
   box-shadow:none!important;
   clip-path:none!important;
 }
 
-/* ONE shared horizontal gutter for all pages.
-   Only left/right spacing is standardized; vertical spacing remains untouched. */
-.app,
-main.app{
-  box-sizing:border-box!important;
-  max-width:none!important;
-  padding-left:var(--v380-content-gutter)!important;
-  padding-right:var(--v380-content-gutter)!important;
-}
-
-/* Remove page-specific extra horizontal centering/gaps so every page begins
-   and ends at the same content lines created by .app. */
-.page-view,
-#page-home{
+#page-home .v244-home-shell,
+#page-roster .r29-shell,
+#page-rules .r31-shell,
+#page-holidays .h32-shell,
+#page-history .h33-shell,
+#page-summary .s34-shell,
+#page-internal .u36-app,
+#page-settings .s37-shell{
   box-sizing:border-box!important;
   width:100%!important;
-  max-width:none!important;
-  margin-left:0!important;
-  margin-right:0!important;
-}
-
-/* Page roots that previously supplied their own outer padding:
-   remove horizontal-only padding, retaining their existing vertical padding. */
-#page-internal{
+  max-width:var(--v381-reference-width)!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
   padding-left:0!important;
   padding-right:0!important;
-}
-
-/* Existing PEOPLE fixes stay transparent; inner cards are intentionally untouched. */
-#page-people .p30-shell{
   background:transparent!important;
   background-image:none!important;
 }
 
-/* Existing ROSTER outer shell stays transparent; inner cards retain their colors. */
-#page-roster .r29-shell{
-  background:transparent!important;
-  background-image:none!important;
-}
-
-/* Responsive gutter values only — no component/grid/layout changes. */
-@media (min-width:701px) and (max-width:1180px){
-  :root{--v380-content-gutter:18px}
-}
-@media (max-width:700px){
-  :root{--v380-content-gutter:14px}
+@media (max-width:820px){
+  #page-home .v244-home-shell,
+  #page-roster .r29-shell,
+  #page-rules .r31-shell,
+  #page-holidays .h32-shell,
+  #page-history .h33-shell,
+  #page-summary .s34-shell,
+  #page-internal .u36-app,
+  #page-settings .s37-shell{
+    padding-left:2px!important;
+    padding-right:2px!important;
+  }
 }
 </style>
 </head>
