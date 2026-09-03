@@ -2590,21 +2590,71 @@ body.p306-people-open .p306-topbar-title{
 </style>
 
 
-<style id="people-v308-pink-background-around-sections-only">
-/* PEOPLE V30.8 — restore summary frame; remove only white page surface indicated by arrows.
-   Inner cards, summary frame, table frame, colors, spacing, functions and responsive layout stay unchanged. */
 
-#page-people,
+<style id="people-v309-roster-borders-transparent-surfaces-only">
+/* =========================================================
+   PEOPLE V30.9 — people page only
+   1) Match frame border tone to roster page
+   2) Remove only white outer surfaces so program background remains visible
+   3) Keep all inner pastel card colors and existing layout/functions unchanged
+   ========================================================= */
+
+#page-people{
+  --p309-roster-line:var(--border2,#ebe6dc);
+  background:transparent!important;
+  background-image:none!important;
+}
+
 #page-people .p30-shell{
   background:transparent!important;
   background-image:none!important;
 }
 
-/* Do not alter the summary/table cards themselves. Explicitly neutralize V30.7 behavior if cached CSS persists. */
+/* Outer frames: keep the frame, remove only its white fill. */
+#page-people .p30-card,
 #page-people .p30-summary-card,
-#page-people .p30-table-card{
-  border-color:revert;
-  box-shadow:revert;
+#page-people .p30-table-card,
+#page-people .p30-bottom-card{
+  background:transparent!important;
+  background-image:none!important;
+  border-color:var(--p309-roster-line)!important;
+  box-shadow:none!important;
+}
+
+/* Match every visible frame/field border on this page to the roster-page border tone.
+   Background/fill colors are intentionally NOT changed. */
+#page-people .p30-stat,
+#page-people .p30-action,
+#page-people .p30-filterbar,
+#page-people .p30-search,
+#page-people .p30-filterbar input,
+#page-people .p30-filterbar select,
+#page-people .p30-filter-btn,
+#page-people .p30-table-wrap,
+#page-people .p30-table,
+#page-people .p30-pagination button,
+#page-people .p30-type-line,
+#page-people .p30-info-row,
+#page-people .p30-row-actions button,
+#page-people .p30-modal-card,
+#page-people .p30-modal-body input,
+#page-people .p30-modal-body select{
+  border-color:var(--p309-roster-line)!important;
+}
+
+/* Keep the pastel fills of summary statistics/actions exactly as they are. */
+#page-people .p30-stat,
+#page-people .p30-action{
+  background-image:revert;
+}
+
+/* Remove any white strip/surface immediately behind the page sections,
+   but do not touch the inner cards or table cell fills. */
+#page-people .p30-card-head,
+#page-people .p30-stat-grid,
+#page-people .p30-bottom-grid{
+  background:transparent!important;
+  background-image:none!important;
 }
 </style>
 </head>
