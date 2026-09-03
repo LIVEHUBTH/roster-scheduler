@@ -2591,18 +2591,26 @@ body.p306-people-open .p306-topbar-title{
 
 
 
-<style id="people-v309-roster-borders-transparent-surfaces-only">
+
+<style id="people-v310-light-gray-borders-program-background-only">
 /* =========================================================
-   PEOPLE V30.9 — people page only
-   1) Match frame border tone to roster page
-   2) Remove only white outer surfaces so program background remains visible
-   3) Keep all inner pastel card colors and existing layout/functions unchanged
+   PEOPLE V30.10 — people page only
+   - light-gray borders like roster page
+   - remove white surfaces behind frames
+   - reveal current program background/theme
+   - no layout / function / sidebar changes
    ========================================================= */
 
 #page-people{
-  --p309-roster-line:var(--border2,#ebe6dc);
-  background:transparent!important;
-  background-image:none!important;
+  --p310-line:#e3e6eb;
+  background:var(
+    --s37-content-gradient,
+    linear-gradient(135deg,#fff5f8 0%,#fff9fb 52%,#f7fbfa 100%)
+  )!important;
+  background-image:var(
+    --s37-content-gradient,
+    linear-gradient(135deg,#fff5f8 0%,#fff9fb 52%,#f7fbfa 100%)
+  )!important;
 }
 
 #page-people .p30-shell{
@@ -2610,51 +2618,56 @@ body.p306-people-open .p306-topbar-title{
   background-image:none!important;
 }
 
-/* Outer frames: keep the frame, remove only its white fill. */
+/* Keep every requested outer frame, but remove its white fill. */
 #page-people .p30-card,
 #page-people .p30-summary-card,
 #page-people .p30-table-card,
 #page-people .p30-bottom-card{
   background:transparent!important;
   background-image:none!important;
-  border-color:var(--p309-roster-line)!important;
+  border-color:var(--p310-line)!important;
   box-shadow:none!important;
 }
 
-/* Match every visible frame/field border on this page to the roster-page border tone.
-   Background/fill colors are intentionally NOT changed. */
+/* Remove only white surfaces immediately behind the content.
+   Existing pastel statistic/action fills remain untouched. */
+#page-people .p30-card-head,
+#page-people .p30-stat-grid,
+#page-people .p30-filterbar,
+#page-people .p30-table-foot,
+#page-people .p30-bottom-grid{
+  background:transparent!important;
+  background-image:none!important;
+}
+
+/* Light-gray border tone for all visible frames/controls on this page. */
 #page-people .p30-stat,
 #page-people .p30-action,
-#page-people .p30-filterbar,
 #page-people .p30-search,
 #page-people .p30-filterbar input,
 #page-people .p30-filterbar select,
 #page-people .p30-filter-btn,
 #page-people .p30-table-wrap,
 #page-people .p30-table,
+#page-people .p30-table th,
+#page-people .p30-table td,
 #page-people .p30-pagination button,
+#page-people .p30-pagination select,
 #page-people .p30-type-line,
 #page-people .p30-info-row,
 #page-people .p30-row-actions button,
 #page-people .p30-modal-card,
 #page-people .p30-modal-body input,
 #page-people .p30-modal-body select{
-  border-color:var(--p309-roster-line)!important;
+  border-color:var(--p310-line)!important;
 }
 
-/* Keep the pastel fills of summary statistics/actions exactly as they are. */
+/* Do NOT change the existing pastel fills inside cards. */
 #page-people .p30-stat,
-#page-people .p30-action{
+#page-people .p30-action,
+#page-people .p30-filter-btn,
+#page-people .p30-pill{
   background-image:revert;
-}
-
-/* Remove any white strip/surface immediately behind the page sections,
-   but do not touch the inner cards or table cell fills. */
-#page-people .p30-card-head,
-#page-people .p30-stat-grid,
-#page-people .p30-bottom-grid{
-  background:transparent!important;
-  background-image:none!important;
 }
 </style>
 </head>
