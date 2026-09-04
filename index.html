@@ -3859,6 +3859,203 @@ body.h393-holidays-open .h393-topbar-title{
   }
 }
 </style>
+
+<style id="history-v396-requested-only">
+/* =========================================================
+   HISTORY V39.6 — HISTORY PAGE ONLY / REQUESTED ITEMS ONLY
+
+   1) Remove white fills / shadows behind History outer frames.
+   2) Move title icon + title + subtitle to Top bar.
+      Keep the original clock/arrow visual, rendered as SVG.
+      No icon frame; size matches Home title icon.
+   3) Remove white frames around the 4 summary-card icons.
+   4) "ดูทั้งหมด" buttons in Recent + Audit = light pastel purple.
+   5) Phone Top bar: menu + title + notification + user status one row.
+   6) No Sidebar / other page / responsive content layout changes.
+   ========================================================= */
+
+/* 1) Page root + shell transparent. */
+html body #page-history,
+html body #page-history .h33-shell{
+  background:transparent!important;
+  background-image:none!important;
+}
+
+/* Remove ONLY the white fill/shadow of History structural cards.
+   Borders, sizes, spacing, grids, table structure and functions stay unchanged. */
+html body #page-history .h33-card,
+html body #page-history .h33-viewer{
+  background:transparent!important;
+  background-image:none!important;
+  box-shadow:none!important;
+}
+
+/* Viewer header should not recreate a white panel inside the transparent frame. */
+html body #page-history .history-viewer-head{
+  background:transparent!important;
+  background-image:none!important;
+  box-shadow:none!important;
+}
+
+/* Remove page-level white bleed/clipping helper only. */
+html body #page-history.active{
+  box-shadow:none!important;
+  clip-path:none!important;
+}
+
+/* Hide only the original in-page main heading after moving it to Top bar. */
+html body #page-history .h33-page-head{
+  display:none!important;
+}
+
+/* 2) Top bar title: Home/People pattern. */
+.h396-topbar-title{
+  display:none;
+  align-items:center;
+  gap:9px;
+  min-width:0;
+}
+body.h396-history-open .h396-topbar-title{
+  display:flex;
+}
+
+.h396-topbar-icon{
+  width:40px;
+  height:40px;
+  flex:0 0 40px;
+  display:grid;
+  place-items:center;
+  padding:0;
+  margin:0;
+  background:transparent!important;
+  background-image:none!important;
+  border:none!important;
+  box-shadow:none!important;
+  border-radius:0!important;
+}
+.h396-topbar-icon svg{
+  width:36px;
+  height:36px;
+  display:block;
+}
+
+.h396-topbar-copy{
+  display:grid;
+  gap:2px;
+  min-width:0;
+}
+.h396-topbar-copy b{
+  color:#26334b;
+  font-size:16px;
+  line-height:1.1;
+  white-space:nowrap;
+}
+.h396-topbar-copy small{
+  color:#8b93a3;
+  font-size:9px;
+  line-height:1.2;
+  white-space:nowrap;
+}
+
+/* 3) Remove white frame/background around the 4 summary-card icons only. */
+html body #page-history .h33-stat-icon{
+  background:transparent!important;
+  background-image:none!important;
+  border:none!important;
+  box-shadow:none!important;
+}
+
+/* Neutralize the per-color inset/white icon frames too. */
+html body #page-history .h33-stat.pink .h33-stat-icon,
+html body #page-history .h33-stat.mint .h33-stat-icon,
+html body #page-history .h33-stat.purple .h33-stat-icon,
+html body #page-history .h33-stat.yellow .h33-stat-icon{
+  background:transparent!important;
+  background-image:none!important;
+  border:none!important;
+  box-shadow:none!important;
+}
+
+/* 4) Both "ดูทั้งหมด" buttons = light pastel purple. */
+html body #page-history #historyRecentAllV33,
+html body #page-history #historyAuditAllV33{
+  background:#f1e9ff!important;
+  color:#7959bd!important;
+  border:1px solid #dfd2f6!important;
+  border-radius:10px!important;
+  padding:7px 12px!important;
+  box-shadow:none!important;
+}
+
+/* 5) PHONE ONLY — one horizontal Top bar row like People. */
+@media(max-width:700px){
+  body.h396-history-open .header-wrap{
+    flex-wrap:nowrap!important;
+    gap:6px!important;
+  }
+
+  body.h396-history-open .header-clean-left{
+    flex:1 1 auto!important;
+    min-width:0!important;
+    display:flex!important;
+    align-items:center!important;
+    gap:6px!important;
+    overflow:hidden!important;
+  }
+
+  body.h396-history-open .mobile-menu-btn{
+    flex:0 0 36px!important;
+  }
+
+  body.h396-history-open .h396-topbar-title{
+    flex:1 1 auto!important;
+    min-width:0!important;
+    gap:6px!important;
+    overflow:hidden!important;
+  }
+
+  body.h396-history-open .h396-topbar-icon{
+    width:31px!important;
+    height:31px!important;
+    flex:0 0 31px!important;
+  }
+
+  body.h396-history-open .h396-topbar-icon svg{
+    width:31px!important;
+    height:31px!important;
+  }
+
+  body.h396-history-open .h396-topbar-copy{
+    min-width:0!important;
+    max-width:135px!important;
+    overflow:hidden!important;
+  }
+
+  body.h396-history-open .h396-topbar-copy b{
+    font-size:11px!important;
+    line-height:1.05!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  body.h396-history-open .h396-topbar-copy small{
+    font-size:6.5px!important;
+    line-height:1.1!important;
+    max-width:135px!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  body.h396-history-open .header-right{
+    flex:0 0 auto!important;
+    margin-left:0!important;
+    gap:6px!important;
+    white-space:nowrap!important;
+  }
+}
+</style>
 </head>
 <body>
 
@@ -8884,6 +9081,92 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
     document.addEventListener('DOMContentLoaded',wireHolidayTopbar,{once:true});
   }else{
     wireHolidayTopbar();
+  }
+})();
+</script>
+
+<script id="history-v396-topbar-only">
+(function(){
+  'use strict';
+
+  function q(id){ return document.getElementById(id); }
+
+  function makeHistoryTitle(){
+    var left = document.querySelector('.header-clean-left');
+    var source = document.querySelector('#page-history .h33-title-wrap');
+    if(!left || !source) return null;
+
+    var existing = q('h396TopbarTitle');
+    if(existing) return existing;
+
+    var box = document.createElement('div');
+    box.id = 'h396TopbarTitle';
+    box.className = 'h396-topbar-title';
+
+    var iconWrap = document.createElement('span');
+    iconWrap.className = 'h396-topbar-icon';
+    iconWrap.setAttribute('aria-hidden','true');
+
+    /* SVG recreation of the existing History clock + pink return arrow icon. */
+    iconWrap.innerHTML =
+      '<svg viewBox="0 0 48 48" focusable="false" aria-hidden="true">'+
+        '<circle cx="24" cy="24" r="13.5" fill="#ffffff" stroke="#7fdcc2" stroke-width="4.5"/>'+
+        '<path d="M24 16v8l7 4" fill="none" stroke="#62cdb1" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>'+
+        '<path d="M12.5 21.5a14.7 14.7 0 0 1 24.8-6.8" fill="none" stroke="#ff6fa6" stroke-width="4.2" stroke-linecap="round"/>'+
+        '<path d="M37.1 9.8l.4 8.3-7.7-2.7" fill="none" stroke="#ff6fa6" stroke-width="3.3" stroke-linecap="round" stroke-linejoin="round"/>'+
+      '</svg>';
+
+    var copy = document.createElement('span');
+    copy.className = 'h396-topbar-copy';
+
+    var title = document.createElement('b');
+    var srcTitle = source.querySelector('h2');
+    title.textContent = srcTitle ? srcTitle.textContent.trim() : 'ประวัติการจัดเวร';
+
+    var sub = document.createElement('small');
+    var srcSub = source.querySelector('p');
+    sub.textContent = srcSub ? srcSub.textContent.trim() : 'ดูประวัติการจัดเวรย้อนหลังและการทำรายการ';
+
+    copy.appendChild(title);
+    copy.appendChild(sub);
+    box.appendChild(iconWrap);
+    box.appendChild(copy);
+    left.appendChild(box);
+
+    return box;
+  }
+
+  function syncHistoryTopbar(){
+    var page = q('page-history');
+    var on = !!(page && page.classList.contains('active'));
+    document.body.classList.toggle('h396-history-open', on);
+    if(on) makeHistoryTitle();
+  }
+
+  function wireHistoryTopbar(){
+    makeHistoryTitle();
+
+    var page = q('page-history');
+    if(page && window.MutationObserver){
+      new MutationObserver(syncHistoryTopbar).observe(page,{
+        attributes:true,
+        attributeFilter:['class']
+      });
+    }
+
+    document.addEventListener('click',function(e){
+      if(e.target.closest && e.target.closest('[data-page]')){
+        setTimeout(syncHistoryTopbar,10);
+      }
+    },true);
+
+    syncHistoryTopbar();
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded',wireHistoryTopbar,{once:true});
+  }else{
+    wireHistoryTopbar();
   }
 })();
 </script>
