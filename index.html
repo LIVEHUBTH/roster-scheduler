@@ -3270,6 +3270,129 @@ html body #page-people .p30-shell{
   }
 }
 </style>
+
+<style id="rules-v389-requested-only">
+/* =========================================================
+   RULES V38.9 — RULES PAGE ONLY / REQUESTED ITEMS ONLY
+   1) Remove white fills / shadows behind Rules frames so the
+      program background/theme remains visible.
+   2) Move existing Rules icon + title + subtitle to Top bar,
+      following the Home/People pattern.
+   3) No Sidebar / other page / responsive layout changes.
+   ========================================================= */
+
+/* Page root + shell transparent. */
+html body #page-rules,
+html body #page-rules .r31-shell{
+  background:transparent!important;
+  background-image:none!important;
+}
+
+/* Remove ONLY structural white frame fills / shadows.
+   Preserve borders, sizes, spacing, grid/flex and all functions. */
+html body #page-rules .r31-card,
+html body #page-rules .r31-rule-list,
+html body #page-rules .r31-rule-row,
+html body #page-rules .r31-personal-intro,
+html body #page-rules .r31-custom-form,
+html body #page-rules .r31-add-rule-form,
+html body #page-rules .r31-custom-chip{
+  background:transparent!important;
+  background-image:none!important;
+  box-shadow:none!important;
+}
+
+/* Remove only the page-level white bleed / clipping helper. */
+html body #page-rules.active{
+  box-shadow:none!important;
+  clip-path:none!important;
+}
+
+/* Hide the original in-page Rules heading only; no space/layout rework elsewhere. */
+html body #page-rules .r31-page-head{
+  display:none!important;
+}
+
+/* Top bar title, same visual behavior as Home/People. */
+.r389-topbar-title{
+  display:none;
+  align-items:center;
+  gap:9px;
+  min-width:0;
+}
+body.r389-rules-open .r389-topbar-title{
+  display:flex;
+}
+
+.r389-topbar-icon{
+  width:40px;
+  height:40px;
+  flex:0 0 40px;
+  display:grid;
+  place-items:center;
+  padding:0;
+  margin:0;
+  background:transparent;
+  border:0;
+  box-shadow:none;
+}
+
+.r389-topbar-icon .r31-heading-icon{
+  width:36px!important;
+  height:36px!important;
+  flex:0 0 36px!important;
+  border-radius:12px!important;
+  margin:0!important;
+}
+.r389-topbar-icon .r31-heading-icon svg{
+  width:22px!important;
+  height:22px!important;
+}
+
+.r389-topbar-copy{
+  display:grid;
+  gap:2px;
+  min-width:0;
+}
+.r389-topbar-copy b{
+  color:#26334b;
+  font-size:16px;
+  line-height:1.1;
+  white-space:nowrap;
+}
+.r389-topbar-copy small{
+  color:#8b93a3;
+  font-size:9px;
+  line-height:1.2;
+  white-space:nowrap;
+}
+
+@media(max-width:700px){
+  .r389-topbar-title{gap:7px}
+  .r389-topbar-icon{
+    width:34px;
+    height:34px;
+    flex-basis:34px;
+  }
+  .r389-topbar-icon .r31-heading-icon{
+    width:31px!important;
+    height:31px!important;
+    flex-basis:31px!important;
+    border-radius:10px!important;
+  }
+  .r389-topbar-icon .r31-heading-icon svg{
+    width:19px!important;
+    height:19px!important;
+  }
+  .r389-topbar-copy b{font-size:12px}
+  .r389-topbar-copy small{
+    font-size:7px;
+    max-width:220px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+}
+</style>
 </head>
 <body>
 
@@ -8124,6 +8247,85 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
     document.addEventListener('DOMContentLoaded',wireHomeTopbar,{once:true});
   }else{
     wireHomeTopbar();
+  }
+})();
+</script>
+
+<script id="rules-v389-topbar-only">
+(function(){
+  'use strict';
+
+  function q(id){ return document.getElementById(id); }
+
+  function makeRulesTitle(){
+    var left = document.querySelector('.header-clean-left');
+    var source = document.querySelector('#page-rules .r31-heading');
+    if(!left || !source) return null;
+
+    var existing = q('r389TopbarTitle');
+    if(existing) return existing;
+
+    var box = document.createElement('div');
+    box.id = 'r389TopbarTitle';
+    box.className = 'r389-topbar-title';
+
+    var iconWrap = document.createElement('span');
+    iconWrap.className = 'r389-topbar-icon';
+
+    var icon = source.querySelector('.r31-heading-icon');
+    if(icon) iconWrap.appendChild(icon.cloneNode(true));
+
+    var copy = document.createElement('span');
+    copy.className = 'r389-topbar-copy';
+
+    var title = document.createElement('b');
+    var srcTitle = source.querySelector('h2');
+    title.textContent = srcTitle ? srcTitle.textContent.trim() : 'กฎการจัดเวร';
+
+    var sub = document.createElement('small');
+    var srcSub = source.querySelector('p');
+    sub.textContent = srcSub ? srcSub.textContent.trim() : 'กำหนดกฎและเงื่อนไขการจัดเวรให้เป็นไปตามนโยบาย';
+
+    copy.appendChild(title);
+    copy.appendChild(sub);
+    box.appendChild(iconWrap);
+    box.appendChild(copy);
+    left.appendChild(box);
+
+    return box;
+  }
+
+  function syncRulesTopbar(){
+    var page = q('page-rules');
+    var on = !!(page && page.classList.contains('active'));
+    document.body.classList.toggle('r389-rules-open', on);
+    if(on) makeRulesTitle();
+  }
+
+  function wireRulesTopbar(){
+    makeRulesTitle();
+    var page = q('page-rules');
+
+    if(page && window.MutationObserver){
+      new MutationObserver(syncRulesTopbar).observe(page,{
+        attributes:true,
+        attributeFilter:['class']
+      });
+    }
+
+    document.addEventListener('click',function(e){
+      if(e.target.closest && e.target.closest('[data-page]')){
+        setTimeout(syncRulesTopbar,10);
+      }
+    },true);
+
+    syncRulesTopbar();
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded',wireRulesTopbar,{once:true});
+  }else{
+    wireRulesTopbar();
   }
 })();
 </script>
