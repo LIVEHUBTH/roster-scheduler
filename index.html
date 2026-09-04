@@ -9400,5 +9400,52 @@ html body #page-history [data-history-version]{
   else init();
 })();
 </script>
+
+<style id="home-v399-remove-version-text-only">
+/* HOME V39.9 — remove ONLY the bottom Home version label. */
+html body #page-home .home-version-footer,
+html body #page-home .home-version,
+html body #page-home [data-home-version]{
+  display:none!important;
+}
+</style>
+<script id="home-v399-remove-version-text-only-js">
+(function(){
+  'use strict';
+
+  function removeHomeVersion(){
+    var page=document.getElementById('page-home');
+    if(!page) return;
+
+    Array.prototype.slice.call(page.querySelectorAll('*')).forEach(function(node){
+      if(node.children.length) return;
+
+      var t=(node.textContent||'').replace(/\s+/g,' ').trim();
+
+      if(/^v\s*28\.6\s*[•·.\-]?\s*home\s*filter\s*frame$/i.test(t)){
+        node.remove();
+      }
+    });
+  }
+
+  function init(){
+    removeHomeVersion();
+
+    var page=document.getElementById('page-home');
+    if(page && window.MutationObserver){
+      new MutationObserver(removeHomeVersion).observe(page,{
+        childList:true,
+        subtree:true
+      });
+    }
+  }
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',init,{once:true});
+  }else{
+    init();
+  }
+})();
+</script>
 </body>
 </html>
