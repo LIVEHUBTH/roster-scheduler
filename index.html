@@ -3484,6 +3484,92 @@ html body #page-rules .r31-rules-card{
   }
 }
 </style>
+
+<style id="rules-v391-requested-only">
+/* =========================================================
+   RULES V39.1 — RULES PAGE ONLY / REQUESTED ITEMS ONLY
+   1) Restore the missing top border of the main Rules frame.
+   2) Top bar shield icon = red outline only, no solid fill.
+   3) No Sidebar / other page / responsive layout changes.
+   ========================================================= */
+
+/* 1) Restore ONLY the missing border segment of the main Rules frame.
+   Keep the previously removed separator line under the category buttons removed. */
+html body #page-rules .r31-main-card{
+  border-top:1px solid #eee6df!important;
+}
+
+/* Preserve the prior request: no separator line directly under category buttons. */
+html body #page-rules .r31-tabs{
+  border-bottom:none!important;
+  box-shadow:none!important;
+}
+
+/* 2) Top bar shield: red outline only.
+   Keep the existing shield shape and Home-matched icon size. */
+.r389-topbar-icon{
+  width:40px!important;
+  height:40px!important;
+  flex:0 0 40px!important;
+  display:grid!important;
+  place-items:center!important;
+  padding:0!important;
+  margin:0!important;
+  background:transparent!important;
+  border:none!important;
+  box-shadow:none!important;
+}
+
+.r389-topbar-icon .r31-heading-icon{
+  width:36px!important;
+  height:36px!important;
+  flex:0 0 36px!important;
+  margin:0!important;
+  padding:0!important;
+  display:grid!important;
+  place-items:center!important;
+  background:transparent!important;
+  border:none!important;
+  box-shadow:none!important;
+  border-radius:0!important;
+  color:#ef5f74!important;
+}
+
+.r389-topbar-icon .r31-heading-icon svg{
+  width:36px!important;
+  height:36px!important;
+  display:block!important;
+  fill:none!important;
+  stroke:#ef5f74!important;
+}
+
+/* Remove the solid red fill introduced in V39.0.
+   All icon paths remain outline strokes only. */
+.r389-topbar-icon .r31-heading-icon svg *{
+  fill:none!important;
+  stroke:#ef5f74!important;
+  stroke-width:2.2!important;
+  stroke-linecap:round!important;
+  stroke-linejoin:round!important;
+}
+
+@media(max-width:700px){
+  .r389-topbar-icon{
+    width:34px!important;
+    height:34px!important;
+    flex-basis:34px!important;
+  }
+  .r389-topbar-icon .r31-heading-icon{
+    width:31px!important;
+    height:31px!important;
+    flex-basis:31px!important;
+  }
+  .r389-topbar-icon .r31-heading-icon svg{
+    width:31px!important;
+    height:31px!important;
+  }
+}
+</style>
 </head>
 <body>
 
