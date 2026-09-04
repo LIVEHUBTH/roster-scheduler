@@ -3655,6 +3655,156 @@ html body #page-rules .r31-bottom-grid > .r31-card{
   }
 }
 </style>
+
+<style id="holidays-v393-requested-only">
+/* =========================================================
+   HOLIDAYS V39.3 — HOLIDAYS PAGE ONLY / REQUESTED ITEMS ONLY
+   1) Remove white fills / shadows behind Holiday outer frames.
+   2) Move existing Holiday icon + title + subtitle to Top bar.
+      Remove only the icon frame; keep the original icon itself.
+   3) Phone Top bar: menu + title + notification + status in one row.
+   4) No Sidebar / other page / responsive content layout changes.
+   ========================================================= */
+
+/* 1) Page root + shell transparent so program background shows through. */
+html body #page-holidays,
+html body #page-holidays .h32-shell{
+  background:transparent!important;
+  background-image:none!important;
+}
+
+/* Remove only white/cream fill and shadow from the Holiday OUTER cards.
+   Borders, dimensions, spacing, grids, controls and all functions stay unchanged. */
+html body #page-holidays .h32-card{
+  background:transparent!important;
+  background-image:none!important;
+  box-shadow:none!important;
+}
+
+/* Remove the page-root white bleed / clipping helper only. */
+html body #page-holidays.active{
+  box-shadow:none!important;
+  clip-path:none!important;
+}
+
+/* 2) Hide only the original in-page title block after moving it to Top bar. */
+html body #page-holidays .h32-page-head{
+  display:none!important;
+}
+
+/* Top bar title follows the Home/People pattern. */
+.h393-topbar-title{
+  display:none;
+  align-items:center;
+  gap:9px;
+  min-width:0;
+}
+body.h393-holidays-open .h393-topbar-title{
+  display:flex;
+}
+
+/* Remove the old icon frame but keep the exact original icon content. */
+.h393-topbar-icon{
+  width:40px;
+  height:40px;
+  flex:0 0 40px;
+  display:grid;
+  place-items:center;
+  padding:0;
+  margin:0;
+  background:transparent!important;
+  background-image:none!important;
+  border:none!important;
+  box-shadow:none!important;
+  border-radius:0!important;
+  font-size:28px;
+  line-height:1;
+}
+
+.h393-topbar-copy{
+  display:grid;
+  gap:2px;
+  min-width:0;
+}
+.h393-topbar-copy b{
+  color:#26334b;
+  font-size:16px;
+  line-height:1.1;
+  white-space:nowrap;
+}
+.h393-topbar-copy small{
+  color:#8b93a3;
+  font-size:9px;
+  line-height:1.2;
+  white-space:nowrap;
+}
+
+/* 3) PHONE ONLY — keep everything in the Top bar on one row,
+      matching the People page behavior. */
+@media(max-width:700px){
+  body.h393-holidays-open .header-wrap{
+    flex-wrap:nowrap!important;
+    gap:6px!important;
+  }
+
+  body.h393-holidays-open .header-clean-left{
+    flex:1 1 auto!important;
+    min-width:0!important;
+    display:flex!important;
+    align-items:center!important;
+    gap:6px!important;
+    overflow:hidden!important;
+  }
+
+  body.h393-holidays-open .mobile-menu-btn{
+    flex:0 0 36px!important;
+  }
+
+  body.h393-holidays-open .h393-topbar-title{
+    flex:1 1 auto!important;
+    min-width:0!important;
+    gap:6px!important;
+    overflow:hidden!important;
+  }
+
+  body.h393-holidays-open .h393-topbar-icon{
+    width:31px!important;
+    height:31px!important;
+    flex:0 0 31px!important;
+    font-size:24px!important;
+  }
+
+  body.h393-holidays-open .h393-topbar-copy{
+    min-width:0!important;
+    max-width:135px!important;
+    overflow:hidden!important;
+  }
+
+  body.h393-holidays-open .h393-topbar-copy b{
+    font-size:11px!important;
+    line-height:1.05!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  body.h393-holidays-open .h393-topbar-copy small{
+    font-size:6.5px!important;
+    line-height:1.1!important;
+    max-width:135px!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  body.h393-holidays-open .header-right{
+    flex:0 0 auto!important;
+    margin-left:0!important;
+    gap:6px!important;
+    white-space:nowrap!important;
+  }
+}
+</style>
 </head>
 <body>
 
@@ -8588,6 +8738,86 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
     document.addEventListener('DOMContentLoaded',wireRulesTopbar,{once:true});
   }else{
     wireRulesTopbar();
+  }
+})();
+</script>
+
+<script id="holidays-v393-topbar-only">
+(function(){
+  'use strict';
+
+  function q(id){ return document.getElementById(id); }
+
+  function makeHolidayTitle(){
+    var left = document.querySelector('.header-clean-left');
+    var source = document.querySelector('#page-holidays .h32-title-wrap');
+    if(!left || !source) return null;
+
+    var existing = q('h393TopbarTitle');
+    if(existing) return existing;
+
+    var box = document.createElement('div');
+    box.id = 'h393TopbarTitle';
+    box.className = 'h393-topbar-title';
+
+    var iconWrap = document.createElement('span');
+    iconWrap.className = 'h393-topbar-icon';
+    iconWrap.setAttribute('aria-hidden','true');
+
+    var srcIcon = source.querySelector('.h32-title-icon');
+    iconWrap.textContent = srcIcon ? srcIcon.textContent.trim() : '🎁';
+
+    var copy = document.createElement('span');
+    copy.className = 'h393-topbar-copy';
+
+    var title = document.createElement('b');
+    var srcTitle = source.querySelector('h2');
+    title.textContent = srcTitle ? srcTitle.textContent.trim() : 'วันหยุด/นักขัตฤกษ์';
+
+    var sub = document.createElement('small');
+    var srcSub = source.querySelector('p');
+    sub.textContent = srcSub ? srcSub.textContent.trim() : 'จัดการวันหยุดประจำปีและวันนักขัตฤกษ์';
+
+    copy.appendChild(title);
+    copy.appendChild(sub);
+    box.appendChild(iconWrap);
+    box.appendChild(copy);
+    left.appendChild(box);
+
+    return box;
+  }
+
+  function syncHolidayTopbar(){
+    var page = q('page-holidays');
+    var on = !!(page && page.classList.contains('active'));
+    document.body.classList.toggle('h393-holidays-open', on);
+    if(on) makeHolidayTitle();
+  }
+
+  function wireHolidayTopbar(){
+    makeHolidayTitle();
+
+    var page = q('page-holidays');
+    if(page && window.MutationObserver){
+      new MutationObserver(syncHolidayTopbar).observe(page,{
+        attributes:true,
+        attributeFilter:['class']
+      });
+    }
+
+    document.addEventListener('click',function(e){
+      if(e.target.closest && e.target.closest('[data-page]')){
+        setTimeout(syncHolidayTopbar,10);
+      }
+    },true);
+
+    syncHolidayTopbar();
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded',wireHolidayTopbar,{once:true});
+  }else{
+    wireHolidayTopbar();
   }
 })();
 </script>
