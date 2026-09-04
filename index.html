@@ -3172,6 +3172,100 @@ body.h386-home-open .h386-topbar-title{
   }
 }
 </style>
+
+<style id="roster-v387-requested-only">
+/* =========================================================
+   ROSTER V38.7 — ROSTER PAGE ONLY / REQUESTED ITEMS ONLY
+   ========================================================= */
+
+/* 1) Remove white page/shell surfaces so program background shows through. */
+html body #page-roster,
+html body #page-roster .r29-shell{
+  background:transparent!important;
+  background-image:none!important;
+}
+
+/* Remove only white fills behind roster frame containers.
+   Keep borders, dimensions, spacing, grids and functions untouched. */
+html body #page-roster .r29-card,
+html body #page-roster .r29-table-card,
+html body #page-roster .r29-summary-card,
+html body #page-roster .r29-workflow-card{
+  background:transparent!important;
+  background-image:none!important;
+}
+
+/* Remove white bleed at page root only. */
+html body #page-roster.active{
+  box-shadow:none!important;
+  clip-path:none!important;
+}
+
+/* 2) Existing roster Top bar icon:
+      - no frame around icon
+      - keep calendar/table shape
+      - green
+      - same size as Home icon */
+html body .r2944-topbar-icon,
+html body .r29-topbar-icon,
+html body .roster-topbar-icon{
+  width:40px!important;
+  height:40px!important;
+  flex:0 0 40px!important;
+  display:grid!important;
+  place-items:center!important;
+  padding:0!important;
+  margin:0!important;
+  background:transparent!important;
+  background-image:none!important;
+  border:none!important;
+  box-shadow:none!important;
+  border-radius:0!important;
+}
+
+html body .r2944-topbar-icon svg,
+html body .r29-topbar-icon svg,
+html body .roster-topbar-icon svg{
+  width:36px!important;
+  height:36px!important;
+  display:block!important;
+}
+
+/* Recolor existing icon without changing the SVG shape. */
+html body .r2944-topbar-icon svg *,
+html body .r29-topbar-icon svg *,
+html body .roster-topbar-icon svg *{
+  fill:#54c7a6!important;
+  stroke:#3fa98b!important;
+}
+
+/* 3) People remains transparent. */
+html body #page-people,
+html body #page-people.active,
+html body #page-people .p30-shell{
+  background:transparent!important;
+  background-image:none!important;
+}
+
+/* Same icon size relationship as Home on phone only.
+   No page layout changes. */
+@media(max-width:700px){
+  html body .r2944-topbar-icon,
+  html body .r29-topbar-icon,
+  html body .roster-topbar-icon{
+    width:34px!important;
+    height:34px!important;
+    flex-basis:34px!important;
+  }
+
+  html body .r2944-topbar-icon svg,
+  html body .r29-topbar-icon svg,
+  html body .roster-topbar-icon svg{
+    width:31px!important;
+    height:31px!important;
+  }
+}
+</style>
 </head>
 <body>
 
