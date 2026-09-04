@@ -3173,42 +3173,62 @@ body.h386-home-open .h386-topbar-title{
 }
 </style>
 
-<style id="roster-v387-requested-only">
+
+<style id="roster-v388-requested-only">
 /* =========================================================
-   ROSTER V38.7 — ROSTER PAGE ONLY / REQUESTED ITEMS ONLY
+   ROSTER V38.8 — ROSTER PAGE ONLY / REQUESTED ITEMS ONLY
+   1) Remove white fills / shadows behind all outer Roster frames.
+   2) Top bar icon = exact icon from "เวรเดือนนี้" card.
+   3) Button-group surrounding frames transparent.
+   4) No Sidebar / other page / responsive layout changes.
    ========================================================= */
 
-/* 1) Remove white page/shell surfaces so program background shows through. */
+/* Page root + shell: show the program background. */
 html body #page-roster,
 html body #page-roster .r29-shell{
   background:transparent!important;
   background-image:none!important;
 }
 
-/* Remove only white fills behind roster frame containers.
-   Keep borders, dimensions, spacing, grids and functions untouched. */
-html body #page-roster .r29-card,
+/* 1) Remove ONLY white/near-white outer frame surfaces and their shadows.
+   Borders, dimensions, spacing, grid and content are preserved. */
+html body #page-roster .r29-toolbar-card,
 html body #page-roster .r29-table-card,
-html body #page-roster .r29-summary-card,
-html body #page-roster .r29-workflow-card{
+html body #page-roster .r29-panel,
+html body #page-roster .r29-summary-panel,
+html body #page-roster .r29-types-panel,
+html body #page-roster .r29-notes-panel{
   background:transparent!important;
   background-image:none!important;
+  box-shadow:none!important;
 }
 
-/* Remove white bleed at page root only. */
+/* Remove the page-level white bleed used around the page. */
 html body #page-roster.active{
   box-shadow:none!important;
   clip-path:none!important;
 }
 
-/* 2) Existing roster Top bar icon:
-      - no frame around icon
-      - keep calendar/table shape
-      - green
-      - same size as Home icon */
-html body .r2944-topbar-icon,
-html body .r29-topbar-icon,
-html body .roster-topbar-icon{
+/* 3) Frames surrounding button/control groups become transparent.
+   The buttons/inputs themselves keep their existing colors and functions. */
+html body #page-roster .r29-toolbar,
+html body #page-roster .r29-table-toolbar,
+html body #page-roster .r29-view-tools,
+html body #page-roster .r29-workflow-row,
+html body #page-roster .r29-bottom{
+  background:transparent!important;
+  background-image:none!important;
+  box-shadow:none!important;
+}
+
+/* Workflow row is itself a visible surrounding frame in the original CSS. */
+html body #page-roster .r29-workflow-row{
+  background:transparent!important;
+}
+
+/* 2) Top bar icon: no outer icon frame, exact same visual size as Home icon.
+   SVG colors/shapes are preserved from the "เวรเดือนนี้" card. */
+html body .r29-topbar-title .r29-topbar-icon{
   width:40px!important;
   height:40px!important;
   flex:0 0 40px!important;
@@ -3221,25 +3241,16 @@ html body .roster-topbar-icon{
   border:none!important;
   box-shadow:none!important;
   border-radius:0!important;
+  color:inherit!important;
 }
 
-html body .r2944-topbar-icon svg,
-html body .r29-topbar-icon svg,
-html body .roster-topbar-icon svg{
+html body .r29-topbar-title .r29-topbar-icon svg{
   width:36px!important;
   height:36px!important;
   display:block!important;
 }
 
-/* Recolor existing icon without changing the SVG shape. */
-html body .r2944-topbar-icon svg *,
-html body .r29-topbar-icon svg *,
-html body .roster-topbar-icon svg *{
-  fill:#54c7a6!important;
-  stroke:#3fa98b!important;
-}
-
-/* 3) People remains transparent. */
+/* Keep People transparent as previously requested, without changing its layout. */
 html body #page-people,
 html body #page-people.active,
 html body #page-people .p30-shell{
@@ -3247,20 +3258,13 @@ html body #page-people .p30-shell{
   background-image:none!important;
 }
 
-/* Same icon size relationship as Home on phone only.
-   No page layout changes. */
 @media(max-width:700px){
-  html body .r2944-topbar-icon,
-  html body .r29-topbar-icon,
-  html body .roster-topbar-icon{
+  html body .r29-topbar-title .r29-topbar-icon{
     width:34px!important;
     height:34px!important;
     flex-basis:34px!important;
   }
-
-  html body .r2944-topbar-icon svg,
-  html body .r29-topbar-icon svg,
-  html body .roster-topbar-icon svg{
+  html body .r29-topbar-title .r29-topbar-icon svg{
     width:31px!important;
     height:31px!important;
   }
@@ -7950,19 +7954,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
     box.className='r29-topbar-title';
     box.innerHTML=
       '<span class="r29-topbar-icon" aria-hidden="true">'+
-        '<svg viewBox="0 0 64 64" focusable="false">'+
-          '<rect x="9" y="12" width="46" height="42" rx="10" fill="#ffd7e6"/>'+
-          '<rect x="9" y="12" width="46" height="12" rx="10" fill="#f6a9c7"/>'+
-          '<rect x="17" y="29" width="8" height="7" rx="2" fill="#fff"/>'+
-          '<rect x="28" y="29" width="8" height="7" rx="2" fill="#fff"/>'+
-          '<rect x="39" y="29" width="8" height="7" rx="2" fill="#fff"/>'+
-          '<rect x="17" y="40" width="8" height="7" rx="2" fill="#fff"/>'+
-          '<rect x="28" y="40" width="8" height="7" rx="2" fill="#fff"/>'+
-          '<path d="M39 43l4 4 7-9" fill="none" stroke="#d85d8e" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>'+
-          '<rect x="18" y="8" width="4" height="11" rx="2" fill="#d85d8e"/>'+
-          '<rect x="42" y="8" width="4" height="11" rx="2" fill="#d85d8e"/>'+
-        '</svg>'+
-      '</span>'+
+        '<svg viewBox=\"0 0 64 64\" focusable=\"false\" aria-hidden=\"true\">'+'<rect x=\"10\" y=\"14\" width=\"44\" height=\"40\" rx=\"8\" fill=\"#74d9c6\"/>'+'<rect x=\"10\" y=\"20\" width=\"44\" height=\"9\" fill=\"#54c7b2\"/>'+'<rect x=\"18\" y=\"9\" width=\"5\" height=\"12\" rx=\"2.5\" fill=\"#358f82\"/>'+'<rect x=\"41\" y=\"9\" width=\"5\" height=\"12\" rx=\"2.5\" fill=\"#358f82\"/>'+'<g fill=\"#fff\">'+'<rect x=\"17\" y=\"34\" width=\"7\" height=\"6\" rx=\"2\"/>'+'<rect x=\"28\" y=\"34\" width=\"7\" height=\"6\" rx=\"2\"/>'+'<rect x=\"39\" y=\"34\" width=\"7\" height=\"6\" rx=\"2\"/>'+'<rect x=\"17\" y=\"43\" width=\"7\" height=\"6\" rx=\"2\"/>'+'<rect x=\"28\" y=\"43\" width=\"7\" height=\"6\" rx=\"2\"/>'+'</g>'+'</svg>'+'</span>'+
       '<span class="r29-topbar-title-copy"><b>จัดตารางเวร</b><small>ระบบจัดการเวรอย่างเป็นระบบ</small></span>';
     left.appendChild(box);
     return box;
