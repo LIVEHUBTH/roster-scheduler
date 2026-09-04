@@ -3057,6 +3057,121 @@ html body #page-home .v244-home-shell{
   background-image:none!important;
 }
 </style>
+
+<style id="home-v386-requested-only">
+/* =========================================================
+   HOME V38.6 — HOME PAGE ONLY / REQUESTED ITEMS ONLY
+   - transparent white surfaces behind Home frames
+   - Home title in Top bar, same pattern as People
+   - hide Home version footer
+   - Home outer horizontal edge uses the same reference width as People
+   - no Sidebar / other page / inner responsive layout changes
+   ========================================================= */
+
+/* 1) Let the program theme/background show through Home page surfaces. */
+html body #page-home,
+html body #page-home .v244-home-shell{
+  background:transparent!important;
+  background-image:none!important;
+}
+
+/* Remove ONLY the white fill of Home frame cards.
+   Borders, sizes, grid, spacing and content stay unchanged. */
+html body #page-home .v244-card{
+  background:transparent!important;
+  background-image:none!important;
+}
+
+/* Keep the requested white-strip cleanup at the Home page root. */
+html body #page-home.active{
+  box-shadow:none!important;
+  clip-path:none!important;
+}
+
+/* 3) Remove Home version text/footer only. */
+html body #page-home .home-version-footer{
+  display:none!important;
+}
+
+/* 4) Home outer horizontal frame = People reference.
+   Horizontal properties only; vertical/responsive layout is untouched. */
+html body #page-home{
+  width:100%!important;
+  max-width:1480px!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+  padding-left:0!important;
+  padding-right:0!important;
+}
+html body #page-home .v244-home-shell{
+  width:100%!important;
+  max-width:100%!important;
+  margin-left:0!important;
+  margin-right:0!important;
+  padding-left:0!important;
+  padding-right:0!important;
+}
+
+/* 2) Home title shown in Top bar, styled to match People. */
+.h386-topbar-title{
+  display:none;
+  align-items:center;
+  gap:9px;
+  min-width:0;
+}
+body.h386-home-open .h386-topbar-title{
+  display:flex;
+}
+.h386-topbar-icon{
+  width:40px;
+  height:40px;
+  flex:0 0 40px;
+  display:grid;
+  place-items:center;
+}
+.h386-topbar-icon svg{
+  width:36px;
+  height:36px;
+  display:block;
+}
+.h386-topbar-copy{
+  display:grid;
+  gap:2px;
+  min-width:0;
+}
+.h386-topbar-copy b{
+  color:#26334b;
+  font-size:16px;
+  line-height:1.1;
+  white-space:nowrap;
+}
+.h386-topbar-copy small{
+  color:#8b93a3;
+  font-size:9px;
+  line-height:1.2;
+  white-space:nowrap;
+}
+
+@media(max-width:700px){
+  .h386-topbar-title{gap:7px}
+  .h386-topbar-icon{
+    width:34px;
+    height:34px;
+    flex-basis:34px;
+  }
+  .h386-topbar-icon svg{
+    width:31px;
+    height:31px;
+  }
+  .h386-topbar-copy b{font-size:12px}
+  .h386-topbar-copy small{
+    font-size:7px;
+    max-width:205px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+}
+</style>
 </head>
 <body>
 
@@ -7847,6 +7962,83 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   document.addEventListener('click',function(e){
     if(e.target.closest&&e.target.closest('[data-page]'))setTimeout(sync,10);
   },true);
+})();
+</script>
+
+<script id="home-v386-topbar-only">
+(function(){
+  'use strict';
+
+  function q(id){ return document.getElementById(id); }
+
+  function makeHomeTitle(){
+    var left = document.querySelector('.header-clean-left');
+    if(!left) return null;
+
+    var existing = q('h386TopbarTitle');
+    if(existing) return existing;
+
+    var box = document.createElement('div');
+    box.id = 'h386TopbarTitle';
+    box.className = 'h386-topbar-title';
+
+    var icon = document.createElement('span');
+    icon.className = 'h386-topbar-icon';
+    icon.setAttribute('aria-hidden','true');
+    icon.innerHTML =
+      '<svg viewBox="0 0 48 48" focusable="false" aria-hidden="true">'+
+        '<path d="M8 22.5 24 9l16 13.5v17a2.5 2.5 0 0 1-2.5 2.5h-9.2V29.4h-8.6V42h-9.2A2.5 2.5 0 0 1 8 39.5v-17Z" fill="#f36b9d"/>'+
+        '<path d="M5.8 23.1 24 7.8l18.2 15.3" fill="none" stroke="#d95789" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>'+
+        '<rect x="20" y="29" width="8" height="13" rx="2" fill="#ffd7e6"/>'+
+      '</svg>';
+
+    var copy = document.createElement('span');
+    copy.className = 'h386-topbar-copy';
+
+    var title = document.createElement('b');
+    title.textContent = 'หน้าหลัก';
+
+    var sub = document.createElement('small');
+    sub.textContent = 'ช่วยจัดเวรให้ง่าย ยุติธรรม แม่นยำ';
+
+    copy.appendChild(title);
+    copy.appendChild(sub);
+    box.appendChild(icon);
+    box.appendChild(copy);
+    left.appendChild(box);
+
+    return box;
+  }
+
+  function syncHomeTopbar(){
+    var page = q('page-home');
+    var on = !!(page && page.classList.contains('active'));
+    document.body.classList.toggle('h386-home-open', on);
+    if(on) makeHomeTitle();
+  }
+
+  function wireHomeTopbar(){
+    makeHomeTitle();
+    var page = q('page-home');
+    if(page && window.MutationObserver){
+      new MutationObserver(syncHomeTopbar).observe(page,{
+        attributes:true,
+        attributeFilter:['class']
+      });
+    }
+    document.addEventListener('click',function(e){
+      if(e.target.closest && e.target.closest('[data-page]')){
+        setTimeout(syncHomeTopbar,10);
+      }
+    },true);
+    syncHomeTopbar();
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded',wireHomeTopbar,{once:true});
+  }else{
+    wireHomeTopbar();
+  }
 })();
 </script>
 </body>
