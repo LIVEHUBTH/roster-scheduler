@@ -9364,5 +9364,41 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   }
 })();
 </script>
+
+<style id="history-v398-remove-version-text-only">
+/* HISTORY V39.8 — remove ONLY the bottom-right "V33.8 • History" label. */
+html body #page-history .h33-version,
+html body #page-history .h33-version-label,
+html body #page-history .history-version,
+html body #page-history .history-version-label,
+html body #page-history [data-history-version]{
+  display:none!important;
+}
+</style>
+<script id="history-v398-remove-version-text-only-js">
+(function(){
+  'use strict';
+  function removeHistoryVersion(){
+    var page=document.getElementById('page-history');
+    if(!page) return;
+    Array.prototype.slice.call(page.querySelectorAll('*')).forEach(function(node){
+      if(node.children.length) return;
+      var t=(node.textContent||'').replace(/\s+/g,' ').trim();
+      if(/^v\s*33\.8\s*[•·.\-]?\s*history$/i.test(t)){
+        node.remove();
+      }
+    });
+  }
+  function init(){
+    removeHistoryVersion();
+    var page=document.getElementById('page-history');
+    if(page && window.MutationObserver){
+      new MutationObserver(removeHistoryVersion).observe(page,{childList:true,subtree:true});
+    }
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true});
+  else init();
+})();
+</script>
 </body>
 </html>
