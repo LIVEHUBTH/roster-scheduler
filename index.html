@@ -3570,6 +3570,91 @@ html body #page-rules .r31-tabs{
   }
 }
 </style>
+
+<style id="rules-v392-requested-only">
+/* =========================================================
+   RULES V39.2 — RULES PAGE ONLY / REQUESTED ITEMS ONLY
+   1) Restore complete borders on the 4 bottom Rules cards.
+   2) Phone Top bar: menu + Rules title + notification + status
+      remain on one row, like People.
+   3) No Sidebar / other page / responsive content layout changes.
+   ========================================================= */
+
+/* 1) Restore ALL FOUR sides of the four bottom cards only:
+      - ประเภทเวรในระบบ
+      - ข้อมูลวันที่อนุญาต
+      - สรุปผลการตรวจสอบกฎ
+      - ภาพรวมการทำงาน
+   This does not restore the separator line below the category buttons. */
+html body #page-rules .r31-bottom-grid > .r31-card{
+  border:1px solid #eee6df!important;
+}
+
+/* 2) PHONE ONLY — keep the Top bar in one horizontal row.
+   No changes to page content layout. */
+@media(max-width:700px){
+  body.r389-rules-open .header-wrap{
+    flex-wrap:nowrap!important;
+    gap:6px!important;
+  }
+
+  body.r389-rules-open .header-clean-left{
+    flex:1 1 auto!important;
+    min-width:0!important;
+    display:flex!important;
+    align-items:center!important;
+    gap:6px!important;
+    overflow:hidden!important;
+  }
+
+  body.r389-rules-open .mobile-menu-btn{
+    flex:0 0 36px!important;
+  }
+
+  body.r389-rules-open .r389-topbar-title{
+    flex:1 1 auto!important;
+    min-width:0!important;
+    gap:6px!important;
+    overflow:hidden!important;
+  }
+
+  body.r389-rules-open .r389-topbar-icon{
+    flex:0 0 31px!important;
+    width:31px!important;
+    height:31px!important;
+  }
+
+  body.r389-rules-open .r389-topbar-copy{
+    min-width:0!important;
+    max-width:135px!important;
+    overflow:hidden!important;
+  }
+
+  body.r389-rules-open .r389-topbar-copy b{
+    font-size:11px!important;
+    line-height:1.05!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  body.r389-rules-open .r389-topbar-copy small{
+    font-size:6.5px!important;
+    line-height:1.1!important;
+    max-width:135px!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  body.r389-rules-open .header-right{
+    flex:0 0 auto!important;
+    margin-left:0!important;
+    gap:6px!important;
+    white-space:nowrap!important;
+  }
+}
+</style>
 </head>
 <body>
 
