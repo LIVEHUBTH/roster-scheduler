@@ -3393,6 +3393,97 @@ body.r389-rules-open .r389-topbar-title{
   }
 }
 </style>
+
+<style id="rules-v390-requested-only">
+/* =========================================================
+   RULES V39.0 — RULES PAGE ONLY / REQUESTED ITEMS ONLY
+   1) Remove separator line between rule category buttons and
+      the main rules frame.
+   2) Top bar icon becomes a red shield matching the Rules
+      Sidebar icon style; same size as Home icon.
+   3) No Sidebar / other page / responsive layout changes.
+   ========================================================= */
+
+/* 1) Remove only the separator/border line between the category buttons
+   and the main rules frame. Keep spacing, sizes and layout unchanged. */
+html body #page-rules .r31-tabs,
+html body #page-rules .r31-rule-tabs,
+html body #page-rules .r31-category-tabs{
+  border-bottom:none!important;
+  box-shadow:none!important;
+}
+
+/* Also remove the top divider on the main rules section if present. */
+html body #page-rules .r31-card,
+html body #page-rules .r31-main-card,
+html body #page-rules .r31-rules-card{
+  border-top-color:transparent!important;
+}
+
+/* 2) Top bar icon — red shield, no surrounding frame,
+      same visual size as Home icon. */
+.r389-topbar-icon{
+  width:40px!important;
+  height:40px!important;
+  flex:0 0 40px!important;
+  display:grid!important;
+  place-items:center!important;
+  padding:0!important;
+  margin:0!important;
+  background:transparent!important;
+  border:none!important;
+  box-shadow:none!important;
+}
+
+.r389-topbar-icon .r31-heading-icon{
+  width:36px!important;
+  height:36px!important;
+  flex:0 0 36px!important;
+  margin:0!important;
+  padding:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  border:none!important;
+  box-shadow:none!important;
+  display:grid!important;
+  place-items:center!important;
+}
+
+.r389-topbar-icon .r31-heading-icon svg{
+  width:36px!important;
+  height:36px!important;
+  display:block!important;
+}
+
+/* Force the existing shield icon to red while preserving its shape. */
+.r389-topbar-icon .r31-heading-icon svg *{
+  fill:#ef5f74!important;
+  stroke:#d84b62!important;
+}
+
+/* Keep any white internal cutouts/details readable. */
+.r389-topbar-icon .r31-heading-icon svg [fill="#fff"],
+.r389-topbar-icon .r31-heading-icon svg [fill="white"]{
+  fill:#fff!important;
+}
+
+@media(max-width:700px){
+  .r389-topbar-icon{
+    width:34px!important;
+    height:34px!important;
+    flex-basis:34px!important;
+  }
+  .r389-topbar-icon .r31-heading-icon{
+    width:31px!important;
+    height:31px!important;
+    flex-basis:31px!important;
+  }
+  .r389-topbar-icon .r31-heading-icon svg{
+    width:31px!important;
+    height:31px!important;
+  }
+}
+</style>
 </head>
 <body>
 
