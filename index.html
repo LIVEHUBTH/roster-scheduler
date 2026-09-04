@@ -4294,6 +4294,142 @@ html body #page-summary .s3911-page-svg svg{
   }
 }
 </style>
+
+<style id="summary-v3912-remove-old-duplicate-icons-only">
+/* SUMMARY V39.12 — remove ONLY the old duplicate action icons.
+   Keep the new SVG icons from V39.11.
+   Do not affect card icons, Sidebar, other pages, or layout. */
+html body #page-summary .s34-actions .s34-action-icon{
+  display:none!important;
+}
+html body #page-summary .s34-actions .s34-action-icon::before,
+html body #page-summary .s34-actions .s34-action-icon::after{
+  content:none!important;
+  display:none!important;
+}
+</style>
+
+<style id="summary-v3913-center-icons-no-overlap-only">
+/* =========================================================
+   SUMMARY V39.13 — SUMMARY PAGE ONLY / REQUESTED ITEMS ONLY
+   1) Center the new SVG icons vertically/horizontally in their row.
+   2) Prevent toolbar/tab/action contents from increasing row height
+      or overlapping the stat cards below.
+   3) No Sidebar / other page / responsive page-layout changes.
+   ========================================================= */
+
+/* New SVG icon box: true center alignment and no baseline expansion. */
+html body #page-summary .s3911-page-svg{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:16px!important;
+  height:16px!important;
+  flex:0 0 16px!important;
+  margin:0 4px 0 0!important;
+  padding:0!important;
+  vertical-align:middle!important;
+  line-height:0!important;
+  position:relative!important;
+  top:0!important;
+}
+
+html body #page-summary .s3911-page-svg svg{
+  display:block!important;
+  width:16px!important;
+  height:16px!important;
+  margin:0!important;
+  padding:0!important;
+  flex:0 0 16px!important;
+}
+
+/* Center icon + text inside report-type tabs.
+   Preserve the original tab dimensions/grid. */
+html body #page-summary .s34-tabs button{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:3px!important;
+  line-height:1!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+}
+
+/* Center icon + text inside action buttons without changing button dimensions. */
+html body #page-summary .s34-actions .s34-action{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:3px!important;
+  line-height:1!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  vertical-align:middle!important;
+}
+
+/* The icon has its own controlled gap above, so remove any extra margin
+   when it is inside tabs/actions. */
+html body #page-summary .s34-tabs button .s3911-page-svg,
+html body #page-summary .s34-actions .s34-action .s3911-page-svg{
+  margin-right:0!important;
+}
+
+/* Keep toolbar contents inside the original 76px frame.
+   This fixes the visual overlap with the stat cards without moving/resizing
+   the Summary layout itself. */
+html body #page-summary .s34-toolbar{
+  box-sizing:border-box!important;
+}
+html body #page-summary .s34-toolbar > *{
+  min-width:0!important;
+}
+html body #page-summary .s34-actions{
+  min-width:0!important;
+  align-items:center!important;
+}
+
+/* iPad / landscape: use the original compact action-button sizing,
+   while keeping the SVG visible and centered. */
+@media (min-width:821px) and (max-width:1100px){
+  html body #page-summary .s34-actions .s34-action{
+    padding-left:5px!important;
+    padding-right:5px!important;
+    gap:2px!important;
+  }
+
+  html body #page-summary .s34-actions .s3911-page-svg{
+    width:13px!important;
+    height:13px!important;
+    flex-basis:13px!important;
+  }
+
+  html body #page-summary .s34-actions .s3911-page-svg svg{
+    width:13px!important;
+    height:13px!important;
+  }
+
+  html body #page-summary .s34-tabs .s3911-page-svg{
+    width:13px!important;
+    height:13px!important;
+    flex-basis:13px!important;
+  }
+
+  html body #page-summary .s34-tabs .s3911-page-svg svg{
+    width:13px!important;
+    height:13px!important;
+  }
+}
+
+/* Phone keeps the existing 2-column responsive layout;
+   only icon centering/size is normalized. */
+@media(max-width:520px){
+  html body #page-summary .s34-actions .s34-action,
+  html body #page-summary .s34-tabs button{
+    align-items:center!important;
+    justify-content:center!important;
+  }
+}
+</style>
 </head>
 <body>
 
