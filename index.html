@@ -4430,6 +4430,101 @@ html body #page-summary .s34-actions{
   }
 }
 </style>
+
+<style id="summary-v3914-ipad-toolbar-overlap-fix-only">
+/* =========================================================
+   SUMMARY V39.14 — SUMMARY PAGE ONLY / REQUESTED FIX ONLY
+
+   Fix the iPad/landscape overlap between:
+   - filter/report/action toolbar
+   - summary statistic cards below
+
+   Only containment/alignment of the existing Summary toolbar is changed.
+   No Sidebar / other page / phone / desktop layout changes.
+   ========================================================= */
+
+@media (min-width:821px) and (max-width:1100px){
+
+  /* Keep the original toolbar row height exactly contained. */
+  html body #page-summary .s34-toolbar{
+    height:76px!important;
+    min-height:76px!important;
+    max-height:76px!important;
+    box-sizing:border-box!important;
+    overflow:hidden!important;
+    align-items:end!important;
+    position:relative!important;
+    z-index:2!important;
+  }
+
+  /* Every toolbar cell must stay inside its own grid cell. */
+  html body #page-summary .s34-toolbar > *{
+    min-width:0!important;
+    min-height:0!important;
+    max-height:60px!important;
+    box-sizing:border-box!important;
+    overflow:hidden!important;
+  }
+
+  /* Keep the report-type tab row vertically centered. */
+  html body #page-summary .s34-tabs{
+    height:36px!important;
+    min-height:36px!important;
+    max-height:36px!important;
+    align-self:end!important;
+  }
+
+  html body #page-summary .s34-tabs button{
+    height:34px!important;
+    min-height:34px!important;
+    max-height:34px!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    box-sizing:border-box!important;
+    overflow:hidden!important;
+  }
+
+  /* Keep action buttons in one contained 36px row. */
+  html body #page-summary .s34-actions{
+    height:36px!important;
+    min-height:36px!important;
+    max-height:36px!important;
+    align-self:end!important;
+    display:flex!important;
+    align-items:center!important;
+    flex-wrap:nowrap!important;
+    overflow:hidden!important;
+  }
+
+  html body #page-summary .s34-actions .s34-action,
+  html body #page-summary .s34-actions .s34-history-pdf{
+    height:36px!important;
+    min-height:36px!important;
+    max-height:36px!important;
+    box-sizing:border-box!important;
+    margin:0!important;
+    vertical-align:middle!important;
+  }
+
+  /* Ensure the stats row begins in its own grid row and never rises into toolbar. */
+  html body #page-summary .s34-stats{
+    margin-top:0!important;
+    position:relative!important;
+    z-index:1!important;
+    align-self:stretch!important;
+    transform:none!important;
+  }
+
+  /* SVGs remain centered but cannot increase the row height. */
+  html body #page-summary .s3911-page-svg{
+    position:static!important;
+    top:auto!important;
+    transform:none!important;
+    vertical-align:middle!important;
+  }
+}
+</style>
 </head>
 <body>
 
