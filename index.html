@@ -8324,6 +8324,145 @@ html.phone-device body.s37-settings-open .header-user-status{
   }
 }
 </style>
+<style id="global-v38911-iphone-unit-geometry-and-two-line-subtitles-only">
+/* V38.9.11 — iPhone fallback.
+   g3899UnitTopbar exists only on Rules/Settings while a phone is detected. */
+#g3899UnitTopbar{
+  box-sizing:border-box!important;
+  width:100%!important;
+  min-height:69px!important;
+  height:69px!important;
+  max-height:69px!important;
+  padding:12px 22px!important;
+  display:flex!important;
+  flex-direction:row!important;
+  flex-wrap:nowrap!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:6px!important;
+}
+#g3899UnitTopbar .header-clean-left{
+  display:flex!important;
+  flex:1 1 auto!important;
+  min-width:0!important;
+  align-items:center!important;
+  gap:6px!important;
+  overflow:hidden!important;
+}
+#g3899UnitTopbar .mobile-menu-btn{
+  flex:0 0 36px!important;
+  width:36px!important;
+  min-width:36px!important;
+  margin:0!important;
+}
+#g3899UnitTopbar .r389-topbar-title,
+#g3899UnitTopbar .s37-topbar-title{
+  display:none!important;
+}
+#g3899UnitTopbar.g3899-rules .r389-topbar-title,
+#g3899UnitTopbar.g3899-settings .s37-topbar-title{
+  display:flex!important;
+  flex:1 1 auto!important;
+  min-width:0!important;
+  align-items:center!important;
+  gap:6px!important;
+  overflow:hidden!important;
+  position:static!important;
+  top:auto!important;
+  margin:0!important;
+}
+#g3899UnitTopbar .r389-topbar-icon,
+#g3899UnitTopbar .s37-topbar-gear{
+  box-sizing:border-box!important;
+  flex:0 0 31px!important;
+  width:31px!important;
+  height:31px!important;
+  margin:0!important;
+}
+#g3899UnitTopbar .r389-topbar-icon svg,
+#g3899UnitTopbar .s37-topbar-gear svg{
+  width:31px!important;
+  height:31px!important;
+  display:block!important;
+}
+#g3899UnitTopbar .r389-topbar-copy,
+#g3899UnitTopbar .s37-topbar-title-copy{
+  display:grid!important;
+  flex:1 1 auto!important;
+  min-width:0!important;
+  max-width:135px!important;
+  gap:1px!important;
+  overflow:hidden!important;
+}
+#g3899UnitTopbar .r389-topbar-copy b,
+#g3899UnitTopbar .s37-topbar-title-copy b{
+  display:block!important;
+  max-width:135px!important;
+  margin:0!important;
+  padding:0!important;
+  font-size:11px!important;
+  line-height:1.05!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+#g3899UnitTopbar .r389-topbar-copy small,
+#g3899UnitTopbar .s37-topbar-title-copy small{
+  display:block!important;
+  width:135px!important;
+  max-width:135px!important;
+  height:auto!important;
+  max-height:16px!important;
+  margin:0!important;
+  padding:0!important;
+  font-size:6.5px!important;
+  line-height:1.1!important;
+  white-space:normal!important;
+  overflow:hidden!important;
+  text-overflow:clip!important;
+  word-break:keep-all!important;
+}
+#g3899UnitTopbar .header-right{
+  display:flex!important;
+  flex:0 0 auto!important;
+  width:auto!important;
+  min-width:0!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  gap:6px!important;
+  margin:0!important;
+  transform:none!important;
+  white-space:nowrap!important;
+}
+#g3899UnitTopbar .header-bell{
+  box-sizing:border-box!important;
+  flex:0 0 36px!important;
+  width:36px!important;
+  min-width:36px!important;
+  height:36px!important;
+  min-height:36px!important;
+  margin:0!important;
+}
+#g3899UnitTopbar .header-user-status{
+  box-sizing:border-box!important;
+  flex:0 0 113px!important;
+  width:113px!important;
+  min-width:113px!important;
+  max-width:113px!important;
+  height:40px!important;
+  min-height:40px!important;
+  padding:5px 7px!important;
+  gap:6px!important;
+  margin:0!important;
+  overflow:hidden!important;
+}
+#g3899UnitTopbar .header-user-avatar{
+  display:grid!important;
+  flex:0 0 30px!important;
+  width:30px!important;
+  height:30px!important;
+}
+</style>
 </head>
 <body>
 
@@ -14683,11 +14822,21 @@ html body #page-home [data-home-version]{
       (rules && rules.classList.contains('active')) ||
       (settings && settings.classList.contains('active'))
     );
-    var phone=window.matchMedia && window.matchMedia('(max-width:700px)').matches;
+    var phone=document.documentElement.classList.contains('phone-device') ||
+      !!(window.matchMedia && window.matchMedia('(max-width:700px)').matches);
     if(target && phone){
       bar.id='g3899UnitTopbar';
       bar.classList.toggle('g3899-rules',!!(rules && rules.classList.contains('active')));
       bar.classList.toggle('g3899-settings',!!(settings && settings.classList.contains('active')));
+
+      var rulesSub=bar.querySelector('.r389-topbar-copy small');
+      var settingsSub=bar.querySelector('.s37-topbar-title-copy small');
+      if(rulesSub){
+        rulesSub.innerHTML='กำหนดกฎและเงื่อนไขการจัดเวร<br>ให้เป็นไปตามนโยบาย';
+      }
+      if(settingsSub){
+        settingsSub.innerHTML='ปรับแต่งการทำงานของโปรแกรม<br>ให้ตรงกับความต้องการ';
+      }
     }else if(bar.id==='g3899UnitTopbar'){
       bar.removeAttribute('id');
       bar.classList.remove('g3899-rules','g3899-settings');
