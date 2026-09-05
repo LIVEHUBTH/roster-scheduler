@@ -6173,6 +6173,59 @@ html.phone-device body:has(.page-view.active:not(#page-roster)) .page-view.activ
   padding-bottom:0!important;
 }
 </style>
+
+<style id="global-v385-stop-scroll-at-last-content-only">
+/* =========================================================
+   GLOBAL V38.5 — SCROLL END FIX ONLY
+
+   Root cause:
+   ROSTER V38.10 keeps the inactive roster rendered for fast opening.
+   It was hidden with position:absolute, so its very tall table could still
+   enlarge the document's scrollable area on OTHER pages.
+
+   Fix:
+   Keep the cached roster rendered, but pin it to the viewport with fixed
+   positioning while inactive so it cannot extend document scroll height.
+
+   Result:
+   Scrolling stops at the last visible content/frame of the active page.
+
+   No Sidebar / no other page internals / no responsive visual layout changes.
+   ========================================================= */
+
+html body #page-roster:not(.active){
+  position:fixed!important;
+  inset:0!important;
+  left:0!important;
+  top:0!important;
+  right:0!important;
+  bottom:0!important;
+  width:100vw!important;
+  height:100vh!important;
+  max-height:100vh!important;
+  overflow:hidden!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+  opacity:0!important;
+  z-index:-1!important;
+  contain:layout style paint!important;
+}
+
+/* When Roster is active, restore the exact normal page flow. */
+html body #page-roster.active{
+  position:static!important;
+  inset:auto!important;
+  width:auto!important;
+  height:auto!important;
+  max-height:none!important;
+  overflow:visible!important;
+  visibility:visible!important;
+  pointer-events:auto!important;
+  opacity:1!important;
+  z-index:auto!important;
+  contain:none!important;
+}
+</style>
 </head>
 <body>
 
