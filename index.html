@@ -5233,6 +5233,52 @@ html body #page-settings button > span{
   }
 }
 </style>
+
+<style id="history-v3911-phone-status-two-lines-only">
+/* =========================================================
+   HISTORY V39.11 — PHONE ONLY / REQUESTED TEXT PLACEMENT ONLY
+
+   Move "เดือนก่อน: ..." below "เดือนปัจจุบัน: ..."
+   so the History title has enough horizontal space to remain one line.
+
+   No Sidebar / other pages / iPad / Desktop / structural layout changes.
+   ========================================================= */
+
+@media(max-width:700px){
+
+  html body #page-history .h33-table-card > .h33-card-head > h3{
+    white-space:nowrap!important;
+    word-break:keep-all!important;
+    overflow-wrap:normal!important;
+    font-size:12.5px!important;
+    line-height:1.1!important;
+    flex:0 0 auto!important;
+  }
+
+  html body #page-history .h33-table-card > .h33-card-head > #historyInfo{
+    display:block!important;
+    min-width:0!important;
+    white-space:normal!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+    font-size:7.7px!important;
+    line-height:1.25!important;
+    text-align:right!important;
+  }
+
+  html body #page-history #historyInfo .h3911-current,
+  html body #page-history #historyInfo .h3911-previous{
+    display:block!important;
+    white-space:nowrap!important;
+    word-break:keep-all!important;
+    overflow-wrap:normal!important;
+  }
+
+  html body #page-history #historyInfo .h3911-sep{
+    display:none!important;
+  }
+}
+</style>
 </head>
 <body>
 
@@ -7074,8 +7120,9 @@ function renderHistory(){
   var previous=savedMonth(prevKey());
   if(el('historyInfo')){
     el('historyInfo').innerHTML=
-      'เดือนปัจจุบัน: <b>'+(current?'มีข้อมูลบันทึก':'ยังไม่บันทึก')+
-      '</b> • เดือนก่อน: <b>'+(previous?'พบข้อมูล':'ไม่พบข้อมูล')+'</b>';
+      '<span class="h3911-current">เดือนปัจจุบัน: <b>'+(current?'มีข้อมูลบันทึก':'ยังไม่บันทึก')+'</b></span>'+
+      '<span class="h3911-sep"> • </span>'+
+      '<span class="h3911-previous">เดือนก่อน: <b>'+(previous?'พบข้อมูล':'ไม่พบข้อมูล')+'</b></span>';
   }
 
   var list=el('historyMonthList');
