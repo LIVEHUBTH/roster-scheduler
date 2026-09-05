@@ -4525,6 +4525,92 @@ html body #page-summary .s34-actions{
   }
 }
 </style>
+
+<style id="summary-v3915-vertical-spacing-no-overlap-only">
+/* =========================================================
+   SUMMARY V39.15 — SUMMARY PAGE ONLY / REQUESTED SPACING FIX
+
+   Requested vertical sequence:
+   toolbar
+   -> summary cards
+   -> charts (จำนวนเวรตามประเภท / สัดส่วนเวรเดือนนี้)
+   -> detail row (ตารางรายบุคคล / Top 5 / ข้อสังเกต)
+   -> compare previous month
+
+   Only vertical spacing/row allocation is changed.
+   Existing columns, card sizes, internal layouts, Sidebar and other pages stay untouched.
+   ========================================================= */
+
+/* Normal-flow devices: add clear vertical breathing room between each existing section. */
+html body #page-summary .s34-stats{
+  margin-top:16px!important;
+}
+html body #page-summary .s34-charts{
+  margin-top:16px!important;
+}
+html body #page-summary .s34-detail-grid{
+  margin-top:16px!important;
+}
+html body #page-summary .s34-compare-card{
+  margin-top:16px!important;
+}
+
+/* iPad / landscape:
+   The old grid still reserved a 44px row for the in-page heading that is now hidden,
+   which shifted every following section into the wrong fixed-height row and caused overlap.
+   Re-map ONLY the vertical rows to the actual visible sections. */
+@media (min-width:821px) and (orientation:landscape){
+
+  html body #page-summary .s34-shell{
+    grid-template-rows:
+      76px   /* toolbar */
+      78px   /* summary cards */
+      175px  /* charts */
+      166px  /* person table + Top5 + tips */
+      96px   /* compare previous month */
+      10px!important;
+    gap:12px!important;
+  }
+
+  /* Grid gap supplies the requested spacing on landscape;
+     prevent added margins from doubling the space. */
+  html body #page-summary .s34-stats,
+  html body #page-summary .s34-charts,
+  html body #page-summary .s34-detail-grid,
+  html body #page-summary .s34-compare-card{
+    margin-top:0!important;
+    min-width:0!important;
+    min-height:0!important;
+  }
+
+  /* Keep each section inside its own assigned row. */
+  html body #page-summary .s34-toolbar,
+  html body #page-summary .s34-stats,
+  html body #page-summary .s34-charts,
+  html body #page-summary .s34-detail-grid,
+  html body #page-summary .s34-compare-card{
+    position:relative!important;
+    transform:none!important;
+  }
+
+  html body #page-summary .s34-toolbar{z-index:5!important}
+  html body #page-summary .s34-stats{z-index:4!important}
+  html body #page-summary .s34-charts{z-index:3!important}
+  html body #page-summary .s34-detail-grid{z-index:2!important}
+  html body #page-summary .s34-compare-card{z-index:1!important}
+}
+
+/* Phone/tablet portrait: preserve the existing responsive columns/stacks.
+   Only add vertical separation between frames. */
+@media (max-width:820px){
+  html body #page-summary .s34-stats,
+  html body #page-summary .s34-charts,
+  html body #page-summary .s34-detail-grid,
+  html body #page-summary .s34-compare-card{
+    margin-top:16px!important;
+  }
+}
+</style>
 </head>
 <body>
 
