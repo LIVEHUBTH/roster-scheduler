@@ -6383,6 +6383,133 @@ html.phone-device body .s37-topbar-title{
   overflow:visible!important;
 }
 </style>
+
+<style id="settings-v3712-thai-text-fix-only">
+/* =========================================================
+   SETTINGS V37.12 — SETTINGS PAGE / PHONE TEXT FIX ONLY
+
+   Fixes:
+   1) Settings subtitle must show completely (no "...").
+   2) Thai tone marks / vowels must not be clipped in:
+      - main Settings title
+      - Settings tab buttons
+      - Settings action buttons
+
+   No Sidebar / other pages / iPad / Desktop / structural layout changes.
+   ========================================================= */
+
+@media(max-width:700px){
+
+  /* ----- Top bar: Settings page only ----- */
+  body.s37-settings-open .s37-topbar-title{
+    overflow:visible!important;
+    align-items:center!important;
+  }
+
+  body.s37-settings-open .s37-topbar-title-copy{
+    flex:1 1 auto!important;
+    min-width:0!important;
+    max-width:118px!important;
+    overflow:visible!important;
+  }
+
+  /* Main title: extra vertical room for Thai marks. */
+  body.s37-settings-open .s37-topbar-title-copy b{
+    display:block!important;
+    font-size:10.5px!important;
+    line-height:1.35!important;
+    white-space:nowrap!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+    word-break:keep-all!important;
+    padding-top:1px!important;
+    padding-bottom:1px!important;
+  }
+
+  /* Subtitle: show ALL text, allow two lines, no ellipsis. */
+  body.s37-settings-open .s37-topbar-title-copy small{
+    display:block!important;
+    font-size:5.8px!important;
+    line-height:1.28!important;
+    white-space:normal!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+    word-break:keep-all!important;
+    overflow-wrap:normal!important;
+    max-width:118px!important;
+    max-height:none!important;
+    padding-top:1px!important;
+    padding-bottom:1px!important;
+    margin-top:0!important;
+  }
+
+  /* ----- Settings tabs ----- */
+  html body #page-settings .s37-tab{
+    line-height:1.35!important;
+    overflow:visible!important;
+  }
+
+  html body #page-settings .s37-tab > span,
+  html body #page-settings .s37-tab{
+    padding-top:1px!important;
+    padding-bottom:1px!important;
+  }
+
+  /* ----- All Settings action buttons ----- */
+  html body #page-settings button,
+  html body #page-settings button > span{
+    line-height:1.35!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+  }
+
+  html body #page-settings button > span{
+    padding-top:1px!important;
+    padding-bottom:1px!important;
+  }
+}
+
+/* iPhone Safari fallback when layout viewport is reported wider. */
+html.phone-device body.s37-settings-open .s37-topbar-title-copy{
+  flex:1 1 auto!important;
+  min-width:0!important;
+  max-width:118px!important;
+  overflow:visible!important;
+}
+
+html.phone-device body.s37-settings-open .s37-topbar-title-copy b{
+  font-size:10.5px!important;
+  line-height:1.35!important;
+  white-space:nowrap!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  padding-top:1px!important;
+  padding-bottom:1px!important;
+}
+
+html.phone-device body.s37-settings-open .s37-topbar-title-copy small{
+  font-size:5.8px!important;
+  line-height:1.28!important;
+  white-space:normal!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  word-break:keep-all!important;
+  overflow-wrap:normal!important;
+  max-width:118px!important;
+  max-height:none!important;
+  padding-top:1px!important;
+  padding-bottom:1px!important;
+  margin-top:0!important;
+}
+
+html.phone-device body #page-settings .s37-tab,
+html.phone-device body #page-settings button,
+html.phone-device body #page-settings button > span{
+  line-height:1.35!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+}
+</style>
 </head>
 <body>
 
