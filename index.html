@@ -10127,9 +10127,11 @@ html body #page-home [data-home-version]{
 })();
 </script>
 
-<script id="summary-v3916-requested-only-js">
+<script id="summary-v3917-performance-fix-only-js">
 (function(){
   'use strict';
+
+  var refreshing = false;
 
   function svgMonth(){
     return ''+
@@ -10181,7 +10183,7 @@ html body #page-home [data-home-version]{
     }
 
     var fileBtn=document.getElementById('summaryOpenPdfBtn');
-    if(fileBtn){
+    if(fileBtn && !fileBtn.querySelector('.s3916-file-svg')){
       fileBtn.innerHTML=svgFile()+'<span>เลือกไฟล์</span>';
       fileBtn.setAttribute('title','เลือกไฟล์');
       fileBtn.setAttribute('aria-label','เลือกไฟล์');
@@ -10202,8 +10204,14 @@ html body #page-home [data-home-version]{
   }
 
   function refresh(){
-    applyToolbarIcons();
-    renameFirstHeader();
+    if(refreshing) return;
+    refreshing = true;
+    try{
+      applyToolbarIcons();
+      renameFirstHeader();
+    }finally{
+      refreshing = false;
+    }
   }
 
   function init(){
@@ -10211,7 +10219,33 @@ html body #page-home [data-home-version]{
 
     var page=document.getElementById('page-summary');
     if(page && window.MutationObserver){
-      new MutationObserver(refresh).observe(page,{
+      var timer=0;
+      new MutationObserver(function(mutations){
+        var relevant=false;
+
+        for(var i=0;i<mutations.length;i++){
+          var m=mutations[i];
+          if(m.type!=='childList') continue;
+
+          /* Ignore mutations caused by our already-finished SVG/text replacement. */
+          var target=m.target;
+          if(target && target.closest){
+            if(target.closest('#summaryOpenPdfBtn') ||
+               target.closest('.s34-calendar-pink') ||
+               target.closest('.s34-calendar-blue')){
+              continue;
+            }
+          }
+
+          relevant=true;
+          break;
+        }
+
+        if(!relevant) return;
+
+        clearTimeout(timer);
+        timer=setTimeout(refresh,40);
+      }).observe(page,{
         childList:true,
         subtree:true
       });
