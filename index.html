@@ -7619,6 +7619,61 @@ html.phone-device body.s37-settings-open .header-user-avatar{
   height:28px!important;
 }
 </style>
+<style id="global-v3894-phone-topbar-subtitle-full-text-only">
+/* V38.9.4 — show the complete phone subtitle on Rules + Settings only.
+   Keep the current bell, user status, Sidebar and page layouts unchanged. */
+@media(max-width:700px){
+  body.r389-rules-open .r389-topbar-copy,
+  body.s37-settings-open .s37-topbar-title-copy{
+    max-width:143px!important;
+    overflow:visible!important;
+  }
+
+  body.r389-rules-open .r389-topbar-copy small,
+  body.s37-settings-open .s37-topbar-title-copy small{
+    display:block!important;
+    width:100%!important;
+    max-width:143px!important;
+    max-height:none!important;
+    height:auto!important;
+    font-size:5.2px!important;
+    line-height:1.18!important;
+    white-space:normal!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+    word-break:keep-all!important;
+    overflow-wrap:normal!important;
+    -webkit-line-clamp:unset!important;
+    -webkit-box-orient:unset!important;
+    margin:0!important;
+    padding:0!important;
+  }
+}
+
+/* iPhone Safari fallback when its layout viewport bypasses max-width. */
+html.phone-device body.r389-rules-open .r389-topbar-copy,
+html.phone-device body.s37-settings-open .s37-topbar-title-copy{
+  max-width:143px!important;
+  overflow:visible!important;
+}
+html.phone-device body.r389-rules-open .r389-topbar-copy small,
+html.phone-device body.s37-settings-open .s37-topbar-title-copy small{
+  display:block!important;
+  width:100%!important;
+  max-width:143px!important;
+  max-height:none!important;
+  height:auto!important;
+  font-size:5.2px!important;
+  line-height:1.18!important;
+  white-space:normal!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  word-break:keep-all!important;
+  overflow-wrap:normal!important;
+  -webkit-line-clamp:unset!important;
+  -webkit-box-orient:unset!important;
+}
+</style>
 </head>
 <body>
 
