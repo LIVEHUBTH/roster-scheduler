@@ -7508,6 +7508,117 @@ html.phone-device body.s37-settings-open .header-right{
   white-space:nowrap!important;
 }
 </style>
+<style id="global-v3893-phone-rules-settings-topbar-final-fix">
+/* V38.9.3 — final phone-only normalization for Rules + Settings top bar.
+   This intentionally sits last so older page-specific !important rules
+   cannot squeeze the Settings user chip again. */
+@media(max-width:700px){
+  body.r389-rules-open .header-right,
+  body.s37-settings-open .header-right{
+    display:flex!important;
+    flex:0 0 auto!important;
+    width:auto!important;
+    min-width:0!important;
+    align-items:center!important;
+    justify-content:flex-end!important;
+    gap:5px!important;
+    margin:0!important;
+    transform:none!important;
+    white-space:nowrap!important;
+  }
+
+  body.r389-rules-open .header-bell,
+  body.s37-settings-open .header-bell{
+    flex:0 0 36px!important;
+    width:36px!important;
+    min-width:36px!important;
+    height:36px!important;
+    margin:0!important;
+  }
+
+  body.r389-rules-open .header-user-status,
+  body.s37-settings-open .header-user-status{
+    box-sizing:border-box!important;
+    flex:0 0 102px!important;
+    width:102px!important;
+    min-width:102px!important;
+    max-width:102px!important;
+    min-height:36px!important;
+    padding:4px 5px!important;
+    gap:4px!important;
+    margin:0!important;
+    overflow:hidden!important;
+  }
+
+  body.r389-rules-open .header-user-copy,
+  body.s37-settings-open .header-user-copy{
+    flex:1 1 auto!important;
+    min-width:0!important;
+    overflow:visible!important;
+  }
+
+  body.r389-rules-open .header-user-copy b,
+  body.s37-settings-open .header-user-copy b{
+    display:block!important;
+    width:auto!important;
+    max-width:none!important;
+    font-size:9px!important;
+    line-height:1.1!important;
+    white-space:nowrap!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+  }
+
+  body.r389-rules-open .header-user-copy small,
+  body.s37-settings-open .header-user-copy small{
+    display:none!important;
+  }
+
+  body.r389-rules-open .header-user-avatar,
+  body.s37-settings-open .header-user-avatar{
+    display:grid!important;
+    flex:0 0 28px!important;
+    width:28px!important;
+    height:28px!important;
+    margin:0!important;
+  }
+}
+
+/* iPhone Safari can expose a layout viewport wider than the media query. */
+html.phone-device body.r389-rules-open .header-right,
+html.phone-device body.s37-settings-open .header-right{
+  gap:5px!important;
+  margin:0!important;
+  transform:none!important;
+}
+html.phone-device body.r389-rules-open .header-user-status,
+html.phone-device body.s37-settings-open .header-user-status{
+  box-sizing:border-box!important;
+  flex:0 0 102px!important;
+  width:102px!important;
+  min-width:102px!important;
+  max-width:102px!important;
+  padding:4px 5px!important;
+  gap:4px!important;
+}
+html.phone-device body.r389-rules-open .header-user-copy b,
+html.phone-device body.s37-settings-open .header-user-copy b{
+  max-width:none!important;
+  font-size:9px!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+}
+html.phone-device body.r389-rules-open .header-user-copy small,
+html.phone-device body.s37-settings-open .header-user-copy small{
+  display:none!important;
+}
+html.phone-device body.r389-rules-open .header-user-avatar,
+html.phone-device body.s37-settings-open .header-user-avatar{
+  flex:0 0 28px!important;
+  width:28px!important;
+  height:28px!important;
+}
+</style>
 </head>
 <body>
 
