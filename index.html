@@ -7900,6 +7900,154 @@ html.phone-device body.s37-settings-open .s37-topbar-title-copy small{
   -webkit-box-orient:unset!important;
 }
 </style>
+<style id="global-v3897-phone-rules-settings-exact-unit-controls-only">
+/* V38.9.7 — PHONE ONLY.
+   Settings has no s37-settings-open body-state synchronizer, so bind its
+   final sizing to the real active page. Rules keeps its working body state. */
+@media(max-width:700px){
+  /* Settings Top bar: same rendered height/padding as Unit. */
+  body:has(#page-settings.active) .header-wrap{
+    box-sizing:border-box!important;
+    min-height:69px!important;
+    height:69px!important;
+    max-height:69px!important;
+    padding:12px 8px!important;
+    align-items:center!important;
+    flex-wrap:nowrap!important;
+    gap:6px!important;
+  }
+
+  body:has(#page-settings.active) .header-clean-left,
+  body:has(#page-settings.active) .s37-topbar-title{
+    flex:1 1 auto!important;
+    min-width:0!important;
+    align-items:center!important;
+    gap:6px!important;
+    overflow:visible!important;
+  }
+
+  body:has(#page-settings.active) .s37-topbar-title-copy{
+    flex:1 1 auto!important;
+    min-width:0!important;
+    max-width:135px!important;
+    overflow:visible!important;
+  }
+
+  body:has(#page-settings.active) .s37-topbar-title-copy small{
+    display:block!important;
+    width:100%!important;
+    max-width:135px!important;
+    height:auto!important;
+    max-height:none!important;
+    font-size:6.5px!important;
+    line-height:1.1!important;
+    white-space:normal!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+    word-break:keep-all!important;
+    overflow-wrap:normal!important;
+    -webkit-line-clamp:unset!important;
+    -webkit-box-orient:unset!important;
+  }
+
+  /* Rules + Settings notification/status = measured Unit dimensions. */
+  body.r389-rules-open .header-right,
+  body:has(#page-settings.active) .header-right{
+    display:flex!important;
+    flex:0 0 auto!important;
+    width:auto!important;
+    min-width:0!important;
+    align-items:center!important;
+    justify-content:flex-end!important;
+    gap:6px!important;
+    margin:0!important;
+    transform:none!important;
+    white-space:nowrap!important;
+  }
+
+  body.r389-rules-open .header-bell,
+  body:has(#page-settings.active) .header-bell{
+    box-sizing:border-box!important;
+    flex:0 0 36px!important;
+    width:36px!important;
+    min-width:36px!important;
+    height:36px!important;
+    min-height:36px!important;
+    margin:0!important;
+  }
+
+  body.r389-rules-open .header-user-status,
+  body:has(#page-settings.active) .header-user-status{
+    box-sizing:border-box!important;
+    flex:0 0 113px!important;
+    width:113px!important;
+    min-width:113px!important;
+    max-width:113px!important;
+    height:40px!important;
+    min-height:40px!important;
+    padding:5px 7px!important;
+    gap:6px!important;
+    margin:0!important;
+    overflow:hidden!important;
+  }
+
+  body.r389-rules-open .header-user-avatar,
+  body:has(#page-settings.active) .header-user-avatar{
+    flex:0 0 30px!important;
+    width:30px!important;
+    height:30px!important;
+  }
+
+  body.r389-rules-open .header-user-copy,
+  body:has(#page-settings.active) .header-user-copy{
+    flex:1 1 auto!important;
+    min-width:0!important;
+  }
+
+  body.r389-rules-open .header-user-copy b,
+  body:has(#page-settings.active) .header-user-copy b{
+    display:block!important;
+    max-width:63px!important;
+    font-size:9.5px!important;
+    line-height:1.1!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:clip!important;
+  }
+
+  body.r389-rules-open .header-user-copy small,
+  body:has(#page-settings.active) .header-user-copy small{
+    display:none!important;
+  }
+}
+
+/* iPhone Safari fallback uses the active Settings page, not a missing body class. */
+html.phone-device body:has(#page-settings.active) .header-wrap{
+  box-sizing:border-box!important;
+  min-height:69px!important;
+  height:69px!important;
+  max-height:69px!important;
+  padding:12px 8px!important;
+}
+html.phone-device body.r389-rules-open .header-user-status,
+html.phone-device body:has(#page-settings.active) .header-user-status{
+  box-sizing:border-box!important;
+  flex:0 0 113px!important;
+  width:113px!important;
+  min-width:113px!important;
+  max-width:113px!important;
+  height:40px!important;
+  min-height:40px!important;
+  padding:5px 7px!important;
+  gap:6px!important;
+}
+html.phone-device body.r389-rules-open .header-user-avatar,
+html.phone-device body:has(#page-settings.active) .header-user-avatar{
+  flex:0 0 30px!important;
+  width:30px!important;
+  height:30px!important;
+}
+</style>
 </head>
 <body>
 
