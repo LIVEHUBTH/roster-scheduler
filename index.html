@@ -6103,6 +6103,76 @@ html.phone-device body.s37-settings-open .s37-topbar-title-copy small{
   }
 }
 </style>
+
+<style id="global-v384-phone-page-height-fit-only">
+/* =========================================================
+   GLOBAL V38.4 — PHONE ONLY / OUTER PAGE HEIGHT FIT ONLY
+
+   Problem:
+   Short pages keep a tall empty content surface after their last frame.
+
+   Fix:
+   On phone, for active pages OTHER THAN Roster, let only the OUTER
+   page/app wrappers shrink to the real content height.
+
+   This does NOT change:
+   - Sidebar
+   - inner cards / grids / buttons / functions
+   - iPad / Desktop
+   - Roster page (already behaves correctly)
+   ========================================================= */
+
+@media(max-width:700px){
+
+  /* Remove viewport-forced minimum height only while a non-Roster page is active. */
+  body:has(.page-view.active:not(#page-roster)) .app-shell{
+    min-height:0!important;
+    height:auto!important;
+  }
+
+  body:has(.page-view.active:not(#page-roster)) .main-shell{
+    min-height:0!important;
+    height:auto!important;
+  }
+
+  body:has(.page-view.active:not(#page-roster)) .app,
+  body:has(.page-view.active:not(#page-roster)) main.app{
+    min-height:0!important;
+    height:auto!important;
+    padding-bottom:12px!important;
+  }
+
+  /* Active page ends immediately after its last existing frame.
+     No change to any internal page layout. */
+  body:has(.page-view.active:not(#page-roster)) .page-view.active{
+    min-height:0!important;
+    height:auto!important;
+    max-height:none!important;
+    padding-bottom:0!important;
+  }
+}
+
+/* Reliable iPhone marker fallback for Safari desktop-sized layout viewport. */
+html.phone-device body:has(.page-view.active:not(#page-roster)) .app-shell,
+html.phone-device body:has(.page-view.active:not(#page-roster)) .main-shell{
+  min-height:0!important;
+  height:auto!important;
+}
+
+html.phone-device body:has(.page-view.active:not(#page-roster)) .app,
+html.phone-device body:has(.page-view.active:not(#page-roster)) main.app{
+  min-height:0!important;
+  height:auto!important;
+  padding-bottom:12px!important;
+}
+
+html.phone-device body:has(.page-view.active:not(#page-roster)) .page-view.active{
+  min-height:0!important;
+  height:auto!important;
+  max-height:none!important;
+  padding-bottom:0!important;
+}
+</style>
 </head>
 <body>
 
