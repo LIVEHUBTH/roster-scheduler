@@ -5743,6 +5743,266 @@ html body #page-settings .s37-calendar-art.s375-cute-calendar > svg{
   }
 }
 </style>
+
+<style id="settings-v379-phone-topbar-hard-align-only">
+/* =========================================================
+   SETTINGS V37.9 — SETTINGS PAGE / PHONE TOPBAR HARD ALIGN ONLY
+
+   Diagnosis from the latest phone screenshot:
+   the Settings title group + right controls were still wider than the
+   available phone header width, so flex wrapped the right controls down.
+
+   Fix only on phone:
+   - keep all four groups in ONE row
+   - move icon/title/subtitle down to the same visual center as right controls
+   - shift notification/user status slightly right
+   - compact widths only enough to prevent wrapping
+
+   No Sidebar / other pages / iPad / Desktop changes.
+   ========================================================= */
+
+/* Use the existing reliable phone-device marker as well as narrow viewport,
+   because iPhone Safari can report a wider layout viewport in some modes. */
+/* PHONE DEVICE — exact Settings-only override */
+html.phone-device body.s37-settings-open .header-wrap{
+  display:flex!important;
+  flex-direction:row!important;
+  flex-wrap:nowrap!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:4px!important;
+  min-height:58px!important;
+  padding:9px 8px!important;
+}
+
+html.phone-device body.s37-settings-open .header-clean-left{
+  display:flex!important;
+  flex:1 1 auto!important;
+  min-width:0!important;
+  width:auto!important;
+  align-items:center!important;
+  gap:5px!important;
+  overflow:hidden!important;
+}
+
+html.phone-device body.s37-settings-open .mobile-menu-btn{
+  flex:0 0 34px!important;
+  width:34px!important;
+  height:34px!important;
+  min-width:34px!important;
+  margin:0!important;
+}
+
+html.phone-device body.s37-settings-open .s37-topbar-title{
+  position:relative!important;
+  top:5px!important;
+  display:flex!important;
+  flex:1 1 auto!important;
+  min-width:0!important;
+  align-items:center!important;
+  gap:5px!important;
+  overflow:hidden!important;
+  margin:0!important;
+}
+
+html.phone-device body.s37-settings-open .s37-topbar-gear{
+  flex:0 0 29px!important;
+  width:29px!important;
+  height:29px!important;
+  margin:0!important;
+}
+
+html.phone-device body.s37-settings-open .s37-topbar-gear svg{
+  width:29px!important;
+  height:29px!important;
+}
+
+html.phone-device body.s37-settings-open .s37-topbar-title-copy{
+  flex:1 1 auto!important;
+  min-width:0!important;
+  max-width:105px!important;
+  overflow:hidden!important;
+}
+
+html.phone-device body.s37-settings-open .s37-topbar-title-copy b{
+  display:block!important;
+  font-size:10.5px!important;
+  line-height:1.05!important;
+  margin:0!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+
+html.phone-device body.s37-settings-open .s37-topbar-title-copy small{
+  display:block!important;
+  font-size:6.2px!important;
+  line-height:1.05!important;
+  margin-top:2px!important;
+  max-width:105px!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+
+html.phone-device body.s37-settings-open .header-right{
+  display:flex!important;
+  flex:0 0 auto!important;
+  width:auto!important;
+  min-width:0!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  gap:5px!important;
+  margin-left:2px!important;
+  margin-right:-2px!important;
+  transform:translateX(2px)!important;
+  white-space:nowrap!important;
+}
+
+html.phone-device body.s37-settings-open .header-bell{
+  flex:0 0 36px!important;
+  width:36px!important;
+  height:36px!important;
+  min-width:36px!important;
+  padding:0!important;
+}
+
+html.phone-device body.s37-settings-open .header-user-status{
+  flex:0 0 auto!important;
+  width:auto!important;
+  min-width:82px!important;
+  max-width:94px!important;
+  min-height:36px!important;
+  padding:5px 7px!important;
+  gap:6px!important;
+}
+
+html.phone-device body.s37-settings-open .header-online-dot{
+  width:8px!important;
+  height:8px!important;
+  flex:0 0 8px!important;
+}
+
+html.phone-device body.s37-settings-open .header-user-copy{
+  min-width:0!important;
+}
+
+html.phone-device body.s37-settings-open .header-user-copy b{
+  max-width:68px!important;
+  font-size:9.5px!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+
+html.phone-device body.s37-settings-open .header-user-copy small{
+  display:none!important;
+}
+
+/* Same fix for ordinary narrow viewport when phone-device marker is absent. */
+@media(max-width:700px){
+  body.s37-settings-open .header-wrap{
+    display:flex!important;
+    flex-direction:row!important;
+    flex-wrap:nowrap!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    gap:4px!important;
+    min-height:58px!important;
+    padding:9px 8px!important;
+  }
+
+  body.s37-settings-open .header-clean-left{
+    display:flex!important;
+    flex:1 1 auto!important;
+    min-width:0!important;
+    width:auto!important;
+    align-items:center!important;
+    gap:5px!important;
+    overflow:hidden!important;
+  }
+
+  body.s37-settings-open .mobile-menu-btn{
+    flex:0 0 34px!important;
+    width:34px!important;
+    height:34px!important;
+    min-width:34px!important;
+  }
+
+  body.s37-settings-open .s37-topbar-title{
+    position:relative!important;
+    top:5px!important;
+    flex:1 1 auto!important;
+    min-width:0!important;
+    display:flex!important;
+    align-items:center!important;
+    gap:5px!important;
+    overflow:hidden!important;
+  }
+
+  body.s37-settings-open .s37-topbar-gear{
+    flex:0 0 29px!important;
+    width:29px!important;
+    height:29px!important;
+  }
+
+  body.s37-settings-open .s37-topbar-gear svg{
+    width:29px!important;
+    height:29px!important;
+  }
+
+  body.s37-settings-open .s37-topbar-title-copy{
+    flex:1 1 auto!important;
+    min-width:0!important;
+    max-width:105px!important;
+  }
+
+  body.s37-settings-open .s37-topbar-title-copy b{
+    font-size:10.5px!important;
+  }
+
+  body.s37-settings-open .s37-topbar-title-copy small{
+    font-size:6.2px!important;
+    max-width:105px!important;
+  }
+
+  body.s37-settings-open .header-right{
+    display:flex!important;
+    flex:0 0 auto!important;
+    width:auto!important;
+    min-width:0!important;
+    align-items:center!important;
+    gap:5px!important;
+    margin-left:2px!important;
+    margin-right:-2px!important;
+    transform:translateX(2px)!important;
+    white-space:nowrap!important;
+  }
+
+  body.s37-settings-open .header-bell{
+    flex:0 0 36px!important;
+    width:36px!important;
+    height:36px!important;
+  }
+
+  body.s37-settings-open .header-user-status{
+    min-width:82px!important;
+    max-width:94px!important;
+    min-height:36px!important;
+    padding:5px 7px!important;
+    gap:6px!important;
+  }
+
+  body.s37-settings-open .header-user-copy b{
+    max-width:68px!important;
+    font-size:9.5px!important;
+  }
+
+  body.s37-settings-open .header-user-copy small{
+    display:none!important;
+  }
+}
+</style>
 </head>
 <body>
 
