@@ -6746,6 +6746,62 @@ html.phone-device body #page-settings button > span{
   }
 }
 </style>
+
+<style id="global-v388-topbar-refine-only">
+/* =========================================================
+   GLOBAL V38.8 — TOP BAR ONLY / REQUESTED REFINEMENTS
+
+   1) User-status chip = pastel pink.
+   2) Bell icon/button = pastel yellow; badge remains clearly colored.
+   3) iPad/Desktop: show only main user name + avatar, hide lower metadata line.
+   4) No Sidebar / page content / responsive layout changes.
+   ========================================================= */
+
+/* 1) pastel pink user-status frame */
+.header-user-status{
+  background:#fff4f8!important;
+  border-color:#f2cbd9!important;
+  box-shadow:none!important;
+}
+
+/* 2) pastel yellow notification button + bell */
+.header-bell{
+  background:#fff9e8!important;
+  border-color:#f2dca2!important;
+  box-shadow:none!important;
+}
+.header-bell .g387-bell-svg path{
+  fill:#fff2bf!important;
+  stroke:#d7a52e!important;
+}
+.header-bell-badge{
+  background:#ff6f9d!important;
+  color:#ffffff!important;
+  border-color:#ffffff!important;
+}
+
+/* topbar avatar can display the same user photo from Unit account management */
+.header-user-avatar{
+  overflow:hidden!important;
+  display:grid!important;
+  place-items:center!important;
+}
+.header-user-avatar > img{
+  width:100%!important;
+  height:100%!important;
+  object-fit:cover!important;
+  object-position:center!important;
+  border-radius:50%!important;
+  display:block!important;
+}
+
+/* 3) iPad + Desktop only: remove @admin / role / online subline. */
+@media(min-width:701px){
+  .header-user-copy small{
+    display:none!important;
+  }
+}
+</style>
 </head>
 <body>
 
@@ -12505,7 +12561,10 @@ html body #page-home [data-home-version]{
   }
 
   function savePhotos(map){
-    try{ localStorage.setItem(PHOTO_KEY,JSON.stringify(map)); }catch(e){}
+    try{
+      localStorage.setItem(PHOTO_KEY,JSON.stringify(map));
+      window.dispatchEvent(new CustomEvent('u400photoschanged'));
+    }catch(e){}
   }
 
   function usernameFromRow(row){
@@ -12954,6 +13013,128 @@ html body #page-home [data-home-version]{
     },{passive:true});
 
     applyStatus(getStatus());
+  }
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',init,{once:true});
+  }else{
+    init();
+  }
+})();
+</script>
+
+<script id="global-v388-topbar-refine-js">
+(function(){
+  'use strict';
+
+  var PHOTO_KEY='roster_unit_user_photos_v1';
+
+  function el(id){ return document.getElementById(id); }
+
+  function currentUsername(){
+    /* Prefer actual system user object when available. */
+    try{
+      if(window.unitUser && window.unitUser.username){
+        return String(window.unitUser.username).replace(/^@/,'').trim();
+      }
+    }catch(e){}
+
+    /* Fallback: parse the existing metadata text before it is visually hidden. */
+    var role=el('headerCurrentRole');
+    var text=role ? String(role.textContent||'') : '';
+    var m=text.match(/@([^\s•]+)/);
+    return m ? m[1].trim() : 'admin';
+  }
+
+  function syncHeaderAvatar(){
+    var avatar=document.querySelector('.header-user-avatar');
+    if(!avatar) return;
+
+    var username=currentUsername();
+    var src='';
+
+    try{
+      var map=JSON.parse(localStorage.getItem(PHOTO_KEY)||'{}');
+      if(map && typeof map==='object') src=String(map[username]||'');
+    }catch(e){}
+
+    if(src){
+      avatar.innerHTML='<img src="'+src+'" alt="รูปผู้ใช้งาน">';
+    }else{
+      /* Keep a single cartoon fallback when no custom photo exists. */
+      avatar.textContent='👩🏻‍⚕️';
+    }
+  }
+
+  function goToPage(page){
+    /* Use the same real Sidebar navigation target the system already uses,
+       without changing Sidebar itself. */
+    var nav=document.querySelector('.side-nav a[data-page="'+page+'"]');
+    if(nav){
+      nav.click();
+      return true;
+    }
+
+    /* Fallback to the existing page router. */
+    try{
+      if(typeof showPage==='function'){
+        showPage(page,true);
+        return true;
+      }
+    }catch(e){}
+
+    return false;
+  }
+
+  function repairNotificationLinks(){
+    var pop=el('g387NoticePop');
+    if(!pop) return;
+
+    pop.addEventListener('click',function(ev){
+      var item=ev.target && ev.target.closest
+        ? ev.target.closest('[data-g387-page]')
+        : null;
+      if(!item) return;
+
+      ev.preventDefault();
+      ev.stopPropagation();
+
+      var page=item.getAttribute('data-g387-page');
+      if(!page) return;
+
+      var ok=goToPage(page);
+      if(ok && typeof closeAll==='function'){
+        try{ closeAll(); }catch(e){}
+      }else{
+        pop.classList.remove('show');
+      }
+    },true);
+  }
+
+  function init(){
+    syncHeaderAvatar();
+    repairNotificationLinks();
+
+    window.addEventListener('u400photoschanged',syncHeaderAvatar);
+    window.addEventListener('storage',function(ev){
+      if(ev.key===PHOTO_KEY) syncHeaderAvatar();
+    });
+
+    /* Refresh when opening the user-status popup or Unit page;
+       no polling / no continuous background loop. */
+    var user=el('headerUserStatus');
+    if(user){
+      user.addEventListener('click',function(){
+        syncHeaderAvatar();
+      },true);
+    }
+
+    document.addEventListener('click',function(ev){
+      var nav=ev.target && ev.target.closest
+        ? ev.target.closest('[data-page]')
+        : null;
+      if(nav) setTimeout(syncHeaderAvatar,0);
+    },true);
   }
 
   if(document.readyState==='loading'){
