@@ -5173,6 +5173,66 @@ html body #page-settings button > span{
   }
 }
 </style>
+
+<style id="history-v3910-phone-heading-one-line-only">
+/* =========================================================
+   HISTORY V39.10 — PHONE ONLY / TEXT ONE-LINE FIX ONLY
+
+   Keep History card headings and their sentence text on one line.
+   Only font sizing/nowrap is adjusted on phone.
+   No Sidebar / other pages / iPad / Desktop / structural layout changes.
+   ========================================================= */
+
+@media(max-width:700px){
+
+  /* Main table title: force one line by reducing text size only. */
+  html body #page-history .h33-table-card > .h33-card-head > h3{
+    white-space:nowrap!important;
+    word-break:keep-all!important;
+    overflow-wrap:normal!important;
+    font-size:13px!important;
+    line-height:1.1!important;
+    letter-spacing:-.15px!important;
+  }
+
+  /* Keep the accompanying current/previous-month sentence on one line. */
+  html body #page-history .h33-table-card > .h33-card-head > #historyInfo{
+    white-space:nowrap!important;
+    word-break:keep-all!important;
+    overflow-wrap:normal!important;
+    font-size:8px!important;
+    line-height:1.1!important;
+  }
+
+  /* Recent-view card heading. */
+  html body #page-history .h33-bottom-grid .h33-card-head > h3,
+  html body #page-history .h33-recent-card .h33-card-head > h3{
+    white-space:nowrap!important;
+    word-break:keep-all!important;
+    overflow-wrap:normal!important;
+    font-size:13px!important;
+    line-height:1.1!important;
+    letter-spacing:-.1px!important;
+  }
+
+  /* Audit Log heading: keep Thai + English phrase on one line. */
+  html body #page-history .h33-audit-card .h33-card-head > h3{
+    white-space:nowrap!important;
+    word-break:keep-all!important;
+    overflow-wrap:normal!important;
+    font-size:12px!important;
+    line-height:1.1!important;
+    letter-spacing:-.15px!important;
+  }
+
+  /* Generic fallback for History card headings only. */
+  html body #page-history .h33-card-head > h3{
+    white-space:nowrap!important;
+    word-break:keep-all!important;
+    overflow-wrap:normal!important;
+  }
+}
+</style>
 </head>
 <body>
 
