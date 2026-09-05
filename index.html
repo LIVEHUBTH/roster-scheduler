@@ -4879,6 +4879,130 @@ html body #page-internal .u36-avatar.u400-photo-avatar .u400-photo-edit svg{
   display:block!important;
 }
 </style>
+
+<style id="unit-v401-requested-only">
+/* =========================================================
+   UNIT V40.1 — #page-internal ONLY / REQUESTED ITEMS ONLY
+
+   1) Topbar icon -> exact Unit/Building SVG style from sidebar, pastel pink.
+   2) Restore pastel fills on Unit cards, matching their border colors.
+   3) iPad/Desktop only: logo chooser + Cancel + Save on same row.
+   4) No Sidebar / other pages / phone layout changes.
+   ========================================================= */
+
+/* 1) Topbar icon uses the same building geometry as Sidebar.
+      Keep Home-reference icon size. */
+body.u400-unit-open .u400-topbar-icon{
+  background:transparent!important;
+  border:none!important;
+  box-shadow:none!important;
+}
+body.u400-unit-open .u400-topbar-icon svg{
+  width:36px!important;
+  height:36px!important;
+  display:block!important;
+}
+@media(max-width:700px){
+  body.u400-unit-open .u400-topbar-icon svg{
+    width:31px!important;
+    height:31px!important;
+  }
+}
+
+/* 2) Pastel card fills, tied to each existing border color.
+      This intentionally overrides only V40.0's transparent card fills. */
+html body #page-internal .u36-stat.purple{
+  background:#f7f3ff!important;
+  background-image:none!important;
+  border-color:#ddd2fb!important;
+  box-shadow:none!important;
+}
+html body #page-internal .u36-stat.pink{
+  background:#fff2f7!important;
+  background-image:none!important;
+  border-color:#f7d3e1!important;
+  box-shadow:none!important;
+}
+html body #page-internal .u36-stat.mint{
+  background:#eefbf7!important;
+  background-image:none!important;
+  border-color:#ccefe5!important;
+  box-shadow:none!important;
+}
+html body #page-internal .u36-stat.orange{
+  background:#fff7ec!important;
+  background-image:none!important;
+  border-color:#f4ddbf!important;
+  box-shadow:none!important;
+}
+
+/* Main Unit cards: soft pastel tint coordinated with their existing borders.
+   Keep all dimensions, borders and inner layout unchanged. */
+html body #page-internal .u36-info-card{
+  background:#fff7fb!important;
+  background-image:none!important;
+  box-shadow:none!important;
+}
+html body #page-internal .u36-accounts-card{
+  background:#f7f5ff!important;
+  background-image:none!important;
+  box-shadow:none!important;
+}
+
+/* Keep inner editing/table surfaces readable but still softly tinted. */
+html body #page-internal .u36-info-card .u36-form{
+  background:rgba(255,255,255,.58)!important;
+  box-shadow:none!important;
+}
+html body #page-internal .u36-accounts-card .u36-table-wrap{
+  background:rgba(255,255,255,.56)!important;
+  box-shadow:none!important;
+}
+
+/* 3) iPad/Desktop ONLY:
+      logo preview/copy + Cancel + Save share one balanced row.
+      Phone remains exactly as V40.0. */
+@media(min-width:701px){
+  html body #page-internal .u36-info-card .u36-form{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) auto!important;
+    column-gap:14px!important;
+    align-items:end!important;
+  }
+
+  html body #page-internal .u36-info-card .u36-grid{
+    grid-column:1 / -1!important;
+  }
+
+  html body #page-internal .u36-info-card .u36-logo-row{
+    grid-column:1!important;
+    margin-top:10px!important;
+    min-width:0!important;
+  }
+
+  html body #page-internal .u36-info-card .u36-actions{
+    grid-column:2!important;
+    margin-top:10px!important;
+    align-self:end!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:flex-end!important;
+    gap:8px!important;
+    width:auto!important;
+  }
+
+  html body #page-internal .u36-info-card .u36-actions .u36-btn{
+    width:auto!important;
+    min-width:92px!important;
+    height:35px!important;
+    margin:0!important;
+  }
+
+  html body #page-internal .u36-info-card #u36SaveInfo{
+    min-width:154px!important;
+  }
+}
+</style>
 </head>
 <body>
 
@@ -10454,12 +10578,9 @@ html body #page-home [data-home-version]{
 
   function houseSvg(){
     return ''+
-      '<svg viewBox="0 0 48 48" aria-hidden="true" focusable="false">'+
-        '<path d="M8 23.2 24 9l16 14.2v16.1c0 1.5-1.2 2.7-2.7 2.7H10.7A2.7 2.7 0 0 1 8 39.3V23.2Z" fill="#f36b9d"/>'+
-        '<path d="M5.8 23.6 24 7.5l18.2 16.1" fill="none" stroke="#d95789" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>'+
-        '<rect x="20" y="29" width="8" height="13" rx="2" fill="#ffd7e6"/>'+
-        '<rect x="12.5" y="26.5" width="6" height="6" rx="1.5" fill="#ffd7e6"/>'+
-        '<rect x="29.5" y="26.5" width="6" height="6" rx="1.5" fill="#ffd7e6"/>'+
+      '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">'+
+        '<path d="M4 21V7l8-4 8 4v14" fill="none" stroke="#f36b9d" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>'+
+        '<path d="M8 9h2M14 9h2M8 13h2M14 13h2M8 17h2M14 17h2M3 21h18" fill="none" stroke="#f36b9d" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>'+
       '</svg>';
   }
 
