@@ -5669,6 +5669,80 @@ html body #page-settings .s37-calendar-art.s375-cute-calendar > svg{
   }
 }
 </style>
+
+<style id="settings-v378-phone-topbar-align-only">
+/* =========================================================
+   SETTINGS V37.8 — SETTINGS PAGE / PHONE TOPBAR ALIGN ONLY
+
+   Move the Settings title group slightly downward so its visual center
+   aligns with notification + user status, and shift the right controls
+   slightly to the right.
+
+   No Sidebar / other pages / iPad / Desktop / structural layout changes.
+   ========================================================= */
+
+@media(max-width:700px){
+
+  /* Keep the same single-row structure from V37.7. */
+  body.s37-settings-open .header-wrap{
+    flex-wrap:nowrap!important;
+    gap:6px!important;
+    align-items:center!important;
+  }
+
+  body.s37-settings-open .header-clean-left{
+    flex:1 1 auto!important;
+    min-width:0!important;
+    display:flex!important;
+    align-items:center!important;
+    gap:6px!important;
+    overflow:hidden!important;
+  }
+
+  /* Move only the Settings title block slightly down to match
+     the visual baseline/center of notification + user status. */
+  body.s37-settings-open .s37-topbar-title{
+    position:relative!important;
+    top:6px!important;
+    flex:1 1 auto!important;
+    min-width:0!important;
+    display:flex!important;
+    align-items:center!important;
+    gap:6px!important;
+    overflow:hidden!important;
+  }
+
+  body.s37-settings-open .s37-topbar-gear{
+    flex:0 0 31px!important;
+    width:31px!important;
+    height:31px!important;
+    align-self:center!important;
+  }
+
+  body.s37-settings-open .s37-topbar-title-copy{
+    min-width:0!important;
+    max-width:135px!important;
+    overflow:hidden!important;
+    align-self:center!important;
+  }
+
+  body.s37-settings-open .s37-topbar-title-copy b,
+  body.s37-settings-open .s37-topbar-title-copy small{
+    margin:0!important;
+  }
+
+  /* Shift only notification + user status a little to the right,
+     keeping them in the same row. */
+  body.s37-settings-open .header-right{
+    flex:0 0 auto!important;
+    margin-left:4px!important;
+    transform:translateX(4px)!important;
+    gap:6px!important;
+    white-space:nowrap!important;
+    align-items:center!important;
+  }
+}
+</style>
 </head>
 <body>
 
