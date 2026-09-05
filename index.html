@@ -7118,6 +7118,133 @@ html.phone-device body .header-right{
   white-space:nowrap!important;
 }
 </style>
+
+<style id="global-v3891-phone-topbar-active-only">
+/* =========================================================
+   GLOBAL V38.9.1 — PHONE TOP BAR ACTIVE-PAGE ONLY
+
+   Fixes the regression where all page title/icon groups were shown
+   together in the Top bar.
+
+   Keep Unit-page visual proportions from V38.9, but show ONLY
+   the title/icon group of the page that is currently active.
+
+   No Sidebar / page content / iPad / Desktop changes.
+   ========================================================= */
+
+@media(max-width:700px){
+
+  /* Hide every page-specific Top bar title by default. */
+  body .h386-topbar-title,
+  body .r29-topbar-title,
+  body .p306-topbar-title,
+  body .r389-topbar-title,
+  body .h393-topbar-title,
+  body .h396-topbar-title,
+  body .s3911-topbar-title,
+  body .u400-topbar-title,
+  body .s37-topbar-title{
+    display:none!important;
+  }
+
+  /* Show ONLY the title group that matches the active page body state. */
+  body.h386-home-open .h386-topbar-title,
+  body.r29-roster-open .r29-topbar-title,
+  body.p306-people-open .p306-topbar-title,
+  body.r389-rules-open .r389-topbar-title,
+  body.h393-holidays-open .h393-topbar-title,
+  body.h396-history-open .h396-topbar-title,
+  body.s3911-summary-open .s3911-topbar-title,
+  body.u400-unit-open .u400-topbar-title,
+  body.s37-settings-open .s37-topbar-title{
+    display:flex!important;
+    flex:1 1 auto!important;
+    min-width:0!important;
+    align-items:center!important;
+    gap:6px!important;
+    overflow:hidden!important;
+    position:static!important;
+    top:auto!important;
+    margin:0!important;
+  }
+
+  /* People page uses p306 naming, keep the same Unit-style sizing. */
+  body.p306-people-open .p306-topbar-title .p306-topbar-icon{
+    width:31px!important;
+    height:31px!important;
+    flex:0 0 31px!important;
+  }
+
+  body.p306-people-open .p306-topbar-title .p306-topbar-icon .p30-title-icon,
+  body.p306-people-open .p306-topbar-title .p306-topbar-icon .p30-title-icon svg{
+    width:31px!important;
+    height:31px!important;
+  }
+
+  body.p306-people-open .p306-topbar-title .p306-topbar-copy{
+    flex:1 1 auto!important;
+    min-width:0!important;
+    max-width:135px!important;
+    overflow:hidden!important;
+  }
+
+  body.p306-people-open .p306-topbar-title .p306-topbar-copy b{
+    display:block!important;
+    font-size:11px!important;
+    line-height:1.15!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    max-width:135px!important;
+  }
+
+  body.p306-people-open .p306-topbar-title .p306-topbar-copy small{
+    display:-webkit-box!important;
+    -webkit-box-orient:vertical!important;
+    -webkit-line-clamp:2!important;
+    font-size:6.5px!important;
+    line-height:1.18!important;
+    white-space:normal!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    max-width:135px!important;
+    max-height:16px!important;
+  }
+}
+
+/* iPhone Safari fallback when layout viewport is wider than 700px. */
+html.phone-device body .h386-topbar-title,
+html.phone-device body .r29-topbar-title,
+html.phone-device body .p306-topbar-title,
+html.phone-device body .r389-topbar-title,
+html.phone-device body .h393-topbar-title,
+html.phone-device body .h396-topbar-title,
+html.phone-device body .s3911-topbar-title,
+html.phone-device body .u400-topbar-title,
+html.phone-device body .s37-topbar-title{
+  display:none!important;
+}
+
+html.phone-device body.h386-home-open .h386-topbar-title,
+html.phone-device body.r29-roster-open .r29-topbar-title,
+html.phone-device body.p306-people-open .p306-topbar-title,
+html.phone-device body.r389-rules-open .r389-topbar-title,
+html.phone-device body.h393-holidays-open .h393-topbar-title,
+html.phone-device body.h396-history-open .h396-topbar-title,
+html.phone-device body.s3911-summary-open .s3911-topbar-title,
+html.phone-device body.u400-unit-open .u400-topbar-title,
+html.phone-device body.s37-settings-open .s37-topbar-title{
+  display:flex!important;
+  flex:1 1 auto!important;
+  min-width:0!important;
+  align-items:center!important;
+  gap:6px!important;
+  overflow:hidden!important;
+  position:static!important;
+  top:auto!important;
+  margin:0!important;
+}
+</style>
 </head>
 <body>
 
