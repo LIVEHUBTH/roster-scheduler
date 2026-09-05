@@ -5132,6 +5132,47 @@ html body #page-settings button > span{
   line-height:1.15;
 }
 </style>
+
+<style id="history-v399-phone-one-line-text-only">
+/* =========================================================
+   HISTORY V39.9 — PHONE ONLY / TEXT WRAP FIX ONLY
+
+   Keep phrases that belong to the same sentence on one line
+   in the History page. No Sidebar / other pages / layout changes.
+   ========================================================= */
+
+@media(max-width:700px){
+
+  /* Main history-table heading: prevent
+     "ประวัติการจัดเวรย้อน / หลัง" from breaking into two lines. */
+  html body #page-history .h33-table-card > .h33-card-head > h3{
+    white-space:nowrap!important;
+    word-break:keep-all!important;
+    overflow-wrap:normal!important;
+    font-size:clamp(13px,3.9vw,17px)!important;
+    line-height:1.15!important;
+  }
+
+  /* Keep the accompanying status sentence together as one sentence.
+     It may scroll horizontally inside its own text area rather than
+     splitting a single phrase into separate lines. */
+  html body #page-history .h33-table-card > .h33-card-head > #historyInfo{
+    white-space:nowrap!important;
+    word-break:keep-all!important;
+    overflow-wrap:normal!important;
+    min-width:0!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  /* Other card headings on History page: keep each heading phrase intact. */
+  html body #page-history .h33-bottom-grid .h33-card-head > h3{
+    white-space:nowrap!important;
+    word-break:keep-all!important;
+    overflow-wrap:normal!important;
+  }
+}
+</style>
 </head>
 <body>
 
