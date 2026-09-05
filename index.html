@@ -6510,6 +6510,242 @@ html.phone-device body #page-settings button > span{
   text-overflow:clip!important;
 }
 </style>
+
+<style id="global-v387-topbar-popups">
+/* =========================================================
+   GLOBAL V38.7 — TOP BAR POPUPS ONLY
+
+   - Pastel SVG notification bell.
+   - Bell popup with scrollable, clickable notifications.
+   - User/status popup with Online / Away / Offline controls.
+   - Floating overlays only: no page/sidebar/layout changes.
+   ========================================================= */
+
+.header-bell .g387-bell-svg{
+  width:24px!important;
+  height:24px!important;
+  display:block!important;
+}
+
+/* Make existing user status chip tappable without changing its size/layout. */
+.header-user-status{
+  cursor:pointer!important;
+}
+
+/* Shared floating popup shell */
+.g387-popover{
+  position:fixed;
+  z-index:10050;
+  width:min(360px,calc(100vw - 24px));
+  background:rgba(255,255,255,.98);
+  border:1px solid #f0dce5;
+  border-radius:20px;
+  box-shadow:0 18px 50px rgba(77,55,68,.14);
+  overflow:hidden;
+  opacity:0;
+  visibility:hidden;
+  transform:translateY(-7px);
+  transition:opacity .14s ease,transform .14s ease,visibility .14s ease;
+  color:#344158;
+}
+.g387-popover.show{
+  opacity:1;
+  visibility:visible;
+  transform:translateY(0);
+}
+
+.g387-pop-arrow{
+  position:absolute;
+  top:-8px;
+  width:16px;
+  height:16px;
+  background:#fff;
+  border-left:1px solid #f0dce5;
+  border-top:1px solid #f0dce5;
+  transform:rotate(45deg);
+}
+
+.g387-pop-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:15px 16px 12px;
+  border-bottom:1px solid #f4e8ee;
+  background:linear-gradient(180deg,#fff9fc,#fff);
+}
+.g387-pop-head strong{
+  font-size:15px;
+  line-height:1.2;
+  color:#27334b;
+}
+.g387-pop-count{
+  min-width:26px;
+  height:26px;
+  padding:0 8px;
+  border-radius:999px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  background:#ff5e91;
+  color:#fff;
+  font-size:11px;
+  font-weight:900;
+}
+
+.g387-notice-list{
+  max-height:min(430px,55vh);
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+  padding:5px 0;
+}
+.g387-notice-item{
+  width:100%;
+  border:0;
+  background:#fff;
+  display:grid;
+  grid-template-columns:48px minmax(0,1fr) 10px;
+  gap:10px;
+  align-items:center;
+  text-align:left;
+  padding:12px 15px;
+  cursor:pointer;
+  color:#344158;
+  border-bottom:1px solid #f5edf1;
+}
+.g387-notice-item:last-child{border-bottom:0}
+.g387-notice-item:active{background:#fff8fb}
+.g387-notice-icon{
+  width:44px;
+  height:44px;
+  border-radius:14px;
+  display:grid;
+  place-items:center;
+}
+.g387-notice-icon svg{
+  width:28px;
+  height:28px;
+  display:block;
+}
+.g387-notice-icon.pink{background:#fff0f6;color:#ea5c91}
+.g387-notice-icon.purple{background:#f4efff;color:#9b78de}
+.g387-notice-icon.mint{background:#eefbf7;color:#45b99e}
+.g387-notice-icon.yellow{background:#fff8e5;color:#e7aa31}
+
+.g387-notice-copy{
+  min-width:0;
+}
+.g387-notice-copy b{
+  display:block;
+  font-size:12px;
+  line-height:1.35;
+  color:#27334b;
+  margin-bottom:2px;
+}
+.g387-notice-copy small{
+  display:block;
+  font-size:9.5px;
+  line-height:1.45;
+  color:#7d8698;
+}
+.g387-notice-arrow{
+  font-size:18px;
+  color:#f06295;
+  font-weight:900;
+}
+
+.g387-pop-empty{
+  padding:26px 16px;
+  text-align:center;
+  color:#8d94a2;
+  font-size:11px;
+}
+
+/* User/status popup */
+.g387-user-card{
+  padding:14px 16px 10px;
+  display:flex;
+  align-items:center;
+  gap:11px;
+}
+.g387-user-avatar{
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg,#ffe6f0,#eee8ff);
+  font-size:22px;
+  flex:0 0 44px;
+}
+.g387-user-copy{min-width:0}
+.g387-user-copy b{
+  display:block;
+  color:#27334b;
+  font-size:13px;
+  line-height:1.2;
+}
+.g387-user-copy small{
+  display:block;
+  color:#8a91a0;
+  font-size:9.5px;
+  margin-top:3px;
+}
+
+.g387-status-title{
+  padding:2px 16px 8px;
+  font-size:10px;
+  color:#737c8e;
+  font-weight:800;
+}
+.g387-status-options{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  padding:0 12px 14px;
+}
+.g387-status-btn{
+  min-height:50px;
+  border-radius:14px;
+  border:1px solid #ebe7e5;
+  background:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  font-size:10px;
+  font-weight:900;
+  color:#687181;
+  cursor:pointer;
+}
+.g387-status-btn .dot{
+  width:11px;height:11px;border-radius:50%;flex:0 0 11px;
+}
+.g387-status-btn[data-status="online"] .dot{background:#2fcf89}
+.g387-status-btn[data-status="away"] .dot{background:#f7b538}
+.g387-status-btn[data-status="offline"] .dot{background:#8b94a0}
+.g387-status-btn.active[data-status="online"]{
+  border-color:#95e8c8;background:#effcf7;color:#149a68;
+}
+.g387-status-btn.active[data-status="away"]{
+  border-color:#f4d59b;background:#fff9ed;color:#b77a13;
+}
+.g387-status-btn.active[data-status="offline"]{
+  border-color:#d6dbe1;background:#f6f7f9;color:#66707e;
+}
+
+/* Phone popup width/placement only; does not affect Top bar layout. */
+@media(max-width:700px){
+  .g387-popover{
+    width:calc(100vw - 20px);
+    border-radius:18px;
+  }
+  .g387-notice-list{
+    max-height:52vh;
+  }
+}
+</style>
 </head>
 <body>
 
@@ -6565,8 +6801,12 @@ html.phone-device body #page-settings button > span{
       <button class="mobile-menu-btn no-print" id="mobileMenuBtn">☰</button>
     </div>
     <div class="header-right no-print">
-      <button class="header-bell" id="headerBellBtn" title="การแจ้งเตือน">
-        🔔
+      <button class="header-bell" id="headerBellBtn" title="การแจ้งเตือน" aria-label="การแจ้งเตือน" aria-haspopup="true" aria-expanded="false">
+        <svg class="g387-bell-svg" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+          <path d="M16 5.2c-4.5 0-7.5 3.4-7.5 8.1v4.2c0 1.8-.7 3.5-2.1 4.8l-1.2 1.1h21.6l-1.2-1.1a6.6 6.6 0 0 1-2.1-4.8v-4.2c0-4.7-3-8.1-7.5-8.1Z" fill="#fff0f6" stroke="#ef6698" stroke-width="2.1" stroke-linejoin="round"/>
+          <path d="M12.4 24.2c.5 2 1.8 3.1 3.6 3.1s3.1-1.1 3.6-3.1" fill="none" stroke="#ef6698" stroke-width="2.1" stroke-linecap="round"/>
+          <path d="M13.8 4.9c.3-1.1 1.1-1.7 2.2-1.7s1.9.6 2.2 1.7" fill="none" stroke="#ef6698" stroke-width="2.1" stroke-linecap="round"/>
+        </svg>
         <span class="header-bell-badge" id="headerBellBadge">0</span>
       </button>
       <div class="header-user-status" id="headerUserStatus">
@@ -12458,6 +12698,262 @@ html body #page-home [data-home-version]{
         setTimeout(apply,80);
       }
     },true);
+  }
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',init,{once:true});
+  }else{
+    init();
+  }
+})();
+</script>
+
+<script id="global-v387-topbar-popups-js">
+(function(){
+  'use strict';
+
+  var STATUS_KEY='roster_header_presence_v1';
+
+  function el(id){return document.getElementById(id)}
+  function closeAll(){
+    var a=el('g387NoticePop'),b=el('g387StatusPop');
+    if(a)a.classList.remove('show');
+    if(b)b.classList.remove('show');
+    var bell=el('headerBellBtn');
+    if(bell)bell.setAttribute('aria-expanded','false');
+    var user=el('headerUserStatus');
+    if(user)user.setAttribute('aria-expanded','false');
+  }
+
+  function iconSvg(type){
+    if(type==='calendar'){
+      return '<svg viewBox="0 0 32 32" aria-hidden="true"><rect x="5" y="7" width="22" height="20" rx="6" fill="#ffe3ee" stroke="currentColor" stroke-width="1.8"/><path d="M5 12h22M10 5v5M22 5v5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="m11 18 3 3 6-7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    }
+    if(type==='rules'){
+      return '<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M8 5h13l4 4v18H8z" fill="#efe7ff" stroke="currentColor" stroke-width="1.8"/><path d="M21 5v5h5M12 15h10M12 20h7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="m11 24 2 2 4-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    }
+    if(type==='history'){
+      return '<svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="10" fill="#e9faf5" stroke="currentColor" stroke-width="1.8"/><path d="M16 10v6l4 3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+    }
+    return '<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 6c-5 0-8 4-8 9v4c0 2-.8 3.7-2.3 5h20.6A6.8 6.8 0 0 1 24 19v-4c0-5-3-9-8-9Z" fill="#fff2d7" stroke="currentColor" stroke-width="1.8"/><path d="M13 25c.5 1.5 1.5 2.2 3 2.2s2.5-.7 3-2.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+  }
+
+  function getNotices(){
+    var arr=[];
+    var warn=parseInt((el('dashWarn')&&el('dashWarn').textContent)||'0',10)||0;
+    var err=parseInt((el('dashError')&&el('dashError').textContent)||'0',10)||0;
+
+    if(err>0){
+      arr.push({
+        type:'rules',tone:'purple',title:'พบข้อขัดแย้งของกฎการจัดเวร',
+        detail:'มี '+err+' รายการที่ควรตรวจสอบก่อนใช้งานตาราง',
+        page:'rules'
+      });
+    }
+    if(warn>0){
+      arr.push({
+        type:'bell',tone:'yellow',title:'มีรายการที่ควรตรวจสอบ',
+        detail:'พบ '+warn+' รายการที่ควรทบทวนเพื่อให้ตารางสมดุล',
+        page:'summary'
+      });
+    }
+
+    arr.push({
+      type:'calendar',tone:'pink',title:'ตรวจสอบวันหยุดและข้อมูลบุคลากร',
+      detail:'ตรวจสอบข้อมูลก่อนรันตารางเวรเพื่อความถูกต้อง',
+      page:'holidays'
+    });
+    arr.push({
+      type:'history',tone:'mint',title:'ดูประวัติการจัดเวรย้อนหลัง',
+      detail:'สามารถตรวจสอบเดือนที่บันทึกและสถานะตารางได้',
+      page:'history'
+    });
+    return arr;
+  }
+
+  function noticeHtml(){
+    var notices=getNotices();
+    var badge=el('headerBellBadge');
+    var count=parseInt((badge&&badge.textContent)||'0',10);
+    if(!isFinite(count))count=notices.length;
+
+    return '<div class="g387-pop-arrow"></div>'+
+      '<div class="g387-pop-head"><strong>การแจ้งเตือน</strong><span class="g387-pop-count">'+count+'</span></div>'+
+      '<div class="g387-notice-list">'+
+        notices.map(function(n){
+          return '<button type="button" class="g387-notice-item" data-g387-page="'+n.page+'">'+
+            '<span class="g387-notice-icon '+n.tone+'">'+iconSvg(n.type)+'</span>'+
+            '<span class="g387-notice-copy"><b>'+n.title+'</b><small>'+n.detail+'</small></span>'+
+            '<span class="g387-notice-arrow">›</span>'+
+          '</button>';
+        }).join('')+
+      '</div>';
+  }
+
+  function getStatus(){
+    try{return localStorage.getItem(STATUS_KEY)||'online'}catch(e){return 'online'}
+  }
+  function setStatus(s){
+    try{localStorage.setItem(STATUS_KEY,s)}catch(e){}
+    applyStatus(s);
+  }
+  function applyStatus(s){
+    var dot=document.querySelector('#headerUserStatus .header-online-dot');
+    var role=el('headerCurrentRole');
+    var labels={online:'ออนไลน์',away:'ไม่อยู่',offline:'ออฟไลน์'};
+    var colors={online:'#2fbd79',away:'#f7b538',offline:'#8b94a0'};
+    var rings={online:'#e3f8ee',away:'#fff3d8',offline:'#edf0f3'};
+    if(dot){
+      dot.style.background=colors[s]||colors.online;
+      dot.style.boxShadow='0 0 0 3px '+(rings[s]||rings.online);
+    }
+    if(role)role.textContent=labels[s]||labels.online;
+
+    document.querySelectorAll('.g387-status-btn').forEach(function(b){
+      b.classList.toggle('active',b.dataset.status===s);
+    });
+  }
+
+  function statusHtml(){
+    var name=(el('headerCurrentUser')&&el('headerCurrentUser').textContent)||'ผู้ดูแลระบบ';
+    var role=(el('headerCurrentRole')&&el('headerCurrentRole').textContent)||'ออนไลน์';
+    var current=getStatus();
+    return '<div class="g387-pop-arrow"></div>'+
+      '<div class="g387-user-card">'+
+        '<div class="g387-user-avatar">👩🏻‍⚕️</div>'+
+        '<div class="g387-user-copy"><b>'+name+'</b><small>'+role+'</small></div>'+
+      '</div>'+
+      '<div class="g387-status-title">สถานะของฉัน</div>'+
+      '<div class="g387-status-options">'+
+        '<button type="button" class="g387-status-btn '+(current==='online'?'active':'')+'" data-status="online"><span class="dot"></span>ออนไลน์</button>'+
+        '<button type="button" class="g387-status-btn '+(current==='away'?'active':'')+'" data-status="away"><span class="dot"></span>ไม่อยู่</button>'+
+        '<button type="button" class="g387-status-btn '+(current==='offline'?'active':'')+'" data-status="offline"><span class="dot"></span>ออฟไลน์</button>'+
+      '</div>';
+  }
+
+  function position(pop,anchor,alignRight){
+    if(!pop||!anchor)return;
+    var r=anchor.getBoundingClientRect();
+    var vw=document.documentElement.clientWidth||window.innerWidth;
+    var w=Math.min(360,vw-24);
+    var left=alignRight ? Math.max(12,Math.min(vw-w-12,r.right-w)) : Math.max(12,Math.min(vw-w-12,r.left));
+    pop.style.width=w+'px';
+    pop.style.left=left+'px';
+    pop.style.top=Math.round(r.bottom+10)+'px';
+
+    var arrow=pop.querySelector('.g387-pop-arrow');
+    if(arrow){
+      var center=r.left+r.width/2-left-8;
+      arrow.style.left=Math.max(20,Math.min(w-36,center))+'px';
+    }
+  }
+
+  function openNotice(){
+    var pop=el('g387NoticePop'),bell=el('headerBellBtn');
+    var other=el('g387StatusPop');
+    if(other)other.classList.remove('show');
+    if(!pop||!bell)return;
+
+    var willOpen=!pop.classList.contains('show');
+    if(!willOpen){closeAll();return}
+
+    pop.innerHTML=noticeHtml();
+    position(pop,bell,true);
+    pop.classList.add('show');
+    bell.setAttribute('aria-expanded','true');
+
+    pop.querySelectorAll('[data-g387-page]').forEach(function(btn){
+      btn.onclick=function(){
+        var page=this.dataset.g387Page;
+        closeAll();
+        if(typeof showPage==='function')showPage(page,true);
+      };
+    });
+  }
+
+  function openStatus(){
+    var pop=el('g387StatusPop'),chip=el('headerUserStatus');
+    var other=el('g387NoticePop');
+    if(other)other.classList.remove('show');
+    if(!pop||!chip)return;
+
+    var willOpen=!pop.classList.contains('show');
+    if(!willOpen){closeAll();return}
+
+    pop.innerHTML=statusHtml();
+    position(pop,chip,true);
+    pop.classList.add('show');
+    chip.setAttribute('aria-expanded','true');
+
+    pop.querySelectorAll('.g387-status-btn').forEach(function(btn){
+      btn.onclick=function(){
+        setStatus(this.dataset.status);
+        closeAll();
+      };
+    });
+  }
+
+  function init(){
+    var bell=el('headerBellBtn');
+    var user=el('headerUserStatus');
+    if(!bell||!user)return;
+
+    var notice=document.createElement('div');
+    notice.id='g387NoticePop';
+    notice.className='g387-popover';
+    notice.setAttribute('role','dialog');
+    notice.setAttribute('aria-label','การแจ้งเตือน');
+
+    var status=document.createElement('div');
+    status.id='g387StatusPop';
+    status.className='g387-popover';
+    status.setAttribute('role','dialog');
+    status.setAttribute('aria-label','สถานะผู้ใช้งาน');
+
+    document.body.appendChild(notice);
+    document.body.appendChild(status);
+
+    /* Replace the old Bell behavior (go Home) with popup only. */
+    bell.onclick=function(ev){
+      ev.preventDefault();
+      ev.stopPropagation();
+      openNotice();
+    };
+
+    user.setAttribute('role','button');
+    user.setAttribute('tabindex','0');
+    user.setAttribute('aria-haspopup','true');
+    user.setAttribute('aria-expanded','false');
+    user.onclick=function(ev){
+      ev.preventDefault();
+      ev.stopPropagation();
+      openStatus();
+    };
+    user.onkeydown=function(ev){
+      if(ev.key==='Enter'||ev.key===' '){
+        ev.preventDefault();
+        openStatus();
+      }
+    };
+
+    document.addEventListener('click',function(ev){
+      if(ev.target.closest('#g387NoticePop')||ev.target.closest('#g387StatusPop')||
+         ev.target.closest('#headerBellBtn')||ev.target.closest('#headerUserStatus'))return;
+      closeAll();
+    });
+
+    document.addEventListener('keydown',function(ev){
+      if(ev.key==='Escape')closeAll();
+    });
+
+    window.addEventListener('resize',closeAll,{passive:true});
+    window.addEventListener('scroll',function(){
+      if((notice&&notice.classList.contains('show'))||(status&&status.classList.contains('show'))){
+        closeAll();
+      }
+    },{passive:true});
+
+    applyStatus(getStatus());
   }
 
   if(document.readyState==='loading'){
