@@ -8205,6 +8205,11 @@ html.phone-device body.s37-settings-open .header-user-status{
 
   #g3899UnitTopbar .r389-topbar-title,
   #g3899UnitTopbar .s37-topbar-title{
+    display:none!important;
+  }
+
+  #g3899UnitTopbar.g3899-rules .r389-topbar-title,
+  #g3899UnitTopbar.g3899-settings .s37-topbar-title{
     display:flex!important;
     flex:1 1 auto!important;
     min-width:0!important;
@@ -14681,8 +14686,11 @@ html body #page-home [data-home-version]{
     var phone=window.matchMedia && window.matchMedia('(max-width:700px)').matches;
     if(target && phone){
       bar.id='g3899UnitTopbar';
+      bar.classList.toggle('g3899-rules',!!(rules && rules.classList.contains('active')));
+      bar.classList.toggle('g3899-settings',!!(settings && settings.classList.contains('active')));
     }else if(bar.id==='g3899UnitTopbar'){
       bar.removeAttribute('id');
+      bar.classList.remove('g3899-rules','g3899-settings');
     }
   }
 
