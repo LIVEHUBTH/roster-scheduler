@@ -6802,6 +6802,322 @@ html.phone-device body #page-settings button > span{
   }
 }
 </style>
+
+<style id="global-v389-phone-topbar-unit-reference-only">
+/* =========================================================
+   GLOBAL V38.9 — PHONE TOP BAR ONLY
+
+   Use the Unit page Top bar as the reference for ALL pages:
+   - menu
+   - page icon
+   - main title
+   - subtitle
+   - notification
+   - user status
+   stay in one row
+   - long text is compact/truncated in the same manner
+     rather than expanding the header.
+
+   No Sidebar / page content / iPad / Desktop layout changes.
+   ========================================================= */
+
+@media(max-width:700px){
+
+  /* shared header row */
+  body .header-wrap{
+    display:flex!important;
+    flex-direction:row!important;
+    flex-wrap:nowrap!important;
+    align-items:center!important;
+    gap:6px!important;
+  }
+
+  body .header-clean-left{
+    display:flex!important;
+    flex:1 1 auto!important;
+    min-width:0!important;
+    align-items:center!important;
+    gap:6px!important;
+    overflow:hidden!important;
+  }
+
+  body .mobile-menu-btn{
+    flex:0 0 36px!important;
+    width:36px!important;
+    min-width:36px!important;
+  }
+
+  /* every page-specific Top bar title uses the Unit-page proportions */
+  body .h386-topbar-title,
+  body .r29-topbar-title,
+  body .p30-topbar-title,
+  body .r389-topbar-title,
+  body .h393-topbar-title,
+  body .h396-topbar-title,
+  body .s3911-topbar-title,
+  body .u400-topbar-title,
+  body .s37-topbar-title{
+    display:flex!important;
+    flex:1 1 auto!important;
+    min-width:0!important;
+    align-items:center!important;
+    gap:6px!important;
+    overflow:hidden!important;
+    position:static!important;
+    top:auto!important;
+    margin:0!important;
+  }
+
+  /* icon size = Unit page reference */
+  body .h386-topbar-icon,
+  body .r29-topbar-icon,
+  body .p30-topbar-icon,
+  body .r389-topbar-icon,
+  body .h393-topbar-icon,
+  body .h396-topbar-icon,
+  body .s3911-topbar-icon,
+  body .u400-topbar-icon,
+  body .s37-topbar-gear{
+    width:31px!important;
+    height:31px!important;
+    flex:0 0 31px!important;
+    margin:0!important;
+  }
+
+  body .h386-topbar-icon svg,
+  body .r29-topbar-icon svg,
+  body .p30-topbar-icon svg,
+  body .r389-topbar-icon svg,
+  body .h393-topbar-icon svg,
+  body .h396-topbar-icon svg,
+  body .s3911-topbar-icon svg,
+  body .u400-topbar-icon svg,
+  body .s37-topbar-gear svg{
+    width:31px!important;
+    height:31px!important;
+    display:block!important;
+  }
+
+  /* copy width = Unit page reference */
+  body .h386-topbar-copy,
+  body .r29-topbar-copy,
+  body .p30-topbar-copy,
+  body .r389-topbar-copy,
+  body .h393-topbar-copy,
+  body .h396-topbar-copy,
+  body .s3911-topbar-copy,
+  body .u400-topbar-copy,
+  body .s37-topbar-title-copy{
+    flex:1 1 auto!important;
+    min-width:0!important;
+    max-width:135px!important;
+    overflow:hidden!important;
+    display:grid!important;
+    gap:1px!important;
+  }
+
+  /* main title: one line, crop with ellipsis if too long */
+  body .h386-topbar-copy b,
+  body .r29-topbar-copy b,
+  body .p30-topbar-copy b,
+  body .r389-topbar-copy b,
+  body .h393-topbar-copy b,
+  body .h396-topbar-copy b,
+  body .s3911-topbar-copy b,
+  body .u400-topbar-copy b,
+  body .s37-topbar-title-copy b{
+    display:block!important;
+    font-size:11px!important;
+    line-height:1.15!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    word-break:normal!important;
+    max-width:135px!important;
+    margin:0!important;
+    padding:0!important;
+  }
+
+  /* subtitle: Unit-like compact two-line area; crop only if longer than 2 lines */
+  body .h386-topbar-copy small,
+  body .r29-topbar-copy small,
+  body .p30-topbar-copy small,
+  body .r389-topbar-copy small,
+  body .h393-topbar-copy small,
+  body .h396-topbar-copy small,
+  body .s3911-topbar-copy small,
+  body .u400-topbar-copy small,
+  body .s37-topbar-title-copy small{
+    display:-webkit-box!important;
+    -webkit-box-orient:vertical!important;
+    -webkit-line-clamp:2!important;
+    font-size:6.5px!important;
+    line-height:1.18!important;
+    white-space:normal!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    word-break:keep-all!important;
+    overflow-wrap:normal!important;
+    max-width:135px!important;
+    max-height:16px!important;
+    margin:0!important;
+    padding:0!important;
+  }
+
+  /* right side stays compact and aligned like Unit page */
+  body .header-right{
+    display:flex!important;
+    flex:0 0 auto!important;
+    min-width:0!important;
+    align-items:center!important;
+    gap:6px!important;
+    margin-left:0!important;
+    transform:none!important;
+    white-space:nowrap!important;
+  }
+
+  body .header-bell{
+    flex:0 0 36px!important;
+    width:36px!important;
+    height:36px!important;
+    min-width:36px!important;
+  }
+
+  body .header-user-status{
+    flex:0 0 auto!important;
+    min-width:96px!important;
+    max-width:118px!important;
+    min-height:36px!important;
+    padding:5px 7px!important;
+    gap:6px!important;
+    overflow:hidden!important;
+  }
+
+  body .header-user-copy{
+    min-width:0!important;
+  }
+
+  body .header-user-copy b{
+    display:block!important;
+    max-width:72px!important;
+    font-size:9.5px!important;
+    line-height:1.1!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  body .header-user-copy small{
+    display:none!important;
+  }
+
+  body .header-user-avatar{
+    flex:0 0 30px!important;
+    width:30px!important;
+    height:30px!important;
+  }
+}
+
+/* iPhone Safari fallback when layout viewport is wider than 700px */
+html.phone-device body .header-wrap{
+  display:flex!important;
+  flex-direction:row!important;
+  flex-wrap:nowrap!important;
+  align-items:center!important;
+  gap:6px!important;
+}
+
+html.phone-device body .header-clean-left{
+  display:flex!important;
+  flex:1 1 auto!important;
+  min-width:0!important;
+  align-items:center!important;
+  gap:6px!important;
+  overflow:hidden!important;
+}
+
+html.phone-device body .h386-topbar-title,
+html.phone-device body .r29-topbar-title,
+html.phone-device body .p30-topbar-title,
+html.phone-device body .r389-topbar-title,
+html.phone-device body .h393-topbar-title,
+html.phone-device body .h396-topbar-title,
+html.phone-device body .s3911-topbar-title,
+html.phone-device body .u400-topbar-title,
+html.phone-device body .s37-topbar-title{
+  display:flex!important;
+  flex:1 1 auto!important;
+  min-width:0!important;
+  align-items:center!important;
+  gap:6px!important;
+  overflow:hidden!important;
+  position:static!important;
+  top:auto!important;
+}
+
+html.phone-device body .h386-topbar-copy,
+html.phone-device body .r29-topbar-copy,
+html.phone-device body .p30-topbar-copy,
+html.phone-device body .r389-topbar-copy,
+html.phone-device body .h393-topbar-copy,
+html.phone-device body .h396-topbar-copy,
+html.phone-device body .s3911-topbar-copy,
+html.phone-device body .u400-topbar-copy,
+html.phone-device body .s37-topbar-title-copy{
+  flex:1 1 auto!important;
+  min-width:0!important;
+  max-width:135px!important;
+  overflow:hidden!important;
+}
+
+html.phone-device body .h386-topbar-copy b,
+html.phone-device body .r29-topbar-copy b,
+html.phone-device body .p30-topbar-copy b,
+html.phone-device body .r389-topbar-copy b,
+html.phone-device body .h393-topbar-copy b,
+html.phone-device body .h396-topbar-copy b,
+html.phone-device body .s3911-topbar-copy b,
+html.phone-device body .u400-topbar-copy b,
+html.phone-device body .s37-topbar-title-copy b{
+  font-size:11px!important;
+  line-height:1.15!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  max-width:135px!important;
+}
+
+html.phone-device body .h386-topbar-copy small,
+html.phone-device body .r29-topbar-copy small,
+html.phone-device body .p30-topbar-copy small,
+html.phone-device body .r389-topbar-copy small,
+html.phone-device body .h393-topbar-copy small,
+html.phone-device body .h396-topbar-copy small,
+html.phone-device body .s3911-topbar-copy small,
+html.phone-device body .u400-topbar-copy small,
+html.phone-device body .s37-topbar-title-copy small{
+  display:-webkit-box!important;
+  -webkit-box-orient:vertical!important;
+  -webkit-line-clamp:2!important;
+  font-size:6.5px!important;
+  line-height:1.18!important;
+  white-space:normal!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  max-width:135px!important;
+  max-height:16px!important;
+}
+
+html.phone-device body .header-right{
+  display:flex!important;
+  flex:0 0 auto!important;
+  align-items:center!important;
+  gap:6px!important;
+  margin-left:0!important;
+  transform:none!important;
+  white-space:nowrap!important;
+}
+</style>
 </head>
 <body>
 
