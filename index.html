@@ -5393,6 +5393,97 @@ html body #page-roster .r29-table-card{
   background-image:none!important;
 }
 </style>
+
+<style id="settings-v375-requested-only">
+/* =========================================================
+   SETTINGS V37.5 — #page-settings / PHONE TOPBAR ONLY
+
+   1) Phone Settings Top bar:
+      menu + icon/title/subtitle + notification + user status = one row.
+   2) Cute pastel calendar/cartoon inside Program Info card.
+   3) No Sidebar / other pages / iPad / Desktop layout changes.
+   ========================================================= */
+
+/* Cute illustration replaces only the old Settings calendar artwork. */
+html body #page-settings .s37-calendar-art.s375-cute-calendar{
+  background:transparent!important;
+  border:none!important;
+  box-shadow:none!important;
+  overflow:visible!important;
+  display:grid!important;
+  place-items:center!important;
+}
+html body #page-settings .s37-calendar-art.s375-cute-calendar::before,
+html body #page-settings .s37-calendar-art.s375-cute-calendar::after{
+  content:none!important;
+  display:none!important;
+}
+html body #page-settings .s37-calendar-art.s375-cute-calendar > svg{
+  width:100%!important;
+  height:100%!important;
+  max-width:190px!important;
+  max-height:170px!important;
+  display:block!important;
+}
+
+/* PHONE ONLY */
+@media(max-width:700px){
+  body.s37-settings-open .header-wrap{
+    flex-wrap:nowrap!important;
+    gap:6px!important;
+  }
+
+  body.s37-settings-open .header-clean-left{
+    flex:1 1 auto!important;
+    min-width:0!important;
+    display:flex!important;
+    align-items:center!important;
+    gap:6px!important;
+    overflow:hidden!important;
+  }
+
+  body.s37-settings-open .mobile-menu-btn{
+    flex:0 0 36px!important;
+  }
+
+  body.s37-settings-open .s37-topbar-title{
+    flex:1 1 auto!important;
+    min-width:0!important;
+    gap:6px!important;
+    overflow:hidden!important;
+  }
+
+  body.s37-settings-open .s37-topbar-title-copy{
+    min-width:0!important;
+    max-width:135px!important;
+    overflow:hidden!important;
+  }
+
+  body.s37-settings-open .s37-topbar-title-copy b{
+    font-size:11px!important;
+    line-height:1.05!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  body.s37-settings-open .s37-topbar-title-copy small{
+    font-size:6.5px!important;
+    line-height:1.1!important;
+    max-width:135px!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  body.s37-settings-open .header-right{
+    flex:0 0 auto!important;
+    margin-left:0!important;
+    gap:6px!important;
+    white-space:nowrap!important;
+  }
+}
+</style>
 </head>
 <body>
 
@@ -6511,7 +6602,64 @@ html body #page-roster .r29-table-card{
                   <label>ภาษาหลัก<select id="settingsLanguageV37"><option value="th">🇹🇭 ภาษาไทย</option></select></label>
                 </div>
               </div>
-              <div class="s37-calendar-art" aria-hidden="true"><div class="s37-cal-top"></div><div class="s37-cal-grid"><i></i><i>✓</i><i>✓</i><i>✓</i><i></i><i>✓</i></div><span>⚙</span></div>
+              <div class="s37-calendar-art s375-cute-calendar" aria-hidden="true">
+  <svg viewBox="0 0 190 170" focusable="false">
+    <defs>
+      <linearGradient id="s375CalBody" x1="0" x2="1" y1="0" y2="1">
+        <stop offset="0" stop-color="#ffd9e8"/>
+        <stop offset="1" stop-color="#f7c9dc"/>
+      </linearGradient>
+      <linearGradient id="s375CalTop" x1="0" x2="1">
+        <stop offset="0" stop-color="#ff6da5"/>
+        <stop offset="1" stop-color="#f04d91"/>
+      </linearGradient>
+    </defs>
+
+    <!-- soft decorative bubbles -->
+    <circle cx="28" cy="28" r="12" fill="#e8faf4"/>
+    <circle cx="165" cy="34" r="10" fill="#fff2c9"/>
+    <circle cx="160" cy="145" r="13" fill="#efe6ff"/>
+
+    <!-- calendar -->
+    <rect x="35" y="28" width="120" height="105" rx="22" fill="url(#s375CalBody)" stroke="#efb6cf" stroke-width="2"/>
+    <path d="M35 51c0-12 10-23 23-23h74c13 0 23 11 23 23v16H35V51Z" fill="url(#s375CalTop)"/>
+    <rect x="55" y="19" width="9" height="22" rx="4.5" fill="#9edfd0"/>
+    <rect x="126" y="19" width="9" height="22" rx="4.5" fill="#9edfd0"/>
+
+    <!-- calendar cells -->
+    <g fill="#fff" stroke="#f1bdd2" stroke-width="1.2">
+      <rect x="51" y="79" width="25" height="20" rx="6"/>
+      <rect x="82" y="79" width="25" height="20" rx="6"/>
+      <rect x="113" y="79" width="25" height="20" rx="6"/>
+      <rect x="51" y="105" width="25" height="20" rx="6"/>
+      <rect x="82" y="105" width="25" height="20" rx="6"/>
+      <rect x="113" y="105" width="25" height="20" rx="6"/>
+    </g>
+
+    <!-- cheerful checks -->
+    <g fill="none" stroke="#ec5593" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M87 89l6 6 10-13"/>
+      <path d="M118 89l6 6 10-13"/>
+      <path d="M56 115l6 6 10-13"/>
+      <path d="M118 115l6 6 10-13"/>
+    </g>
+
+    <!-- cute rabbit mascot -->
+    <g transform="translate(126 112)">
+      <ellipse cx="17" cy="-8" rx="7" ry="17" fill="#fff" stroke="#d8c8ef" stroke-width="2" transform="rotate(-12 17 -8)"/>
+      <ellipse cx="36" cy="-8" rx="7" ry="17" fill="#fff" stroke="#d8c8ef" stroke-width="2" transform="rotate(12 36 -8)"/>
+      <circle cx="27" cy="17" r="25" fill="#fff" stroke="#d8c8ef" stroke-width="2"/>
+      <circle cx="19" cy="13" r="2.3" fill="#596078"/>
+      <circle cx="35" cy="13" r="2.3" fill="#596078"/>
+      <path d="M24 21c2 2 4 2 6 0" fill="none" stroke="#ec79a7" stroke-width="2.2" stroke-linecap="round"/>
+      <ellipse cx="27" cy="18" rx="2.4" ry="1.8" fill="#ff9fbd"/>
+      <circle cx="13" cy="20" r="4" fill="#ffd3e1" opacity=".8"/>
+      <circle cx="41" cy="20" r="4" fill="#ffd3e1" opacity=".8"/>
+      <circle cx="45" cy="34" r="9" fill="#8ed8e5" stroke="#fff" stroke-width="2"/>
+      <path d="M41 34h8M45 30v8" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+    </g>
+  </svg>
+</div>
             </div>
             <div class="s37-hidden-unit-fields" aria-hidden="true">
               <input id="settingsOrgV24" type="hidden"><input id="settingsHeadV24" type="hidden"><input id="settingsSchedulerV24" type="hidden">
