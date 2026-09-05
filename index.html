@@ -7827,6 +7827,79 @@ html.phone-device body #page-settings .s37-tab > b{
   text-overflow:clip!important;
 }
 </style>
+<style id="global-v3896-phone-rules-settings-match-unit-measured-only">
+/* V38.9.6 — PHONE ONLY.
+   Match the actually rendered Unit Top bar (about 69 CSS px), not the older
+   58px declaration that is visually shorter on iPhone Safari. */
+@media(max-width:700px){
+  body.r389-rules-open .header-wrap,
+  body.s37-settings-open .header-wrap{
+    box-sizing:border-box!important;
+    min-height:69px!important;
+    height:69px!important;
+    max-height:69px!important;
+    padding:12px 8px!important;
+    align-items:center!important;
+    flex-wrap:nowrap!important;
+    gap:6px!important;
+  }
+
+  body.r389-rules-open .r389-topbar-copy,
+  body.s37-settings-open .s37-topbar-title-copy{
+    max-width:135px!important;
+    overflow:visible!important;
+  }
+
+  body.r389-rules-open .r389-topbar-copy small,
+  body.s37-settings-open .s37-topbar-title-copy small{
+    display:block!important;
+    width:100%!important;
+    max-width:135px!important;
+    height:auto!important;
+    max-height:none!important;
+    font-size:6.5px!important;
+    line-height:1.1!important;
+    white-space:normal!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+    word-break:keep-all!important;
+    overflow-wrap:normal!important;
+    -webkit-line-clamp:unset!important;
+    -webkit-box-orient:unset!important;
+  }
+}
+
+/* iPhone Safari fallback when it reports a wider layout viewport. */
+html.phone-device body.r389-rules-open .header-wrap,
+html.phone-device body.s37-settings-open .header-wrap{
+  box-sizing:border-box!important;
+  min-height:69px!important;
+  height:69px!important;
+  max-height:69px!important;
+  padding:12px 8px!important;
+  align-items:center!important;
+}
+html.phone-device body.r389-rules-open .r389-topbar-copy,
+html.phone-device body.s37-settings-open .s37-topbar-title-copy{
+  max-width:135px!important;
+  overflow:visible!important;
+}
+html.phone-device body.r389-rules-open .r389-topbar-copy small,
+html.phone-device body.s37-settings-open .s37-topbar-title-copy small{
+  display:block!important;
+  width:100%!important;
+  max-width:135px!important;
+  height:auto!important;
+  max-height:none!important;
+  font-size:6.5px!important;
+  line-height:1.1!important;
+  white-space:normal!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  -webkit-line-clamp:unset!important;
+  -webkit-box-orient:unset!important;
+}
+</style>
 </head>
 <body>
 
