@@ -7674,6 +7674,159 @@ html.phone-device body.s37-settings-open .s37-topbar-title-copy small{
   -webkit-box-orient:unset!important;
 }
 </style>
+<style id="global-v3895-phone-rules-settings-exact-fix-only">
+/* V38.9.5 — PHONE ONLY: Rules + Settings requested fixes.
+   No Sidebar, functions, other pages, iPad or desktop selectors. */
+@media(max-width:700px){
+  /* Match the 58px phone Top bar used by the Unit page. */
+  body.r389-rules-open .header-wrap,
+  body.s37-settings-open .header-wrap{
+    box-sizing:border-box!important;
+    min-height:58px!important;
+    height:58px!important;
+    max-height:58px!important;
+    padding:7px 8px!important;
+    align-items:center!important;
+    flex-wrap:nowrap!important;
+    gap:6px!important;
+    overflow:visible!important;
+  }
+
+  body.r389-rules-open .mobile-menu-btn,
+  body.s37-settings-open .mobile-menu-btn{
+    flex:0 0 36px!important;
+  }
+
+  body.r389-rules-open .header-clean-left,
+  body.s37-settings-open .header-clean-left{
+    flex:1 1 auto!important;
+    min-width:0!important;
+    align-items:center!important;
+    gap:6px!important;
+    overflow:visible!important;
+  }
+
+  body.r389-rules-open .r389-topbar-title,
+  body.s37-settings-open .s37-topbar-title{
+    flex:1 1 auto!important;
+    min-width:0!important;
+    align-items:center!important;
+    gap:6px!important;
+    overflow:visible!important;
+    margin:0!important;
+  }
+
+  body.r389-rules-open .r389-topbar-icon,
+  body.r389-rules-open .r389-topbar-icon .r31-heading-icon,
+  body.s37-settings-open .s37-topbar-title .s37-topbar-gear{
+    box-sizing:border-box!important;
+    width:31px!important;
+    height:31px!important;
+    flex:0 0 31px!important;
+    margin:0!important;
+  }
+  body.r389-rules-open .r389-topbar-icon .r31-heading-icon svg,
+  body.s37-settings-open .s37-topbar-title .s37-topbar-gear svg{
+    width:31px!important;
+    height:31px!important;
+  }
+
+  body.r389-rules-open .r389-topbar-copy,
+  body.s37-settings-open .s37-topbar-title-copy{
+    flex:1 1 auto!important;
+    min-width:0!important;
+    max-width:143px!important;
+    overflow:visible!important;
+    display:grid!important;
+    gap:1px!important;
+  }
+
+  body.r389-rules-open .r389-topbar-copy b,
+  body.s37-settings-open .s37-topbar-title-copy b{
+    display:block!important;
+    max-width:143px!important;
+    font-size:11px!important;
+    line-height:1.08!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    margin:0!important;
+    padding:0!important;
+  }
+
+  /* Long descriptions wrap downward; no ellipsis or clipping. */
+  body.r389-rules-open .r389-topbar-copy small,
+  body.s37-settings-open .s37-topbar-title-copy small{
+    display:block!important;
+    width:100%!important;
+    max-width:143px!important;
+    height:auto!important;
+    max-height:none!important;
+    font-size:5.2px!important;
+    line-height:1.18!important;
+    white-space:normal!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+    word-break:keep-all!important;
+    overflow-wrap:normal!important;
+    -webkit-line-clamp:unset!important;
+    -webkit-box-orient:unset!important;
+    margin:0!important;
+    padding:0!important;
+  }
+
+  /* Preserve Thai vowels/tones in the horizontal page-tab buttons. */
+  html body #page-rules .r31-tabs,
+  html body #page-settings .s37-tabs{
+    overflow-x:auto!important;
+    overflow-y:visible!important;
+  }
+  html body #page-rules .r31-tabs button,
+  html body #page-rules .r31-tabs button > span,
+  html body #page-settings .s37-tab,
+  html body #page-settings .s37-tab > span,
+  html body #page-settings .s37-tab > b{
+    line-height:1.45!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+  }
+  html body #page-rules .r31-tabs button,
+  html body #page-settings .s37-tab{
+    padding-top:9px!important;
+    padding-bottom:9px!important;
+  }
+  html body #page-rules .r31-tabs button > span,
+  html body #page-settings .s37-tab > span,
+  html body #page-settings .s37-tab > b{
+    padding-top:2px!important;
+    padding-bottom:2px!important;
+  }
+}
+
+/* iPhone Safari fallback for its alternate layout viewport reporting. */
+html.phone-device body.r389-rules-open .r389-topbar-copy small,
+html.phone-device body.s37-settings-open .s37-topbar-title-copy small{
+  display:block!important;
+  height:auto!important;
+  max-height:none!important;
+  font-size:5.2px!important;
+  line-height:1.18!important;
+  white-space:normal!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  -webkit-line-clamp:unset!important;
+  -webkit-box-orient:unset!important;
+}
+html.phone-device body #page-rules .r31-tabs button,
+html.phone-device body #page-rules .r31-tabs button > span,
+html.phone-device body #page-settings .s37-tab,
+html.phone-device body #page-settings .s37-tab > span,
+html.phone-device body #page-settings .s37-tab > b{
+  line-height:1.45!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+}
+</style>
 </head>
 <body>
 
