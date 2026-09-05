@@ -5484,6 +5484,125 @@ html body #page-settings .s37-calendar-art.s375-cute-calendar > svg{
   }
 }
 </style>
+
+<style id="settings-v376-requested-only">
+/* =========================================================
+   SETTINGS V37.6 — SETTINGS PAGE ONLY / REQUESTED ITEMS ONLY
+
+   1) PHONE ONLY: Top bar matches Rules page structure:
+      menu + icon/title/subtitle + notification + user status = one row.
+   2) Enlarge cute calendar+rabbit artwork inside Program Info card.
+   3) No Sidebar / other pages / structural responsive layout changes.
+   ========================================================= */
+
+/* 1) PHONE ONLY — copy the same one-row behavior used by Rules page. */
+@media(max-width:700px){
+  body.s37-settings-open .header-wrap{
+    flex-wrap:nowrap!important;
+    gap:6px!important;
+  }
+
+  body.s37-settings-open .header-clean-left{
+    flex:1 1 auto!important;
+    min-width:0!important;
+    display:flex!important;
+    align-items:center!important;
+    gap:6px!important;
+    overflow:hidden!important;
+  }
+
+  body.s37-settings-open .mobile-menu-btn{
+    flex:0 0 36px!important;
+  }
+
+  body.s37-settings-open .s37-topbar-title{
+    flex:1 1 auto!important;
+    min-width:0!important;
+    gap:6px!important;
+    overflow:hidden!important;
+  }
+
+  body.s37-settings-open .s37-topbar-gear{
+    flex:0 0 31px!important;
+    width:31px!important;
+    height:31px!important;
+  }
+
+  body.s37-settings-open .s37-topbar-gear svg{
+    width:31px!important;
+    height:31px!important;
+  }
+
+  body.s37-settings-open .s37-topbar-title-copy{
+    min-width:0!important;
+    max-width:135px!important;
+    overflow:hidden!important;
+  }
+
+  body.s37-settings-open .s37-topbar-title-copy b{
+    font-size:11px!important;
+    line-height:1.05!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  body.s37-settings-open .s37-topbar-title-copy small{
+    font-size:6.5px!important;
+    line-height:1.1!important;
+    max-width:135px!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  body.s37-settings-open .header-right{
+    flex:0 0 auto!important;
+    margin-left:0!important;
+    gap:6px!important;
+    white-space:nowrap!important;
+  }
+}
+
+/* 2) Enlarge only the cute calendar+rabbit illustration.
+      Keep the existing Program Info grid/layout unchanged. */
+@media(min-width:981px){
+  html body #page-settings .s37-calendar-art.s375-cute-calendar{
+    width:220px!important;
+    height:205px!important;
+    max-width:none!important;
+    max-height:none!important;
+    margin:auto!important;
+  }
+
+  html body #page-settings .s37-calendar-art.s375-cute-calendar > svg{
+    width:220px!important;
+    height:205px!important;
+    max-width:none!important;
+    max-height:none!important;
+  }
+}
+
+/* iPad / medium desktop: enlarge substantially while staying inside
+   the existing artwork column; no grid or card dimensions changed. */
+@media(min-width:701px) and (max-width:980px){
+  html body #page-settings .s37-calendar-art.s375-cute-calendar{
+    width:170px!important;
+    height:160px!important;
+    max-width:none!important;
+    max-height:none!important;
+    margin:auto!important;
+    overflow:visible!important;
+  }
+
+  html body #page-settings .s37-calendar-art.s375-cute-calendar > svg{
+    width:170px!important;
+    height:160px!important;
+    max-width:none!important;
+    max-height:none!important;
+  }
+}
+</style>
 </head>
 <body>
 
