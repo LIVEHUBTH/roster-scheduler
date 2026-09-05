@@ -5603,6 +5603,72 @@ html body #page-settings .s37-calendar-art.s375-cute-calendar > svg{
   }
 }
 </style>
+
+<style id="settings-v377-calendar-fit-only">
+/* =========================================================
+   SETTINGS V37.7 — SETTINGS PAGE ONLY / CALENDAR FIT ONLY
+
+   Keep the cute calendar+rabbit completely inside the
+   "ข้อมูลโปรแกรม" artwork column and visually balanced.
+
+   No Sidebar / other pages / responsive structural layout changes.
+   ========================================================= */
+
+/* Desktop: existing artwork column is 210px.
+   Keep comfortable inner breathing room and never cross the card boundary. */
+@media(min-width:981px){
+  html body #page-settings .s37-program-layout{
+    overflow:hidden!important;
+  }
+
+  html body #page-settings .s37-calendar-art.s375-cute-calendar{
+    width:min(190px,100%)!important;
+    height:auto!important;
+    aspect-ratio:190 / 170!important;
+    max-width:100%!important;
+    max-height:none!important;
+    margin:auto!important;
+    overflow:hidden!important;
+    box-sizing:border-box!important;
+  }
+
+  html body #page-settings .s37-calendar-art.s375-cute-calendar > svg{
+    width:100%!important;
+    height:100%!important;
+    max-width:100%!important;
+    max-height:100%!important;
+    display:block!important;
+  }
+}
+
+/* iPad / medium desktop:
+   existing Settings CSS uses a 120px artwork column here.
+   Fit the illustration to that column rather than letting it spill out. */
+@media(min-width:701px) and (max-width:980px){
+  html body #page-settings .s37-program-layout{
+    overflow:hidden!important;
+  }
+
+  html body #page-settings .s37-calendar-art.s375-cute-calendar{
+    width:min(116px,100%)!important;
+    height:auto!important;
+    aspect-ratio:190 / 170!important;
+    max-width:100%!important;
+    max-height:none!important;
+    margin:auto!important;
+    overflow:hidden!important;
+    box-sizing:border-box!important;
+  }
+
+  html body #page-settings .s37-calendar-art.s375-cute-calendar > svg{
+    width:100%!important;
+    height:100%!important;
+    max-width:100%!important;
+    max-height:100%!important;
+    display:block!important;
+  }
+}
+</style>
 </head>
 <body>
 
