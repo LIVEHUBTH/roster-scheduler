@@ -4612,18 +4612,14 @@ html body #page-summary .s34-compare-card{
 }
 </style>
 
-<style id="summary-v3916-requested-only">
+<style id="summary-v3918-details-only">
 /* =========================================================
-   SUMMARY V39.16 — SUMMARY PAGE ONLY / REQUESTED ITEMS ONLY
-
-   1) Month / Buddhist year / file button icons -> pastel SVG.
-      File button text -> "เลือกไฟล์".
-   2) Personal summary table first header "#" -> "ลำดับ".
-   3) Remove the left vertical line of the bar chart.
-   4) No Sidebar / other page / responsive layout changes.
+   SUMMARY V39.18
+   BASE = V39.15 EXACTLY
+   Requested detail changes only.
    ========================================================= */
 
-/* Month / year SVG icon containers — same existing footprint. */
+/* Month / Buddhist-year pastel SVGs: keep the original icon footprint. */
 html body #page-summary .s34-mini-icon{
   width:18px!important;
   height:18px!important;
@@ -4632,7 +4628,8 @@ html body #page-summary .s34-mini-icon{
   place-items:center!important;
   background:none!important;
 }
-html body #page-summary .s34-mini-icon::before{
+html body #page-summary .s34-mini-icon::before,
+html body #page-summary .s34-mini-icon::after{
   content:none!important;
   display:none!important;
 }
@@ -4642,33 +4639,33 @@ html body #page-summary .s34-mini-icon svg{
   display:block!important;
 }
 
-/* File button: preserve existing action height and styling;
-   only make room for SVG + text. */
-html body #page-summary #summaryOpenPdfBtn{
+/* Replace the former "..." control with pastel SVG + "เลือกไฟล์".
+   Keep it in the exact same actions row; no responsive layout rules changed. */
+html body #page-summary #summaryOpenPdfBtn.s3918-file-btn{
   width:auto!important;
-  min-width:72px!important;
-  padding:0 8px!important;
+  min-width:74px!important;
+  padding-left:7px!important;
+  padding-right:7px!important;
   display:inline-flex!important;
   align-items:center!important;
   justify-content:center!important;
-  gap:5px!important;
+  gap:4px!important;
   white-space:nowrap!important;
 }
-html body #page-summary #summaryOpenPdfBtn .s3916-file-svg{
+html body #page-summary #summaryOpenPdfBtn.s3918-file-btn .s3918-file-svg{
   width:15px!important;
   height:15px!important;
   flex:0 0 15px!important;
   display:block!important;
 }
 
-/* Remove ONLY the left vertical rule from the bar-chart area. */
-html body #page-summary .s34-bar-chart{
-  border-left:0!important;
-  box-shadow:none!important;
+/* Remove only the LEFT vertical line of the bar-chart plotting area.
+   Keep the card border and all horizontal guide lines unchanged. */
+html body #page-summary #summaryBarChartV24{
+  border-left:none!important;
 }
-html body #page-summary .s34-bar-chart::before,
-html body #page-summary .s34-bar-chart::after{
-  border-left:0!important;
+html body #page-summary #summaryBarChartV24 > *{
+  border-left:none!important;
 }
 </style>
 </head>
@@ -5522,11 +5519,11 @@ html body #page-summary .s34-bar-chart::after{
     <section class="s34-toolbar">
       <div class="s34-field">
         <label>เดือน</label>
-        <div class="s34-select-wrap"><span class="s34-mini-icon s34-calendar-pink"></span><select id="summaryMonthProxyV24"></select></div>
+        <div class="s34-select-wrap"><span class="s34-mini-icon s34-calendar-pink" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect x="3.5" y="5" width="17" height="15" rx="3.5" fill="#ffe7f0" stroke="#ef86aa" stroke-width="1.5"/><path d="M3.5 9h17" stroke="#ef86aa" stroke-width="1.5"/><path d="M8 3.7v3M16 3.7v3" stroke="#d95f8e" stroke-width="1.8" stroke-linecap="round"/><g fill="#f59abb"><rect x="6.5" y="11.5" width="2.2" height="2.2" rx=".5"/><rect x="10.9" y="11.5" width="2.2" height="2.2" rx=".5"/><rect x="15.3" y="11.5" width="2.2" height="2.2" rx=".5"/><rect x="6.5" y="15.7" width="2.2" height="2.2" rx=".5"/><rect x="10.9" y="15.7" width="2.2" height="2.2" rx=".5"/></g></svg></span><select id="summaryMonthProxyV24"></select></div>
       </div>
       <div class="s34-field s34-year-field">
         <label>ปี พ.ศ.</label>
-        <div class="s34-select-wrap"><span class="s34-mini-icon s34-calendar-blue"></span><input id="summaryYearProxyV24" type="number" min="2500" max="2700"></div>
+        <div class="s34-select-wrap"><span class="s34-mini-icon s34-calendar-blue" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect x="3.5" y="4.5" width="17" height="16" rx="3.5" fill="#e8f5ff" stroke="#72b9e8" stroke-width="1.5"/><path d="M3.5 8.7h17" stroke="#72b9e8" stroke-width="1.5"/><path d="M8 3.2v3M16 3.2v3" stroke="#4f9fd5" stroke-width="1.8" stroke-linecap="round"/><path d="M7 12h10M7 15h10M7 18h7" stroke="#86c7ef" stroke-width="1.35" stroke-linecap="round"/></svg></span><input id="summaryYearProxyV24" type="number" min="2500" max="2700"></div>
       </div>
 
       <div class="s34-report-type">
@@ -5544,7 +5541,7 @@ html body #page-summary .s34-bar-chart::after{
         <button type="button" id="summaryPdfBtn" class="s34-action pdf"><span class="s34-action-icon pdf"></span>ดาวน์โหลด PDF</button>
         <button type="button" id="summaryExcelBtnV34" class="s34-action excel"><span class="s34-action-icon excel"></span>ส่งออก Excel</button>
         <button type="button" id="summaryPrintBtn" class="s34-action print"><span class="s34-action-icon print"></span>พิมพ์</button>
-        <button type="button" id="summaryOpenPdfBtn" class="s34-history-pdf" title="เปิด PDF ย้อนหลัง">⋯</button>
+        <button type="button" id="summaryOpenPdfBtn" class="s34-history-pdf s3918-file-btn" title="เลือกไฟล์" aria-label="เลือกไฟล์"><svg class="s3918-file-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 3.5h8l4 4V20.5H6z" fill="#f5edff" stroke="#aa8ae0" stroke-width="1.6" stroke-linejoin="round"/><path d="M14 3.5v4h4" fill="none" stroke="#aa8ae0" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 12.2h6M9 15.5h5" stroke="#c39ee8" stroke-width="1.7" stroke-linecap="round"/></svg><span>เลือกไฟล์</span></button>
         <input id="summaryPdfFile" type="file" accept="application/pdf" style="display:none">
       </div>
     </section>
@@ -10127,128 +10124,53 @@ html body #page-home [data-home-version]{
 })();
 </script>
 
-<script id="summary-v3917-performance-fix-only-js">
+<script id="summary-v3918-person-header-only">
 (function(){
   'use strict';
-
-  var refreshing = false;
-
-  function svgMonth(){
-    return ''+
-      '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">'+
-        '<rect x="3.5" y="5" width="17" height="15" rx="3.5" fill="#ffe7f0" stroke="#ef86aa" stroke-width="1.5"/>'+
-        '<path d="M3.5 9h17" stroke="#ef86aa" stroke-width="1.5"/>'+
-        '<path d="M8 3.7v3M16 3.7v3" stroke="#d95f8e" stroke-width="1.8" stroke-linecap="round"/>'+
-        '<g fill="#f59abb">'+
-          '<rect x="6.5" y="11.5" width="2.2" height="2.2" rx=".5"/>'+
-          '<rect x="10.9" y="11.5" width="2.2" height="2.2" rx=".5"/>'+
-          '<rect x="15.3" y="11.5" width="2.2" height="2.2" rx=".5"/>'+
-          '<rect x="6.5" y="15.7" width="2.2" height="2.2" rx=".5"/>'+
-          '<rect x="10.9" y="15.7" width="2.2" height="2.2" rx=".5"/>'+
-        '</g>'+
-      '</svg>';
-  }
-
-  function svgYear(){
-    return ''+
-      '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">'+
-        '<rect x="3.5" y="4.5" width="17" height="16" rx="3.5" fill="#e8f5ff" stroke="#72b9e8" stroke-width="1.5"/>'+
-        '<path d="M3.5 8.7h17" stroke="#72b9e8" stroke-width="1.5"/>'+
-        '<path d="M8 3.2v3M16 3.2v3" stroke="#4f9fd5" stroke-width="1.8" stroke-linecap="round"/>'+
-        '<path d="M7 12h10M7 15h10M7 18h7" stroke="#86c7ef" stroke-width="1.35" stroke-linecap="round"/>'+
-      '</svg>';
-  }
-
-  function svgFile(){
-    return ''+
-      '<svg class="s3916-file-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">'+
-        '<path d="M6 3.5h8l4 4V20.5H6z" fill="#f5edff" stroke="#aa8ae0" stroke-width="1.6" stroke-linejoin="round"/>'+
-        '<path d="M14 3.5v4h4" fill="none" stroke="#aa8ae0" stroke-width="1.6" stroke-linejoin="round"/>'+
-        '<path d="M9 12.2h6M9 15.5h5" stroke="#c39ee8" stroke-width="1.7" stroke-linecap="round"/>'+
-      '</svg>';
-  }
-
-  function applyToolbarIcons(){
-    var page=document.getElementById('page-summary');
-    if(!page) return;
-
-    var month=page.querySelector('.s34-calendar-pink');
-    if(month && !month.querySelector('svg')){
-      month.innerHTML=svgMonth();
-    }
-
-    var year=page.querySelector('.s34-calendar-blue');
-    if(year && !year.querySelector('svg')){
-      year.innerHTML=svgYear();
-    }
-
-    var fileBtn=document.getElementById('summaryOpenPdfBtn');
-    if(fileBtn && !fileBtn.querySelector('.s3916-file-svg')){
-      fileBtn.innerHTML=svgFile()+'<span>เลือกไฟล์</span>';
-      fileBtn.setAttribute('title','เลือกไฟล์');
-      fileBtn.setAttribute('aria-label','เลือกไฟล์');
-    }
-  }
 
   function renameFirstHeader(){
     var box=document.getElementById('summaryTopPeopleV24');
     if(!box) return;
-
-    var table=box.querySelector('table');
-    if(!table) return;
-
-    var first=table.querySelector('thead th:first-child') || table.querySelector('tr th:first-child');
+    var first=box.querySelector('thead th:first-child') || box.querySelector('tr th:first-child');
     if(first && first.textContent.trim()==='#'){
       first.textContent='ลำดับ';
     }
   }
 
-  function refresh(){
-    if(refreshing) return;
-    refreshing = true;
-    try{
-      applyToolbarIcons();
+  function wrapSummaryRender(){
+    var api=window.SummaryV34;
+    if(!api || typeof api.render!=='function' || api.__v3918Wrapped) return false;
+
+    var original=api.render;
+    api.render=function(){
+      var result=original.apply(this,arguments);
       renameFirstHeader();
-    }finally{
-      refreshing = false;
-    }
+      return result;
+    };
+    api.__v3918Wrapped=true;
+    return true;
   }
 
   function init(){
-    refresh();
+    wrapSummaryRender();
+    renameFirstHeader();
 
+    /* Re-check only after explicit Summary controls are used.
+       No observer / interval / continuous background work. */
     var page=document.getElementById('page-summary');
-    if(page && window.MutationObserver){
-      var timer=0;
-      new MutationObserver(function(mutations){
-        var relevant=false;
+    if(page){
+      page.addEventListener('click',function(e){
+        var t=e.target && e.target.closest
+          ? e.target.closest('#summaryViewBtnV34,[data-summary-tab],#summaryAllPeopleBtnV34')
+          : null;
+        if(t) setTimeout(renameFirstHeader,0);
+      },true);
 
-        for(var i=0;i<mutations.length;i++){
-          var m=mutations[i];
-          if(m.type!=='childList') continue;
-
-          /* Ignore mutations caused by our already-finished SVG/text replacement. */
-          var target=m.target;
-          if(target && target.closest){
-            if(target.closest('#summaryOpenPdfBtn') ||
-               target.closest('.s34-calendar-pink') ||
-               target.closest('.s34-calendar-blue')){
-              continue;
-            }
-          }
-
-          relevant=true;
-          break;
+      page.addEventListener('change',function(e){
+        if(e.target && (e.target.id==='summaryMonthProxyV24' || e.target.id==='summaryYearProxyV24')){
+          setTimeout(renameFirstHeader,0);
         }
-
-        if(!relevant) return;
-
-        clearTimeout(timer);
-        timer=setTimeout(refresh,40);
-      }).observe(page,{
-        childList:true,
-        subtree:true
-      });
+      },true);
     }
   }
 
