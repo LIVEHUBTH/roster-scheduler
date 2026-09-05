@@ -6003,6 +6003,66 @@ html.phone-device body.s37-settings-open .header-user-copy small{
   }
 }
 </style>
+
+<style id="settings-v3710-phone-topbar-height-only">
+/* =========================================================
+   SETTINGS V37.10 — PHONE ONLY / TOP BAR HEIGHT FIX ONLY
+
+   Make Settings Top bar the same compact height as other pages
+   and remove the empty space underneath it.
+
+   No Sidebar / other pages / iPad / Desktop / content layout changes.
+   ========================================================= */
+
+html.phone-device body.s37-settings-open header{
+  height:58px!important;
+  min-height:58px!important;
+  max-height:58px!important;
+  overflow:hidden!important;
+}
+
+html.phone-device body.s37-settings-open .header-wrap{
+  height:58px!important;
+  min-height:58px!important;
+  max-height:58px!important;
+  padding:7px 8px!important;
+  margin:0!important;
+  box-sizing:border-box!important;
+  overflow:hidden!important;
+  align-items:center!important;
+}
+
+/* Keep all existing V37.9 alignment, but remove the extra downward offset
+   that was contributing to excess visual height. */
+html.phone-device body.s37-settings-open .s37-topbar-title{
+  top:0!important;
+}
+
+/* Same phone-only fallback when the device marker is not present. */
+@media(max-width:700px){
+  body.s37-settings-open header{
+    height:58px!important;
+    min-height:58px!important;
+    max-height:58px!important;
+    overflow:hidden!important;
+  }
+
+  body.s37-settings-open .header-wrap{
+    height:58px!important;
+    min-height:58px!important;
+    max-height:58px!important;
+    padding:7px 8px!important;
+    margin:0!important;
+    box-sizing:border-box!important;
+    overflow:hidden!important;
+    align-items:center!important;
+  }
+
+  body.s37-settings-open .s37-topbar-title{
+    top:0!important;
+  }
+}
+</style>
 </head>
 <body>
 
