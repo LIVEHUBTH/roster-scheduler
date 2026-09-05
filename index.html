@@ -8167,6 +8167,158 @@ html.phone-device body.s37-settings-open .header-user-status{
   gap:6px!important;
 }
 </style>
+<style id="global-v3899-phone-direct-unit-topbar-copy-only">
+/* V38.9.9 — direct Unit geometry copy.
+   The class is attached to the shared Top bar itself only while Rules or
+   Settings is active, bypassing all legacy page-state selectors. */
+@media(max-width:700px){
+  #g3899UnitTopbar{
+    box-sizing:border-box!important;
+    width:100%!important;
+    min-height:69px!important;
+    height:69px!important;
+    max-height:69px!important;
+    padding:12px 22px!important;
+    display:flex!important;
+    flex-direction:row!important;
+    flex-wrap:nowrap!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    gap:6px!important;
+  }
+
+  #g3899UnitTopbar .header-clean-left{
+    display:flex!important;
+    flex:1 1 auto!important;
+    min-width:0!important;
+    align-items:center!important;
+    gap:6px!important;
+    overflow:hidden!important;
+  }
+
+  #g3899UnitTopbar .mobile-menu-btn{
+    flex:0 0 36px!important;
+    width:36px!important;
+    min-width:36px!important;
+    margin:0!important;
+  }
+
+  #g3899UnitTopbar .r389-topbar-title,
+  #g3899UnitTopbar .s37-topbar-title{
+    display:flex!important;
+    flex:1 1 auto!important;
+    min-width:0!important;
+    align-items:center!important;
+    gap:6px!important;
+    overflow:hidden!important;
+    position:static!important;
+    top:auto!important;
+    margin:0!important;
+  }
+
+  #g3899UnitTopbar .r389-topbar-icon,
+  #g3899UnitTopbar .s37-topbar-gear{
+    box-sizing:border-box!important;
+    flex:0 0 31px!important;
+    width:31px!important;
+    height:31px!important;
+    margin:0!important;
+  }
+
+  #g3899UnitTopbar .r389-topbar-icon svg,
+  #g3899UnitTopbar .s37-topbar-gear svg{
+    width:31px!important;
+    height:31px!important;
+    display:block!important;
+  }
+
+  #g3899UnitTopbar .r389-topbar-copy,
+  #g3899UnitTopbar .s37-topbar-title-copy{
+    display:grid!important;
+    flex:1 1 auto!important;
+    min-width:0!important;
+    max-width:135px!important;
+    gap:1px!important;
+    overflow:hidden!important;
+  }
+
+  #g3899UnitTopbar .r389-topbar-copy b,
+  #g3899UnitTopbar .s37-topbar-title-copy b{
+    display:block!important;
+    max-width:135px!important;
+    margin:0!important;
+    padding:0!important;
+    font-size:11px!important;
+    line-height:1.05!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  #g3899UnitTopbar .r389-topbar-copy small,
+  #g3899UnitTopbar .s37-topbar-title-copy small{
+    display:-webkit-box!important;
+    -webkit-box-orient:vertical!important;
+    -webkit-line-clamp:2!important;
+    width:100%!important;
+    max-width:135px!important;
+    max-height:16px!important;
+    margin:0!important;
+    padding:0!important;
+    font-size:6.5px!important;
+    line-height:1.1!important;
+    white-space:normal!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    word-break:keep-all!important;
+    overflow-wrap:normal!important;
+  }
+
+  #g3899UnitTopbar .header-right{
+    display:flex!important;
+    flex:0 0 auto!important;
+    width:auto!important;
+    min-width:0!important;
+    align-items:center!important;
+    justify-content:flex-end!important;
+    gap:6px!important;
+    margin:0!important;
+    transform:none!important;
+    white-space:nowrap!important;
+  }
+
+  #g3899UnitTopbar .header-bell{
+    box-sizing:border-box!important;
+    flex:0 0 36px!important;
+    width:36px!important;
+    min-width:36px!important;
+    height:36px!important;
+    min-height:36px!important;
+    margin:0!important;
+  }
+
+  #g3899UnitTopbar .header-user-status{
+    box-sizing:border-box!important;
+    flex:0 0 113px!important;
+    width:113px!important;
+    min-width:113px!important;
+    max-width:113px!important;
+    height:40px!important;
+    min-height:40px!important;
+    padding:5px 7px!important;
+    gap:6px!important;
+    margin:0!important;
+    overflow:hidden!important;
+  }
+
+  #g3899UnitTopbar .header-user-avatar{
+    display:grid!important;
+    flex:0 0 30px!important;
+    width:30px!important;
+    height:30px!important;
+  }
+}
+</style>
 </head>
 <body>
 
@@ -14503,6 +14655,52 @@ html body #page-home [data-home-version]{
         : null;
       if(nav) setTimeout(syncHeaderAvatar,0);
     },true);
+  }
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',init,{once:true});
+  }else{
+    init();
+  }
+})();
+</script>
+<script id="global-v3899-phone-direct-unit-topbar-copy-js">
+(function(){
+  'use strict';
+
+  function sync(){
+    var bar=document.querySelector('.header-wrap');
+    var rules=document.getElementById('page-rules');
+    var settings=document.getElementById('page-settings');
+    if(!bar) return;
+
+    var target=!!(
+      (rules && rules.classList.contains('active')) ||
+      (settings && settings.classList.contains('active'))
+    );
+    var phone=window.matchMedia && window.matchMedia('(max-width:700px)').matches;
+    if(target && phone){
+      bar.id='g3899UnitTopbar';
+    }else if(bar.id==='g3899UnitTopbar'){
+      bar.removeAttribute('id');
+    }
+  }
+
+  function init(){
+    var rules=document.getElementById('page-rules');
+    var settings=document.getElementById('page-settings');
+    if(window.MutationObserver){
+      [rules,settings].forEach(function(page){
+        if(page){
+          new MutationObserver(sync).observe(page,{
+            attributes:true,
+            attributeFilter:['class']
+          });
+        }
+      });
+    }
+    window.addEventListener('resize',sync,{passive:true});
+    sync();
   }
 
   if(document.readyState==='loading'){
