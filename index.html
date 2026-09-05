@@ -4668,6 +4668,217 @@ html body #page-summary #summaryBarChartV24 > *{
   border-left:none!important;
 }
 </style>
+
+<style id="unit-v400-requested-only">
+/* =========================================================
+   UNIT V40.0 — #page-internal ONLY / REQUESTED ITEMS ONLY
+
+   1) Remove white fills/shadows behind Unit-page frames.
+   2) Move pink SVG house + title/subtitle to Top bar.
+      Main title = "ระบบหน่วยงาน"
+   3) Phone Top bar stays in one horizontal row.
+   4) Add account photo changing; cartoon avatar remains as fallback.
+   5) No Sidebar / other pages / other responsive layouts changed.
+   ========================================================= */
+
+/* ---------- 1) transparent Unit page surfaces ---------- */
+html body #page-internal,
+html body #page-internal .u36-app{
+  background:transparent!important;
+  background-image:none!important;
+}
+
+html body #page-internal.active{
+  box-shadow:none!important;
+  clip-path:none!important;
+}
+
+/* Only Unit-page structural frames/cards.
+   Keep borders, dimensions, grids, inputs and controls unchanged. */
+html body #page-internal .u36-card,
+html body #page-internal .u36-stat,
+html body #page-internal .u36-form,
+html body #page-internal .u36-table-wrap{
+  background:transparent!important;
+  background-image:none!important;
+  box-shadow:none!important;
+}
+
+/* Existing pastel card variants may have higher-specificity fills. */
+html body #page-internal .u36-stat.purple,
+html body #page-internal .u36-stat.pink,
+html body #page-internal .u36-stat.mint,
+html body #page-internal .u36-stat.orange,
+html body #page-internal .u36-info-card,
+html body #page-internal .u36-accounts-card{
+  background:transparent!important;
+  background-image:none!important;
+  box-shadow:none!important;
+}
+
+/* Remove only the original in-page page heading after moving it to Top bar. */
+html body #page-internal .u36-head{
+  display:none!important;
+}
+
+/* ---------- 2) Top bar title ---------- */
+.u400-topbar-title{
+  display:none;
+  align-items:center;
+  gap:9px;
+  min-width:0;
+}
+body.u400-unit-open .u400-topbar-title{
+  display:flex;
+}
+
+.u400-topbar-icon{
+  width:40px;
+  height:40px;
+  flex:0 0 40px;
+  display:grid;
+  place-items:center;
+  padding:0;
+  margin:0;
+  background:transparent!important;
+  border:none!important;
+  box-shadow:none!important;
+}
+.u400-topbar-icon svg{
+  width:36px;
+  height:36px;
+  display:block;
+}
+
+.u400-topbar-copy{
+  display:grid;
+  gap:2px;
+  min-width:0;
+}
+.u400-topbar-copy b{
+  color:#26334b;
+  font-size:16px;
+  line-height:1.1;
+  white-space:nowrap;
+}
+.u400-topbar-copy small{
+  color:#8b93a3;
+  font-size:9px;
+  line-height:1.2;
+  white-space:nowrap;
+}
+
+/* ---------- 3) PHONE ONLY: one-line Top bar ---------- */
+@media(max-width:700px){
+  body.u400-unit-open .header-wrap{
+    flex-wrap:nowrap!important;
+    gap:6px!important;
+  }
+
+  body.u400-unit-open .header-clean-left{
+    flex:1 1 auto!important;
+    min-width:0!important;
+    display:flex!important;
+    align-items:center!important;
+    gap:6px!important;
+    overflow:hidden!important;
+  }
+
+  body.u400-unit-open .mobile-menu-btn{
+    flex:0 0 36px!important;
+  }
+
+  body.u400-unit-open .u400-topbar-title{
+    flex:1 1 auto!important;
+    min-width:0!important;
+    gap:6px!important;
+    overflow:hidden!important;
+  }
+
+  body.u400-unit-open .u400-topbar-icon{
+    width:31px!important;
+    height:31px!important;
+    flex:0 0 31px!important;
+  }
+  body.u400-unit-open .u400-topbar-icon svg{
+    width:31px!important;
+    height:31px!important;
+  }
+
+  body.u400-unit-open .u400-topbar-copy{
+    min-width:0!important;
+    max-width:135px!important;
+    overflow:hidden!important;
+  }
+
+  body.u400-unit-open .u400-topbar-copy b{
+    font-size:11px!important;
+    line-height:1.05!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  body.u400-unit-open .u400-topbar-copy small{
+    font-size:6.5px!important;
+    line-height:1.1!important;
+    max-width:135px!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  body.u400-unit-open .header-right{
+    flex:0 0 auto!important;
+    margin-left:0!important;
+    gap:6px!important;
+    white-space:nowrap!important;
+  }
+}
+
+/* ---------- 4) account photo changing ---------- */
+html body #page-internal .u36-avatar.u400-photo-avatar{
+  position:relative!important;
+  overflow:visible!important;
+  cursor:pointer!important;
+}
+html body #page-internal .u36-avatar.u400-photo-avatar > img{
+  width:100%!important;
+  height:100%!important;
+  object-fit:cover!important;
+  border-radius:50%!important;
+  display:block!important;
+}
+html body #page-internal .u36-avatar.u400-photo-avatar .u400-avatar-fallback{
+  width:100%!important;
+  height:100%!important;
+  display:grid!important;
+  place-items:center!important;
+  border-radius:50%!important;
+}
+html body #page-internal .u36-avatar.u400-photo-avatar .u400-photo-edit{
+  position:absolute!important;
+  right:-4px!important;
+  bottom:-3px!important;
+  width:17px!important;
+  height:17px!important;
+  min-height:17px!important;
+  padding:0!important;
+  border-radius:50%!important;
+  border:1px solid #f0cddd!important;
+  background:#fff5f9!important;
+  color:#df5d90!important;
+  display:grid!important;
+  place-items:center!important;
+  box-shadow:none!important;
+  z-index:2!important;
+}
+html body #page-internal .u36-avatar.u400-photo-avatar .u400-photo-edit svg{
+  width:10px!important;
+  height:10px!important;
+  display:block!important;
+}
+</style>
 </head>
 <body>
 
@@ -10220,6 +10431,230 @@ html body #page-home [data-home-version]{
     if(btn){
       btn.addEventListener('click', afterFullTableOpen, false);
     }
+  }
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',init,{once:true});
+  }else{
+    init();
+  }
+})();
+</script>
+
+<script id="unit-v400-requested-only-js">
+(function(){
+  'use strict';
+
+  var PHOTO_KEY='roster_unit_user_photos_v1';
+  var observer=null;
+  var decorating=false;
+
+  function q(s,r){ return (r||document).querySelector(s); }
+  function qa(s,r){ return Array.prototype.slice.call((r||document).querySelectorAll(s)); }
+
+  function houseSvg(){
+    return ''+
+      '<svg viewBox="0 0 48 48" aria-hidden="true" focusable="false">'+
+        '<path d="M8 23.2 24 9l16 14.2v16.1c0 1.5-1.2 2.7-2.7 2.7H10.7A2.7 2.7 0 0 1 8 39.3V23.2Z" fill="#f36b9d"/>'+
+        '<path d="M5.8 23.6 24 7.5l18.2 16.1" fill="none" stroke="#d95789" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>'+
+        '<rect x="20" y="29" width="8" height="13" rx="2" fill="#ffd7e6"/>'+
+        '<rect x="12.5" y="26.5" width="6" height="6" rx="1.5" fill="#ffd7e6"/>'+
+        '<rect x="29.5" y="26.5" width="6" height="6" rx="1.5" fill="#ffd7e6"/>'+
+      '</svg>';
+  }
+
+  function cameraSvg(){
+    return ''+
+      '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">'+
+        '<path d="M5 8h3l1.4-2h5.2L16 8h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>'+
+        '<circle cx="12" cy="13" r="3.2" fill="none" stroke="currentColor" stroke-width="1.8"/>'+
+      '</svg>';
+  }
+
+  function makeTopbarTitle(){
+    var left=q('.header-clean-left');
+    if(!left) return;
+
+    var box=q('#u400TopbarTitle');
+    if(box) return;
+
+    box=document.createElement('div');
+    box.id='u400TopbarTitle';
+    box.className='u400-topbar-title';
+    box.innerHTML=
+      '<span class="u400-topbar-icon">'+houseSvg()+'</span>'+
+      '<span class="u400-topbar-copy">'+
+        '<b>ระบบหน่วยงาน</b>'+
+        '<small>จัดการหน่วยงาน โครงสร้าง และบัญชีผู้ใช้งานในระบบ</small>'+
+      '</span>';
+    left.appendChild(box);
+  }
+
+  function syncTopbar(){
+    var p=document.getElementById('page-internal');
+    var on=!!(p && p.classList.contains('active'));
+    document.body.classList.toggle('u400-unit-open',on);
+    if(on) makeTopbarTitle();
+  }
+
+  function loadPhotos(){
+    try{
+      var x=JSON.parse(localStorage.getItem(PHOTO_KEY)||'{}');
+      return x && typeof x==='object' ? x : {};
+    }catch(e){
+      return {};
+    }
+  }
+
+  function savePhotos(map){
+    try{ localStorage.setItem(PHOTO_KEY,JSON.stringify(map)); }catch(e){}
+  }
+
+  function usernameFromRow(row){
+    var small=q('.u36-person small',row);
+    return small ? String(small.textContent||'').replace(/^@/,'').trim() : '';
+  }
+
+  function choosePhoto(username,avatar){
+    if(!username || !avatar) return;
+
+    var input=document.createElement('input');
+    input.type='file';
+    input.accept='image/*';
+    input.style.display='none';
+
+    input.onchange=function(){
+      var file=input.files && input.files[0];
+      if(!file){ input.remove(); return; }
+
+      var reader=new FileReader();
+      reader.onload=function(){
+        var src=String(reader.result||'');
+        if(!src){ input.remove(); return; }
+
+        var map=loadPhotos();
+        map[username]=src;
+        savePhotos(map);
+
+        applyOneAvatar(avatar,username);
+        input.remove();
+      };
+      reader.readAsDataURL(file);
+    };
+
+    document.body.appendChild(input);
+    input.click();
+  }
+
+  function applyOneAvatar(avatar,username){
+    if(!avatar || !username) return;
+
+    var map=loadPhotos();
+    var src=map[username]||'';
+    var fallback=avatar.getAttribute('data-u400-fallback') || avatar.textContent.trim() || '👩🏻';
+
+    avatar.setAttribute('data-u400-fallback',fallback);
+    avatar.classList.add('u400-photo-avatar');
+
+    avatar.innerHTML=
+      (src
+        ? '<img alt="รูปผู้ใช้งาน" src="'+src+'">'
+        : '<span class="u400-avatar-fallback">'+fallback+'</span>')+
+      '<button type="button" class="u400-photo-edit" title="เปลี่ยนรูป" aria-label="เปลี่ยนรูป">'+cameraSvg()+'</button>';
+
+    var btn=q('.u400-photo-edit',avatar);
+    if(btn){
+      btn.onclick=function(ev){
+        ev.preventDefault();
+        ev.stopPropagation();
+        choosePhoto(username,avatar);
+      };
+    }
+
+    avatar.onclick=function(ev){
+      if(ev.target && ev.target.closest && ev.target.closest('.u400-photo-edit')) return;
+      choosePhoto(username,avatar);
+    };
+  }
+
+  function decorateAvatars(){
+    if(decorating) return;
+    var host=q('#u36UsersBody');
+    if(!host) return;
+
+    decorating=true;
+    if(observer) observer.disconnect();
+
+    try{
+      qa('tr',host).forEach(function(row){
+        var avatar=q('.u36-avatar',row);
+        var username=usernameFromRow(row);
+        if(!avatar || !username) return;
+
+        /* Reapply only when Unit V36 has freshly rendered its original emoji. */
+        if(!avatar.classList.contains('u400-photo-avatar')){
+          applyOneAvatar(avatar,username);
+        }
+      });
+    }finally{
+      decorating=false;
+      observeUserRows();
+    }
+  }
+
+  function observeUserRows(){
+    var host=q('#u36UsersBody');
+    if(!host || !window.MutationObserver) return;
+
+    if(!observer){
+      observer=new MutationObserver(function(){
+        if(!decorating) setTimeout(decorateAvatars,0);
+      });
+    }
+
+    observer.disconnect();
+    observer.observe(host,{childList:true});
+  }
+
+  function waitForUnitMount(){
+    var page=document.getElementById('page-internal');
+    if(!page) return;
+
+    if(q('.u36-app',page)){
+      decorateAvatars();
+      return;
+    }
+
+    var tries=0;
+    var timer=setInterval(function(){
+      tries++;
+      if(q('.u36-app',page)){
+        clearInterval(timer);
+        decorateAvatars();
+      }else if(tries>=30){
+        clearInterval(timer);
+      }
+    },100);
+  }
+
+  function init(){
+    makeTopbarTitle();
+    syncTopbar();
+    waitForUnitMount();
+
+    var page=document.getElementById('page-internal');
+    if(page && window.MutationObserver){
+      new MutationObserver(syncTopbar).observe(page,{
+        attributes:true,
+        attributeFilter:['class']
+      });
+    }
+
+    document.addEventListener('click',function(e){
+      if(e.target && e.target.closest && e.target.closest('[data-page]')){
+        setTimeout(syncTopbar,10);
+      }
+    },true);
   }
 
   if(document.readyState==='loading'){
