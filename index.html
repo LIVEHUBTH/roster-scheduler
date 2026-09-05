@@ -6063,6 +6063,46 @@ html.phone-device body.s37-settings-open .s37-topbar-title{
   }
 }
 </style>
+
+<style id="settings-v3711-phone-subtitle-full-only">
+/* =========================================================
+   SETTINGS V37.11 — PHONE ONLY / SUBTITLE VISIBILITY ONLY
+
+   Show the Settings Top bar subtitle in full.
+   Keep the same compact Top bar height and one-row structure.
+   No Sidebar / other pages / iPad / Desktop / content layout changes.
+   ========================================================= */
+
+html.phone-device body.s37-settings-open .s37-topbar-title-copy small{
+  display:block!important;
+  max-width:105px!important;
+  white-space:normal!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  word-break:keep-all!important;
+  overflow-wrap:normal!important;
+  font-size:5.4px!important;
+  line-height:1.08!important;
+  max-height:none!important;
+  margin-top:1px!important;
+}
+
+@media(max-width:700px){
+  body.s37-settings-open .s37-topbar-title-copy small{
+    display:block!important;
+    max-width:105px!important;
+    white-space:normal!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+    word-break:keep-all!important;
+    overflow-wrap:normal!important;
+    font-size:5.4px!important;
+    line-height:1.08!important;
+    max-height:none!important;
+    margin-top:1px!important;
+  }
+}
+</style>
 </head>
 <body>
 
