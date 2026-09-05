@@ -5003,6 +5003,135 @@ html body #page-internal .u36-accounts-card .u36-table-wrap{
   }
 }
 </style>
+
+<style id="settings-v374-requested-only">
+/* =========================================================
+   SETTINGS V37.4 — #page-settings ONLY / REQUESTED ITEMS ONLY
+
+   1) Topbar icon: remove frame, keep only green SVG gear
+      using the same gear geometry as Sidebar "ตั้งค่าโปรแกรม".
+   2) Align icon + text in one centered row for Settings buttons.
+   3) No Sidebar / other pages / responsive layout changes.
+   ========================================================= */
+
+/* 1) Topbar settings icon — SVG only, no frame/background. */
+body.s37-settings-open .s37-topbar-title .s37-topbar-gear{
+  width:40px!important;
+  height:40px!important;
+  flex:0 0 40px!important;
+  display:grid!important;
+  place-items:center!important;
+  padding:0!important;
+  margin:0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  background-image:none!important;
+  box-shadow:none!important;
+  color:#43a88d!important;
+}
+body.s37-settings-open .s37-topbar-title .s37-topbar-gear svg{
+  width:36px!important;
+  height:36px!important;
+  display:block!important;
+  fill:none!important;
+  stroke:#43a88d!important;
+  stroke-width:1.8!important;
+  stroke-linecap:round!important;
+  stroke-linejoin:round!important;
+}
+
+@media(max-width:700px){
+  body.s37-settings-open .s37-topbar-title .s37-topbar-gear{
+    width:31px!important;
+    height:31px!important;
+    flex-basis:31px!important;
+  }
+  body.s37-settings-open .s37-topbar-title .s37-topbar-gear svg{
+    width:31px!important;
+    height:31px!important;
+  }
+}
+
+/* 2) Tabs: icon immediately before text, both centered on one row. */
+html body #page-settings .s37-tab{
+  display:flex!important;
+  flex-direction:row!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:7px!important;
+  text-align:center!important;
+  line-height:1!important;
+  white-space:nowrap!important;
+}
+html body #page-settings .s37-tab .s37-tab-icon{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  flex:0 0 auto!important;
+  margin:0!important;
+}
+html body #page-settings .s37-tab .s37-tab-icon .s37-svg{
+  display:block!important;
+  margin:0!important;
+}
+
+/* Standard action buttons in every Settings panel:
+   icon + text centered in the same line. */
+html body #page-settings .s37-primary,
+html body #page-settings .s37-secondary,
+html body #page-settings .s37-soft-button,
+html body #page-settings .s37-button-stack button,
+html body #page-settings .s37-manage-grid button,
+html body #page-settings .s37-cloud-head button,
+html body #page-settings #settingsChangePasswordBtn,
+html body #page-settings #cloudConnectBtn,
+html body #page-settings #cloudUploadBtn,
+html body #page-settings #cloudDownloadBtn,
+html body #page-settings #settingsClearV24,
+html body #page-settings #settingsValidateV24,
+html body #page-settings #settingsPeopleV24,
+html body #page-settings #settingsResetV24,
+html body #page-settings #settingsGoRulesV24{
+  display:inline-flex!important;
+  flex-direction:row!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:6px!important;
+  text-align:center!important;
+  line-height:1.15!important;
+  white-space:nowrap!important;
+}
+
+/* Remove old baseline/margin behavior that can push SVG above the text. */
+html body #page-settings .s37-primary .s37-svg,
+html body #page-settings .s37-secondary .s37-svg,
+html body #page-settings .s37-soft-button .s37-svg,
+html body #page-settings .s37-button-stack button .s37-svg,
+html body #page-settings .s37-manage-grid button .s37-svg,
+html body #page-settings .s37-cloud-head button .s37-svg,
+html body #page-settings #settingsChangePasswordBtn .s37-svg,
+html body #page-settings #cloudConnectBtn .s37-svg,
+html body #page-settings #cloudUploadBtn .s37-svg,
+html body #page-settings #cloudDownloadBtn .s37-svg,
+html body #page-settings #settingsClearV24 .s37-svg,
+html body #page-settings #settingsValidateV24 .s37-svg,
+html body #page-settings #settingsPeopleV24 .s37-svg,
+html body #page-settings #settingsResetV24 .s37-svg,
+html body #page-settings #settingsGoRulesV24 .s37-svg{
+  display:block!important;
+  flex:0 0 auto!important;
+  margin:0!important;
+  vertical-align:middle!important;
+}
+
+/* If existing JS wraps button copy in a span, keep it inline and centered. */
+html body #page-settings button > span{
+  display:inline-flex;
+  align-items:center;
+  line-height:1.15;
+}
+</style>
 </head>
 <body>
 
@@ -10774,6 +10903,51 @@ html body #page-home [data-home-version]{
     document.addEventListener('click',function(e){
       if(e.target && e.target.closest && e.target.closest('[data-page]')){
         setTimeout(syncTopbar,10);
+      }
+    },true);
+  }
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',init,{once:true});
+  }else{
+    init();
+  }
+})();
+</script>
+
+<script id="settings-v374-topbar-icon-only-js">
+(function(){
+  'use strict';
+
+  function sidebarGearSvg(){
+    return ''+
+      '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">'+
+        '<circle cx="12" cy="12" r="3"/>'+
+        '<path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V21h-4v-.2a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H3v-4h.2a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.4 7 7.2 4.2l.1.1a1.7 1.7 0 0 0 1.9.3 1.7 1.7 0 0 0 1-1.6V3h4v.2a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L20 7.2l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1H21v4h-.2a1.7 1.7 0 0 0-1.4.8Z"/>'+
+      '</svg>';
+  }
+
+  function apply(){
+    var gear=document.querySelector('.s37-topbar-title .s37-topbar-gear');
+    if(!gear) return false;
+
+    if(!gear.dataset.v374){
+      gear.innerHTML=sidebarGearSvg();
+      gear.dataset.v374='1';
+    }
+    return true;
+  }
+
+  function init(){
+    apply();
+
+    /* Existing Settings code creates the title when the Settings page opens.
+       Re-check only after explicit navigation clicks; no observer/polling loop. */
+    document.addEventListener('click',function(e){
+      var nav=e.target && e.target.closest ? e.target.closest('[data-page="settings"]') : null;
+      if(nav){
+        setTimeout(apply,0);
+        setTimeout(apply,80);
       }
     },true);
   }
