@@ -9901,7 +9901,7 @@ function el(id){return document.getElementById(id)}
 function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function parse(v,f){try{return JSON.parse(v)}catch(e){return f}}
 function pad(n){return n<10?'0'+n:String(n)}
-function py(){return parseInt(el('year').value,10)||2569} function gy(){return py()-543} function cm(){return parseInt(el('month').value,10)||0}
+function py(){return parseInt(el('year').value,10)||2569} function gy(){return py()-543} function cy(){return gy()} function cm(){return parseInt(el('month').value,10)||0}
 function dim(){return new Date(gy(),cm()+1,0).getDate()} function monthKey(y,m){return y+'-'+pad(m+1)} function currentKey(){return monthKey(gy(),cm())}
 function prevYM(){var y=gy(),m=cm()-1;if(m<0){m=11;y--}return {y:y,m:m}} function prevKey(){var p=prevYM();return monthKey(p.y,p.m)}
 function dateKey(y,m,d){return monthKey(y,m)+'-'+pad(d)} function dkey(d){return dateKey(gy(),cm(),d)} function akey(d,s){return d+'|'+s}
@@ -10317,21 +10317,8 @@ function saveMonth(silent){
   renderHistory();renderUnitWorkflow();
 }
 
-/* ตารางเวรเดือนกันยายน พ.ศ. 2569 จากเอกสาร IMG_5920
-   นำเข้าครั้งเดียวต่อข้อมูลเดือน และไม่แตะเดือนหรือระบบอื่น */
-async function importSeptember2569Roster(){
-  var targetKey='2026-09';
-  var importId='IMG_5920-SEP-2569-V2';
-  if(cloud.connected){
-    try{await fetchCloudMonth(targetKey)}catch(ignore){}
-  }
-  var existing=savedMonth(targetKey);
-  var alreadyImported=!!(existing&&existing.importSource===importId&&existing.assignments);
-  if(!Array.isArray(state.people)||state.people.length<28){
-    setStatus('ยังนำเข้าตารางเดือนกันยายน 2569 ไม่ได้: ต้องมีรายชื่อบุคลากรอย่างน้อย 28 คน',false);
-    return false;
-  }
-
+/* ตารางเวรเดือนกันยายน พ.ศ. 2569 จากเอกสาร IMG_5920 */
+function buildSeptember2569Assignments(){
   var slotIds=['v1','v2','ot1','ot2','s1d','s1n','s2d','s2n','s3d','s3n','s4d','s4n','s5','s6','s7','s8','e1','e2','e3'];
   var rows={
     1:[12,7,10,2,0,1,0,9,0,23,0,19,0,0,25,4,16,20,28],
@@ -10374,29 +10361,50 @@ async function importSeptember2569Roster(){
       if(person)assignments[akey(day,slotIds[index])]=person.id;
     });
   });
+  return assignments;
+}
 
-  var data;
-  if(alreadyImported){
-    /* ต้องโหลดข้อมูลที่นำเข้าแล้วกลับเข้าตารางด้วย ห้าม return ก่อนจุดนี้ */
-    data=existing;
-    assignments=data.assignments||{};
-  }else{
-    /* V2 เขียนทับเฉพาะข้อมูลนำเข้ารุ่นเดิมที่ไม่แสดงผล แล้วคงการแก้ไขหลัง V2 ไว้ */
-    data=Object.assign({},existing||{}, {
-      version:'39.14-september-2569-load-hotfix',
-      key:targetKey,
-      year:2026,
-      month:8,
-      savedAt:new Date().toISOString(),
-      assignments:assignments,
-      rotation:(existing&&existing.rotation)||{},
-      peopleSnapshot:state.people,
-      workflow:normalizeWorkflow(existing&&existing.workflow),
-      importSource:importId
-    });
-    localStorage.setItem(storageKey(targetKey),JSON.stringify(data));
-    if(cloud.connected)await cloudSaveMonth(data);
+/* ใส่ข้อมูลใน localStorage ให้เสร็จก่อน renderSheet เพื่อไม่ต้องรอ Login/Cloud */
+function ensureSeptember2569RosterLocal(existing){
+  var targetKey='2026-09';
+  var importId='IMG_5920-SEP-2569-V3';
+  existing=existing||savedMonth(targetKey);
+  if(existing&&existing.importSource===importId&&existing.assignments)return existing;
+  if(!Array.isArray(state.people)||state.people.length<28)return existing||null;
+
+  var data=Object.assign({},existing||{}, {
+    version:'39.15-september-2569-direct-load',
+    key:targetKey,
+    year:2026,
+    month:8,
+    savedAt:new Date().toISOString(),
+    assignments:buildSeptember2569Assignments(),
+    rotation:(existing&&existing.rotation)||{},
+    peopleSnapshot:state.people,
+    workflow:normalizeWorkflow(existing&&existing.workflow),
+    importSource:importId
+  });
+  localStorage.setItem(storageKey(targetKey),JSON.stringify(data));
+  return data;
+}
+
+/* ซิงก์ข้อมูลชุดเดียวกันขึ้น Cloud หลังจากโหลดลงตารางแล้ว */
+async function importSeptember2569Roster(){
+  var targetKey='2026-09';
+  var importId='IMG_5920-SEP-2569-V3';
+  if(cloud.connected){
+    try{await fetchCloudMonth(targetKey)}catch(ignore){}
   }
+  var existing=savedMonth(targetKey);
+  var alreadyImported=!!(existing&&existing.importSource===importId&&existing.assignments);
+  var data=ensureSeptember2569RosterLocal(existing);
+  if(!data||!data.assignments){
+    setStatus('ยังนำเข้าตารางเดือนกันยายน 2569 ไม่ได้: ต้องมีรายชื่อบุคลากรอย่างน้อย 28 คน',false);
+    return false;
+  }
+  var assignments=data.assignments;
+
+  if(!alreadyImported&&cloud.connected)await cloudSaveMonth(data);
 
   if(currentKey()===targetKey){
     state.assignments=assignments;
@@ -10417,6 +10425,7 @@ function unitSaveMonth(){
 }
 function loadMonth(silent){clearActionFeedback();hideAutoFixSummary();
   var d=savedMonth(currentKey());
+  if(currentKey()==='2026-09')d=ensureSeptember2569RosterLocal(d);
   state.assignments=d&&d.assignments?d.assignments:{};
   state.rotation=d&&d.rotation?d.rotation:{};
   workflow=normalizeWorkflow(d&&d.workflow);
