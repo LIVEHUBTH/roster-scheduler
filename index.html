@@ -10370,7 +10370,7 @@ function buildSeptember2569Assignments(){
 }
 
 function september2569RosterMatchesPeople(data){
-  if(!data||data.importSource!=='IMG_5920-SEP-2569-V4'||!data.assignments)return false;
+  if(!data||data.importSource!=='IMG_5920-SEP-2569-V5-27PEOPLE'||!data.assignments)return false;
   var ids={};
   state.people.forEach(function(person){ids[person.id]=true});
   return Object.keys(data.assignments).every(function(key){
@@ -10382,14 +10382,14 @@ function september2569RosterMatchesPeople(data){
 /* ใส่ข้อมูลใน localStorage ให้เสร็จก่อน renderSheet เพื่อไม่ต้องรอ Login/Cloud */
 function ensureSeptember2569RosterLocal(existing){
   var targetKey='2026-09';
-  var importId='IMG_5920-SEP-2569-V4';
+  var importId='IMG_5920-SEP-2569-V5-27PEOPLE';
   existing=existing||savedMonth(targetKey);
   /* เก็บการแก้ไขเดิมไว้เมื่อ ID ยังตรงกับรายชื่อปัจจุบัน */
   if(september2569RosterMatchesPeople(existing))return existing;
-  if(!Array.isArray(state.people)||state.people.length<28)return existing||null;
+  if(!Array.isArray(state.people)||state.people.length<27)return existing||null;
 
   var data=Object.assign({},existing||{}, {
-    version:'39.18-september-baseline-extra-only-lock',
+    version:'39.19-september-baseline-27-people-fix',
     key:targetKey,
     year:2026,
     month:8,
@@ -10407,7 +10407,7 @@ function ensureSeptember2569RosterLocal(existing){
 /* ซิงก์ข้อมูลชุดเดียวกันขึ้น Cloud หลังจากโหลดลงตารางแล้ว */
 async function importSeptember2569Roster(){
   var targetKey='2026-09';
-  var importId='IMG_5920-SEP-2569-V4';
+  var importId='IMG_5920-SEP-2569-V5-27PEOPLE';
   if(cloud.connected){
     try{await fetchCloudMonth(targetKey)}catch(ignore){}
   }
@@ -10415,7 +10415,7 @@ async function importSeptember2569Roster(){
   var alreadyImported=september2569RosterMatchesPeople(existing);
   var data=ensureSeptember2569RosterLocal(existing);
   if(!data||!data.assignments){
-    setStatus('ยังนำเข้าตารางเดือนกันยายน 2569 ไม่ได้: ต้องมีรายชื่อบุคลากรอย่างน้อย 28 คน',false);
+    setStatus('ยังนำเข้าตารางเดือนกันยายน 2569 ไม่ได้: ต้องมีรายชื่อบุคลากรอย่างน้อย 27 คน',false);
     return false;
   }
   var assignments=data.assignments;
