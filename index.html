@@ -8468,6 +8468,76 @@ html.phone-device body.s37-settings-open .header-user-status{
   height:30px!important;
 }
 </style>
+
+<style id="people-v3922-mobile-modal-scroll-fix">
+/* V39.22 — mobile personnel popup: keep Save reachable without changing desktop layout */
+@media (max-width:700px){
+  html body #personModalV30.p30-modal.show{
+    position:fixed!important;
+    inset:0!important;
+    z-index:99999!important;
+    display:flex!important;
+    align-items:flex-start!important;
+    justify-content:center!important;
+    overflow:hidden!important;
+    padding:max(8px,env(safe-area-inset-top)) 8px max(8px,env(safe-area-inset-bottom))!important;
+    box-sizing:border-box!important;
+  }
+  html body #personModalV30 .p30-modal-backdrop{
+    position:absolute!important;
+    inset:0!important;
+  }
+  html body #personModalV30 .p30-modal-card{
+    position:relative!important;
+    width:min(96vw,680px)!important;
+    max-width:96vw!important;
+    height:auto!important;
+    max-height:calc(100dvh - max(16px,env(safe-area-inset-top)) - max(16px,env(safe-area-inset-bottom)))!important;
+    margin:0!important;
+    display:flex!important;
+    flex-direction:column!important;
+    overflow:hidden!important;
+    box-sizing:border-box!important;
+  }
+  html body #personModalV30 .p30-modal-head{
+    flex:0 0 auto!important;
+    position:relative!important;
+    z-index:3!important;
+    background:#fff!important;
+  }
+  html body #personModalV30 .p30-modal-body{
+    flex:1 1 auto!important;
+    min-height:0!important;
+    overflow-y:auto!important;
+    overflow-x:hidden!important;
+    -webkit-overflow-scrolling:touch!important;
+    overscroll-behavior:contain!important;
+    padding-bottom:24px!important;
+  }
+  html body #personModalV30 .p30-modal-foot{
+    flex:0 0 auto!important;
+    position:sticky!important;
+    bottom:0!important;
+    z-index:5!important;
+    background:#fff!important;
+    padding-bottom:max(12px,env(safe-area-inset-bottom))!important;
+    box-shadow:0 -8px 18px rgba(44,52,73,.08)!important;
+  }
+  html body #personModalV30 #personDutyAccessV3921{
+    min-width:0!important;
+    overflow:hidden!important;
+  }
+  html body #personModalV30 #personDutyAccessV3921>div{
+    grid-template-columns:1fr!important;
+  }
+  html body #personModalV30 #personDutyAccessV3921 label{
+    min-width:0!important;
+    width:100%!important;
+    box-sizing:border-box!important;
+  }
+}
+</style>
+
 </head>
 <body>
 
@@ -10418,7 +10488,7 @@ function ensureSeptember2569RosterLocal(existing){
   if(!Array.isArray(state.people)||state.people.length<28)return existing||null;
 
   var data=Object.assign({},existing||{}, {
-    version:'39.21-flexible-people-rules-rule21-validation',
+    version:'39.22-rule21-autofix-mobile-person-modal-scroll',
     key:targetKey,
     year:2026,
     month:8,
@@ -12263,8 +12333,10 @@ function autoFixConflicts(){
   var details=lastConflictDetails.slice();
   var fixed=0, failed=0, changed=[];
 
+  /* แก้ข้อขัดแย้งระดับเซลล์ก่อน (กฎ 1–20) */
   for(var i=0;i<details.length;i++){
     var c=details[i];
+    if(c&&String(c.rule||'').indexOf('กฎ 21')>=0)continue;
     var target=locateConflictAssignment(c);
     if(!target){failed++;continue}
 
@@ -12282,25 +12354,36 @@ function autoFixConflicts(){
     });
     fixed++;
 
-    // Re-evaluate after each change so later fixes see updated state.
+    /* ประเมินใหม่ทุกครั้งเพื่อให้การแก้จุดถัดไปเห็นตารางล่าสุด */
     validate(false);
+  }
+
+  /* V39.22: กฎ 21 เป็นความไม่สมดุลระดับทั้งเดือน จึงต้องใช้ตัว rebalance โดยตรง
+     ตัว rebalance จะย้าย/สลับเฉพาะเมื่อยังผ่านกฎข้อ 1–20 */
+  var balanceMoves=0;
+  if(hasRule(21)){
+    var before21=rule21Report();
+    if(!before21.ok){
+      var balanceResult=rebalanceRule21();
+      balanceMoves=Number(balanceResult&&balanceResult.moved||0);
+    }
   }
 
   var remaining=validate(false);
   renderSheet();
   renderConflictDetails();
 
-  if(fixed){
-    auditWorkflow('แก้ไขข้อขัดแย้งอัตโนมัติ '+fixed+' จุด');
+  if(fixed||balanceMoves){
+    auditWorkflow('แก้ไขข้อขัดแย้งอัตโนมัติ '+fixed+' จุด • ปรับสมดุล '+balanceMoves+' ครั้ง');
     saveMonth(true);
   }
 
   if(remaining===0){
-    showAutoFixSummary('✅ แก้ไขอัตโนมัติสำเร็จ '+fixed+' จุด และตรวจสอบแล้วไม่พบข้อขัดแย้ง','ok');
-    showActionFeedback('✅ แก้ไขข้อขัดแย้งอัตโนมัติแล้ว ตารางพร้อมสำหรับส่งตรวจ','ok');
+    showAutoFixSummary('✅ แก้ไขอัตโนมัติสำเร็จ • แก้จุดขัดแย้ง '+fixed+' จุด • ปรับสมดุลกฎ 21 '+balanceMoves+' ครั้ง • ตรวจสอบแล้วไม่พบข้อขัดแย้ง','ok');
+    showActionFeedback('✅ แก้ไขข้อขัดแย้งและปรับสมดุลกฎ 21 แล้ว ตารางพร้อมสำหรับส่งตรวจ','ok');
   }else{
-    showAutoFixSummary('⚠️ แก้ได้ '+fixed+' จุด เหลือข้อขัดแย้ง '+remaining+' จุดที่ต้องตรวจหรือแก้ด้วยตนเอง','warn');
-    showActionFeedback('⚠️ ยังเหลือข้อขัดแย้ง '+remaining+' จุด • ดูรายละเอียดด้านล่าง','err');
+    showAutoFixSummary('⚠️ แก้จุดขัดแย้งได้ '+fixed+' จุด • ปรับสมดุลกฎ 21 '+balanceMoves+' ครั้ง • ยังเหลือข้อขัดแย้ง '+remaining+' จุดที่ติดเงื่อนไขและต้องตรวจหรือแก้ด้วยตนเอง','warn');
+    showActionFeedback('⚠️ ยังเหลือข้อขัดแย้ง '+remaining+' จุด • ระบบไม่ฝืนกฎข้อ 1–20','err');
   }
 }
 
