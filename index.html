@@ -41,6 +41,11 @@ button{min-height:43px;border:0;border-radius:11px;background:#edeef3;color:var(
 .sheet tr.weekend td,.sheet tr.weekend .date,.sheet tr.holiday td,.sheet tr.holiday .date{background:var(--weekend)!important;color:#222}
 .sheet select{width:100%;height:26px;border:1px solid transparent;border-radius:6px;background:transparent;color:inherit;font-size:11px;text-align:center;appearance:none;-webkit-appearance:none}
 .sheet select:focus{border-color:var(--accent);background:#fff;outline:0}.sheet td.inactive{background:#fff!important;color:#aaa}
+.phone-sheet-value{display:none}
+html.phone-device .sheet td[data-d][data-s]{position:relative}
+html.phone-device .sheet .phone-sheet-value{display:block;width:100%;height:26px;line-height:26px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center;font-size:9px;color:inherit;pointer-events:none}
+html.phone-device .sheet td[data-d][data-s]>select{position:absolute!important;inset:3px 4px!important;width:calc(100% - 8px)!important;height:26px!important;opacity:.001!important;z-index:2!important}
+@media print{.phone-sheet-value{display:none!important}}
 .sheet tr.weekend td.inactive,.sheet tr.holiday td.inactive{background:var(--weekend)!important;color:#222}
 .sheet td.conflict{box-shadow:inset 0 0 0 2px #f04438!important;background:#fff1f0!important;color:#111!important}
 .section-title{font-weight:800;font-size:18px;margin-bottom:8px}.muted{font-size:12px;color:var(--muted);line-height:1.55}
@@ -10384,7 +10389,7 @@ function ensureSeptember2569RosterLocal(existing){
   if(!Array.isArray(state.people)||state.people.length<28)return existing||null;
 
   var data=Object.assign({},existing||{}, {
-    version:'39.16-september-2569-id-remap',
+    version:'39.18-september-baseline-extra-only-lock',
     key:targetKey,
     year:2026,
     month:8,
@@ -10597,7 +10602,7 @@ function specialNightDay(y,m,d){var w=dowFor(y,m,d);return w===5||w===6||w===0||
 function allowNightChain(y1,m1,d1,y2,m2,d2){return specialNightDay(y1,m1,d1)&&specialNightDay(y2,m2,d2)}
 function prevMonthNight(pid){var p=prevYM(),d=savedMonth(prevKey());if(!d)return false;var last=new Date(p.y,p.m+1,0).getDate();return hadNight(d.assignments||{},pid,last)}
 function customAllowed(pid,sid){for(var i=0;i<state.customRules.length;i++){var r=state.customRules[i];if(r.personId!==pid)continue;if(r.type==='only'&&r.slots.indexOf(sid)<0)return false;if(r.type==='block'&&r.slots.indexOf(sid)>=0)return false}return true}
-function eligible(pid,d,slot){var _pp=state.people.find(function(x){return x.id===pid});if(_pp&&_pp.active===false)return false;if(!active(slot,d))return false;if(hasRule(2)&&usedToday(pid,d))return false;if(hasRule(4)&&pid===state.people[state.people.length-1].id&&['e1','e2','e3'].indexOf(slot.id)<0)return false;if(!customAllowed(pid,slot.id))return false;if(hasRule(3)){if(d===1&&prevMonthNight(pid)){var p=prevYM(),last=new Date(p.y,p.m+1,0).getDate();if(!(slot.kind==='night'&&allowNightChain(p.y,p.m,last,gy(),cm(),1)))return false}if(d>1&&hadNight(state.assignments,pid,d-1)){if(!(slot.kind==='night'&&allowNightChain(gy(),cm(),d-1,gy(),cm(),d)))return false}}return true}
+function eligible(pid,d,slot){var _pp=state.people.find(function(x){return x.id===pid});if(_pp&&_pp.active===false)return false;if(!active(slot,d))return false;if(hasRule(2)&&usedToday(pid,d))return false;/* HARD LOCK: บุคลากร EXTRA-only มีสิทธิ์เฉพาะ EXTRA1-3 เท่านั้น ไม่ว่าถูกกำหนดจากกฎข้อ 4 หรือหน้าบุคลากร */if(isExtraOnlyPerson(pid)&&!isExtraSlot(slot))return false;if(!customAllowed(pid,slot.id))return false;if(hasRule(3)){if(d===1&&prevMonthNight(pid)){var p=prevYM(),last=new Date(p.y,p.m+1,0).getDate();if(!(slot.kind==='night'&&allowNightChain(p.y,p.m,last,gy(),cm(),1)))return false}if(d>1&&hadNight(state.assignments,pid,d-1)){if(!(slot.kind==='night'&&allowNightChain(gy(),cm(),d-1,gy(),cm(),d)))return false}}return true}
 function initCounts(){var c={total:{},slot:{},group:{},groupWeekday:{},groupOff:{}};state.people.forEach(function(p){c.total[p.id]=0});SLOTS.forEach(function(s){c.slot[s.id]={};state.people.forEach(function(p){c.slot[s.id][p.id]=0})});Object.keys(GROUPS).forEach(function(g){c.group[g]={};c.groupWeekday[g]={};c.groupOff[g]={};state.people.forEach(function(p){c.group[g][p.id]=0;c.groupWeekday[g][p.id]=0;c.groupOff[g][p.id]=0})});return c}
 function addCounts(c,a,y,m){Object.keys(a||{}).forEach(function(k){var pid=a[k];if(c.total[pid]===undefined)return;var p=k.split('|'),d=parseInt(p[0],10),sid=p[1],g=SLOT_GROUP[sid];c.total[pid]++;c.slot[sid][pid]++;c.group[g][pid]++;var w=dowFor(y,m,d),off=(w===0||w===6||!!state.holidays[dateKey(y,m,d)]);if(off)c.groupOff[g][pid]++;else c.groupWeekday[g][pid]++})}
 function previousCounts(){var c=initCounts(),d=savedMonth(prevKey());if(d){var p=prevYM();addCounts(c,d.assignments||{},p.y,p.m)}return c} function currentCounts(){var c=initCounts();addCounts(c,state.assignments,gy(),cm());return c}
@@ -10648,13 +10653,15 @@ function choose(candidates,slot,current,previous,d,cursor){
     var key;
 
     if(hasRule(21)){
+      /* เดือนปัจจุบันยังเป็นตัวหลัก แต่ใช้เดือนก่อนเป็น baseline/ตัวตัดสินเมื่อยอดปัจจุบันใกล้กัน
+         เพื่อให้การหมุนเวรต่อเนื่องข้ามเดือน โดยไม่เอายอดเดือนก่อนมารวมเป็นค่าเฉลี่ยของเดือนใหม่ */
       key=[
         currentGroup,
         repeatScore,
         currentSlot,
-        currentTotal,
-        previousSlot,
         previousGroup,
+        previousSlot,
+        currentTotal,
         previousTotal,
         classLoad,
         heavyPenalty(pid,d,slot),
@@ -10742,14 +10749,8 @@ function isExtraOnlyPerson(pid){
 
 function basePersonCanSlot(pid,slot){
   var _pp=state.people.find(function(x){return x.id===pid});if(_pp&&_pp.active===false)return false;
-  if(
-    hasRule(4)&&
-    state.people.length&&
-    pid===state.people[state.people.length-1].id&&
-    !isExtraSlot(slot)
-  ){
-    return false;
-  }
+  /* HARD LOCK เดียวกับ eligible(): EXTRA-only ห้ามหลุดไปอยู่กลุ่มเวรอื่นระหว่าง rebalance */
+  if(isExtraOnlyPerson(pid)&&!isExtraSlot(slot))return false;
 
   if(!customAllowed(pid,slot.id))return false;
   return true;
@@ -11184,6 +11185,9 @@ async function runSchedule(){
   if(!requireRosterEdit('รันตารางเวร'))return;
   try{
     if(cloud.connected)await ensureCloudMonths([prevKey(),currentKey()]);
+    /* กันยายน 2569 เป็น baseline ที่ผู้ใช้จัดเอง: ก่อนรัน ต.ค. ให้รับประกันว่าข้อมูลอ้างอิงนี้อยู่ใน local storage
+       เดือนถัดจากนั้นจะอ้างอิงเดือนก่อนหน้าที่บันทึกไว้ตามปกติ */
+    if(prevKey()==='2026-09')ensureSeptember2569RosterLocal(savedMonth('2026-09'));
     state.assignments={};
     var previous=previousCounts(),current=initCounts(),cursor={};
     Object.keys(GROUPS).forEach(function(g){cursor[g]=initialCursor(g)});
@@ -11266,7 +11270,8 @@ function buildHeader(){return '<caption>ตารางเวรผู้ช่�
 '<th class="grp-sdmc78">16.00-24.00</th><th class="grp-sdmc78">16.00-24.00</th>'+
 '</tr></thead>'}
 function optionHtml(selected){var h='<option value=""></option>';state.people.forEach(function(p,i){h+='<option value="'+p.id+'"'+(selected===p.id?' selected':'')+'>'+(i+1)+'. '+esc(p.name)+'</option>'});return h}
-function renderSheet(){if(!workflow)workflow=defaultWorkflow();var editable=canRosterEdit();var h=buildHeader()+'<tbody>';for(var d=1;d<=dim();d++){var w=dow(d);var cls=isHoliday(d)?'holiday':(w===6?'saturday':(w===0?'sunday':''));h+='<tr class="'+cls+'"><td class="date"><b>'+DAYS[dow(d)]+d+'</b>'+(isHoliday(d)?'<br><small>นักขัตฯ</small>':'')+'</td>';SLOTS.forEach(function(s){if(!active(s,d)){h+='<td class="inactive"></td>';return}var v=state.assignments[akey(d,s.id)]||'';h+='<td data-d="'+d+'" data-s="'+s.id+'"><select '+(editable?'':'disabled')+' data-d="'+d+'" data-s="'+s.id+'">'+optionHtml(v)+'</select></td>'});h+='</tr>'}h+='</tbody>';el('sheet').innerHTML=h;el('sheet').classList.toggle('is-readonly',!editable);el('sheet').querySelectorAll('select').forEach(function(s){s.onchange=function(){if(!requireRosterEdit('แก้ไขตาราง')){renderSheet();return}var d=parseInt(this.dataset.d,10),sid=this.dataset.s;if(this.value)state.assignments[akey(d,sid)]=this.value;else delete state.assignments[akey(d,sid)];if(!workflowEditLogged){auditWorkflow('เริ่มแก้ไขตารางเวรด้วยตนเอง');workflowEditLogged=true}validate(false);renderSummary();renderUnitWorkflow()}});validate(false);renderSummary();renderHomePreview();applyUnitPermissions();}
+function rosterCellLabel(pid){if(!pid)return '';for(var i=0;i<state.people.length;i++){if(state.people[i].id===pid)return (i+1)+'. '+state.people[i].name}return ''}
+function renderSheet(){if(!workflow)workflow=defaultWorkflow();var editable=canRosterEdit();var h=buildHeader()+'<tbody>';for(var d=1;d<=dim();d++){var w=dow(d);var cls=isHoliday(d)?'holiday':(w===6?'saturday':(w===0?'sunday':''));h+='<tr class="'+cls+'"><td class="date"><b>'+DAYS[dow(d)]+d+'</b>'+(isHoliday(d)?'<br><small>นักขัตฯ</small>':'')+'</td>';SLOTS.forEach(function(s){if(!active(s,d)){h+='<td class="inactive"></td>';return}var v=state.assignments[akey(d,s.id)]||'';h+='<td data-d="'+d+'" data-s="'+s.id+'"><span class="phone-sheet-value">'+esc(rosterCellLabel(v))+'</span><select '+(editable?'':'disabled')+' data-d="'+d+'" data-s="'+s.id+'">'+optionHtml(v)+'</select></td>'});h+='</tr>'}h+='</tbody>';el('sheet').innerHTML=h;el('sheet').classList.toggle('is-readonly',!editable);el('sheet').querySelectorAll('select').forEach(function(s){s.onchange=function(){if(!requireRosterEdit('แก้ไขตาราง')){renderSheet();return}var d=parseInt(this.dataset.d,10),sid=this.dataset.s;if(this.value)state.assignments[akey(d,sid)]=this.value;else delete state.assignments[akey(d,sid)];var label=this.parentNode.querySelector('.phone-sheet-value');if(label)label.textContent=rosterCellLabel(this.value);if(!workflowEditLogged){auditWorkflow('เริ่มแก้ไขตารางเวรด้วยตนเอง');workflowEditLogged=true}validate(false);renderSummary();renderUnitWorkflow()}});validate(false);renderSummary();renderHomePreview();applyUnitPermissions();}
 function mark(d,sid){var td=document.querySelector('td[data-d="'+d+'"][data-s="'+sid+'"]');if(td)td.classList.add('conflict')}
 var lastConflictDetails=[];
 
