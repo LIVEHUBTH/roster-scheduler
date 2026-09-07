@@ -8609,6 +8609,46 @@ html.phone-device body.s37-settings-open .header-user-status{
 }
 </style>
 
+
+<style id="people-v3925-duty-label-mobile-fix">
+/* V39.25 — keep checkbox and duty name together on mobile; undo global input sizing. */
+#personModalV30 #personDutyAccessV3921 > div > label{
+  display:flex!important;
+  flex-direction:row!important;
+  justify-content:flex-start!important;
+  align-items:center!important;
+  gap:10px!important;
+  min-width:0!important;
+  width:100%!important;
+  max-width:100%!important;
+  text-align:left!important;
+  white-space:normal!important;
+  overflow:visible!important;
+  line-height:1.35!important;
+}
+#personModalV30 #personDutyAccessV3921 input[type="checkbox"]{
+  flex:0 0 24px!important;
+  width:24px!important;
+  min-width:24px!important;
+  max-width:24px!important;
+  height:24px!important;
+  min-height:24px!important;
+  margin:0!important;
+  padding:0!important;
+}
+@media (max-width:700px){
+  html body #personModalV30 #personDutyAccessV3921 > div{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:12px!important;
+  }
+  html body #personModalV30 #personDutyAccessV3921 > div > label{
+    font-size:15px!important;
+    color:#4b5568!important;
+  }
+}
+</style>
+
 </head>
 <body>
 
@@ -10047,7 +10087,7 @@ var DEFAULT_RULES=[
 {id:'r18',text:'ต้องหมุนเวียนตำแหน่งภายในแต่ละประเภทเวร และไม่ให้บุคคลเดิมอยู่ในเวรหรือตำแหน่งเดิมซ้ำ ๆ รวมถึงหลีกเลี่ยงชื่อเดียวกันติดต่อกันหลายวัน'},
 {id:'r19',text:'การจัดตารางเดือนใหม่ต้องอ้างอิงตารางเวรของเดือนก่อนหน้า โดยนำข้อมูลการหมุนคิว จำนวนเวรสะสม ประเภทเวร และประวัติการขึ้นเวรมาประกอบการจัดเดือนใหม่'},
 {id:'r20',text:'ต้องตรวจสอบรอยต่อระหว่างปลายเดือนก่อนหน้ากับต้นเดือนใหม่ โดยใช้กฎทั้งหมดเหมือนเป็นตารางต่อเนื่องกัน'},
-{id:'r21',text:'การกระจายเวรของเดือนปัจจุบันให้คิดเป็น 7 กลุ่มประเภทเวร ได้แก่ เวร1–2, OT1–2, SDMC เช้า1–4, SDMC บ่าย–ดึก1–4, SDMC เช้า–บ่าย5–6, SDMC บ่าย7–8 และ EXTRA1–3 โดยในแต่ละกลุ่มให้ตรวจเฉพาะบุคลากรที่กำลังใช้งานและมีสิทธิ์ขึ้นเวรกลุ่มนั้น จำนวนเวรของผู้ที่ได้มากที่สุดกับผู้ที่ได้น้อยที่สุดต้องต่างกันไม่เกิน 1 เวร (Max − Min ≤ 1) ภายในกลุ่มเดียวกันต้องหมุนตำแหน่งย่อยและหลีกเลี่ยงบุคคลเดิมลงช่องเดิมซ้ำ ๆ หลายวัน หากยังต่างกันเกิน 1 เวร ให้ระบบปรับสมดุลอัตโนมัติโดยห้ามทำให้ผิดกฎข้อ 1–20 บุคลากรที่พักเวรหรือไม่มีสิทธิ์ในกลุ่มนั้นไม่นำมาร่วมตรวจ และบุคลากร EXTRA-only ให้นำมาตรวจเฉพาะกลุ่ม EXTRA1–3'}
+{id:'r21',text:'การกระจายเวรของเดือนปัจจุบันให้คิดเป็น 7 กลุ่มประเภทเวร ได้แก่ เวร1–2, OT1–2, SDMC เช้า1–4, SDMC บ่าย–ดึก1–4, SDMC เช้า–บ่าย5–6, SDMC บ่าย7–8 และ EXTRA1–3 โดยระบบต้องคำนวณค่าเฉลี่ยเป้าหมายของแต่ละกลุ่มจากจำนวนเวรที่ต้องจัดในเดือนนั้นหารด้วยจำนวนบุคลากรที่กำลังใช้งานและมีสิทธิ์ขึ้นเวรกลุ่มนั้น แล้วใช้ค่าเฉลี่ยดังกล่าวช่วยเลือกผู้ที่ยังมีเวรกลุ่มนั้นต่ำกว่าเป้าหมายก่อน ระหว่างจัดต้องหมุนตำแหน่งย่อยและหลีกเลี่ยงบุคคลเดิมลงช่องเดิมซ้ำ ๆ หลายวัน เกณฑ์ผ่านสุดท้ายของแต่ละกลุ่มคือจำนวนเวรของผู้ที่ได้มากที่สุดกับผู้ที่ได้น้อยที่สุดต้องต่างกันไม่เกิน 1 เวร (Max − Min ≤ 1) หากยังต่างกันเกิน 1 เวร ให้ระบบปรับสมดุลอัตโนมัติโดยห้ามทำให้ผิดกฎข้อ 1–20 บุคลากรที่พักเวรหรือไม่มีสิทธิ์ในกลุ่มนั้นไม่นำมาคิดค่าเฉลี่ยและไม่นำมาร่วมตรวจ และบุคลากร EXTRA-only ให้นำมาคิดและตรวจเฉพาะกลุ่ม EXTRA1–3'}
 ];
 var state={people:[],assignments:{},holidays:{},rules:[],customRules:[],pdfNote:'',rotation:{},unitInfo:{}};
 var peopleV30Page=1,peopleV30PageSize=10,peopleV30SortDept=false;
@@ -10559,7 +10599,7 @@ function ensureSeptember2569RosterLocal(existing){
   if(!Array.isArray(state.people)||state.people.length<28)return existing||null;
 
   var data=Object.assign({},existing||{}, {
-    version:'39.24-rule21-max-min-one-mobile-popup-scroll',
+    version:'39.25-average-guided-max-min-one-duty-label-mobile-fix',
     key:targetKey,
     year:2026,
     month:8,
@@ -10821,12 +10861,18 @@ function choose(candidates,slot,current,previous,d,cursor){
     var repeatScore=recentSameSlotScore(pid,d,slot.id);
     var classLoad=off?((current.groupOff[g][pid]||0)+(previous.groupOff[g][pid]||0)):((current.groupWeekday[g][pid]||0)+(previous.groupWeekday[g][pid]||0));
     var key;
+    var targetAverage=hasRule(21)?groupTargetAverage(g):0;
+    /* ค่ายิ่งติดลบมาก = ยังขาดจากค่าเฉลี่ยเป้าหมายมากกว่า จึงควรได้คิวก่อน */
+    var targetDeficit=hasRule(21)?Math.max(0,targetAverage-currentGroup):0;
+    var projectedTargetDistance=hasRule(21)?Math.abs((currentGroup+1)-targetAverage):0;
 
     if(hasRule(21)){
       /* เดือนปัจจุบันยังเป็นตัวหลัก แต่ใช้เดือนก่อนเป็น baseline/ตัวตัดสินเมื่อยอดปัจจุบันใกล้กัน
          เพื่อให้การหมุนเวรต่อเนื่องข้ามเดือน โดยไม่เอายอดเดือนก่อนมารวมเป็นค่าเฉลี่ยของเดือนใหม่ */
       key=[
+        -targetDeficit,
         currentGroup,
+        projectedTargetDistance,
         repeatScore,
         currentSlot,
         previousGroup,
@@ -10947,6 +10993,23 @@ function averagePeopleForGroup(group){
   return fairnessPeopleForGroup(group);
 }
 
+/* V39.25: ค่าเฉลี่ยเป้าหมายของกลุ่มจากจำนวนช่องเวรที่ต้องจัดจริงในเดือนนี้
+   หารด้วยจำนวนบุคลากรที่ active และมีสิทธิ์ในกลุ่มนั้น */
+function plannedAssignmentsForGroup(group){
+  var total=0,slotIds=GROUPS[group]||[];
+  for(var d=1;d<=dim();d++){
+    for(var i=0;i<slotIds.length;i++){
+      var slot=slotById(slotIds[i]);
+      if(slot&&active(slot,d))total++;
+    }
+  }
+  return total;
+}
+function groupTargetAverage(group){
+  var ids=averagePeopleForGroup(group);
+  return ids.length?plannedAssignmentsForGroup(group)/ids.length:0;
+}
+
 function extraOnlyPeople(){
   return state.people.filter(function(p){
     return isExtraOnlyPerson(p.id);
@@ -11023,7 +11086,9 @@ function groupAverageInfo(group){
     averageIds:averageIds,
     counts:counts,
     total:total,
-    avg:averageIds.length?total/averageIds.length:0
+    avg:averageIds.length?total/averageIds.length:0,
+    targetAvg:groupTargetAverage(group),
+    plannedTotal:plannedAssignmentsForGroup(group)
   };
 }
 
@@ -11215,7 +11280,7 @@ function rebalanceTotal(){
 }
 
 /* EXTRA-only ถูกปรับสมดุลใน rebalanceGroups() ของกลุ่ม EXTRA
-   ด้วยเกณฑ์ค่ากลาง ±1 เดียวกับผู้มีสิทธิ์ EXTRA คนอื่น */
+   ด้วยเกณฑ์ Max − Min ≤ 1 เดียวกับผู้มีสิทธิ์ EXTRA คนอื่น */
 function rebalanceExtraOnly(){
   return 0;
 }
@@ -11272,8 +11337,7 @@ function rebalanceRule21(){
   var moved=0;
 
   for(var round=0;round<8;round++){
-    moved+=rebalanceGroups();
-    /* กฎ 21 ใหม่ตรวจเฉพาะ 7 กลุ่ม: Max − Min ≤ 1 */
+    /* ปรับสมดุล 7 กลุ่มตาม Max − Min ≤ 1 หลังจากตัวรันใช้ค่าเฉลี่ยเป้าหมายช่วยเลือกคนแล้ว */
     moved+=rebalanceGroups();
 
     var check=rule21Report();
@@ -11749,9 +11813,9 @@ function renderSummary(){
        '</div>';
 
     h+='<div class="muted" style="margin:0 0 8px 0">'+
-       '<b>ข้อมูล 7 กลุ่ม (ค่าเฉลี่ยใช้ดูประกอบ; เกณฑ์ผ่านคือ Max−Min ≤ 1):</b> '+
+       '<b>ข้อมูล 7 กลุ่ม (ค่าเฉลี่ยเป้าหมายใช้ช่วยเลือกคนตอนรัน; เกณฑ์ผ่านสุดท้ายคือ Max−Min ≤ 1):</b> '+
        groupAverages.map(function(info){
-         return esc(info.label)+' = '+info.avg.toFixed(2);
+         return esc(info.label)+' = '+info.avg.toFixed(2)+' / เป้าหมาย '+info.targetAvg.toFixed(2);
        }).join(' • ')+
        ' • <b>เวรรวม = '+totalInfo.avg.toFixed(2)+'</b>'+
        '</div>';
