@@ -10549,7 +10549,7 @@ function auditWorkflow(action){
   workflow.audit.unshift({at:new Date().toISOString(),user:unitUser.name,role:unitUser.role,action:action});
   if(workflow.audit.length>100)workflow.audit=workflow.audit.slice(0,100);
 }
-function monthPayload(){return {version:'24.5-home-ipad-fit',key:currentKey(),year:gy(),month:cm(),savedAt:new Date().toISOString(),assignments:state.assignments,rotation:state.rotation,peopleSnapshot:state.people,workflow:normalizeWorkflow(workflow)}}
+function monthPayload(){return {version:'39.26.5-full-autosync-pdf-all-days',key:currentKey(),year:gy(),month:cm(),savedAt:new Date().toISOString(),assignments:state.assignments,rotation:state.rotation,peopleSnapshot:state.people,workflow:normalizeWorkflow(workflow)}}
 function saveMonth(silent){
   if(!workflow)workflow=defaultWorkflow();
   var d=monthPayload();
@@ -11930,7 +11930,7 @@ function prepareSchedulePdfNode(){
   table.querySelectorAll('.date').forEach(function(c){c.style.width='48px';c.style.minWidth='48px';c.style.maxWidth='48px';c.style.fontWeight='800';c.style.fontSize='13.5px';c.style.padding='1px'})
   table.querySelectorAll('select').forEach(function(select){var span=document.createElement('span');span.textContent=select.options[select.selectedIndex]?select.options[select.selectedIndex].text:'';span.style.display='block';span.style.textAlign='center';span.style.fontSize='13.5px';span.style.fontWeight='400';span.style.whiteSpace='nowrap';span.style.overflow='hidden';select.parentNode.replaceChild(span,select)})
   table.querySelectorAll('tbody tr').forEach(function(row){var shade=row.classList.contains('saturday')||row.classList.contains('sunday')||row.classList.contains('holiday');row.querySelectorAll('td').forEach(function(td){td.style.background=shade?'#e6e6e6':'#fff';td.style.color='#111'})});
-  var wrap=document.createElement('div');wrap.style.position='fixed';wrap.style.left='-12000px';wrap.style.top='0';wrap.style.width='1600px';wrap.style.height='1131px';wrap.style.overflow='hidden';wrap.style.boxSizing='border-box';wrap.style.background='#fff';wrap.style.padding='0';wrap.style.margin='0';wrap.appendChild(table);
+  var wrap=document.createElement('div');wrap.style.position='fixed';wrap.style.left='-12000px';wrap.style.top='0';wrap.style.width='1600px';wrap.style.height='auto';wrap.style.minHeight='0';wrap.style.overflow='visible';wrap.style.boxSizing='border-box';wrap.style.background='#fff';wrap.style.padding='0';wrap.style.margin='0';wrap.appendChild(table);
   var note=(el('pdfNote').value||'').trim();
   var noteBox=document.createElement('div');noteBox.style.marginTop='3px';noteBox.style.fontFamily='-apple-system,BlinkMacSystemFont,"Noto Sans Thai",Tahoma,Arial,sans-serif';noteBox.style.fontSize='13px';noteBox.style.lineHeight='1.15';noteBox.style.color='#111';noteBox.style.textAlign='left';noteBox.style.whiteSpace='pre-wrap';
   noteBox.innerHTML='<b>หมายเหตุ:</b> '+esc(note||'-');wrap.appendChild(noteBox);
@@ -11941,7 +11941,11 @@ function autoFillPdfHeight(wrap,table){
   var caption=table.querySelector('caption');var head=table.querySelector('thead');
   var note=wrap.lastElementChild===table?null:wrap.lastElementChild;
   var used=(caption?caption.getBoundingClientRect().height:0)+(head?head.getBoundingClientRect().height:0)+(note?note.getBoundingClientRect().height+4:0);
-  var target=Math.max(22,(1127-used)/rows.length);
+  var basePageHeight=1131;
+  var naturalRowsHeight=Array.from(rows).reduce(function(sum,row){return sum+row.getBoundingClientRect().height},0);
+  var target=Math.max(22,(basePageHeight-used)/rows.length);
+  /* Never shrink/crop rows; if content naturally needs more height, html2canvas captures all of it and PDF scales it to one A4 landscape page. */
+  if(naturalRowsHeight/rows.length>target)target=naturalRowsHeight/rows.length;
   rows.forEach(function(row){row.querySelectorAll('td').forEach(function(td){td.style.height=target+'px';td.style.verticalAlign='middle'})});
 }
 
@@ -11975,10 +11979,10 @@ function saveSchedulePDF(){
       useCORS:true,
       backgroundColor:'#fff',
       logging:false,
-      width:1600,
-      height:1131,
-      windowWidth:1600,
-      windowHeight:1131,
+      width:Math.ceil(wrap.scrollWidth),
+      height:Math.ceil(wrap.scrollHeight),
+      windowWidth:Math.ceil(wrap.scrollWidth),
+      windowHeight:Math.ceil(wrap.scrollHeight),
       scrollX:0,
       scrollY:0
     }).then(function(canvas){
@@ -12068,7 +12072,7 @@ async function connectCloud(show){
     return false
   }
 }
-var cloudLastLocalEdit=0,cloudPollTimer=null,cloudPullBusy=false;
+var cloudLastLocalEdit=0,cloudPollTimer=null,cloudPullBusy=false,cloudAllMonthsLastPull=0;
 var cloudConfigPending=null,cloudConfigSaving=false,cloudMonthPending={},cloudMonthSaving={};
 function markCloudLocalEdit(){cloudLastLocalEdit=Date.now()}
 function cloudHasPendingWrites(){return !!cloudConfigPending||cloudConfigSaving||Object.keys(cloudMonthPending).length>0||Object.keys(cloudMonthSaving).some(function(k){return cloudMonthSaving[k]})}
@@ -12121,6 +12125,19 @@ function flushAllCloudWrites(){
 }
 async function fetchCloudMonth(key){if(!cloud.connected)return null;var r=await cloudRequest('/api/month/'+encodeURIComponent(key),{method:'GET'});if(r&&r.found&&r.data){localStorage.setItem(storageKey(key),JSON.stringify(r.data));return r.data}return null}
 async function ensureCloudMonths(keys){for(var i=0;i<keys.length;i++)try{await fetchCloudMonth(keys[i])}catch(e){}}
+async function syncAllCloudMonths(force){
+  if(!auth.token)return;
+  if(!force&&Date.now()-cloudAllMonthsLastPull<10000)return;
+  if(!(await ensureCloudConnected()))return;
+  var list=await cloudRequest('/api/months',{method:'GET'});
+  var months=(list&&list.months)||[];
+  for(var i=0;i<months.length;i++){
+    var key=months[i]&&months[i].key;
+    if(!key||cloudMonthPending[key]||cloudMonthSaving[key])continue;
+    try{await fetchCloudMonth(key)}catch(e){console.warn('month full autosync',key,e)}
+  }
+  cloudAllMonthsLastPull=Date.now();
+}
 async function uploadCloud(){if(!cloud.connected&&!(await connectCloud(false)))return;await cloudRequest('/api/config',{method:'PUT',body:JSON.stringify(configPayload())});for(var i=0;i<localStorage.length;i++){var key=localStorage.key(i);if(key&&key.indexOf('roster_month_v7_')===0){var d=parse(localStorage.getItem(key),null);if(d)await cloudRequest('/api/month/'+encodeURIComponent(key.replace('roster_month_v7_','')),{method:'PUT',body:JSON.stringify(d)})}}setStatus('อัปโหลดข้อมูลออนไลน์แล้ว',true)}
 async function downloadCloud(){if(!cloud.connected&&!(await connectCloud(false)))return;var c=await cloudRequest('/api/config',{method:'GET'});if(c&&c.found&&c.data){localStorage.setItem('roster_config_v8',JSON.stringify(c.data));loadConfig();buildNames();renderHolidays();renderRules();renderCustomRules();renderUnitInfo();renderPeopleV24();loadV24Settings()}var list=await cloudRequest('/api/months',{method:'GET'}),months=list.months||[];for(var i=0;i<months.length;i++)await fetchCloudMonth(months[i].key);loadMonth(true);setStatus('โหลดข้อมูลออนไลน์แล้ว',true)}
 function cloudComparableConfig(x){if(!x)return null;var y={};Object.keys(x).forEach(function(k){if(k!=='updatedAt')y[k]=x[k]});return y}
@@ -12149,6 +12166,9 @@ async function pullCloudLatest(force){
         renderSheet();renderHistory();renderUnitWorkflow();renderSummaryV24();renderHomeV24();
       }
     }
+    /* Full-system autosync: refresh every saved cloud month too, so History/previous-month data on iPad cannot stay stale. */
+    await syncAllCloudMonths(!!force);
+    renderHistory();
   }catch(e){console.warn('cloud pull',e)}finally{cloudPullBusy=false}
 }
 function startCloudAutoSync(){
@@ -12160,7 +12180,10 @@ async function initCloud(){
   if(await connectCloud(false)){
     var c=await cloudRequest('/api/config',{method:'GET'}).catch(function(){return null});
     if(c&&c.found&&c.data){localStorage.setItem('roster_config_v8',JSON.stringify(c.data));loadConfig();loadV24Settings()}
-    await ensureCloudMonths([prevKey(),currentKey()]);loadMonth(true);startCloudAutoSync();
+    /* On every device/login, Cloud is authoritative. Pull ALL saved months before rendering current data. */
+    await syncAllCloudMonths(true);
+    await ensureCloudMonths([prevKey(),currentKey()]);
+    loadMonth(true);renderHistory();startCloudAutoSync();
   }
 }
 document.addEventListener('visibilitychange',function(){if(!document.hidden){flushAllCloudWrites();pullCloudLatest(true)}});
