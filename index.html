@@ -10321,12 +10321,12 @@ function saveMonth(silent){
    นำเข้าครั้งเดียวต่อข้อมูลเดือน และไม่แตะเดือนหรือระบบอื่น */
 async function importSeptember2569Roster(){
   var targetKey='2026-09';
-  var importId='IMG_5920-SEP-2569-V1';
+  var importId='IMG_5920-SEP-2569-V2';
   if(cloud.connected){
     try{await fetchCloudMonth(targetKey)}catch(ignore){}
   }
   var existing=savedMonth(targetKey);
-  if(existing&&existing.importSource===importId)return false;
+  var alreadyImported=!!(existing&&existing.importSource===importId&&existing.assignments);
   if(!Array.isArray(state.people)||state.people.length<28){
     setStatus('ยังนำเข้าตารางเดือนกันยายน 2569 ไม่ได้: ต้องมีรายชื่อบุคลากรอย่างน้อย 28 คน',false);
     return false;
@@ -10375,20 +10375,28 @@ async function importSeptember2569Roster(){
     });
   });
 
-  var data=Object.assign({},existing||{}, {
-    version:'39.13-september-2569-import',
-    key:targetKey,
-    year:2026,
-    month:8,
-    savedAt:new Date().toISOString(),
-    assignments:assignments,
-    rotation:(existing&&existing.rotation)||{},
-    peopleSnapshot:state.people,
-    workflow:normalizeWorkflow(existing&&existing.workflow),
-    importSource:importId
-  });
-  localStorage.setItem(storageKey(targetKey),JSON.stringify(data));
-  if(cloud.connected)await cloudSaveMonth(data);
+  var data;
+  if(alreadyImported){
+    /* ต้องโหลดข้อมูลที่นำเข้าแล้วกลับเข้าตารางด้วย ห้าม return ก่อนจุดนี้ */
+    data=existing;
+    assignments=data.assignments||{};
+  }else{
+    /* V2 เขียนทับเฉพาะข้อมูลนำเข้ารุ่นเดิมที่ไม่แสดงผล แล้วคงการแก้ไขหลัง V2 ไว้ */
+    data=Object.assign({},existing||{}, {
+      version:'39.14-september-2569-load-hotfix',
+      key:targetKey,
+      year:2026,
+      month:8,
+      savedAt:new Date().toISOString(),
+      assignments:assignments,
+      rotation:(existing&&existing.rotation)||{},
+      peopleSnapshot:state.people,
+      workflow:normalizeWorkflow(existing&&existing.workflow),
+      importSource:importId
+    });
+    localStorage.setItem(storageKey(targetKey),JSON.stringify(data));
+    if(cloud.connected)await cloudSaveMonth(data);
+  }
 
   if(currentKey()===targetKey){
     state.assignments=assignments;
@@ -10400,7 +10408,7 @@ async function importSeptember2569Roster(){
   renderHistory();
   renderSummaryV24();
   renderHomeV24();
-  return true;
+  return !alreadyImported;
 }
 function unitSaveMonth(){
   if(!requireRosterEdit('บันทึกการแก้ไขตาราง'))return;
@@ -12901,7 +12909,12 @@ if(el('unitLogoFile'))el('unitLogoFile').onchange=function(){
   var f=this.files&&this.files[0];if(f)handleUnitLogoFile(f);this.value='';
 };
 
-el('month').onchange=async function(){if(cloud.connected)await ensureCloudMonths([prevKey(),currentKey()]);loadMonth(true)};el('year').onchange=el('month').onchange;el('pdfNote').onchange=saveConfig;
+el('month').onchange=async function(){
+  if(cloud.connected)await ensureCloudMonths([prevKey(),currentKey()]);
+  /* Cloud อาจส่งข้อมูลกันยายนรุ่นเก่ากลับมา จึงต้องซิงก์ชุด V2 ก่อนเปิดตาราง */
+  if(currentKey()==='2026-09')await importSeptember2569Roster();
+  loadMonth(true);
+};el('year').onchange=el('month').onchange;el('pdfNote').onchange=saveConfig;
 }
 async function init(){
   function safeStep(label,fn){
