@@ -12019,215 +12019,7 @@ function saveSummaryPDF(){
     });
   });
 }
-function printSummary(){var table=el('summaryTable');if(!table)return;var win=window.open('','_blank');if(!win)return;var title='ตารางหลักการเฉลี่ยเวร เดือน'+MONTHS[cm()]+' พ.ศ. '+py();win.document.write('<!DOCTYPE html><html lang="th"><head><meta charset="utf-8"><title>'+title+'</title><style>@page{size:A4 landscape;margin:15mm 10mm 13mm 10mm}body{font-family:-apple-system,BlinkMacSystemFont,"Noto Sans Thai",Tahoma,Arial,sans-serif;margin:0}h2{text-align:center;font-size:15px}table{border-collapse:collapse;width:100%;font-size:6px}th,td{border:1px solid #999;padding:1.5px;text-align:center;white-space:nowrap;color:#111!important}td{background:#fff!important}th{background:#e7e7ea!important}tfoot td{background:#ededed!important}</style></head><body><h2>'+title+'</h2>'+table.outerHTML+'<script>window.onload=function(){window.print()}<\/script>
-<script id="v3926-autosync-pdf-mobile-fix">
-(function(){
-  'use strict';
-  var syncTimer=null, pullBusy=false, lastLocalEdit=0, pollTimer=null;
-
-  function markLocal(){ lastLocalEdit=Date.now(); }
-  function stableJson(x){try{return JSON.stringify(x||null)}catch(e){return ''}}
-
-  /* Every configuration edit saves to localStorage immediately and Cloud automatically.
-     If Cloud is temporarily disconnected, reconnect once and retry instead of silently dropping the edit. */
-  window.scheduleCloudConfigSave=function(payload){
-    markLocal();
-    clearTimeout(syncTimer);
-    syncTimer=setTimeout(async function(){
-      try{
-        if(!cloud.connected){
-          var ok=await connectCloud(false);
-          if(!ok)return;
-        }
-        await cloudRequest('/api/config',{method:'PUT',body:JSON.stringify(payload)});
-      }catch(e){console.warn('V39.26 config autosave',e)}
-    },250);
-  };
-
-  var originalCloudSaveMonth=window.cloudSaveMonth;
-  window.cloudSaveMonth=async function(data){
-    markLocal();
-    try{
-      if(!cloud.connected){
-        var ok=await connectCloud(false);
-        if(!ok)return;
-      }
-      await cloudRequest('/api/month/'+encodeURIComponent(data.key),{method:'PUT',body:JSON.stringify(data)});
-    }catch(e){console.warn('V39.26 month autosave',e)}
-  };
-
-  var monthSaveTimer=null;
-  window.scheduleAutoSaveCurrentMonthV3926=function(){
-    markLocal();
-    clearTimeout(monthSaveTimer);
-    monthSaveTimer=setTimeout(function(){
-      try{saveMonth(true)}catch(e){console.warn('V39.26 roster autosave',e)}
-    },300);
-  };
-
-  /* Manual cell edits now save automatically; no separate Save press is required. */
-  var baseRenderSheet=window.renderSheet;
-  if(typeof baseRenderSheet==='function'){
-    window.renderSheet=function(){
-      var out=baseRenderSheet.apply(this,arguments);
-      try{
-        var root=el('sheet');
-        if(root)root.querySelectorAll('select[data-d][data-s]').forEach(function(sel){
-          if(sel.dataset.v3926Autosave==='1')return;
-          sel.dataset.v3926Autosave='1';
-          var old=sel.onchange;
-          sel.onchange=function(ev){
-            var r=old?old.call(this,ev):undefined;
-            scheduleAutoSaveCurrentMonthV3926();
-            return r;
-          };
-        });
-      }catch(e){console.warn('V39.26 bind autosave',e)}
-      return out;
-    };
-  }
-
-  function applyRemoteConfigV3926(remote){
-    if(!remote)return false;
-    var local=parse(localStorage.getItem('roster_config_v8'),null);
-    if(stableJson(local)===stableJson(remote))return false;
-    localStorage.setItem('roster_config_v8',JSON.stringify(remote));
-    loadConfig();
-    try{buildNames()}catch(e){}
-    try{renderHolidays()}catch(e){}
-    try{renderRules()}catch(e){}
-    try{renderCustomRules()}catch(e){}
-    try{renderUnitInfo()}catch(e){}
-    try{renderPeopleV24()}catch(e){}
-    try{renderSummary()}catch(e){}
-    try{renderHomeV24()}catch(e){}
-    return true;
-  }
-
-  async function pullCloudV3926(force){
-    if(pullBusy||!auth.token)return;
-    if(!force && Date.now()-lastLocalEdit<1600)return;
-    pullBusy=true;
-    try{
-      if(!cloud.connected){
-        var ok=await connectCloud(false);
-        if(!ok)return;
-      }
-      var c=await cloudRequest('/api/config',{method:'GET'});
-      if(c&&c.found&&c.data)applyRemoteConfigV3926(c.data);
-
-      var key=currentKey();
-      var remote=await cloudRequest('/api/month/'+encodeURIComponent(key),{method:'GET'});
-      if(remote&&remote.found&&remote.data){
-        var local=savedMonth(key);
-        if(stableJson(local)!==stableJson(remote.data)){
-          localStorage.setItem(storageKey(key),JSON.stringify(remote.data));
-          state.assignments=remote.data.assignments||{};
-          state.rotation=remote.data.rotation||{};
-          workflow=normalizeWorkflow(remote.data.workflow);
-          workflowEditLogged=false;
-          try{renderSheet()}catch(e){}
-          try{renderHistory()}catch(e){}
-          try{renderUnitWorkflow()}catch(e){}
-          try{renderSummaryV24()}catch(e){}
-          try{renderHomeV24()}catch(e){}
-        }
-      }
-    }catch(e){console.warn('V39.26 cloud pull',e)}finally{pullBusy=false}
-  }
-  window.pullCloudV3926=pullCloudV3926;
-
-  /* On login/open, Cloud is authoritative for current shared data. */
-  var baseInitCloud=window.initCloud;
-  window.initCloud=async function(){
-    loadCloudSettings();
-    if(!cloud.apiUrl||!auth.token)return;
-    if(await connectCloud(false)){
-      try{
-        var c=await cloudRequest('/api/config',{method:'GET'});
-        if(c&&c.found&&c.data)applyRemoteConfigV3926(c.data);
-      }catch(e){}
-      await ensureCloudMonths([prevKey(),currentKey()]);
-      loadMonth(true);
-    }
-  };
-
-  function startPolling(){
-    if(pollTimer)clearInterval(pollTimer);
-    pollTimer=setInterval(function(){pullCloudV3926(false)},10000);
-  }
-  if(document.readyState==='loading'){
-    document.addEventListener('DOMContentLoaded',startPolling,{once:true});
-  }else startPolling();
-  document.addEventListener('visibilitychange',function(){if(!document.hidden)pullCloudV3926(true)});
-  window.addEventListener('focus',function(){pullCloudV3926(true)});
-
-  /* Trim the white area Safari/html2canvas can append around an off-screen capture. */
-  function trimWhiteCanvasV3926(canvas){
-    try{
-      var ctx=canvas.getContext('2d',{willReadFrequently:true});
-      var w=canvas.width,h=canvas.height;
-      var data=ctx.getImageData(0,0,w,h).data;
-      var minX=w,minY=h,maxX=-1,maxY=-1;
-      var step=Math.max(1,Math.floor(Math.min(w,h)/1600));
-      for(var y=0;y<h;y+=step){
-        for(var x=0;x<w;x+=step){
-          var i=(y*w+x)*4;
-          if(data[i+3]>10 && (data[i]<247||data[i+1]<247||data[i+2]<247)){
-            if(x<minX)minX=x;if(x>maxX)maxX=x;if(y<minY)minY=y;if(y>maxY)maxY=y;
-          }
-        }
-      }
-      if(maxX<0||maxY<0)return canvas;
-      var pad=Math.max(12,Math.round(Math.min(w,h)*0.008));
-      minX=Math.max(0,minX-pad);minY=Math.max(0,minY-pad);
-      maxX=Math.min(w-1,maxX+pad);maxY=Math.min(h-1,maxY+pad);
-      var out=document.createElement('canvas');
-      out.width=maxX-minX+1;out.height=maxY-minY+1;
-      var o=out.getContext('2d');o.fillStyle='#fff';o.fillRect(0,0,out.width,out.height);
-      o.drawImage(canvas,minX,minY,out.width,out.height,0,0,out.width,out.height);
-      return out;
-    }catch(e){return canvas}
-  }
-
-  /* Use the same A4 landscape physical size on phone, iPad and desktop. */
-  window.saveCanvasAsPdf=function(canvas,filename){
-    var jsPDF=window.jspdf.jsPDF;
-    var clean=trimWhiteCanvasV3926(canvas);
-    var pdf=new jsPDF({orientation:'landscape',unit:'mm',format:'a4',compress:true,hotfixes:['px_scaling']});
-    var pw=pdf.internal.pageSize.getWidth(),ph=pdf.internal.pageSize.getHeight();
-    var left=8,right=8,top=8,bottom=8,maxW=pw-left-right,maxH=ph-top-bottom;
-    var ratio=Math.min(maxW/clean.width,maxH/clean.height);
-    var ww=clean.width*ratio,hh=clean.height*ratio;
-    var x=(pw-ww)/2,y=(ph-hh)/2;
-    pdf.addImage(clean.toDataURL('image/jpeg',0.96),'JPEG',x,y,ww,hh,undefined,'FAST');
-    pdf.save(filename);
-  };
-
-  /* More deterministic html2canvas sizing on iPhone Safari. */
-  var baseSaveSchedulePDF=window.saveSchedulePDF;
-  window.saveSchedulePDF=function(){
-    state.pdfNote=el('pdfNote').value;saveConfig();
-    var wrap=prepareSchedulePdfNode(), table=wrap.querySelector('table');
-    requestAnimationFrame(function(){
-      autoFillPdfHeight(wrap,table);
-      var width=Math.ceil(wrap.scrollWidth),height=Math.ceil(wrap.scrollHeight);
-      html2canvas(wrap,{scale:2,useCORS:true,backgroundColor:'#fff',logging:false,width:width,height:height,windowWidth:1700,windowHeight:Math.max(height,1000),scrollX:0,scrollY:0}).then(function(canvas){
-        saveCanvasAsPdf(canvas,'ตารางเวร_'+MONTHS[cm()]+'_'+py()+'.pdf');
-        if(wrap.parentNode)wrap.parentNode.removeChild(wrap);
-        setStatus('บันทึก PDF A4 แนวนอนเต็มหน้าเรียบร้อยแล้ว',true);
-      }).catch(function(err){try{if(wrap.parentNode)wrap.parentNode.removeChild(wrap)}catch(e){}setStatus('สร้าง PDF ไม่สำเร็จ: '+err.message,false)});
-    });
-  };
-
-  /* Existing click binding may already point to the old function object. Rebind after load. */
-  function rebindV3926(){
-    try{if(el('pdfBtn'))el('pdfBtn').onclick=window.saveSchedulePDF}catch(e){}
-  }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',rebindV3926,{once:true});else rebindV3926();
-})();
-</script>
-</body></html>');win.document.close()}
+function printSummary(){var table=el('summaryTable');if(!table)return;var win=window.open('','_blank');if(!win)return;var title='ตารางหลักการเฉลี่ยเวร เดือน'+MONTHS[cm()]+' พ.ศ. '+py();win.document.write('<!DOCTYPE html><html lang="th"><head><meta charset="utf-8"><title>'+title+'</title><style>@page{size:A4 landscape;margin:15mm 10mm 13mm 10mm}body{font-family:-apple-system,BlinkMacSystemFont,"Noto Sans Thai",Tahoma,Arial,sans-serif;margin:0}h2{text-align:center;font-size:15px}table{border-collapse:collapse;width:100%;font-size:6px}th,td{border:1px solid #999;padding:1.5px;text-align:center;white-space:nowrap;color:#111!important}td{background:#fff!important}th{background:#e7e7ea!important}tfoot td{background:#ededed!important}</style></head><body><h2>'+title+'</h2>'+table.outerHTML+'<script>window.onload=function(){window.print()}<\/script></body></html>');win.document.close()}
 function openSummaryPdf(){el('summaryPdfFile').click()}
 
 function normalizeUrl(v){return String(v||'').trim().replace(/\/+$/,'')}
@@ -15376,6 +15168,214 @@ html body #page-home [data-home-version]{
   }else{
     init();
   }
+})();
+</script>
+
+<script id="v3926-autosync-pdf-mobile-fix">
+(function(){
+  'use strict';
+  var syncTimer=null, pullBusy=false, lastLocalEdit=0, pollTimer=null;
+
+  function markLocal(){ lastLocalEdit=Date.now(); }
+  function stableJson(x){try{return JSON.stringify(x||null)}catch(e){return ''}}
+
+  /* Every configuration edit saves to localStorage immediately and Cloud automatically.
+     If Cloud is temporarily disconnected, reconnect once and retry instead of silently dropping the edit. */
+  window.scheduleCloudConfigSave=function(payload){
+    markLocal();
+    clearTimeout(syncTimer);
+    syncTimer=setTimeout(async function(){
+      try{
+        if(!cloud.connected){
+          var ok=await connectCloud(false);
+          if(!ok)return;
+        }
+        await cloudRequest('/api/config',{method:'PUT',body:JSON.stringify(payload)});
+      }catch(e){console.warn('V39.26 config autosave',e)}
+    },250);
+  };
+
+  var originalCloudSaveMonth=window.cloudSaveMonth;
+  window.cloudSaveMonth=async function(data){
+    markLocal();
+    try{
+      if(!cloud.connected){
+        var ok=await connectCloud(false);
+        if(!ok)return;
+      }
+      await cloudRequest('/api/month/'+encodeURIComponent(data.key),{method:'PUT',body:JSON.stringify(data)});
+    }catch(e){console.warn('V39.26 month autosave',e)}
+  };
+
+  var monthSaveTimer=null;
+  window.scheduleAutoSaveCurrentMonthV3926=function(){
+    markLocal();
+    clearTimeout(monthSaveTimer);
+    monthSaveTimer=setTimeout(function(){
+      try{saveMonth(true)}catch(e){console.warn('V39.26 roster autosave',e)}
+    },300);
+  };
+
+  /* Manual cell edits now save automatically; no separate Save press is required. */
+  var baseRenderSheet=window.renderSheet;
+  if(typeof baseRenderSheet==='function'){
+    window.renderSheet=function(){
+      var out=baseRenderSheet.apply(this,arguments);
+      try{
+        var root=el('sheet');
+        if(root)root.querySelectorAll('select[data-d][data-s]').forEach(function(sel){
+          if(sel.dataset.v3926Autosave==='1')return;
+          sel.dataset.v3926Autosave='1';
+          var old=sel.onchange;
+          sel.onchange=function(ev){
+            var r=old?old.call(this,ev):undefined;
+            scheduleAutoSaveCurrentMonthV3926();
+            return r;
+          };
+        });
+      }catch(e){console.warn('V39.26 bind autosave',e)}
+      return out;
+    };
+  }
+
+  function applyRemoteConfigV3926(remote){
+    if(!remote)return false;
+    var local=parse(localStorage.getItem('roster_config_v8'),null);
+    if(stableJson(local)===stableJson(remote))return false;
+    localStorage.setItem('roster_config_v8',JSON.stringify(remote));
+    loadConfig();
+    try{buildNames()}catch(e){}
+    try{renderHolidays()}catch(e){}
+    try{renderRules()}catch(e){}
+    try{renderCustomRules()}catch(e){}
+    try{renderUnitInfo()}catch(e){}
+    try{renderPeopleV24()}catch(e){}
+    try{renderSummary()}catch(e){}
+    try{renderHomeV24()}catch(e){}
+    return true;
+  }
+
+  async function pullCloudV3926(force){
+    if(pullBusy||!auth.token)return;
+    if(!force && Date.now()-lastLocalEdit<1600)return;
+    pullBusy=true;
+    try{
+      if(!cloud.connected){
+        var ok=await connectCloud(false);
+        if(!ok)return;
+      }
+      var c=await cloudRequest('/api/config',{method:'GET'});
+      if(c&&c.found&&c.data)applyRemoteConfigV3926(c.data);
+
+      var key=currentKey();
+      var remote=await cloudRequest('/api/month/'+encodeURIComponent(key),{method:'GET'});
+      if(remote&&remote.found&&remote.data){
+        var local=savedMonth(key);
+        if(stableJson(local)!==stableJson(remote.data)){
+          localStorage.setItem(storageKey(key),JSON.stringify(remote.data));
+          state.assignments=remote.data.assignments||{};
+          state.rotation=remote.data.rotation||{};
+          workflow=normalizeWorkflow(remote.data.workflow);
+          workflowEditLogged=false;
+          try{renderSheet()}catch(e){}
+          try{renderHistory()}catch(e){}
+          try{renderUnitWorkflow()}catch(e){}
+          try{renderSummaryV24()}catch(e){}
+          try{renderHomeV24()}catch(e){}
+        }
+      }
+    }catch(e){console.warn('V39.26 cloud pull',e)}finally{pullBusy=false}
+  }
+  window.pullCloudV3926=pullCloudV3926;
+
+  /* On login/open, Cloud is authoritative for current shared data. */
+  var baseInitCloud=window.initCloud;
+  window.initCloud=async function(){
+    loadCloudSettings();
+    if(!cloud.apiUrl||!auth.token)return;
+    if(await connectCloud(false)){
+      try{
+        var c=await cloudRequest('/api/config',{method:'GET'});
+        if(c&&c.found&&c.data)applyRemoteConfigV3926(c.data);
+      }catch(e){}
+      await ensureCloudMonths([prevKey(),currentKey()]);
+      loadMonth(true);
+    }
+  };
+
+  function startPolling(){
+    if(pollTimer)clearInterval(pollTimer);
+    pollTimer=setInterval(function(){pullCloudV3926(false)},10000);
+  }
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',startPolling,{once:true});
+  }else startPolling();
+  document.addEventListener('visibilitychange',function(){if(!document.hidden)pullCloudV3926(true)});
+  window.addEventListener('focus',function(){pullCloudV3926(true)});
+
+  /* Trim the white area Safari/html2canvas can append around an off-screen capture. */
+  function trimWhiteCanvasV3926(canvas){
+    try{
+      var ctx=canvas.getContext('2d',{willReadFrequently:true});
+      var w=canvas.width,h=canvas.height;
+      var data=ctx.getImageData(0,0,w,h).data;
+      var minX=w,minY=h,maxX=-1,maxY=-1;
+      var step=Math.max(1,Math.floor(Math.min(w,h)/1600));
+      for(var y=0;y<h;y+=step){
+        for(var x=0;x<w;x+=step){
+          var i=(y*w+x)*4;
+          if(data[i+3]>10 && (data[i]<247||data[i+1]<247||data[i+2]<247)){
+            if(x<minX)minX=x;if(x>maxX)maxX=x;if(y<minY)minY=y;if(y>maxY)maxY=y;
+          }
+        }
+      }
+      if(maxX<0||maxY<0)return canvas;
+      var pad=Math.max(12,Math.round(Math.min(w,h)*0.008));
+      minX=Math.max(0,minX-pad);minY=Math.max(0,minY-pad);
+      maxX=Math.min(w-1,maxX+pad);maxY=Math.min(h-1,maxY+pad);
+      var out=document.createElement('canvas');
+      out.width=maxX-minX+1;out.height=maxY-minY+1;
+      var o=out.getContext('2d');o.fillStyle='#fff';o.fillRect(0,0,out.width,out.height);
+      o.drawImage(canvas,minX,minY,out.width,out.height,0,0,out.width,out.height);
+      return out;
+    }catch(e){return canvas}
+  }
+
+  /* Use the same A4 landscape physical size on phone, iPad and desktop. */
+  window.saveCanvasAsPdf=function(canvas,filename){
+    var jsPDF=window.jspdf.jsPDF;
+    var clean=trimWhiteCanvasV3926(canvas);
+    var pdf=new jsPDF({orientation:'landscape',unit:'mm',format:'a4',compress:true,hotfixes:['px_scaling']});
+    var pw=pdf.internal.pageSize.getWidth(),ph=pdf.internal.pageSize.getHeight();
+    var left=8,right=8,top=8,bottom=8,maxW=pw-left-right,maxH=ph-top-bottom;
+    var ratio=Math.min(maxW/clean.width,maxH/clean.height);
+    var ww=clean.width*ratio,hh=clean.height*ratio;
+    var x=(pw-ww)/2,y=(ph-hh)/2;
+    pdf.addImage(clean.toDataURL('image/jpeg',0.96),'JPEG',x,y,ww,hh,undefined,'FAST');
+    pdf.save(filename);
+  };
+
+  /* More deterministic html2canvas sizing on iPhone Safari. */
+  var baseSaveSchedulePDF=window.saveSchedulePDF;
+  window.saveSchedulePDF=function(){
+    state.pdfNote=el('pdfNote').value;saveConfig();
+    var wrap=prepareSchedulePdfNode(), table=wrap.querySelector('table');
+    requestAnimationFrame(function(){
+      autoFillPdfHeight(wrap,table);
+      var width=Math.ceil(wrap.scrollWidth),height=Math.ceil(wrap.scrollHeight);
+      html2canvas(wrap,{scale:2,useCORS:true,backgroundColor:'#fff',logging:false,width:width,height:height,windowWidth:1700,windowHeight:Math.max(height,1000),scrollX:0,scrollY:0}).then(function(canvas){
+        saveCanvasAsPdf(canvas,'ตารางเวร_'+MONTHS[cm()]+'_'+py()+'.pdf');
+        if(wrap.parentNode)wrap.parentNode.removeChild(wrap);
+        setStatus('บันทึก PDF A4 แนวนอนเต็มหน้าเรียบร้อยแล้ว',true);
+      }).catch(function(err){try{if(wrap.parentNode)wrap.parentNode.removeChild(wrap)}catch(e){}setStatus('สร้าง PDF ไม่สำเร็จ: '+err.message,false)});
+    });
+  };
+
+  /* Existing click binding may already point to the old function object. Rebind after load. */
+  function rebindV3926(){
+    try{if(el('pdfBtn'))el('pdfBtn').onclick=window.saveSchedulePDF}catch(e){}
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',rebindV3926,{once:true});else rebindV3926();
 })();
 </script>
 </body>
