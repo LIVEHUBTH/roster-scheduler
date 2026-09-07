@@ -1,4 +1,4 @@
-/* BUILD: HISTORY V33.8 FULL ICON + FOOTER 2026-08-25 */
+/* BUILD: HISTORY V33.19 DELETE SAVED MONTH 2026-09-07 */
 /* HISTORY V33.8 — compact pastel layout + cute icons + bottom-right version */
 (function(){
   'use strict';
@@ -260,9 +260,17 @@
   function renderRows(){
     var body=$('historyRowsV33');if(!body)return;
     var start=(page-1)*pageSize,slice=filtered.slice(start,start+pageSize);
-    body.innerHTML=slice.length?slice.map(function(r){return '<tr><td><div class="h33-month-cell"><span class="h33-month-ico h33-calendar-pink">'+iconSvg('calendarPink')+'</span><span>'+esc(MONTHS[r.month])+' '+r.year+'</span></div></td><td>'+esc(r.unit)+'</td><td><span class="h33-status '+r.status+'">'+statusIcon(r.status)+' '+statusLabel(r.status)+'</span></td><td><div class="h33-user"><span class="h33-avatar">👩🏻</span><span>'+esc(r.scheduler)+'</span></div></td><td>'+fmt(r.savedAt)+'</td><td>'+fmt(r.approvedAt)+'</td><td>'+fmt(r.lockedAt)+'</td><td>'+esc(r.note)+'</td><td><div class="h33-row-actions"><button class="h33-open" title="เปิดตารางเวรเต็มหน้า" data-open="'+r.year+'|'+r.month+'">เปิดดู</button><button class="h33-more h33-download" title="ดาวน์โหลด PDF ตารางเวร" aria-label="ดาวน์โหลด PDF ตารางเวร" data-download="'+r.year+'|'+r.month+'">↓</button></div></td></tr>'}).join(''):'<tr><td colspan="9" style="text-align:center;padding:34px;color:#98a1af">ไม่พบประวัติการจัดเวรตามตัวกรอง</td></tr>';
+    body.innerHTML=slice.length?slice.map(function(r){return '<tr><td><div class="h33-month-cell"><span class="h33-month-ico h33-calendar-pink">'+iconSvg('calendarPink')+'</span><span>'+esc(MONTHS[r.month])+' '+r.year+'</span></div></td><td>'+esc(r.unit)+'</td><td><span class="h33-status '+r.status+'">'+statusIcon(r.status)+' '+statusLabel(r.status)+'</span></td><td><div class="h33-user"><span class="h33-avatar">👩🏻</span><span>'+esc(r.scheduler)+'</span></div></td><td>'+fmt(r.savedAt)+'</td><td>'+fmt(r.approvedAt)+'</td><td>'+fmt(r.lockedAt)+'</td><td>'+esc(r.note)+'</td><td><div class="h33-row-actions"><button class="h33-open" title="เปิดตารางเวรเต็มหน้า" data-open="'+r.year+'|'+r.month+'">เปิดดู</button><button class="h33-more h33-download" title="ดาวน์โหลด PDF ตารางเวร" aria-label="ดาวน์โหลด PDF ตารางเวร" data-download="'+r.year+'|'+r.month+'">↓</button><button class="h33-more h33-delete" title="ลบประวัติการจัดเวรเดือนนี้" aria-label="ลบประวัติการจัดเวรเดือนนี้" data-delete="'+r.year+'|'+r.month+'">×</button></div></td></tr>'}).join(''):'<tr><td colspan="9" style="text-align:center;padding:34px;color:#98a1af">ไม่พบประวัติการจัดเวรตามตัวกรอง</td></tr>';
     body.querySelectorAll('[data-open]').forEach(function(b){b.onclick=function(){var p=this.dataset.open.split('|');openRecord(+p[0],+p[1],'roster')}});
     body.querySelectorAll('[data-download]').forEach(function(b){b.onclick=function(){var p=this.dataset.download.split('|'),y=+p[0],m=+p[1],r=records.find(function(x){return x.year===y&&x.month===m});if(r)saveHistoryRosterPdf(r)}});
+    body.querySelectorAll('[data-delete]').forEach(function(b){b.onclick=async function(){
+      var p=this.dataset.delete.split('|'),y=+p[0],m=+p[1];
+      if(!B.deleteMonth)return;
+      this.disabled=true;
+      var deleted=false;
+      try{deleted=await B.deleteMonth(y,m)}catch(err){alert('ลบประวัติไม่สำเร็จ: '+err.message)}
+      if(deleted){buildRecords();applyFilters()}else{this.disabled=false}
+    }});
     if($('historyRangeV33'))$('historyRangeV33').textContent='แสดง '+(slice.length?(start+1):0)+' - '+Math.min(start+pageSize,filtered.length)+' จาก '+filtered.length+' รายการ';
     renderPager();
   }

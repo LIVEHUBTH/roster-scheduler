@@ -12993,6 +12993,45 @@ window.__ROSTER_HISTORY_V33__={
   getYearRecords:function(yThai){var a=[];for(var m=0;m<12;m++){var d=savedMonth(historyKeyFromThaiYear(yThai,m));if(d)a.push({month:m,data:d})}return a},
   getAvailableYears:function(){var set={};for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i)||'';var mm=k.match(/^roster_month_v7_(\\d{4})-(\\d{2})$/);if(mm)set[parseInt(mm[1],10)+543]=1}set[py()]=1;return Object.keys(set).map(Number).sort(function(a,b){return b-a})},
   openMonth:function(yThai,m,type){openSystemHistoryMonth(yThai,m,type||'roster')},
+  deleteMonth:async function(yThai,m){
+    var key=historyKeyFromThaiYear(yThai,m);
+    var data=savedMonth(key);
+    if(!data){
+      setStatus('ไม่พบประวัติเดือน '+MONTHS[m]+' '+yThai,false);
+      return false;
+    }
+    if(!confirm('ยืนยันลบประวัติการจัดเวรเดือน '+MONTHS[m]+' พ.ศ. '+yThai+' หรือไม่?\\n\\nข้อมูลเดือนนี้จะถูกลบและไม่สามารถเรียกคืนได้'))return false;
+
+    /* ถ้ามีบัญชีและ Cloud ให้ลบข้อมูลออนไลน์ก่อน เพื่อไม่ให้ประวัติกลับมาเมื่อซิงก์ครั้งถัดไป */
+    if(cloud.apiUrl&&auth.token){
+      if(!cloud.connected&&!(await connectCloud(false))){
+        setStatus('ลบไม่สำเร็จ: ไม่สามารถเชื่อมฐานข้อมูลออนไลน์ได้',false);
+        return false;
+      }
+      try{
+        await cloudRequest('/api/month/'+encodeURIComponent(key),{method:'DELETE'});
+      }catch(err){
+        setStatus('ลบไม่สำเร็จ: '+err.message,false);
+        return false;
+      }
+    }
+
+    localStorage.removeItem(storageKey(key));
+    try{
+      var recent=parse(localStorage.getItem('roster_history_recent_v33'),[]);
+      if(Array.isArray(recent)){
+        recent=recent.filter(function(x){return !(Number(x.year)===Number(yThai)&&Number(x.month)===Number(m))});
+        localStorage.setItem('roster_history_recent_v33',JSON.stringify(recent));
+      }
+    }catch(ignore){}
+
+    closeHistoryViewer();
+    document.documentElement.classList.remove('h33-history-viewer-open');
+    renderHistory();
+    renderHomeV24();
+    setStatus('ลบประวัติเดือน '+MONTHS[m]+' '+yThai+' เรียบร้อยแล้ว',true);
+    return true;
+  },
   saveCurrent:function(){saveMonth(false)},
   statusLabel:function(d){if(d&&d.workflow&&d.workflow.locked)return 'ล็อกแล้ว';var s=d&&d.workflow&&d.workflow.status||'draft';return {approved:'อนุมัติแล้ว',submitted:'ส่งตรวจแล้ว',draft:'ร่างตาราง'}[s]||s},
   formatTime:formatUnitTime,
@@ -13126,7 +13165,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 })();
 </script>
 <script src="holidays-v32.js?v=32.14"></script>
-<script src="history-v33.js?v=33.18"></script>
+<script src="history-v33.js?v=33.19"></script>
 <script src="rules-v31.js?v=31.1"></script>
 <script src="roster-v29.js?v=29.3"></script>
 <script src="login-fix-v26-1.js?v=30.0"></script>
