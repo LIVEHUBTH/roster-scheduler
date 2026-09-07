@@ -9916,10 +9916,21 @@ function weekdayNoHoliday(d){var w=dow(d);return w>=1&&w<=5&&!isHoliday(d)}
 function slotById(id){for(var i=0;i<SLOTS.length;i++)if(SLOTS[i].id===id)return SLOTS[i];return null} function hasRule(n){return state.rules.some(function(r){return r.id==='r'+n})}
 function defaultPeople(){var a=[];for(var i=1;i<=28;i++)a.push({id:'p'+i,name:'บุคลากร '+i,code:'EMP'+String(i).padStart(3,'0'),position:'',department:'',active:true,startDate:'',birthDate:''});return a}
 function storageKey(k){return 'roster_month_v7_'+k} function savedMonth(k){return parse(localStorage.getItem(storageKey(k)),null)}
+function ensureKhwanjiraPerson(){
+  if(!Array.isArray(state.people)||!state.people.length)return;
+  var hasExact=state.people.some(function(p){return String(p&&p.name||'').trim()==='ขวัญจิรา'});
+  if(hasExact)return;
+  if(state.people.length!==27)return;
+  var person={id:'p_missing10_khwanjira',name:'ขวัญจิรา',code:'EMP010',position:'',department:'',active:false,startDate:'',birthDate:'',suspendedNote:'งดจัดเวรตั้งแต่เดือนตุลาคม 2569 เป็นต้นไป'};
+  state.people.splice(9,0,person);
+}
 function loadConfig(){
   var c=parse(localStorage.getItem('roster_config_v8'),null);
   state.people=c&&Array.isArray(c.people)&&c.people.length?c.people:defaultPeople();
+  ensureKhwanjiraPerson();
   state.people.forEach(function(p,i){if(!p.code)p.code='EMP'+String(i+1).padStart(3,'0');if(typeof p.position!=='string')p.position='';if(typeof p.department!=='string')p.department='';if(typeof p.active!=='boolean')p.active=true;if(typeof p.startDate!=='string')p.startDate='';if(typeof p.birthDate!=='string')p.birthDate='';});
+  var kp=state.people[9];
+  if(kp&&String(kp.name||'').trim()==='ขวัญจิรา')kp.active=false;
   state.holidays=c&&c.holidays?c.holidays:{};
   state.customRules=c&&c.customRules?c.customRules:[];
   state.pdfNote=c&&c.pdfNote?c.pdfNote:'';
@@ -10370,7 +10381,7 @@ function buildSeptember2569Assignments(){
 }
 
 function september2569RosterMatchesPeople(data){
-  if(!data||data.importSource!=='IMG_5920-SEP-2569-V5-27PEOPLE'||!data.assignments)return false;
+  if(!data||data.importSource!=='IMG_5920-SEP-2569-V6-28PEOPLE-KHWANJIRA'||!data.assignments)return false;
   var ids={};
   state.people.forEach(function(person){ids[person.id]=true});
   return Object.keys(data.assignments).every(function(key){
@@ -10382,14 +10393,14 @@ function september2569RosterMatchesPeople(data){
 /* ใส่ข้อมูลใน localStorage ให้เสร็จก่อน renderSheet เพื่อไม่ต้องรอ Login/Cloud */
 function ensureSeptember2569RosterLocal(existing){
   var targetKey='2026-09';
-  var importId='IMG_5920-SEP-2569-V5-27PEOPLE';
+  var importId='IMG_5920-SEP-2569-V6-28PEOPLE-KHWANJIRA';
   existing=existing||savedMonth(targetKey);
   /* เก็บการแก้ไขเดิมไว้เมื่อ ID ยังตรงกับรายชื่อปัจจุบัน */
   if(september2569RosterMatchesPeople(existing))return existing;
-  if(!Array.isArray(state.people)||state.people.length<27)return existing||null;
+  if(!Array.isArray(state.people)||state.people.length<28)return existing||null;
 
   var data=Object.assign({},existing||{}, {
-    version:'39.19-september-baseline-27-people-fix',
+    version:'39.20-september-baseline-28-people-khwanjira-fix',
     key:targetKey,
     year:2026,
     month:8,
@@ -10407,7 +10418,7 @@ function ensureSeptember2569RosterLocal(existing){
 /* ซิงก์ข้อมูลชุดเดียวกันขึ้น Cloud หลังจากโหลดลงตารางแล้ว */
 async function importSeptember2569Roster(){
   var targetKey='2026-09';
-  var importId='IMG_5920-SEP-2569-V5-27PEOPLE';
+  var importId='IMG_5920-SEP-2569-V6-28PEOPLE-KHWANJIRA';
   if(cloud.connected){
     try{await fetchCloudMonth(targetKey)}catch(ignore){}
   }
@@ -10415,7 +10426,7 @@ async function importSeptember2569Roster(){
   var alreadyImported=september2569RosterMatchesPeople(existing);
   var data=ensureSeptember2569RosterLocal(existing);
   if(!data||!data.assignments){
-    setStatus('ยังนำเข้าตารางเดือนกันยายน 2569 ไม่ได้: ต้องมีรายชื่อบุคลากรอย่างน้อย 27 คน',false);
+    setStatus('ยังนำเข้าตารางเดือนกันยายน 2569 ไม่ได้: ต้องมีรายชื่อบุคลากรอย่างน้อย 28 คน (รวม ขวัญจิรา ลำดับที่ 10)',false);
     return false;
   }
   var assignments=data.assignments;
