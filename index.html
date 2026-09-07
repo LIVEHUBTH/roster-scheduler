@@ -9032,8 +9032,21 @@ html.phone-device body.s37-settings-open .header-user-status{
         <label>แผนก<input id="personDeptV30" type="text" placeholder="แผนก / หน่วยงาน"></label>
         <label>วันเริ่มงาน<input id="personStartV30" type="date"></label>
         <label>วันเกิด<input id="personBirthV30" type="date"></label>
-        <label>ประเภท<select id="personTypeV30"><option value="general">ปกติ</option><option value="extra">EXTRA1–3</option></select></label>
-        <label>สถานะ<select id="personStatusV30"><option value="active">ใช้งาน</option><option value="inactive">ปิดใช้งาน</option></select></label>
+        <label>รูปแบบสิทธิ์<select id="personTypeV30"><option value="general">ปกติ — ทุกประเภทเวร</option><option value="extra">เฉพาะ EXTRA1–3</option><option value="custom">กำหนดเวรเอง</option></select></label>
+        <label>สถานะ<select id="personStatusV30"><option value="active">ใช้งาน / นำไปรันเวร</option><option value="inactive">พักเวรชั่วคราว</option><option value="resigned">ออกจากหน่วยงาน / ไม่รันเวร</option></select></label>
+        <div class="wide" id="personDutyAccessV3921" style="border:1px solid #eee1e8;border-radius:14px;padding:12px;background:#fffafb">
+          <b style="display:block;margin-bottom:8px;color:#4b5568">เวรที่อนุญาตให้รัน</b>
+          <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px 10px;font-size:12px">
+            <label style="display:flex;gap:7px;align-items:center"><input type="checkbox" data-duty-group="v"> เวร1–2</label>
+            <label style="display:flex;gap:7px;align-items:center"><input type="checkbox" data-duty-group="ot"> OT1–2</label>
+            <label style="display:flex;gap:7px;align-items:center"><input type="checkbox" data-duty-group="morning"> SDMC เช้า1–4</label>
+            <label style="display:flex;gap:7px;align-items:center"><input type="checkbox" data-duty-group="night"> SDMC บ่าย–ดึก1–4</label>
+            <label style="display:flex;gap:7px;align-items:center"><input type="checkbox" data-duty-group="long"> SDMC เช้า–บ่าย5–6</label>
+            <label style="display:flex;gap:7px;align-items:center"><input type="checkbox" data-duty-group="evening"> SDMC บ่าย7–8</label>
+            <label style="display:flex;gap:7px;align-items:center"><input type="checkbox" data-duty-group="extra"> EXTRA1–3</label>
+          </div>
+          <small style="display:block;margin-top:8px;color:#8a8190">เลือก “กำหนดเวรเอง” แล้วติ๊กเฉพาะประเภทที่บุคลากรคนนั้นสามารถขึ้นได้</small>
+        </div>
       </div>
       <div id="personModalFeedbackV30" aria-live="polite" style="display:none;margin:0 0 10px;padding:10px 12px;border-radius:12px;font-size:13px;font-weight:700"></div>
       <div class="p30-modal-foot"><button type="button" data-person-close class="cancel">ยกเลิก</button><button type="button" id="personSaveV30" class="save" onclick="return savePersonModalV30(event)">บันทึกข้อมูล</button></div>
@@ -9876,7 +9889,7 @@ var DEFAULT_RULES=[
 {id:'r1',text:'เวลาปฏิบัติงานในเวลาราชการ คือ วันจันทร์–ศุกร์ เวลา 08:00–16:00 น. โดยไม่รวมวันหยุดนักขัตฤกษ์ ส่วนวันและเวลาอื่นทั้งหมดถือเป็นเวรนอกเวลา'},
 {id:'r2',text:'ชื่อบุคลากรห้ามซ้ำในวันเดียวกันทุกประเภทเวร'},
 {id:'r3',text:'หลังจากขึ้นเวรบ่าย–ดึก วันถัดไปห้ามจัดเวรทุกประเภท ข้อยกเว้น: ช่วงวันศุกร์ วันเสาร์ วันอาทิตย์ และวันหยุดนักขัตฤกษ์ สามารถจัดเวรบ่าย–ดึกต่อเนื่องกันได้'},
-{id:'r4',text:'รายชื่อบุคลากรคนสุดท้าย สามารถจัดได้เฉพาะ EXTRA1, EXTRA2 และ EXTRA3 เท่านั้น'},
+{id:'r4',text:'บุคลากรที่กำหนดสิทธิ์เฉพาะ EXTRA1–3 สามารถจัดได้เฉพาะ EXTRA1, EXTRA2 และ EXTRA3 เท่านั้น'},
 {id:'r5',text:'ต้องหลีกเลี่ยงการจัดเวรหนักติดต่อกันหลายวัน แม้จะไม่ขัดกับกฎข้ออื่น'},
 {id:'r6',text:'ต้องแยกการจัดเวรและการคำนวณค่าเฉลี่ยออกเป็นแต่ละประเภท ได้แก่ เวร1–2 / OT1–2 / SDMC เช้า1–4 / SDMC บ่าย–ดึก1–4 / SDMC เช้า–บ่าย5–6 / SDMC บ่าย7–8 / EXTRA1–3'},
 {id:'r7',text:'เวร1–2 จัดทุกวัน ได้แก่ จันทร์–อาทิตย์ รวมวันหยุดนักขัตฤกษ์'},
@@ -9929,10 +9942,15 @@ function loadConfig(){
   state.people=c&&Array.isArray(c.people)&&c.people.length?c.people:defaultPeople();
   ensureKhwanjiraPerson();
   state.people.forEach(function(p,i){if(!p.code)p.code='EMP'+String(i+1).padStart(3,'0');if(typeof p.position!=='string')p.position='';if(typeof p.department!=='string')p.department='';if(typeof p.active!=='boolean')p.active=true;if(typeof p.startDate!=='string')p.startDate='';if(typeof p.birthDate!=='string')p.birthDate='';});
-  var kp=state.people[9];
-  if(kp&&String(kp.name||'').trim()==='ขวัญจิรา')kp.active=false;
   state.holidays=c&&c.holidays?c.holidays:{};
   state.customRules=c&&c.customRules?c.customRules:[];
+  /* V39.21: ย้ายกฎ EXTRA-only แบบเดิมจากการผูกกับรายชื่อสุดท้าย มาเป็นสิทธิ์ของบุคคลโดยตรง
+     เพื่อให้เพิ่ม/ลบบุคลากรภายหลังได้โดยไม่ทำให้คนสุดท้ายกลายเป็น EXTRA-only อัตโนมัติ */
+  if(state.people.length===28){
+    var legacyLast=state.people[state.people.length-1];
+    var hasLegacyExtra=state.customRules.some(function(r){return r.personId===legacyLast.id&&r.type==='only'&&Array.isArray(r.slots)&&r.slots.length&&r.slots.every(function(sid){return EXTRA_IDS.indexOf(sid)>=0})});
+    if(!hasLegacyExtra)state.customRules.push({id:'cr_migrated_extra_'+Date.now(),personId:legacyLast.id,type:'only',slots:['e1','e2','e3']});
+  }
   state.pdfNote=c&&c.pdfNote?c.pdfNote:'';
   state.unitInfo=c&&c.unitInfo?c.unitInfo:{name:'',organization:'',head:'',scheduler:'',phone:'',contact:'',logo:''};
   state.rules=c&&Array.isArray(c.rules)&&c.rules.length?c.rules:DEFAULT_RULES.map(function(r){return {id:r.id,text:r.text}});
@@ -10400,7 +10418,7 @@ function ensureSeptember2569RosterLocal(existing){
   if(!Array.isArray(state.people)||state.people.length<28)return existing||null;
 
   var data=Object.assign({},existing||{}, {
-    version:'39.20-september-baseline-28-people-khwanjira-fix',
+    version:'39.21-flexible-people-rules-rule21-validation',
     key:targetKey,
     year:2026,
     month:8,
@@ -10736,25 +10754,12 @@ function isExtraSlot(slot){
 }
 
 function isExtraOnlyPerson(pid){
-  if(
-    hasRule(4)&&
-    state.people.length&&
-    pid===state.people[state.people.length-1].id
-  ){
-    return true;
-  }
-
   for(var i=0;i<state.customRules.length;i++){
     var r=state.customRules[i];
     if(r.personId!==pid||r.type!=='only'||!Array.isArray(r.slots)||!r.slots.length)continue;
-
-    var onlyExtra=r.slots.every(function(sid){
-      return EXTRA_IDS.indexOf(sid)>=0;
-    });
-
+    var onlyExtra=r.slots.every(function(sid){return EXTRA_IDS.indexOf(sid)>=0;});
     if(onlyExtra)return true;
   }
-
   return false;
 }
 
@@ -10811,7 +10816,7 @@ function extraOnlyPeople(){
 
 function normalFairnessPeople(){
   return state.people.filter(function(p){
-    return !isExtraOnlyPerson(p.id);
+    return p.active!==false&&!isExtraOnlyPerson(p.id);
   }).map(function(p){
     return p.id;
   });
@@ -11315,7 +11320,7 @@ function renderConflictDetails(){
     list.innerHTML=lastConflictDetails.map(function(c,i){
       return '<div class="conflict-item">'+
         '<b>'+(i+1)+'. '+esc(c.rule)+'</b> — '+esc(c.message)+
-        '<div class="conflict-meta">วันที่: '+esc(conflictDayLabel(c.day))+
+        '<div class="conflict-meta">'+(c.day?('วันที่: '+esc(conflictDayLabel(c.day))):'ตรวจระดับทั้งเดือน')+
         (c.name?' • ชื่อ: '+esc(c.name):'')+
         (c.slot?' • ช่องเวร: '+esc(c.slot):'')+
         '</div></div>';
@@ -11335,6 +11340,11 @@ function validateCore(show){
       var pid=state.assignments[akey(d,slot.id)];
       if(!pid)return;
       var pname=conflictPersonName(pid);
+      var assignedPerson=state.people.find(function(x){return x.id===pid});
+      if(assignedPerson&&assignedPerson.active===false){
+        mark(d,slot.id);errors++;
+        pushConflict({day:d,name:pname,slot:slot.label,rule:'สถานะบุคลากร',message:'บุคลากรรายนี้อยู่ในสถานะพักเวร/ไม่ใช้งาน แต่ยังมีชื่ออยู่ในตาราง'});
+      }
 
       if(!active(slot,d)){
         mark(d,slot.id);errors++;
@@ -11357,12 +11367,12 @@ function validateCore(show){
         }else seen[pid]=slot.id;
       }
 
-      if(hasRule(4)&&state.people.length&&pid===state.people[state.people.length-1].id&&['e1','e2','e3'].indexOf(slot.id)<0){
+      if(hasRule(4)&&isExtraOnlyPerson(pid)&&['e1','e2','e3'].indexOf(slot.id)<0){
         mark(d,slot.id);errors++;
         pushConflict({
           day:d,name:pname,slot:slot.label,
           rule:'กฎ 4',
-          message:'รายชื่อสุดท้ายอนุญาตให้ขึ้นเฉพาะ EXTRA1–EXTRA3'
+          message:'บุคลากรรายนี้ถูกกำหนดสิทธิ์ให้ขึ้นเฉพาะ EXTRA1–EXTRA3'
         });
       }
 
@@ -11394,19 +11404,31 @@ function validateCore(show){
 }
 
 function validate(show){
-  var errors=validateCore(show);
+  var errors=validateCore(false);
+  var r21=hasRule(21)?rule21Report():{ok:true,groupProblems:[],totalBad:[]};
+  if(!r21.ok){
+    (r21.groupDetails||[]).forEach(function(gd){
+      errors++;
+      pushConflict({day:0,name:'',slot:gd.label,rule:'กฎ 21',message:'การกระจายเวร '+gd.label+' ยังเกินเกณฑ์ ±1 จากค่ากลาง '+Number(gd.avg||0).toFixed(2)});
+    });
+    if(r21.totalBad&&r21.totalBad.length){
+      errors++;
+      pushConflict({day:0,name:'',slot:'เวรรวมทั้งเดือน',rule:'กฎ 21',message:'ยอดเวรรวมของบุคลากรที่ใช้งานอยู่ยังเกินเกณฑ์ ±1 จากค่ากลาง '+Number(r21.totalAvg||0).toFixed(2)});
+    }
+  }
   if(show){
+    setStatus(errors?'พบข้อขัดแย้ง '+errors+' จุด':'ไม่พบข้อขัดแย้ง',!errors);
     renderConflictDetails();
     if(errors===0){
-      hideFixChoice();showActionFeedback('✅ ตรวจสอบแล้ว ไม่พบข้อขัดแย้ง ตารางพร้อมสำหรับขั้นตอนถัดไป','ok');
+      hideFixChoice();showActionFeedback('✅ ตรวจสอบแล้ว ไม่พบข้อขัดแย้ง รวมกฎค่าเฉลี่ย ±1 ตารางพร้อมสำหรับขั้นตอนถัดไป','ok');
     }else{
-      showActionFeedback('❌ ตรวจสอบแล้ว พบข้อขัดแย้ง '+errors+' จุด • ดูรายละเอียดด้านล่าง','err');
+      showActionFeedback('❌ ตรวจสอบแล้ว พบข้อขัดแย้ง '+errors+' จุด • รวมการตรวจค่าเฉลี่ยตามกฎข้อ 21','err');
     }
   }
   return errors;
 }
 function buildMonths(){el('month').innerHTML=MONTHS.map(function(m,i){return '<option value="'+i+'">'+m+'</option>'}).join('')}
-function buildNames(){el('names').innerHTML=state.people.map(function(p,i){return '<div class="name-row"><b>'+(i+1)+'.</b><input data-pid="'+p.id+'" value="'+esc(p.name)+'"><span class="lastbadge" style="display:'+(i===state.people.length-1?'inline-block':'none')+'">EXTRA1–3 เท่านั้น</span></div>'}).join('');el('personCount').textContent='จำนวน '+state.people.length+' รายชื่อ';el('names').querySelectorAll('input').forEach(function(input){input.onchange=function(){var pid=this.dataset.pid;state.people.forEach(function(p){if(p.id===pid)p.name=input.value.trim()||p.name});saveConfig();buildCustomOptions();renderSheet()}});buildCustomOptions();applyUnitPermissions();renderPeopleV24()}
+function buildNames(){el('names').innerHTML=state.people.map(function(p,i){return '<div class="name-row"><b>'+(i+1)+'.</b><input data-pid="'+p.id+'" value="'+esc(p.name)+'"><span class="lastbadge" style="display:'+(isExtraOnlyPerson(p.id)?'inline-block':'none')+'">EXTRA1–3 เท่านั้น</span></div>'}).join('');el('personCount').textContent='จำนวน '+state.people.length+' รายชื่อ';el('names').querySelectorAll('input').forEach(function(input){input.onchange=function(){var pid=this.dataset.pid;state.people.forEach(function(p){if(p.id===pid)p.name=input.value.trim()||p.name});saveConfig();buildCustomOptions();renderSheet()}});buildCustomOptions();applyUnitPermissions();renderPeopleV24()}
 function addPerson(){if(!canManagePeopleV302())return;openPersonModalV30(null,'edit')}
 function removePerson(){if(!(unitUser.role==='scheduler'||unitUser.role==='admin'))return;if(state.people.length<=1)return;var removed=state.people.pop();state.customRules=state.customRules.filter(function(r){return r.personId!==removed.id});saveConfig();buildNames();renderCustomRules();renderSheet()}
 function renderHolidays(){var h='';Object.keys(state.holidays).sort().forEach(function(k){h+='<span class="chip">'+k+' '+esc(state.holidays[k].name||'วันหยุด')+' <button class="smallbtn" data-holiday="'+k+'">×</button></span>'});el('chips').innerHTML=h;el('chips').querySelectorAll('[data-holiday]').forEach(function(b){b.onclick=function(){delete state.holidays[this.dataset.holiday];saveConfig();renderHolidays();renderSheet();applyUnitPermissions();renderHolidayV24()}});renderHolidayV24()}
@@ -12173,9 +12195,8 @@ function eligibleReplacement(pid,day,sid){
   var slot=SLOTS.find(function(x){return x.id===sid});
   if(!slot||!active(slot,day))return false;
 
-  // last person: EXTRA only
-  if(hasRule(4) && state.people.length && pid===state.people[state.people.length-1].id &&
-     ['e1','e2','e3'].indexOf(sid)<0)return false;
+  // บุคลากรที่กำหนดเป็น EXTRA-only
+  if(hasRule(4) && isExtraOnlyPerson(pid) && ['e1','e2','e3'].indexOf(sid)<0)return false;
 
   // custom rule / eligibility already encoded by allowed()
   try{
@@ -12403,7 +12424,7 @@ function renderPeopleV24(){
   var start=(peopleV30Page-1)*peopleV30PageSize,shown=arr.slice(start,start+peopleV30PageSize),rows=[];
   shown.forEach(function(p,idx){
     var realIndex=state.people.indexOf(p),extra=isExtraOnlyPerson(p.id),duty=(counts.total&&counts.total[p.id])||0;
-    rows.push('<tr><td>'+(start+idx+1)+'</td><td class="code">'+esc(p.code||'')+'</td><td><div class="p30-person">'+personAvatarV30(p,realIndex)+'<b>'+esc(p.name)+'</b></div></td><td>'+esc(p.position||'ไม่ระบุ')+'</td><td>'+esc(p.department||'ไม่ระบุ')+'</td><td><span class="p30-badge '+(extra?'extra':'general')+'">'+(extra?'EXTRA1–3':'ปกติ')+'</span></td><td><span class="p30-badge '+(p.active===false?'inactive':'active')+'">● '+(p.active===false?'ปิดใช้งาน':'ใช้งาน')+'</span></td><td>'+Number(duty||0).toFixed(1)+' เวร</td><td><div class="p30-row-actions"><button title="ดู" data-person-view="'+p.id+'">◉</button><button title="แก้ไข" data-person-edit="'+p.id+'">✎</button><button title="ลบ" class="danger" data-delete-person="'+p.id+'" '+((unitUser.role==='scheduler'||unitUser.role==='admin')?'':'disabled')+'>♲</button></div></td></tr>');
+    rows.push('<tr><td>'+(start+idx+1)+'</td><td class="code">'+esc(p.code||'')+'</td><td><div class="p30-person">'+personAvatarV30(p,realIndex)+'<b>'+esc(p.name)+'</b></div></td><td>'+esc(p.position||'ไม่ระบุ')+'</td><td>'+esc(p.department||'ไม่ระบุ')+'</td><td><span class="p30-badge '+(extra?'extra':'general')+'">'+(extra?'EXTRA1–3':'ปกติ')+'</span></td><td><span class="p30-badge '+(p.active===false?'inactive':'active')+'">● '+(p.active===false?(p.rosterStatus==='resigned'?'ออกจากหน่วยงาน':'พักเวร'):'ใช้งาน')+'</span></td><td>'+Number(duty||0).toFixed(1)+' เวร</td><td><div class="p30-row-actions"><button title="ดู" data-person-view="'+p.id+'">◉</button><button title="แก้ไข" data-person-edit="'+p.id+'">✎</button><button title="ลบ" class="danger" data-delete-person="'+p.id+'" '+((unitUser.role==='scheduler'||unitUser.role==='admin')?'':'disabled')+'>♲</button></div></td></tr>');
   });
   body.innerHTML=rows.join('')||'<tr><td colspan="9" class="p30-empty">ไม่พบข้อมูลพนักงาน</td></tr>';
   body.setAttribute('data-v302-actions','1');
@@ -12527,8 +12548,15 @@ function openPersonModalV30(pid,mode){
   el('personDeptV30').value=p?(p.department||''):'';
   el('personStartV30').value=p?normalizePersonDateV302(p.startDate):'';
   el('personBirthV30').value=p?normalizePersonDateV302(p.birthDate):'';
-  el('personTypeV30').value=p&&isExtraOnlyPerson(p.id)?'extra':'general';
-  el('personStatusV30').value=p&&p.active===false?'inactive':'active';
+  var allowed=p?allowedGroupsForPersonV3921(p.id):Object.keys(GROUPS);
+  var type='general';
+  if(p&&isExtraOnlyPerson(p.id))type='extra';
+  else if(p&&allowed.length<Object.keys(GROUPS).length)type='custom';
+  el('personTypeV30').value=type;
+  el('personStatusV30').value=p&&p.active===false?(p.rosterStatus==='resigned'?'resigned':'inactive'):'active';
+  var dutyBox=el('personDutyAccessV3921');
+  if(dutyBox)dutyBox.querySelectorAll('[data-duty-group]').forEach(function(ch){ch.checked=allowed.indexOf(ch.dataset.dutyGroup)>=0});
+  refreshPersonDutyAccessV3921();
   el('personModalTitleV30').textContent=isView?'รายละเอียดพนักงาน':(p?'แก้ไขข้อมูลพนักงาน':'เพิ่มพนักงาน');
   el('personModalSubV30').textContent=isView?'ข้อมูลบุคลากรในระบบ — กดปิดเมื่อดูเสร็จ':'แก้ไขข้อมูลแล้วกด “บันทึกข้อมูล”';
   setPersonModalModeV302(isView);
@@ -12539,6 +12567,31 @@ function openPersonModalV30(pid,mode){
 }
 function closePersonModalV30(){
   var m=el('personModalV30');if(m){m.classList.remove('show');m.setAttribute('aria-hidden','true');m.dataset.mode=''}
+}
+function allowedGroupsForPersonV3921(pid){
+  var only=state.customRules.find(function(r){return r.personId===pid&&r.type==='only'&&Array.isArray(r.slots)&&r.slots.length});
+  if(!only)return Object.keys(GROUPS);
+  return Object.keys(GROUPS).filter(function(g){return (GROUPS[g]||[]).some(function(sid){return only.slots.indexOf(sid)>=0})});
+}
+function setPersonAllowedGroupsV3921(pid,groups){
+  state.customRules=state.customRules.filter(function(r){return !(r.personId===pid&&r.type==='only')});
+  groups=Array.isArray(groups)?groups:[];
+  var slots=[];
+  groups.forEach(function(g){(GROUPS[g]||[]).forEach(function(sid){if(slots.indexOf(sid)<0)slots.push(sid)})});
+  if(groups.length&&groups.length<Object.keys(GROUPS).length){
+    state.customRules.push({id:'cr_'+Date.now()+'_'+Math.random().toString(36).slice(2,7),personId:pid,type:'only',slots:slots});
+  }
+}
+function refreshPersonDutyAccessV3921(){
+  var type=el('personTypeV30')?el('personTypeV30').value:'general';
+  var box=el('personDutyAccessV3921');if(!box)return;
+  var checks=box.querySelectorAll('[data-duty-group]');
+  checks.forEach(function(ch){
+    if(type==='general')ch.checked=true;
+    if(type==='extra')ch.checked=ch.dataset.dutyGroup==='extra';
+    ch.disabled=type!=='custom';
+  });
+  box.style.opacity=type==='custom'?'1':'.72';
 }
 function setPersonExtraRuleV30(pid,wantExtra){
   state.customRules=state.customRules.filter(function(r){if(r.personId!==pid||r.type!=='only'||!Array.isArray(r.slots)||!r.slots.length)return true;return !r.slots.every(function(sid){return EXTRA_IDS.indexOf(sid)>=0})});
@@ -12593,9 +12646,22 @@ function savePersonModalV30(ev){
     p.department=String(el('personDeptV30')&&el('personDeptV30').value||'').trim();
     p.startDate=el('personStartV30')?el('personStartV30').value||'':'';
     p.birthDate=el('personBirthV30')?el('personBirthV30').value||'':'';
-    p.active=!el('personStatusV30')||el('personStatusV30').value!=='inactive';
-
-    setPersonExtraRuleV30(p.id,!!el('personTypeV30')&&el('personTypeV30').value==='extra');
+    var rosterStatus=el('personStatusV30')?el('personStatusV30').value:'active';
+    p.rosterStatus=rosterStatus;
+    p.active=rosterStatus==='active';
+    var accessType=el('personTypeV30')?el('personTypeV30').value:'general';
+    var allowedGroups=Object.keys(GROUPS);
+    if(accessType==='extra')allowedGroups=['extra'];
+    else if(accessType==='custom'){
+      allowedGroups=[];
+      var dutyBox=el('personDutyAccessV3921');
+      if(dutyBox)dutyBox.querySelectorAll('[data-duty-group]:checked').forEach(function(ch){allowedGroups.push(ch.dataset.dutyGroup)});
+      if(!allowedGroups.length){
+        setPersonModalFeedbackV304('กรุณาเลือกเวรที่อนุญาตอย่างน้อย 1 ประเภท',false);
+        return false;
+      }
+    }
+    setPersonAllowedGroupsV3921(p.id,allowedGroups);
 
     /* Persist before any UI rebuild. */
     persistPeopleConfigV303();
@@ -12629,6 +12695,10 @@ function savePersonModalV30(ev){
   }
 }
 /* : expose the employee save handler to inline/global Safari events. */
+if(el('personTypeV30')&&!el('personTypeV30').dataset.v3921Bound){
+  el('personTypeV30').dataset.v3921Bound='1';
+  el('personTypeV30').addEventListener('change',refreshPersonDutyAccessV3921);
+}
 window.savePersonModalV30=savePersonModalV30;
 window.openPersonModalV30=openPersonModalV30;
 window.closePersonModalV30=closePersonModalV30;
@@ -12637,7 +12707,7 @@ function parseCsvLineV30(line){var a=[],cur='',q=false;for(var i=0;i<line.length
 function importPeopleCsvV30(file){
   if(!(unitUser.role==='scheduler'||unitUser.role==='admin'))return;var r=new FileReader();r.onload=function(){try{var lines=String(r.result||'').replace(/^\uFEFF/,'').split(/\r?\n/).filter(Boolean);if(lines.length<2)throw new Error('ไม่มีข้อมูล');var headers=parseCsvLineV30(lines[0]).map(function(x){return x.trim().toLowerCase()});var map={code:['รหัสพนักงาน','รหัส','code','employee code'],name:['ชื่อ-นามสกุล','ชื่อ','name'],position:['ตำแหน่ง','position'],department:['แผนก','หน่วยงาน','department'],type:['ประเภท','type'],status:['สถานะ','status'],startDate:['วันเริ่มงาน','startdate','start date'],birthDate:['วันเกิด','birthdate','birth date']};function col(k){for(var i=0;i<headers.length;i++)if(map[k].indexOf(headers[i])>=0)return i;return -1}var ni=col('name');if(ni<0)throw new Error('ไม่พบคอลัมน์ชื่อ');var added=0;for(var li=1;li<lines.length;li++){var c=parseCsvLineV30(lines[li]);var nm=String(c[ni]||'').trim();if(!nm)continue;var p={id:'p_'+Date.now()+'_'+li,name:nm,code:col('code')>=0?String(c[col('code')]||'').trim():nextPersonCodeV30(),position:col('position')>=0?String(c[col('position')]||'').trim():'',department:col('department')>=0?String(c[col('department')]||'').trim():'',active:!(col('status')>=0&&/ปิด|inactive|0/i.test(String(c[col('status')]||''))),startDate:col('startDate')>=0?String(c[col('startDate')]||'').trim():'',birthDate:col('birthDate')>=0?String(c[col('birthDate')]||'').trim():''};state.people.push(p);if(col('type')>=0&&/extra/i.test(String(c[col('type')]||'')))setPersonExtraRuleV30(p.id,true);added++}saveConfig();buildNames();renderCustomRules();renderSheet();renderPeopleV24();alert('นำเข้าข้อมูล '+added+' รายการแล้ว')}catch(e){alert('นำเข้าไม่สำเร็จ: '+e.message)}};r.readAsText(file,'utf-8')
 }
-function exportPeopleV30(){var rows=[['ลำดับ','รหัสพนักงาน','ชื่อ-นามสกุล','ตำแหน่ง','แผนก','ประเภท','สถานะ','วันเริ่มงาน','วันเกิด']];state.people.forEach(function(p,i){rows.push([i+1,p.code||'',p.name||'',p.position||'',p.department||'',isExtraOnlyPerson(p.id)?'EXTRA1-3':'ปกติ',p.active===false?'ปิดใช้งาน':'ใช้งาน',p.startDate||'',p.birthDate||''])});var csv=rows.map(function(r){return r.map(function(v){return '"'+String(v).replace(/"/g,'""')+'"'}).join(',')}).join('\n');var a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}));a.download='บุคลากร.csv';a.click();setTimeout(function(){URL.revokeObjectURL(a.href)},1000)}
+function exportPeopleV30(){var rows=[['ลำดับ','รหัสพนักงาน','ชื่อ-นามสกุล','ตำแหน่ง','แผนก','ประเภท','สถานะ','วันเริ่มงาน','วันเกิด']];state.people.forEach(function(p,i){rows.push([i+1,p.code||'',p.name||'',p.position||'',p.department||'',isExtraOnlyPerson(p.id)?'EXTRA1-3':'ปกติ',p.active===false?(p.rosterStatus==='resigned'?'ลาออก':'พักเวร'):'ใช้งาน',p.startDate||'',p.birthDate||''])});var csv=rows.map(function(r){return r.map(function(v){return '"'+String(v).replace(/"/g,'""')+'"'}).join(',')}).join('\n');var a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}));a.download='บุคลากร.csv';a.click();setTimeout(function(){URL.revokeObjectURL(a.href)},1000)}
 
 /* =====  ROW ACTIONS — delegated, works after every re-render ===== */
 function bindPeopleActionsV302(){
