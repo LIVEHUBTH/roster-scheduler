@@ -9888,7 +9888,7 @@ var DEFAULT_RULES=[
 {id:'r18',text:'ต้องหมุนเวียนตำแหน่งภายในแต่ละประเภทเวร และไม่ให้บุคคลเดิมอยู่ในเวรหรือตำแหน่งเดิมซ้ำ ๆ รวมถึงหลีกเลี่ยงชื่อเดียวกันติดต่อกันหลายวัน'},
 {id:'r19',text:'การจัดตารางเดือนใหม่ต้องอ้างอิงตารางเวรของเดือนก่อนหน้า โดยนำข้อมูลการหมุนคิว จำนวนเวรสะสม ประเภทเวร และประวัติการขึ้นเวรมาประกอบการจัดเดือนใหม่'},
 {id:'r20',text:'ต้องตรวจสอบรอยต่อระหว่างปลายเดือนก่อนหน้ากับต้นเดือนใหม่ โดยใช้กฎทั้งหมดเหมือนเป็นตารางต่อเนื่องกัน'},
-{id:'r21',text:'การเฉลี่ยเวรของเดือนปัจจุบันให้คิดเป็น 7 กลุ่มประเภทเวร ได้แก่ เวร1–2, OT1–2, SDMC เช้า1–4, SDMC บ่าย–ดึก1–4, SDMC เช้า–บ่าย5–6, SDMC บ่าย7–8 และ EXTRA1–3 โดยยอดรวมของแต่ละคนภายในแต่ละกลุ่มต้องแตกต่างจากค่ากลางไม่เกิน ±1 เวร และภายในกลุ่มเดียวกันต้องหมุนตำแหน่งย่อย หลีกเลี่ยงการจัดบุคคลเดิมลงเวรช่องเดิมซ้ำ ๆ หลายวัน หากยังเกิน ±1 ให้ระบบปรับสมดุลอัตโนมัติโดยห้ามทำให้ผิดกฎข้อ 1–20 นอกจากนี้ยอดเวรรวมทั้งเดือนของบุคลากรทั่วไปต้องแตกต่างจากค่ากลางไม่เกิน ±1 เวร สำหรับกลุ่ม EXTRA ให้บุคลากรที่กำหนดให้ขึ้นเฉพาะ EXTRA1–3 นำมาร่วมเป็นตัวหารค่ากลางของกลุ่ม EXTRA ด้วย แต่ยังยกเว้นจากค่ากลางเวรรวมทั้งเดือนของบุคลากรทั่วไป และยอดรวม EXTRA1–3 ของบุคลากรกลุ่มนี้สามารถสูงกว่าค่ากลางกลุ่ม EXTRA ได้ไม่เกิน +3 เวร'}
+{id:'r21',text:'การเฉลี่ยเวรของเดือนปัจจุบันให้คิดเป็น 7 กลุ่มประเภทเวร ได้แก่ เวร1–2, OT1–2, SDMC เช้า1–4, SDMC บ่าย–ดึก1–4, SDMC เช้า–บ่าย5–6, SDMC บ่าย7–8 และ EXTRA1–3 โดยยอดรวมของแต่ละคนภายในแต่ละกลุ่มต้องแตกต่างจากค่ากลางไม่เกิน ±1 เวร และภายในกลุ่มเดียวกันต้องหมุนตำแหน่งย่อย หลีกเลี่ยงการจัดบุคคลเดิมลงเวรช่องเดิมซ้ำ ๆ หลายวัน หากยังเกิน ±1 ให้ระบบปรับสมดุลอัตโนมัติโดยห้ามทำให้ผิดกฎข้อ 1–20 นอกจากนี้ยอดเวรรวมทั้งเดือนของบุคลากรทั่วไปต้องแตกต่างจากค่ากลางไม่เกิน ±1 เวร สำหรับกลุ่ม EXTRA ให้บุคลากรที่กำหนดให้ขึ้นเฉพาะ EXTRA1–3 นำมาร่วมเป็นตัวหารค่ากลางของกลุ่ม EXTRA ด้วย'}
 ];
 var state={people:[],assignments:{},holidays:{},rules:[],customRules:[],pdfNote:'',rotation:{},unitInfo:{}};
 var peopleV30Page=1,peopleV30PageSize=10,peopleV30SortDept=false;
@@ -10520,13 +10520,6 @@ function recentSameSlotScore(pid,d,sid){
 function currentSlotLoad(current,pid,sid){return current.slot[sid][pid]||0}
 function choose(candidates,slot,current,previous,d,cursor){
   var g=SLOT_GROUP[slot.id],off=isOffDay(d),best=null,bestKey=null;
-  var liveExtraAvg=0;
-
-  if(g==='extra'&&hasRule(21)){
-    var normalExtraIds=fairnessPeopleForGroup('extra'),liveExtraTotal=0;
-    normalExtraIds.forEach(function(pid){liveExtraTotal+=current.group.extra[pid]||0});
-    liveExtraAvg=normalExtraIds.length?liveExtraTotal/normalExtraIds.length:0;
-  }
 
   candidates.forEach(function(pid){
     var currentGroup=current.group[g][pid]||0;
@@ -10540,34 +10533,19 @@ function choose(candidates,slot,current,previous,d,cursor){
     var key;
 
     if(hasRule(21)){
-      if(g==='extra'&&isExtraOnlyPerson(pid)){
-        var liveCap=Math.floor(liveExtraAvg+3+1e-9);
-        key=[
-          currentGroup>=Math.max(1,liveCap)?999:0,
-          Math.max(0,currentGroup-2),
-          repeatScore,
-          currentSlot,
-          currentTotal,
-          previousSlot,
-          previousGroup,
-          previousTotal,
-          queueDistance(pid,cursor[g]||0)
-        ];
-      }else{
-        key=[
-          currentGroup,
-          repeatScore,
-          currentSlot,
-          currentTotal,
-          previousSlot,
-          previousGroup,
-          previousTotal,
-          classLoad,
-          heavyPenalty(pid,d,slot),
-          recentPenalty(pid,d),
-          queueDistance(pid,cursor[g]||0)
-        ];
-      }
+      key=[
+        currentGroup,
+        repeatScore,
+        currentSlot,
+        currentTotal,
+        previousSlot,
+        previousGroup,
+        previousTotal,
+        classLoad,
+        heavyPenalty(pid,d,slot),
+        recentPenalty(pid,d),
+        queueDistance(pid,cursor[g]||0)
+      ];
     }else{
       key=[
         currentGroup+previousGroup,
@@ -10603,9 +10581,9 @@ function choose(candidates,slot,current,previous,d,cursor){
    ตารางเฉลี่ยยังแสดงแยกทุกช่องเหมือนเดิม
 
    EXTRA-only:
-   - นำมาร่วมเป็นตัวหารค่ากลางของกลุ่ม EXTRA ของบุคลากรทั่วไป
-   - ต้องมีสิทธิ์เข้าคิว EXTRA
-   - EXTRA รวมสูงกว่าค่ากลางกลุ่ม EXTRA ได้ไม่เกิน +3
+   - นำมาร่วมเป็นตัวหารค่ากลางของกลุ่ม EXTRA
+   - ใช้เกณฑ์แตกต่างจากค่ากลางกลุ่ม EXTRA ไม่เกิน ±1
+   - ยังไม่นำไปคิดค่ากลางเวรรวมของบุคลากรทั่วไป
 ========================= */
 
 var EXTRA_IDS=['e1','e2','e3'];
@@ -10686,26 +10664,13 @@ function eligiblePeopleForGroup(group){
 }
 
 function fairnessPeopleForGroup(group){
-  var ids=eligiblePeopleForGroup(group);
-
-  /* EXTRA-only ยังเป็นข้อยกเว้นในการตรวจ ±1 ของบุคลากรทั่วไป
-     แต่จะถูกนำไปร่วมเป็นตัวหารค่ากลางของกลุ่ม EXTRA */
-  if(group==='extra'){
-    ids=ids.filter(function(pid){
-      return !isExtraOnlyPerson(pid);
-    });
-  }
-
-  return ids;
+  /* ทุกคนที่มีสิทธิ์ในกลุ่มนั้นร่วมทั้งตัวหารและการตรวจ ±1
+     รวม EXTRA-only ในกลุ่ม EXTRA ตามกฎข้อ 21 ฉบับใหม่ */
+  return eligiblePeopleForGroup(group);
 }
 
 function averagePeopleForGroup(group){
-  /* กฎ 21 :
-     กลุ่ม EXTRA ใช้ผู้มีสิทธิ์ EXTRA ทั้งหมดเป็นตัวหารค่ากลาง
-     รวมผู้ที่กำหนดให้ขึ้นเฉพาะ EXTRA1–3 ด้วย */
-  if(group==='extra'){
-    return eligiblePeopleForGroup(group);
-  }
+  /* กลุ่ม EXTRA รวมผู้ที่กำหนดให้ขึ้นเฉพาะ EXTRA1–3 ด้วย */
   return fairnessPeopleForGroup(group);
 }
 
@@ -10996,96 +10961,10 @@ function rebalanceTotal(){
   return moved;
 }
 
-/* EXTRA-only:
-   - ต้องได้เข้าคิว หากมี EXTRA ที่สามารถย้ายได้
-   - ห้ามเกินค่ากลาง EXTRA ของคนทั่วไป +3 */
+/* EXTRA-only ถูกปรับสมดุลใน rebalanceGroups() ของกลุ่ม EXTRA
+   ด้วยเกณฑ์ค่ากลาง ±1 เดียวกับผู้มีสิทธิ์ EXTRA คนอื่น */
 function rebalanceExtraOnly(){
-  var ids=extraOnlyPeople();
-
-  if(!ids.length)return 0;
-
-  var moved=0;
-  var guard=0;
-
-  while(guard++<3000){
-    var changed=false;
-    var info=groupAverageInfo('extra');
-    var counts=info.counts;
-    var avg=info.avg;
-    var maxAllowed=Math.floor(avg+3+1e-9);
-
-    /* ป้องกัน 0 เวร */
-    for(var ei=0;ei<ids.length;ei++){
-      var extraPid=ids[ei];
-      var extraCount=groupCountForPid(counts,'extra',extraPid);
-
-      if(extraCount>0)continue;
-
-      var donors=info.ids.slice().sort(function(a,b){
-        return groupCountForPid(counts,'extra',b)-groupCountForPid(counts,'extra',a);
-      });
-
-      outerMin:
-      for(var di=0;di<donors.length;di++){
-        var donor=donors[di];
-
-        for(var d=1;d<=dim();d++){
-          for(var si=0;si<EXTRA_IDS.length;si++){
-            var sid=EXTRA_IDS[si];
-
-            if(state.assignments[akey(d,sid)]!==donor)continue;
-
-            if(moveAssignment(d,sid,donor,extraPid)){
-              moved++;
-              changed=true;
-              break outerMin;
-            }
-          }
-        }
-      }
-
-      if(changed)break;
-    }
-
-    if(changed)continue;
-
-    /* ลด EXTRA-only ที่สูงเกิน +3 */
-    for(var xi=0;xi<ids.length;xi++){
-      var pid=ids[xi];
-      var n=groupCountForPid(counts,'extra',pid);
-
-      if(n<=maxAllowed)continue;
-
-      var receivers=info.ids.slice().sort(function(a,b){
-        return groupCountForPid(counts,'extra',a)-groupCountForPid(counts,'extra',b);
-      });
-
-      outerMax:
-      for(var d2=1;d2<=dim();d2++){
-        for(var s2=0;s2<EXTRA_IDS.length;s2++){
-          var sid2=EXTRA_IDS[s2];
-
-          if(state.assignments[akey(d2,sid2)]!==pid)continue;
-
-          for(var ri=0;ri<receivers.length;ri++){
-            var recv=receivers[ri];
-
-            if(moveAssignment(d2,sid2,pid,recv)){
-              moved++;
-              changed=true;
-              break outerMax;
-            }
-          }
-        }
-      }
-
-      if(changed)break;
-    }
-
-    if(!changed)break;
-  }
-
-  return moved;
+  return 0;
 }
 
 function rule21Report(){
@@ -11131,29 +11010,18 @@ function rule21Report(){
   });
 
   var extraInfo=groupAverageInfo('extra');
-  var extraCap=Math.floor(extraInfo.avg+3+1e-9);
   var extraOnlyBad=[];
-
-  extraOnlyPeople().forEach(function(pid){
-    var n=groupCountForPid(extraInfo.counts,'extra',pid);
-
-    if(n>extraCap){
-      extraOnlyBad.push(pid);
-    }
-  });
 
   return {
     ok:
       groupProblems.length===0&&
-      totalBad.length===0&&
-      extraOnlyBad.length===0,
+      totalBad.length===0,
 
     groupProblems:groupProblems,
     groupDetails:groupDetails,
     totalBad:totalBad,
     totalAvg:totalInfo.avg,
     extraAvg:extraInfo.avg,
-    extraCap:extraCap,
     extraOnlyBad:extraOnlyBad
   };
 }
@@ -11172,9 +11040,8 @@ function rebalanceRule21(){
   for(var round=0;round<6;round++){
     moved+=rebalanceGroups();
     moved+=rebalanceTotal();
-    moved+=rebalanceExtraOnly();
 
-    /* หลังปรับ EXTRA-only ตรวจกลุ่มและยอดรวมอีกครั้ง */
+    /* ตรวจกลุ่มและยอดรวมซ้ำโดยไม่ทำให้กฎข้อ 1–20 เสีย */
     moved+=rebalanceGroups();
     moved+=rebalanceTotal();
 
@@ -11243,7 +11110,7 @@ async function runSchedule(){
     }else if(hasRule(21)&&!balance.ok){
       var parts=[];
       if(balance.report.groupProblems.length)parts.push('รายประเภท: '+balance.report.groupProblems.join(', '));
-      if(balance.report.totalBad.length)parts.push('เวรรวมทั้งเดือนยังเกิน ±1');if(balance.report.extraOnlyBad.length)parts.push('EXTRA-only เกินค่ากลาง EXTRA +3');
+      if(balance.report.totalBad.length)parts.push('เวรรวมทั้งเดือนยังเกิน ±1');
       setStatus('รันเสร็จ แต่กฎข้อ 21 ยังปรับให้ ±1 ไม่ได้ทั้งหมด เนื่องจากติดเงื่อนไข • '+parts.join(' • '),false);
     }else if(hasRule(21)){
       setStatus('รันและบันทึกเรียบร้อย • กฎข้อ 21 ผ่าน: 7 ประเภทเวร + เวรรวมเดือนปัจจุบัน อยู่ในช่วงที่กำหนด',true);
@@ -11583,7 +11450,7 @@ function updateDashboard(){
         :'ยังมีบางประเภทหรือยอดรวมที่เกินเกณฑ์';
     }
     var warnCount=r.groupProblems.length+r.totalBad.length;
-    var errorCount=r.extraOnlyBad.length;
+    var errorCount=0;
     if(el('dashWarn'))el('dashWarn').textContent=warnCount;
     if(el('dashError'))el('dashError').textContent=errorCount;
     if(el('headerBellBadge')){
@@ -11631,8 +11498,7 @@ function renderSummary(){
          ?'✓ กฎข้อ 21 ผ่าน: 7 ประเภทเวร + เวรรวมเดือนปัจจุบัน อยู่ในช่วงที่กำหนด'
          :'⚠ กฎข้อ 21 ยังไม่ผ่านทั้งหมด'+
           (report.groupProblems.length?' • รายประเภท: '+esc(report.groupProblems.join(', ')):'')+
-          (report.totalBad.length?' • เวรรวมทั้งเดือนยังเกิน ±1':'')+
-          (report.extraOnlyBad.length?' • EXTRA-only เกินค่ากลาง EXTRA +3':'')
+          (report.totalBad.length?' • เวรรวมทั้งเดือนยังเกิน ±1':'')
        )+
        '</div>';
 
@@ -11642,7 +11508,6 @@ function renderSummary(){
          return esc(info.label)+' = '+info.avg.toFixed(2);
        }).join(' • ')+
        ' • <b>เวรรวม = '+totalInfo.avg.toFixed(2)+'</b>'+
-       ' • EXTRA-only สูงสุด = '+report.extraCap+
        '</div>';
   }
 
