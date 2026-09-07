@@ -10157,6 +10157,9 @@ function loadConfig(){
   }
   state.pdfNote=c&&c.pdfNote?c.pdfNote:'';
   state.unitInfo=c&&c.unitInfo?c.unitInfo:{name:'',organization:'',head:'',scheduler:'',phone:'',contact:'',logo:''};
+  if(c&&c.uiSettings&&typeof c.uiSettings==='object'){
+    try{localStorage.setItem('roster_ui_v24',JSON.stringify(c.uiSettings))}catch(e){}
+  }
   state.rules=c&&Array.isArray(c.rules)&&c.rules.length?c.rules:DEFAULT_RULES.map(function(r){return {id:r.id,text:r.text}});
 
   /* : คงข้อ 1-20 และใช้ข้อ 21 ล่าสุดเพียงข้อเดียว */
@@ -10190,7 +10193,8 @@ function loadConfig(){
     return String(a.id).localeCompare(String(b.id));
   });
 }
-function configPayload(){return {people:state.people,holidays:state.holidays,customRules:state.customRules,pdfNote:state.pdfNote,rules:state.rules,unitInfo:state.unitInfo||{}}}
+function syncedUiSettings(){var x={};try{x=parse(localStorage.getItem('roster_ui_v24'),{})||{}}catch(e){}return x}
+function configPayload(){return {people:state.people,holidays:state.holidays,customRules:state.customRules,pdfNote:state.pdfNote,rules:state.rules,unitInfo:state.unitInfo||{},uiSettings:syncedUiSettings(),updatedAt:new Date().toISOString()}}
 function saveConfig(){state.pdfNote=el('pdfNote').value;var p=configPayload();localStorage.setItem('roster_config_v8',JSON.stringify(p));scheduleCloudConfigSave(p)}
 
 function normalizeUnitInfo(info){
@@ -11472,7 +11476,7 @@ function buildHeader(){return '<caption>ตารางเวรผู้ช่�
 '</tr></thead>'}
 function optionHtml(selected){var h='<option value=""></option>';state.people.forEach(function(p,i){h+='<option value="'+p.id+'"'+(selected===p.id?' selected':'')+'>'+(i+1)+'. '+esc(p.name)+'</option>'});return h}
 function rosterCellLabel(pid){if(!pid)return '';for(var i=0;i<state.people.length;i++){if(state.people[i].id===pid)return (i+1)+'. '+state.people[i].name}return ''}
-function renderSheet(){if(!workflow)workflow=defaultWorkflow();var editable=canRosterEdit();var h=buildHeader()+'<tbody>';for(var d=1;d<=dim();d++){var w=dow(d);var cls=isHoliday(d)?'holiday':(w===6?'saturday':(w===0?'sunday':''));h+='<tr class="'+cls+'"><td class="date"><b>'+DAYS[dow(d)]+d+'</b>'+(isHoliday(d)?'<br><small>นักขัตฯ</small>':'')+'</td>';SLOTS.forEach(function(s){if(!active(s,d)){h+='<td class="inactive"></td>';return}var v=state.assignments[akey(d,s.id)]||'';h+='<td data-d="'+d+'" data-s="'+s.id+'"><span class="phone-sheet-value">'+esc(rosterCellLabel(v))+'</span><select '+(editable?'':'disabled')+' data-d="'+d+'" data-s="'+s.id+'">'+optionHtml(v)+'</select></td>'});h+='</tr>'}h+='</tbody>';el('sheet').innerHTML=h;el('sheet').classList.toggle('is-readonly',!editable);el('sheet').querySelectorAll('select').forEach(function(s){s.onchange=function(){if(!requireRosterEdit('แก้ไขตาราง')){renderSheet();return}var d=parseInt(this.dataset.d,10),sid=this.dataset.s;if(this.value)state.assignments[akey(d,sid)]=this.value;else delete state.assignments[akey(d,sid)];var label=this.parentNode.querySelector('.phone-sheet-value');if(label)label.textContent=rosterCellLabel(this.value);if(!workflowEditLogged){auditWorkflow('เริ่มแก้ไขตารางเวรด้วยตนเอง');workflowEditLogged=true}validate(false);renderSummary();renderUnitWorkflow()}});validate(false);renderSummary();renderHomePreview();applyUnitPermissions();}
+function renderSheet(){if(!workflow)workflow=defaultWorkflow();var editable=canRosterEdit();var h=buildHeader()+'<tbody>';for(var d=1;d<=dim();d++){var w=dow(d);var cls=isHoliday(d)?'holiday':(w===6?'saturday':(w===0?'sunday':''));h+='<tr class="'+cls+'"><td class="date"><b>'+DAYS[dow(d)]+d+'</b>'+(isHoliday(d)?'<br><small>นักขัตฯ</small>':'')+'</td>';SLOTS.forEach(function(s){if(!active(s,d)){h+='<td class="inactive"></td>';return}var v=state.assignments[akey(d,s.id)]||'';h+='<td data-d="'+d+'" data-s="'+s.id+'"><span class="phone-sheet-value">'+esc(rosterCellLabel(v))+'</span><select '+(editable?'':'disabled')+' data-d="'+d+'" data-s="'+s.id+'">'+optionHtml(v)+'</select></td>'});h+='</tr>'}h+='</tbody>';el('sheet').innerHTML=h;el('sheet').classList.toggle('is-readonly',!editable);el('sheet').querySelectorAll('select').forEach(function(s){s.onchange=function(){if(!requireRosterEdit('แก้ไขตาราง')){renderSheet();return}var d=parseInt(this.dataset.d,10),sid=this.dataset.s;if(this.value)state.assignments[akey(d,sid)]=this.value;else delete state.assignments[akey(d,sid)];var label=this.parentNode.querySelector('.phone-sheet-value');if(label)label.textContent=rosterCellLabel(this.value);if(!workflowEditLogged){auditWorkflow('เริ่มแก้ไขตารางเวรด้วยตนเอง');workflowEditLogged=true}validate(false);renderSummary();renderUnitWorkflow();saveMonth(true)}});validate(false);renderSummary();renderHomePreview();applyUnitPermissions();}
 function mark(d,sid){var td=document.querySelector('td[data-d="'+d+'"][data-s="'+sid+'"]');if(td)td.classList.add('conflict')}
 var lastConflictDetails=[];
 
@@ -11910,40 +11914,35 @@ function fitCanvasToA4(canvas,pdf,left,top,right,bottom){
 function saveCanvasAsPdf(canvas,filename){
   var jsPDF=window.jspdf.jsPDF;
   var pdf=new jsPDF({orientation:'landscape',unit:'mm',format:'a4',compress:true});
-  var fit=fitCanvasToA4(canvas,pdf,10,15,10,13);
-  pdf.addImage(canvas.toDataURL('image/jpeg',0.98),'JPEG',fit.x,fit.y,fit.w,fit.h,undefined,'FAST');
+  var pw=pdf.internal.pageSize.getWidth(),ph=pdf.internal.pageSize.getHeight();
+  var margin=2,maxW=pw-margin*2,maxH=ph-margin*2;
+  var scale=Math.min(maxW/canvas.width,maxH/canvas.height);
+  var w=canvas.width*scale,h=canvas.height*scale;
+  pdf.addImage(canvas.toDataURL('image/jpeg',0.98),'JPEG',(pw-w)/2,(ph-h)/2,w,h,undefined,'FAST');
   pdf.save(filename);
 }
 function prepareSchedulePdfNode(){
   var table=el('sheet').cloneNode(true);
-  table.style.minWidth='0';table.style.width='1700px';table.style.tableLayout='fixed';table.style.borderCollapse='collapse';table.style.background='#fff';
-  var caption=table.querySelector('caption');if(caption){caption.style.fontSize='21px';caption.style.fontWeight='800';caption.style.padding='4px 0 8px'}
-  table.querySelectorAll('th').forEach(function(th){th.style.position='static';th.style.fontWeight='800';th.style.fontSize='12.5px';th.style.lineHeight='1.08';th.style.padding='1.5px';th.style.height='23px';th.style.whiteSpace='nowrap';th.style.background='#e7e7ea';th.style.color='#111'})
-  table.querySelectorAll('td').forEach(function(td){td.style.position='static';td.style.fontWeight='400';td.style.fontSize='12.2px';td.style.lineHeight='1.06';td.style.padding='1px';td.style.height='23px';td.style.whiteSpace='nowrap'})
-  table.querySelectorAll('.date').forEach(function(c){c.style.width='50px';c.style.minWidth='50px';c.style.maxWidth='50px';c.style.fontWeight='800';c.style.fontSize='12.2px';c.style.padding='1px'})
-  table.querySelectorAll('select').forEach(function(select){var span=document.createElement('span');span.textContent=select.options[select.selectedIndex]?select.options[select.selectedIndex].text:'';span.style.display='block';span.style.textAlign='center';span.style.fontSize='12.2px';span.style.fontWeight='400';span.style.whiteSpace='nowrap';span.style.overflow='hidden';select.parentNode.replaceChild(span,select)})
+  table.style.minWidth='0';table.style.width='1600px';table.style.maxWidth='1600px';table.style.tableLayout='fixed';table.style.borderCollapse='collapse';table.style.background='#fff';
+  var caption=table.querySelector('caption');if(caption){caption.style.fontSize='22px';caption.style.fontWeight='800';caption.style.padding='2px 0 5px'}
+  table.querySelectorAll('th').forEach(function(th){th.style.position='static';th.style.fontWeight='800';th.style.fontSize='14px';th.style.lineHeight='1.05';th.style.padding='1px';th.style.height='25px';th.style.whiteSpace='nowrap';th.style.background='#e7e7ea';th.style.color='#111'})
+  table.querySelectorAll('td').forEach(function(td){td.style.position='static';td.style.fontWeight='400';td.style.fontSize='13.5px';td.style.lineHeight='1.04';td.style.padding='1px';td.style.height='25px';td.style.whiteSpace='nowrap'})
+  table.querySelectorAll('.date').forEach(function(c){c.style.width='48px';c.style.minWidth='48px';c.style.maxWidth='48px';c.style.fontWeight='800';c.style.fontSize='13.5px';c.style.padding='1px'})
+  table.querySelectorAll('select').forEach(function(select){var span=document.createElement('span');span.textContent=select.options[select.selectedIndex]?select.options[select.selectedIndex].text:'';span.style.display='block';span.style.textAlign='center';span.style.fontSize='13.5px';span.style.fontWeight='400';span.style.whiteSpace='nowrap';span.style.overflow='hidden';select.parentNode.replaceChild(span,select)})
   table.querySelectorAll('tbody tr').forEach(function(row){var shade=row.classList.contains('saturday')||row.classList.contains('sunday')||row.classList.contains('holiday');row.querySelectorAll('td').forEach(function(td){td.style.background=shade?'#e6e6e6':'#fff';td.style.color='#111'})});
-  var wrap=document.createElement('div');wrap.style.position='fixed';wrap.style.left='-12000px';wrap.style.top='0';wrap.style.width='1700px';wrap.style.background='#fff';wrap.style.padding='0';wrap.appendChild(table);
+  var wrap=document.createElement('div');wrap.style.position='fixed';wrap.style.left='-12000px';wrap.style.top='0';wrap.style.width='1600px';wrap.style.height='1131px';wrap.style.overflow='hidden';wrap.style.boxSizing='border-box';wrap.style.background='#fff';wrap.style.padding='0';wrap.style.margin='0';wrap.appendChild(table);
   var note=(el('pdfNote').value||'').trim();
-  var noteBox=document.createElement('div');noteBox.style.marginTop='6px';noteBox.style.fontFamily='-apple-system,BlinkMacSystemFont,"Noto Sans Thai",Tahoma,Arial,sans-serif';noteBox.style.fontSize='13px';noteBox.style.lineHeight='1.25';noteBox.style.color='#111';noteBox.style.textAlign='left';noteBox.style.whiteSpace='pre-wrap';
+  var noteBox=document.createElement('div');noteBox.style.marginTop='3px';noteBox.style.fontFamily='-apple-system,BlinkMacSystemFont,"Noto Sans Thai",Tahoma,Arial,sans-serif';noteBox.style.fontSize='13px';noteBox.style.lineHeight='1.15';noteBox.style.color='#111';noteBox.style.textAlign='left';noteBox.style.whiteSpace='pre-wrap';
   noteBox.innerHTML='<b>หมายเหตุ:</b> '+esc(note||'-');wrap.appendChild(noteBox);
   document.body.appendChild(wrap);return wrap;
 }
 function autoFillPdfHeight(wrap,table){
-  var printableRatio=182/277;
-  var targetHeight=wrap.scrollWidth*printableRatio;
-  var currentHeight=wrap.scrollHeight;
-  if(currentHeight>=targetHeight)return;
-  var rows=table.querySelectorAll('tbody tr');
-  if(!rows.length)return;
-  var extra=(targetHeight-currentHeight)/rows.length;
-  rows.forEach(function(row){
-    var h=row.getBoundingClientRect().height+extra;
-    row.querySelectorAll('td').forEach(function(td){
-      td.style.height=h+'px';
-      td.style.verticalAlign='middle';
-    });
-  });
+  var rows=table.querySelectorAll('tbody tr');if(!rows.length)return;
+  var caption=table.querySelector('caption');var head=table.querySelector('thead');
+  var note=wrap.lastElementChild===table?null:wrap.lastElementChild;
+  var used=(caption?caption.getBoundingClientRect().height:0)+(head?head.getBoundingClientRect().height:0)+(note?note.getBoundingClientRect().height+4:0);
+  var target=Math.max(22,(1127-used)/rows.length);
+  rows.forEach(function(row){row.querySelectorAll('td').forEach(function(td){td.style.height=target+'px';td.style.verticalAlign='middle'})});
 }
 
 function autoFillSummaryPdfHeight(wrap,table){
@@ -11976,7 +11975,12 @@ function saveSchedulePDF(){
       useCORS:true,
       backgroundColor:'#fff',
       logging:false,
-      windowWidth:1700
+      width:1600,
+      height:1131,
+      windowWidth:1600,
+      windowHeight:1131,
+      scrollX:0,
+      scrollY:0
     }).then(function(canvas){
       saveCanvasAsPdf(canvas,'ตารางเวร_'+MONTHS[cm()]+'_'+py()+'.pdf');
       document.body.removeChild(wrap);
@@ -12064,13 +12068,104 @@ async function connectCloud(show){
     return false
   }
 }
-function scheduleCloudConfigSave(payload){if(!cloud.connected)return;clearTimeout(cloud.timer);cloud.timer=setTimeout(function(){cloudRequest('/api/config',{method:'PUT',body:JSON.stringify(payload)}).catch(function(){})},500)}
-async function cloudSaveMonth(data){if(!cloud.connected)return;try{await cloudRequest('/api/month/'+encodeURIComponent(data.key),{method:'PUT',body:JSON.stringify(data)})}catch(e){}}
+var cloudLastLocalEdit=0,cloudPollTimer=null,cloudPullBusy=false;
+var cloudConfigPending=null,cloudConfigSaving=false,cloudMonthPending={},cloudMonthSaving={};
+function markCloudLocalEdit(){cloudLastLocalEdit=Date.now()}
+function cloudHasPendingWrites(){return !!cloudConfigPending||cloudConfigSaving||Object.keys(cloudMonthPending).length>0||Object.keys(cloudMonthSaving).some(function(k){return cloudMonthSaving[k]})}
+async function ensureCloudConnected(){if(cloud.connected)return true;return await connectCloud(false)}
+function scheduleCloudConfigSave(payload){
+  markCloudLocalEdit();
+  cloudConfigPending=payload||configPayload();
+  clearTimeout(cloud.timer);
+  cloud.timer=setTimeout(flushCloudConfig,80);
+}
+async function flushCloudConfig(){
+  if(cloudConfigSaving||!cloudConfigPending||!auth.token)return;
+  var payload=cloudConfigPending;cloudConfigPending=null;cloudConfigSaving=true;
+  try{
+    if(!(await ensureCloudConnected()))throw new Error('Cloud ยังไม่เชื่อม');
+    await cloudRequest('/api/config',{method:'PUT',body:JSON.stringify(payload)});
+  }catch(e){
+    console.warn('config autosave',e);
+    cloudConfigPending=payload;
+    setTimeout(flushCloudConfig,1200);
+  }finally{
+    cloudConfigSaving=false;
+    if(cloudConfigPending)setTimeout(flushCloudConfig,30);
+  }
+}
+async function cloudSaveMonth(data){
+  if(!data||!data.key)return;
+  markCloudLocalEdit();
+  cloudMonthPending[data.key]=data;
+  flushCloudMonth(data.key);
+}
+async function flushCloudMonth(key){
+  if(cloudMonthSaving[key]||!cloudMonthPending[key]||!auth.token)return;
+  var data=cloudMonthPending[key];delete cloudMonthPending[key];cloudMonthSaving[key]=true;
+  try{
+    if(!(await ensureCloudConnected()))throw new Error('Cloud ยังไม่เชื่อม');
+    await cloudRequest('/api/month/'+encodeURIComponent(key),{method:'PUT',body:JSON.stringify(data)});
+  }catch(e){
+    console.warn('month autosave',e);
+    cloudMonthPending[key]=data;
+    setTimeout(function(){flushCloudMonth(key)},1200);
+  }finally{
+    cloudMonthSaving[key]=false;
+    if(cloudMonthPending[key])setTimeout(function(){flushCloudMonth(key)},30);
+  }
+}
+function flushAllCloudWrites(){
+  if(cloudConfigPending)flushCloudConfig();
+  Object.keys(cloudMonthPending).forEach(flushCloudMonth);
+}
 async function fetchCloudMonth(key){if(!cloud.connected)return null;var r=await cloudRequest('/api/month/'+encodeURIComponent(key),{method:'GET'});if(r&&r.found&&r.data){localStorage.setItem(storageKey(key),JSON.stringify(r.data));return r.data}return null}
 async function ensureCloudMonths(keys){for(var i=0;i<keys.length;i++)try{await fetchCloudMonth(keys[i])}catch(e){}}
 async function uploadCloud(){if(!cloud.connected&&!(await connectCloud(false)))return;await cloudRequest('/api/config',{method:'PUT',body:JSON.stringify(configPayload())});for(var i=0;i<localStorage.length;i++){var key=localStorage.key(i);if(key&&key.indexOf('roster_month_v7_')===0){var d=parse(localStorage.getItem(key),null);if(d)await cloudRequest('/api/month/'+encodeURIComponent(key.replace('roster_month_v7_','')),{method:'PUT',body:JSON.stringify(d)})}}setStatus('อัปโหลดข้อมูลออนไลน์แล้ว',true)}
-async function downloadCloud(){if(!cloud.connected&&!(await connectCloud(false)))return;var c=await cloudRequest('/api/config',{method:'GET'});if(c&&c.found&&c.data){localStorage.setItem('roster_config_v8',JSON.stringify(c.data));loadConfig();buildNames();renderHolidays();renderRules();renderCustomRules();renderUnitInfo()}var list=await cloudRequest('/api/months',{method:'GET'}),months=list.months||[];for(var i=0;i<months.length;i++)await fetchCloudMonth(months[i].key);loadMonth(true);setStatus('โหลดข้อมูลออนไลน์แล้ว',true)}
-async function initCloud(){loadCloudSettings();if(!cloud.apiUrl||!auth.token)return;if(await connectCloud(false)){await ensureCloudMonths([prevKey(),currentKey()]);loadMonth(true)}}
+async function downloadCloud(){if(!cloud.connected&&!(await connectCloud(false)))return;var c=await cloudRequest('/api/config',{method:'GET'});if(c&&c.found&&c.data){localStorage.setItem('roster_config_v8',JSON.stringify(c.data));loadConfig();buildNames();renderHolidays();renderRules();renderCustomRules();renderUnitInfo();renderPeopleV24();loadV24Settings()}var list=await cloudRequest('/api/months',{method:'GET'}),months=list.months||[];for(var i=0;i<months.length;i++)await fetchCloudMonth(months[i].key);loadMonth(true);setStatus('โหลดข้อมูลออนไลน์แล้ว',true)}
+function cloudComparableConfig(x){if(!x)return null;var y={};Object.keys(x).forEach(function(k){if(k!=='updatedAt')y[k]=x[k]});return y}
+function cloudSame(a,b){try{return JSON.stringify(a||null)===JSON.stringify(b||null)}catch(e){return false}}
+async function pullCloudLatest(force){
+  if(cloudPullBusy||!auth.token)return;
+  if(cloudHasPendingWrites())return;
+  if(!force&&Date.now()-cloudLastLocalEdit<3500)return;
+  cloudPullBusy=true;
+  try{
+    if(!cloud.connected&&!(await connectCloud(false)))return;
+    var c=await cloudRequest('/api/config',{method:'GET'});
+    if(c&&c.found&&c.data){
+      var lc=parse(localStorage.getItem('roster_config_v8'),null);
+      if(!cloudSame(cloudComparableConfig(lc),cloudComparableConfig(c.data))){
+        localStorage.setItem('roster_config_v8',JSON.stringify(c.data));
+        loadConfig();buildNames();renderHolidays();renderRules();renderCustomRules();renderUnitInfo();renderPeopleV24();loadV24Settings();renderSummary();renderHomeV24();
+      }
+    }
+    var key=currentKey(),r=await cloudRequest('/api/month/'+encodeURIComponent(key),{method:'GET'});
+    if(r&&r.found&&r.data){
+      var lm=savedMonth(key);
+      if(!cloudSame(lm,r.data)){
+        localStorage.setItem(storageKey(key),JSON.stringify(r.data));
+        state.assignments=r.data.assignments||{};state.rotation=r.data.rotation||{};workflow=normalizeWorkflow(r.data.workflow);workflowEditLogged=false;
+        renderSheet();renderHistory();renderUnitWorkflow();renderSummaryV24();renderHomeV24();
+      }
+    }
+  }catch(e){console.warn('cloud pull',e)}finally{cloudPullBusy=false}
+}
+function startCloudAutoSync(){
+  if(cloudPollTimer)clearInterval(cloudPollTimer);
+  cloudPollTimer=setInterval(function(){flushAllCloudWrites();pullCloudLatest(false)},2500);
+}
+async function initCloud(){
+  loadCloudSettings();if(!cloud.apiUrl||!auth.token)return;
+  if(await connectCloud(false)){
+    var c=await cloudRequest('/api/config',{method:'GET'}).catch(function(){return null});
+    if(c&&c.found&&c.data){localStorage.setItem('roster_config_v8',JSON.stringify(c.data));loadConfig();loadV24Settings()}
+    await ensureCloudMonths([prevKey(),currentKey()]);loadMonth(true);startCloudAutoSync();
+  }
+}
+document.addEventListener('visibilitychange',function(){if(!document.hidden){flushAllCloudWrites();pullCloudLatest(true)}});
+window.addEventListener('focus',function(){flushAllCloudWrites();pullCloudLatest(true)});
+window.addEventListener('online',function(){cloud.connected=false;flushAllCloudWrites();pullCloudLatest(true)});
 
 function showActionFeedback(message,type){
   type=type||'info';
@@ -13090,7 +13185,7 @@ function loadV24Settings(){
 function saveV24Settings(){
   var s={dateFormat:el('settingsDateFormatV24').value,weekStart:el('settingsWeekStartV24').value,workStart:el('settingsWorkStartV24').value,workEnd:el('settingsWorkEndV24').value,fontSize:el('settingsFontV24').value};
   ['notifyRunV24','notifyConflictV24','notifyHolidayV24','notifyDeadlineV24','displayWeekendV24','displayHolidayV24','displayWatermarkV24'].forEach(function(id){if(el(id))s[id]=el(id).checked});
-  localStorage.setItem('roster_ui_v24',JSON.stringify(s));applyV24Settings(s);setStatus('บันทึกการตั้งค่าหน้าจอแล้ว',true);
+  localStorage.setItem('roster_ui_v24',JSON.stringify(s));applyV24Settings(s);scheduleCloudConfigSave(configPayload());setStatus('บันทึกการตั้งค่าหน้าจอแล้ว',true);
 }
 function applyV24Settings(s){
   document.documentElement.style.fontSize=s.fontSize==='large'?'17px':(s.fontSize==='small'?'14px':'16px');
@@ -13099,7 +13194,7 @@ function applyV24Settings(s){
 
 function bind(){
 el('runBtn').onclick=runSchedule;el('saveBtn').onclick=unitSaveMonth;el('loadBtn').onclick=function(){loadMonth(false)};el('validateBtn').onclick=function(){validate(true)};el('printBtn').onclick=function(){window.print()};el('pdfBtn').onclick=saveSchedulePDF;
-el('clearBtn').onclick=function(){if(!requireRosterEdit('ล้างตาราง'))return;if(!confirm('ล้างตารางเดือนนี้หรือไม่?'))return;state.assignments={};auditWorkflow('ล้างตารางเวร');renderSheet();setStatus('ล้างตารางแล้ว',true)};
+el('clearBtn').onclick=function(){if(!requireRosterEdit('ล้างตาราง'))return;if(!confirm('ล้างตารางเดือนนี้หรือไม่?'))return;state.assignments={};auditWorkflow('ล้างตารางเวร');renderSheet();saveMonth(true);setStatus('ล้างตารางแล้ว',true)};
 el('addPersonBtn').onclick=addPerson;el('removePersonBtn').onclick=removePerson;el('addHolidayBtn').onclick=addHoliday;el('addRuleBtn').onclick=addRule;el('addCustomRuleBtn').onclick=addCustomRule;
 el('cloudConnectBtn').onclick=function(){connectCloud(true)};el('cloudUploadBtn').onclick=uploadCloud;el('cloudDownloadBtn').onclick=downloadCloud;
 el('summaryPdfBtn').onclick=saveSummaryPDF;el('summaryPrintBtn').onclick=printSummary;el('summaryOpenPdfBtn').onclick=openSummaryPdf;
@@ -13193,10 +13288,10 @@ if(el('settingsConfirmPassword'))el('settingsConfirmPassword').onkeydown=functio
 if(el('settingsSaveUnitV24'))el('settingsSaveUnitV24').onclick=function(){if(unitUser.role!=='admin'){setStatus('แก้ข้อมูลหน่วยงานได้เฉพาะ Admin',false);return}state.unitInfo=normalizeUnitInfo(state.unitInfo);state.unitInfo.name=el('settingsUnitNameV24').value.trim();state.unitInfo.organization=el('settingsOrgV24').value.trim();state.unitInfo.head=el('settingsHeadV24').value.trim();state.unitInfo.scheduler=el('settingsSchedulerV24').value.trim();saveConfig();renderUnitInfo();setStatus('บันทึกข้อมูลหน่วยงานแล้ว',true)};
 if(el('settingsSaveTimeV24'))el('settingsSaveTimeV24').onclick=saveV24Settings;
 if(el('settingsSaveStyleV24'))el('settingsSaveStyleV24').onclick=saveV24Settings;
-document.querySelectorAll('[data-v24-color]').forEach(function(b){b.style.background=b.dataset.v24Color;b.onclick=function(){document.documentElement.style.setProperty('--v24-pink',this.dataset.v24Color);var s={};try{s=JSON.parse(localStorage.getItem('roster_ui_v24')||'{}')}catch(e){}s.accent=this.dataset.v24Color;localStorage.setItem('roster_ui_v24',JSON.stringify(s))}});
+document.querySelectorAll('[data-v24-color]').forEach(function(b){b.style.background=b.dataset.v24Color;b.onclick=function(){document.documentElement.style.setProperty('--v24-pink',this.dataset.v24Color);var s={};try{s=JSON.parse(localStorage.getItem('roster_ui_v24')||'{}')}catch(e){}s.accent=this.dataset.v24Color;localStorage.setItem('roster_ui_v24',JSON.stringify(s));scheduleCloudConfigSave(configPayload())}});
 if(el('settingsGoRulesV24'))el('settingsGoRulesV24').onclick=function(){showPage('rules',true)};
 if(el('settingsClearV24'))el('settingsClearV24').onclick=function(){showPage('roster',true);setTimeout(function(){el('clearBtn').click()},80)};
-if(el('settingsResetV24'))el('settingsResetV24').onclick=function(){localStorage.removeItem('roster_ui_v24');loadV24Settings();setStatus('รีเซ็ตค่าหน้าจอแล้ว',true)};
+if(el('settingsResetV24'))el('settingsResetV24').onclick=function(){localStorage.removeItem('roster_ui_v24');loadV24Settings();scheduleCloudConfigSave(configPayload());setStatus('รีเซ็ตค่าหน้าจอแล้ว',true)};
 if(el('settingsPeopleV24'))el('settingsPeopleV24').onclick=function(){showPage('people',true)};
 if(el('settingsValidateV24'))el('settingsValidateV24').onclick=function(){showPage('roster',true);setTimeout(function(){validate(true)},80)};
 ['notifyRunV24','notifyConflictV24','notifyHolidayV24','notifyDeadlineV24','displayWeekendV24','displayHolidayV24','displayWatermarkV24','settingsFontV24'].forEach(function(id){if(el(id))el(id).onchange=saveV24Settings});
@@ -15171,212 +15266,6 @@ html body #page-home [data-home-version]{
 })();
 </script>
 
-<script id="v3926-autosync-pdf-mobile-fix">
-(function(){
-  'use strict';
-  var syncTimer=null, pullBusy=false, lastLocalEdit=0, pollTimer=null;
 
-  function markLocal(){ lastLocalEdit=Date.now(); }
-  function stableJson(x){try{return JSON.stringify(x||null)}catch(e){return ''}}
-
-  /* Every configuration edit saves to localStorage immediately and Cloud automatically.
-     If Cloud is temporarily disconnected, reconnect once and retry instead of silently dropping the edit. */
-  window.scheduleCloudConfigSave=function(payload){
-    markLocal();
-    clearTimeout(syncTimer);
-    syncTimer=setTimeout(async function(){
-      try{
-        if(!cloud.connected){
-          var ok=await connectCloud(false);
-          if(!ok)return;
-        }
-        await cloudRequest('/api/config',{method:'PUT',body:JSON.stringify(payload)});
-      }catch(e){console.warn('V39.26 config autosave',e)}
-    },250);
-  };
-
-  var originalCloudSaveMonth=window.cloudSaveMonth;
-  window.cloudSaveMonth=async function(data){
-    markLocal();
-    try{
-      if(!cloud.connected){
-        var ok=await connectCloud(false);
-        if(!ok)return;
-      }
-      await cloudRequest('/api/month/'+encodeURIComponent(data.key),{method:'PUT',body:JSON.stringify(data)});
-    }catch(e){console.warn('V39.26 month autosave',e)}
-  };
-
-  var monthSaveTimer=null;
-  window.scheduleAutoSaveCurrentMonthV3926=function(){
-    markLocal();
-    clearTimeout(monthSaveTimer);
-    monthSaveTimer=setTimeout(function(){
-      try{saveMonth(true)}catch(e){console.warn('V39.26 roster autosave',e)}
-    },300);
-  };
-
-  /* Manual cell edits now save automatically; no separate Save press is required. */
-  var baseRenderSheet=window.renderSheet;
-  if(typeof baseRenderSheet==='function'){
-    window.renderSheet=function(){
-      var out=baseRenderSheet.apply(this,arguments);
-      try{
-        var root=el('sheet');
-        if(root)root.querySelectorAll('select[data-d][data-s]').forEach(function(sel){
-          if(sel.dataset.v3926Autosave==='1')return;
-          sel.dataset.v3926Autosave='1';
-          var old=sel.onchange;
-          sel.onchange=function(ev){
-            var r=old?old.call(this,ev):undefined;
-            scheduleAutoSaveCurrentMonthV3926();
-            return r;
-          };
-        });
-      }catch(e){console.warn('V39.26 bind autosave',e)}
-      return out;
-    };
-  }
-
-  function applyRemoteConfigV3926(remote){
-    if(!remote)return false;
-    var local=parse(localStorage.getItem('roster_config_v8'),null);
-    if(stableJson(local)===stableJson(remote))return false;
-    localStorage.setItem('roster_config_v8',JSON.stringify(remote));
-    loadConfig();
-    try{buildNames()}catch(e){}
-    try{renderHolidays()}catch(e){}
-    try{renderRules()}catch(e){}
-    try{renderCustomRules()}catch(e){}
-    try{renderUnitInfo()}catch(e){}
-    try{renderPeopleV24()}catch(e){}
-    try{renderSummary()}catch(e){}
-    try{renderHomeV24()}catch(e){}
-    return true;
-  }
-
-  async function pullCloudV3926(force){
-    if(pullBusy||!auth.token)return;
-    if(!force && Date.now()-lastLocalEdit<1600)return;
-    pullBusy=true;
-    try{
-      if(!cloud.connected){
-        var ok=await connectCloud(false);
-        if(!ok)return;
-      }
-      var c=await cloudRequest('/api/config',{method:'GET'});
-      if(c&&c.found&&c.data)applyRemoteConfigV3926(c.data);
-
-      var key=currentKey();
-      var remote=await cloudRequest('/api/month/'+encodeURIComponent(key),{method:'GET'});
-      if(remote&&remote.found&&remote.data){
-        var local=savedMonth(key);
-        if(stableJson(local)!==stableJson(remote.data)){
-          localStorage.setItem(storageKey(key),JSON.stringify(remote.data));
-          state.assignments=remote.data.assignments||{};
-          state.rotation=remote.data.rotation||{};
-          workflow=normalizeWorkflow(remote.data.workflow);
-          workflowEditLogged=false;
-          try{renderSheet()}catch(e){}
-          try{renderHistory()}catch(e){}
-          try{renderUnitWorkflow()}catch(e){}
-          try{renderSummaryV24()}catch(e){}
-          try{renderHomeV24()}catch(e){}
-        }
-      }
-    }catch(e){console.warn('V39.26 cloud pull',e)}finally{pullBusy=false}
-  }
-  window.pullCloudV3926=pullCloudV3926;
-
-  /* On login/open, Cloud is authoritative for current shared data. */
-  var baseInitCloud=window.initCloud;
-  window.initCloud=async function(){
-    loadCloudSettings();
-    if(!cloud.apiUrl||!auth.token)return;
-    if(await connectCloud(false)){
-      try{
-        var c=await cloudRequest('/api/config',{method:'GET'});
-        if(c&&c.found&&c.data)applyRemoteConfigV3926(c.data);
-      }catch(e){}
-      await ensureCloudMonths([prevKey(),currentKey()]);
-      loadMonth(true);
-    }
-  };
-
-  function startPolling(){
-    if(pollTimer)clearInterval(pollTimer);
-    pollTimer=setInterval(function(){pullCloudV3926(false)},10000);
-  }
-  if(document.readyState==='loading'){
-    document.addEventListener('DOMContentLoaded',startPolling,{once:true});
-  }else startPolling();
-  document.addEventListener('visibilitychange',function(){if(!document.hidden)pullCloudV3926(true)});
-  window.addEventListener('focus',function(){pullCloudV3926(true)});
-
-  /* Trim the white area Safari/html2canvas can append around an off-screen capture. */
-  function trimWhiteCanvasV3926(canvas){
-    try{
-      var ctx=canvas.getContext('2d',{willReadFrequently:true});
-      var w=canvas.width,h=canvas.height;
-      var data=ctx.getImageData(0,0,w,h).data;
-      var minX=w,minY=h,maxX=-1,maxY=-1;
-      var step=Math.max(1,Math.floor(Math.min(w,h)/1600));
-      for(var y=0;y<h;y+=step){
-        for(var x=0;x<w;x+=step){
-          var i=(y*w+x)*4;
-          if(data[i+3]>10 && (data[i]<247||data[i+1]<247||data[i+2]<247)){
-            if(x<minX)minX=x;if(x>maxX)maxX=x;if(y<minY)minY=y;if(y>maxY)maxY=y;
-          }
-        }
-      }
-      if(maxX<0||maxY<0)return canvas;
-      var pad=Math.max(12,Math.round(Math.min(w,h)*0.008));
-      minX=Math.max(0,minX-pad);minY=Math.max(0,minY-pad);
-      maxX=Math.min(w-1,maxX+pad);maxY=Math.min(h-1,maxY+pad);
-      var out=document.createElement('canvas');
-      out.width=maxX-minX+1;out.height=maxY-minY+1;
-      var o=out.getContext('2d');o.fillStyle='#fff';o.fillRect(0,0,out.width,out.height);
-      o.drawImage(canvas,minX,minY,out.width,out.height,0,0,out.width,out.height);
-      return out;
-    }catch(e){return canvas}
-  }
-
-  /* Use the same A4 landscape physical size on phone, iPad and desktop. */
-  window.saveCanvasAsPdf=function(canvas,filename){
-    var jsPDF=window.jspdf.jsPDF;
-    var clean=trimWhiteCanvasV3926(canvas);
-    var pdf=new jsPDF({orientation:'landscape',unit:'mm',format:'a4',compress:true,hotfixes:['px_scaling']});
-    var pw=pdf.internal.pageSize.getWidth(),ph=pdf.internal.pageSize.getHeight();
-    var left=8,right=8,top=8,bottom=8,maxW=pw-left-right,maxH=ph-top-bottom;
-    var ratio=Math.min(maxW/clean.width,maxH/clean.height);
-    var ww=clean.width*ratio,hh=clean.height*ratio;
-    var x=(pw-ww)/2,y=(ph-hh)/2;
-    pdf.addImage(clean.toDataURL('image/jpeg',0.96),'JPEG',x,y,ww,hh,undefined,'FAST');
-    pdf.save(filename);
-  };
-
-  /* More deterministic html2canvas sizing on iPhone Safari. */
-  var baseSaveSchedulePDF=window.saveSchedulePDF;
-  window.saveSchedulePDF=function(){
-    state.pdfNote=el('pdfNote').value;saveConfig();
-    var wrap=prepareSchedulePdfNode(), table=wrap.querySelector('table');
-    requestAnimationFrame(function(){
-      autoFillPdfHeight(wrap,table);
-      var width=Math.ceil(wrap.scrollWidth),height=Math.ceil(wrap.scrollHeight);
-      html2canvas(wrap,{scale:2,useCORS:true,backgroundColor:'#fff',logging:false,width:width,height:height,windowWidth:1700,windowHeight:Math.max(height,1000),scrollX:0,scrollY:0}).then(function(canvas){
-        saveCanvasAsPdf(canvas,'ตารางเวร_'+MONTHS[cm()]+'_'+py()+'.pdf');
-        if(wrap.parentNode)wrap.parentNode.removeChild(wrap);
-        setStatus('บันทึก PDF A4 แนวนอนเต็มหน้าเรียบร้อยแล้ว',true);
-      }).catch(function(err){try{if(wrap.parentNode)wrap.parentNode.removeChild(wrap)}catch(e){}setStatus('สร้าง PDF ไม่สำเร็จ: '+err.message,false)});
-    });
-  };
-
-  /* Existing click binding may already point to the old function object. Rebind after load. */
-  function rebindV3926(){
-    try{if(el('pdfBtn'))el('pdfBtn').onclick=window.saveSchedulePDF}catch(e){}
-  }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',rebindV3926,{once:true});else rebindV3926();
-})();
-</script>
 </body>
 </html>
