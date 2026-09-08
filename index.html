@@ -15393,5 +15393,45 @@ html body #page-home [data-home-version]{
 })();
 </script>
 
+
+<script id="history-v39269-instant-refresh-only">
+(function(){
+  'use strict';
+  function refreshHistoryV39269(){
+    var btn=document.getElementById('historyRefreshBtn');
+    if(!btn)return;
+    setTimeout(function(){
+      try{btn.click()}catch(e){}
+    },0);
+  }
+
+  function bindHistoryInstantRefreshV39269(){
+    var saveBtn=document.getElementById('saveBtn');
+    if(saveBtn&&!saveBtn.dataset.historyInstantRefreshV39269){
+      saveBtn.dataset.historyInstantRefreshV39269='1';
+      saveBtn.addEventListener('click',function(){
+        setTimeout(refreshHistoryV39269,30);
+      });
+    }
+
+    var page=document.getElementById('page-history');
+    if(page&&!page.dataset.historyInstantRefreshV39269){
+      page.dataset.historyInstantRefreshV39269='1';
+      var wasActive=page.classList.contains('active');
+      new MutationObserver(function(){
+        var active=page.classList.contains('active');
+        if(active&&!wasActive)refreshHistoryV39269();
+        wasActive=active;
+      }).observe(page,{attributes:true,attributeFilter:['class']});
+    }
+  }
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',bindHistoryInstantRefreshV39269,{once:true});
+  }else{
+    bindHistoryInstantRefreshV39269();
+  }
+})();
+</script>
 </body>
 </html>
