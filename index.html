@@ -15338,5 +15338,60 @@ html body #page-home [data-home-version]{
 </script>
 
 
+<!-- V39.26.8 NOTIFICATION CENTER ONLY: visual feedback layer, no business-logic changes -->
+<style id="v39268-notification-center-css">
+#v39268-toast-stack{position:fixed;top:18px;right:18px;z-index:2147483000;display:flex;flex-direction:column;gap:10px;width:min(390px,calc(100vw - 36px));pointer-events:none}
+.v39268-toast{pointer-events:auto;display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-radius:16px;border:1px solid #e7e9ef;background:rgba(255,255,255,.97);box-shadow:0 12px 30px rgba(48,56,74,.14);font-family:inherit;color:#263248;transform:translateY(-8px);opacity:0;transition:opacity .18s ease,transform .18s ease;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.v39268-toast.show{transform:translateY(0);opacity:1}
+.v39268-toast-icon{flex:0 0 28px;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900}
+.v39268-toast-body{min-width:0;flex:1}.v39268-toast-title{font-size:13px;font-weight:800;line-height:1.25;margin:0 0 2px}.v39268-toast-message{font-size:12px;line-height:1.45;overflow-wrap:anywhere}.v39268-toast-close{border:0;background:transparent;color:#8a93a3;font-size:18px;line-height:1;padding:2px 0 0 6px;cursor:pointer}
+.v39268-toast.success{border-color:#ccebdc;background:rgba(245,255,250,.98)}.v39268-toast.success .v39268-toast-icon{background:#dcf7e8;color:#14875a}
+.v39268-toast.info{border-color:#cfe8f5;background:rgba(247,253,255,.98)}.v39268-toast.info .v39268-toast-icon{background:#dff3fb;color:#2488ad}
+.v39268-toast.warning{border-color:#f3dfaa;background:rgba(255,252,241,.98)}.v39268-toast.warning .v39268-toast-icon{background:#fff1c7;color:#a87500}
+.v39268-toast.error{border-color:#f3c7c7;background:rgba(255,247,247,.98)}.v39268-toast.error .v39268-toast-icon{background:#ffe0e0;color:#c34040}
+@media(max-width:700px){#v39268-toast-stack{top:10px;left:12px;right:12px;width:auto}.v39268-toast{border-radius:14px;padding:11px 12px}.v39268-toast-title{font-size:12.5px}.v39268-toast-message{font-size:11.5px}}
+</style>
+<script id="v39268-notification-center-js">
+(function(){
+  'use strict';
+  var lastMessage='',lastAt=0;
+  function stack(){var s=document.getElementById('v39268-toast-stack');if(!s){s=document.createElement('div');s.id='v39268-toast-stack';s.setAttribute('aria-live','polite');s.setAttribute('aria-atomic','false');document.body.appendChild(s)}return s}
+  function classify(msg,isErr){var t=String(msg||'');if(isErr||/ไม่สำเร็จ|ผิดพลาด|ล้มเหลว|error|เชื่อมต่อ.*ไม่ได้|ข้อขัดแย้ง/i.test(t))return 'error';if(/เตือน|ยังไม่|กรุณา|ต้อง|เหลือ|กำลัง|รอ|กำลังซิงก์/i.test(t))return 'warning';if(/สำเร็จ|เรียบร้อย|บันทึกแล้ว|ซิงก์แล้ว|อัปเดตแล้ว|โหลด.*แล้ว|ไม่พบข้อขัดแย้ง/i.test(t))return 'success';return 'info'}
+  function titleFor(type){return type==='success'?'สำเร็จ':type==='warning'?'แจ้งเตือน':type==='error'?'เกิดข้อผิดพลาด':'แจ้งให้ทราบ'}
+  function iconFor(type){return type==='success'?'✓':type==='warning'?'!':type==='error'?'×':'i'}
+  function show(type,message,opts){
+    message=String(message||'').trim();if(!message)return;
+    var now=Date.now();if(message===lastMessage&&now-lastAt<1800)return;lastMessage=message;lastAt=now;
+    opts=opts||{};type=type||classify(message,false);
+    var item=document.createElement('div');item.className='v39268-toast '+type;item.setAttribute('role',type==='error'?'alert':'status');
+    item.innerHTML='<div class="v39268-toast-icon">'+iconFor(type)+'</div><div class="v39268-toast-body"><div class="v39268-toast-title">'+titleFor(type)+'</div><div class="v39268-toast-message"></div></div><button type="button" class="v39268-toast-close" aria-label="ปิด">×</button>';
+    item.querySelector('.v39268-toast-message').textContent=message;
+    var s=stack();s.appendChild(item);while(s.children.length>4)s.removeChild(s.firstElementChild);
+    requestAnimationFrame(function(){item.classList.add('show')});
+    function remove(){item.classList.remove('show');setTimeout(function(){if(item.parentNode)item.parentNode.removeChild(item)},180)}
+    item.querySelector('.v39268-toast-close').onclick=remove;
+    if(!opts.sticky)setTimeout(remove,opts.duration||(type==='error'?6500:type==='warning'?5000:3600));
+  }
+  window.showSystemToast=function(type,message,opts){show(type,message,opts)};
+  function observeStatus(){
+    var node=document.getElementById('status');if(!node)return false;
+    var prev='';
+    function emit(){var msg=(node.textContent||'').trim();if(!msg||msg===prev)return;prev=msg;show(classify(msg,node.classList.contains('err')),msg)}
+    new MutationObserver(emit).observe(node,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['class']});
+    return true;
+  }
+  function bindActionHints(){
+    document.addEventListener('click',function(ev){
+      var b=ev.target&&ev.target.closest?ev.target.closest('button,[role="button"]'):null;if(!b)return;
+      var txt=((b.textContent||'')+' '+(b.getAttribute('aria-label')||'')+' '+(b.getAttribute('title')||'')).trim();
+      if(/ยกเลิก/.test(txt)){show('info','ยกเลิกการดำเนินการแล้ว',{duration:2200});return}
+      if(/ลบ|ล้าง|รีเซต|คืนค่า/.test(txt)){show('warning','กำลังดำเนินการ: '+(b.textContent||b.getAttribute('aria-label')||'รายการสำคัญ').trim(),{duration:2600})}
+    },false);
+  }
+  function init(){if(!observeStatus()){var n=0,t=setInterval(function(){n++;if(observeStatus()||n>20)clearInterval(t)},250)}bindActionHints()}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+</script>
+
 </body>
 </html>
