@@ -8672,6 +8672,89 @@ html.phone-device body.s37-settings-open .header-user-status{
   }
 }
 </style>
+
+<style id="login-v39270-cute-design-only">
+/* V39.26.10 LOGIN VISUAL ONLY — scoped strictly to #authOverlay */
+#authOverlay.auth-overlay{
+  background:
+    radial-gradient(circle at 8% 18%,rgba(255,255,255,.85) 0 72px,transparent 73px),
+    radial-gradient(circle at 92% 80%,rgba(255,255,255,.72) 0 86px,transparent 87px),
+    linear-gradient(135deg,#fff6fb 0%,#f7efff 31%,#eefbff 66%,#fff9ec 100%)!important;
+  padding:24px!important;
+  overflow:auto!important;
+}
+#authOverlay .auth-card{
+  width:min(560px,100%)!important;
+  border:1px solid rgba(244,182,216,.72)!important;
+  border-radius:34px!important;
+  background:rgba(255,255,255,.97)!important;
+  box-shadow:0 26px 70px rgba(117,88,150,.18),0 8px 24px rgba(255,104,176,.10)!important;
+  overflow:hidden!important;
+}
+#authOverlay .auth-head{
+  position:relative!important;
+  padding:28px 26px 20px!important;
+  background:linear-gradient(135deg,#ffe5f3 0%,#f5eaff 42%,#e8fbf7 100%)!important;
+  text-align:center!important;
+  overflow:hidden!important;
+}
+#authOverlay .auth-head:before,#authOverlay .auth-head:after{content:'✦';position:absolute;color:#ff77b5;font-size:24px;opacity:.82}
+#authOverlay .auth-head:before{left:28px;top:28px}
+#authOverlay .auth-head:after{right:30px;top:54px;color:#8b68ef;font-size:20px}
+#authOverlay .auth-art{
+  width:220px;height:154px;object-fit:cover;object-position:center 24%;
+  border-radius:26px;margin:0 auto 12px;display:block;
+  background:#fff;box-shadow:0 12px 28px rgba(211,94,160,.14);
+  border:3px solid rgba(255,255,255,.92);
+}
+#authOverlay .auth-logo{display:none!important}
+#authOverlay .auth-head h2{
+  margin:2px 0 0!important;font-size:30px!important;line-height:1.18!important;font-weight:1000!important;
+  color:#19386b!important;letter-spacing:-.3px!important;
+}
+#authOverlay .auth-head h2 .pink{color:#ff4f9e}
+#authOverlay .auth-head p{margin:8px 0 0!important;font-size:12px!important;color:#69728a!important}
+#authOverlay .auth-body{padding:24px 30px 28px!important}
+#authOverlay .auth-body label{font-size:13px!important;font-weight:900!important;color:#273756!important;margin:12px 0 7px!important}
+#authOverlay .auth-field{position:relative!important}
+#authOverlay .auth-field .auth-field-icon{
+  position:absolute;left:15px;top:50%;transform:translateY(-50%);font-size:21px;line-height:1;z-index:2;
+}
+#authOverlay .auth-body input{
+  width:100%!important;min-height:56px!important;padding:13px 16px 13px 50px!important;
+  border:2px solid #e6ddf1!important;border-radius:18px!important;background:#fff!important;
+  font-size:16px!important;color:#2d3850!important;outline:none!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.8)!important;
+  transition:border-color .18s ease,box-shadow .18s ease,transform .18s ease!important;
+}
+#authOverlay .auth-body input:focus{border-color:#f08ac0!important;box-shadow:0 0 0 4px rgba(240,138,192,.14)!important}
+#authOverlay .auth-body input::placeholder{color:#adb0ba!important}
+#authOverlay #loginBtn{
+  min-height:58px!important;margin-top:20px!important;border-radius:20px!important;border:0!important;
+  background:linear-gradient(100deg,#ff5ca8 0%,#d45bc6 48%,#8667ef 100%)!important;
+  color:#fff!important;font-size:18px!important;font-weight:1000!important;letter-spacing:.1px!important;
+  box-shadow:0 12px 24px rgba(183,82,196,.24)!important;position:relative!important;
+}
+#authOverlay #loginBtn:after{content:'➜';display:inline-block;margin-left:10px;font-size:19px;vertical-align:-1px}
+#authOverlay #loginBtn:active{transform:translateY(1px)!important}
+#authOverlay .auth-error{border-radius:14px!important;font-size:12px!important}
+#authOverlay .auth-foot{
+  margin-top:18px!important;padding-top:14px!important;border-top:1px solid #eee8f4!important;
+  font-size:10px!important;color:#8790a3!important;
+}
+#authOverlay .auth-foot:before{content:'🛡️';margin-right:6px}
+@media(max-width:700px){
+  #authOverlay.auth-overlay{padding:14px!important;align-items:flex-start!important}
+  #authOverlay .auth-card{margin:auto 0!important;border-radius:28px!important}
+  #authOverlay .auth-head{padding:22px 18px 16px!important}
+  #authOverlay .auth-art{width:180px;height:126px;border-radius:22px;margin-bottom:10px}
+  #authOverlay .auth-head h2{font-size:25px!important}
+  #authOverlay .auth-head p{font-size:11px!important}
+  #authOverlay .auth-body{padding:19px 20px 22px!important}
+  #authOverlay .auth-body input{min-height:53px!important;font-size:16px!important}
+  #authOverlay #loginBtn{min-height:55px!important;font-size:17px!important}
+}
+</style>
+<link rel="stylesheet" href="login-v39.26.11.css?v=39.26.11">
 </head>
 <body>
 
@@ -8679,14 +8762,15 @@ html.phone-device body.s37-settings-open .header-user-status{
   <div class="auth-card">
     <div class="auth-head">
       <div class="auth-logo">🗓️</div>
-      <h2>เข้าสู่ระบบจัดตารางเวร</h2>
-      <p></p>
+      <img class="auth-art" alt="รันตารางเวร" src="login-rabbit-calendar.jpeg">
+      <h2><span class="pink">เข้าสู่ระบบ</span>จัดตารางเวร</h2>
+      <p>จัดการเวรให้ง่ายขึ้น… เพื่อทีมที่แฮปปี้กว่าเดิม 💗</p>
     </div>
     <div class="auth-body">
       <label>Username</label>
-      <input id="loginUsername" type="text" autocomplete="username" autocapitalize="none" placeholder="ชื่อผู้ใช้งาน">
+      <div class="auth-field"><span class="auth-field-icon" aria-hidden="true">👤</span><input id="loginUsername" type="text" autocomplete="username" autocapitalize="none" placeholder="ชื่อผู้ใช้งาน"></div>
       <label>รหัสผ่าน</label>
-      <input id="loginPassword" type="password" autocomplete="current-password" placeholder="รหัสผ่าน">
+      <div class="auth-field"><span class="auth-field-icon" aria-hidden="true">🔒</span><input id="loginPassword" type="password" autocomplete="current-password" placeholder="รหัสผ่าน"></div>
       <button id="loginBtn">เข้าสู่ระบบ</button>
       <div id="loginError" class="auth-error"></div>
       <div class="auth-foot">บัญชีและสิทธิ์ถูกตรวจสอบจาก Cloudflare Worker + D1</div>
