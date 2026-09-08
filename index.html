@@ -12091,6 +12091,50 @@ async function connectCloud(show){
 }
 var cloudLastLocalEdit=0,cloudPollTimer=null,cloudPullBusy=false;
 var cloudConfigPending=null,cloudConfigSaving=false,cloudMonthPending={},cloudMonthSaving={};
+/* V39.26.7 Auto Sync watchdog — ตรวจ state หลักซ้ำอีกชั้นโดยไม่พึ่งเฉพาะปุ่ม Save */
+var cloudWatchConfigHash='',cloudWatchMonthHash='',cloudWatchMonthKey='';
+function cloudStableJson(x){
+  try{return JSON.stringify(x||null)}catch(e){return ''}
+}
+function cloudStableConfigSnapshot(){
+  var p=configPayload(),y={};
+  Object.keys(p||{}).forEach(function(k){if(k!=='updatedAt')y[k]=p[k]});
+  return y;
+}
+function cloudStableMonthSnapshot(){
+  return {
+    key:currentKey(),year:gy(),month:cm(),
+    assignments:state.assignments||{},rotation:state.rotation||{},
+    peopleSnapshot:state.people||[],workflow:normalizeWorkflow(workflow)
+  };
+}
+function resetCloudWatchBaseline(){
+  cloudWatchConfigHash=cloudStableJson(cloudStableConfigSnapshot());
+  cloudWatchMonthKey=currentKey();
+  cloudWatchMonthHash=cloudStableJson(cloudStableMonthSnapshot());
+}
+function auditCloudLocalChanges(){
+  if(!auth.token)return;
+  var cfgHash=cloudStableJson(cloudStableConfigSnapshot());
+  if(cloudWatchConfigHash&&cfgHash!==cloudWatchConfigHash){
+    cloudWatchConfigHash=cfgHash;
+    scheduleCloudConfigSave(configPayload());
+  }else if(!cloudWatchConfigHash){cloudWatchConfigHash=cfgHash}
+
+  var mk=currentKey();
+  if(cloudWatchMonthKey!==mk){
+    cloudWatchMonthKey=mk;
+    cloudWatchMonthHash=cloudStableJson(cloudStableMonthSnapshot());
+    return;
+  }
+  var monthHash=cloudStableJson(cloudStableMonthSnapshot());
+  if(cloudWatchMonthHash&&monthHash!==cloudWatchMonthHash){
+    cloudWatchMonthHash=monthHash;
+    var data=monthPayload();
+    localStorage.setItem(storageKey(mk),JSON.stringify(data));
+    cloudSaveMonth(data);
+  }else if(!cloudWatchMonthHash){cloudWatchMonthHash=monthHash}
+}
 function markCloudLocalEdit(){cloudLastLocalEdit=Date.now()}
 function cloudHasPendingWrites(){return !!cloudConfigPending||cloudConfigSaving||Object.keys(cloudMonthPending).length>0||Object.keys(cloudMonthSaving).some(function(k){return cloudMonthSaving[k]})}
 async function ensureCloudConnected(){if(cloud.connected)return true;return await connectCloud(false)}
@@ -12105,7 +12149,8 @@ async function flushCloudConfig(){
   var payload=cloudConfigPending;cloudConfigPending=null;cloudConfigSaving=true;
   try{
     if(!(await ensureCloudConnected()))throw new Error('Cloud ยังไม่เชื่อม');
-    await cloudRequest('/api/config',{method:'PUT',body:JSON.stringify(payload)});
+    await cloudRequest('/api/config',{method:'PUT',body:JSON.stringify(payload),keepalive:true});
+    cloudWatchConfigHash=cloudStableJson(cloudComparableConfig(payload));
   }catch(e){
     console.warn('config autosave',e);
     cloudConfigPending=payload;
@@ -12126,7 +12171,8 @@ async function flushCloudMonth(key){
   var data=cloudMonthPending[key];delete cloudMonthPending[key];cloudMonthSaving[key]=true;
   try{
     if(!(await ensureCloudConnected()))throw new Error('Cloud ยังไม่เชื่อม');
-    await cloudRequest('/api/month/'+encodeURIComponent(key),{method:'PUT',body:JSON.stringify(data)});
+    await cloudRequest('/api/month/'+encodeURIComponent(key),{method:'PUT',body:JSON.stringify(data),keepalive:true});
+    if(key===currentKey()){cloudWatchMonthKey=key;cloudWatchMonthHash=cloudStableJson(cloudStableMonthSnapshot())}
   }catch(e){
     console.warn('month autosave',e);
     cloudMonthPending[key]=data;
@@ -12159,6 +12205,7 @@ async function pullCloudLatest(force){
       if(!cloudSame(cloudComparableConfig(lc),cloudComparableConfig(c.data))){
         localStorage.setItem('roster_config_v8',JSON.stringify(c.data));
         loadConfig();buildNames();renderHolidays();renderRules();renderCustomRules();renderUnitInfo();renderPeopleV24();loadV24Settings();renderSummary();renderHomeV24();
+        cloudWatchConfigHash=cloudStableJson(cloudStableConfigSnapshot());
       }
     }
     var key=currentKey(),r=await cloudRequest('/api/month/'+encodeURIComponent(key),{method:'GET'});
@@ -12168,25 +12215,27 @@ async function pullCloudLatest(force){
         localStorage.setItem(storageKey(key),JSON.stringify(r.data));
         state.assignments=r.data.assignments||{};state.rotation=r.data.rotation||{};workflow=normalizeWorkflow(r.data.workflow);workflowEditLogged=false;
         renderSheet();renderHistory();renderUnitWorkflow();renderSummaryV24();renderHomeV24();
+        cloudWatchMonthKey=key;cloudWatchMonthHash=cloudStableJson(cloudStableMonthSnapshot());
       }
     }
   }catch(e){console.warn('cloud pull',e)}finally{cloudPullBusy=false}
 }
 function startCloudAutoSync(){
   if(cloudPollTimer)clearInterval(cloudPollTimer);
-  cloudPollTimer=setInterval(function(){flushAllCloudWrites();pullCloudLatest(false)},2500);
+  cloudPollTimer=setInterval(function(){auditCloudLocalChanges();flushAllCloudWrites();pullCloudLatest(false)},2500);
 }
 async function initCloud(){
   loadCloudSettings();if(!cloud.apiUrl||!auth.token)return;
   if(await connectCloud(false)){
     var c=await cloudRequest('/api/config',{method:'GET'}).catch(function(){return null});
     if(c&&c.found&&c.data){localStorage.setItem('roster_config_v8',JSON.stringify(c.data));loadConfig();loadV24Settings()}
-    await ensureCloudMonths([prevKey(),currentKey()]);loadMonth(true);startCloudAutoSync();
+    await ensureCloudMonths([prevKey(),currentKey()]);loadMonth(true);resetCloudWatchBaseline();startCloudAutoSync();
   }
 }
-document.addEventListener('visibilitychange',function(){if(!document.hidden){flushAllCloudWrites();pullCloudLatest(true)}});
-window.addEventListener('focus',function(){flushAllCloudWrites();pullCloudLatest(true)});
-window.addEventListener('online',function(){cloud.connected=false;flushAllCloudWrites();pullCloudLatest(true)});
+document.addEventListener('visibilitychange',function(){if(!document.hidden){auditCloudLocalChanges();flushAllCloudWrites();pullCloudLatest(true)}else{auditCloudLocalChanges();flushAllCloudWrites()}});
+window.addEventListener('focus',function(){auditCloudLocalChanges();flushAllCloudWrites();pullCloudLatest(true)});
+window.addEventListener('online',function(){cloud.connected=false;auditCloudLocalChanges();flushAllCloudWrites();pullCloudLatest(true)});
+window.addEventListener('pagehide',function(){auditCloudLocalChanges();flushAllCloudWrites()});
 
 function showActionFeedback(message,type){
   type=type||'info';
@@ -13329,6 +13378,7 @@ el('month').onchange=async function(){
   /* Cloud อาจส่งข้อมูลกันยายนรุ่นเก่ากลับมา จึงต้องซิงก์ชุด V2 ก่อนเปิดตาราง */
   if(currentKey()==='2026-09')await importSeptember2569Roster();
   loadMonth(true);
+  resetCloudWatchBaseline();
 };el('year').onchange=el('month').onchange;el('pdfNote').onchange=saveConfig;
 }
 async function init(){
