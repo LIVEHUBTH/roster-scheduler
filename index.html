@@ -11433,12 +11433,28 @@ function rule21Report(){
   });
 
   var extraInfo=groupAverageInfo('extra');
+  var totalInfo=totalAverageInfo();
+  var totalEntries=totalInfo.ids.map(function(pid){
+    return {pid:pid,count:totalInfo.counts.total[pid]||0};
+  });
+  var totalRange=distributionRange(totalEntries.map(function(x){return x.count}));
+  var totalProblem=totalInfo.ids.length&&totalRange.spread>1;
+  var totalDetail=totalProblem?{
+    label:'เวรรวมทั้งเดือน',
+    avg:totalInfo.avg,
+    min:totalRange.min,
+    max:totalRange.max,
+    spread:totalRange.spread,
+    low:totalEntries.filter(function(x){return x.count===totalRange.min}).map(function(x){return x.pid}),
+    high:totalEntries.filter(function(x){return x.count===totalRange.max}).map(function(x){return x.pid})
+  }:null;
   return {
-    ok:groupProblems.length===0,
+    ok:groupProblems.length===0&&!totalProblem,
     groupProblems:groupProblems,
     groupDetails:groupDetails,
-    totalBad:[],
-    totalAvg:totalAverageInfo().avg,
+    totalBad:totalProblem?['เวรรวมทั้งเดือน']:[],
+    totalDetail:totalDetail,
+    totalAvg:totalInfo.avg,
     extraAvg:extraInfo.avg,
     extraOnlyBad:[]
   };
@@ -11456,8 +11472,9 @@ function rebalanceRule21(){
   var moved=0;
 
   for(var round=0;round<8;round++){
-    /* ปรับสมดุล 7 กลุ่มตาม Max − Min ≤ 1 หลังจากตัวรันใช้ค่าเฉลี่ยเป้าหมายช่วยเลือกคนแล้ว */
+    /* 21.1 ปรับสมดุล 7 กลุ่ม และ 21.2 ปรับยอดรวมบุคลากร Active กลุ่มปกติ */
     moved+=rebalanceGroups();
+    moved+=rebalanceTotal();
 
     var check=rule21Report();
 
@@ -11523,13 +11540,14 @@ async function runSchedule(){
     saveMonth(true);
 
     if(errors){
-      setStatus('รันเสร็จ แต่พบข้อขัดแย้งตามกฎข้อ 1–20 จำนวน '+errors+' จุด',false);
+      setStatus('รันเสร็จ แต่พบข้อขัดแย้งตามกฎ จำนวน '+errors+' จุด',false);
     }else if(hasRule(21)&&!balance.ok){
       var parts=[];
       if(balance.report.groupProblems.length)parts.push('รายประเภท: '+balance.report.groupProblems.join(', '));
-      setStatus('รันเสร็จ แต่กฎข้อ 21 ยังปรับให้แต่ละกลุ่มต่างกันไม่เกิน 1 เวรไม่ได้ทั้งหมด เนื่องจากติดเงื่อนไข • '+parts.join(' • '),false);
+      if(balance.report.totalDetail)parts.push('เวรรวม: Max '+balance.report.totalDetail.max+' / Min '+balance.report.totalDetail.min);
+      setStatus('รันเสร็จ แต่กฎข้อ 21 ยังปรับ Max − Min ≤ 1 ไม่ได้ทั้งหมด เนื่องจากติดเงื่อนไข • '+parts.join(' • '),false);
     }else if(hasRule(21)){
-      setStatus('รันและบันทึกเรียบร้อย • กฎข้อ 21 ผ่าน: ทั้ง 7 กลุ่มมี Max − Min ≤ 1 เวร',true);
+      setStatus('รันและบันทึกเรียบร้อย • กฎข้อ 21 ผ่าน: ทั้ง 7 กลุ่มและเวรรวมมี Max − Min ≤ 1 เวร',true);
     }else{
       setStatus('รันและบันทึกตารางเวรเรียบร้อยแล้ว',true);
     }
@@ -11690,16 +11708,21 @@ function validate(show){
   if(!r21.ok){
     (r21.groupDetails||[]).forEach(function(gd){
       errors++;
-      pushConflict({day:0,name:'',slot:gd.label,rule:'กฎ 21',message:'การกระจายเวร '+gd.label+' ยังห่างกัน '+gd.spread+' เวร (ต่ำสุด '+gd.min+' / สูงสุด '+gd.max+') ต้องไม่เกิน 1 เวร'});
+      pushConflict({day:0,name:'',slot:gd.label,rule:'กฎ 21.1',message:'การกระจายเวร '+gd.label+' ยังห่างกัน '+gd.spread+' เวร (ต่ำสุด '+gd.min+' / สูงสุด '+gd.max+') ต้องไม่เกิน 1 เวร'});
     });
+    if(r21.totalDetail){
+      errors++;
+      var td=r21.totalDetail;
+      pushConflict({day:0,name:'',slot:'เวรรวมทั้งเดือน',rule:'กฎ 21.2',message:'ยอดรวมเวรของบุคลากร Active กลุ่มปกติยังห่างกัน '+td.spread+' เวร (ต่ำสุด '+td.min+' / สูงสุด '+td.max+') ต้องไม่เกิน 1 เวร'});
+    }
   }
   if(show){
     setStatus(errors?'พบข้อขัดแย้ง '+errors+' จุด':'ไม่พบข้อขัดแย้ง',!errors);
     renderConflictDetails();
     if(errors===0){
-      hideFixChoice();showActionFeedback('✅ ตรวจสอบแล้ว ไม่พบข้อขัดแย้ง • กฎ 21 ทุกกลุ่มมี Max − Min ≤ 1 ตารางพร้อมสำหรับขั้นตอนถัดไป','ok');
+      hideFixChoice();showActionFeedback('✅ ตรวจสอบแล้ว ไม่พบข้อขัดแย้ง • กฎ 21.1 ทั้ง 7 กลุ่ม และกฎ 21.2 เวรรวม มี Max − Min ≤ 1 ตารางพร้อมสำหรับขั้นตอนถัดไป','ok');
     }else{
-      showActionFeedback('❌ ตรวจสอบแล้ว พบข้อขัดแย้ง '+errors+' จุด • รวมการตรวจ Max − Min ≤ 1 ตามกฎข้อ 21','err');
+      showActionFeedback('❌ ตรวจสอบแล้ว พบข้อขัดแย้ง '+errors+' จุด • รวมการตรวจกฎ 21.1 รายกลุ่ม และ 21.2 เวรรวม Max − Min ≤ 1','err');
     }
   }
   return errors;
@@ -11876,10 +11899,10 @@ function updateDashboard(){
     }
     if(el('dashBalanceText')){
       el('dashBalanceText').textContent=r.ok
-        ?'ทั้ง 7 กลุ่มต่างกันไม่เกิน 1 เวร'
-        :'ยังมีบางกลุ่มที่คนได้มากสุดกับน้อยสุดต่างกันเกิน 1 เวร';
+        ?'ทั้ง 7 กลุ่มและเวรรวมต่างกันไม่เกิน 1 เวร'
+        :'ยังมีรายกลุ่มหรือเวรรวมที่คนได้มากสุดกับน้อยสุดต่างกันเกิน 1 เวร';
     }
-    var warnCount=r.groupProblems.length;
+    var warnCount=r.groupProblems.length+(r.totalBad||[]).length;
     var errorCount=0;
     if(el('dashWarn'))el('dashWarn').textContent=warnCount;
     if(el('dashError'))el('dashError').textContent=errorCount;
@@ -11925,14 +11948,15 @@ function renderSummary(){
        (report.ok?'#ecfdf3;color:#067647':'#fff1f0;color:#b42318')+'">'+
        (
          report.ok
-         ?'✓ กฎข้อ 21 ผ่าน: ทั้ง 7 กลุ่มมีจำนวนเวรมากสุด−น้อยสุดไม่เกิน 1 เวร'
+         ?'✓ กฎข้อ 21 ผ่าน: ทั้ง 7 กลุ่มและยอดรวมเวร มีจำนวนมากสุด−น้อยสุดไม่เกิน 1 เวร'
          :'⚠ กฎข้อ 21 ยังไม่ผ่านทั้งหมด'+
-          (report.groupProblems.length?' • กลุ่มที่ยังห่างเกิน 1 เวร: '+esc(report.groupProblems.join(', ')):'')
+          (report.groupProblems.length?' • กลุ่มที่ยังห่างเกิน 1 เวร: '+esc(report.groupProblems.join(', ')):'')+
+          (report.totalDetail?' • เวรรวมยังห่าง '+report.totalDetail.spread+' เวร (ต่ำสุด '+report.totalDetail.min+' / สูงสุด '+report.totalDetail.max+')':'')
        )+
        '</div>';
 
     h+='<div class="muted" style="margin:0 0 8px 0">'+
-       '<b>ข้อมูล 7 กลุ่ม (ค่าเฉลี่ยเป้าหมายใช้ช่วยเลือกคนตอนรัน; เกณฑ์ผ่านสุดท้ายคือ Max−Min ≤ 1):</b> '+
+       '<b>ข้อมูล 7 กลุ่ม + เวรรวม (ค่าเฉลี่ยเป้าหมายใช้ช่วยเลือกคนตอนรัน; เกณฑ์ผ่านสุดท้ายคือ Max−Min ≤ 1):</b> '+
        groupAverages.map(function(info){
          return esc(info.label)+' = '+info.avg.toFixed(2)+' / เป้าหมาย '+info.targetAvg.toFixed(2);
        }).join(' • ')+
@@ -13327,10 +13351,10 @@ function renderSummaryV24(){
     if(el('summaryAssignmentsV24'))el('summaryAssignmentsV24').textContent=total;
     if(el('summaryHolidayV24'))el('summaryHolidayV24').textContent=Object.keys(state.holidays||{}).filter(function(k){return k.indexOf(currentKey()+'-')===0}).length;
     var r=rule21Report();if(el('summaryBalanceV24'))el('summaryBalanceV24').textContent=r.ok?'100%':'ควรปรับ';
-    if(el('summaryConflictV24'))el('summaryConflictV24').textContent=(r.groupProblems.length+r.extraOnlyBad.length);
+    if(el('summaryConflictV24'))el('summaryConflictV24').textContent=(r.groupProblems.length+(r.totalBad||[]).length+r.extraOnlyBad.length);
     var people=state.people.map(function(p){return {name:p.name,total:(counts.total[p.id]||0)}}).sort(function(a,b){return b.total-a.total}).slice(0,5),pmax=Math.max.apply(null,people.map(function(x){return x.total}).concat([1]));
     if(el('summaryTopPeopleV24'))el('summaryTopPeopleV24').innerHTML=people.map(function(p,i){return '<div class="v24-person-bar"><span>'+(i+1)+'.</span><div><b>'+esc(p.name)+'</b><i style="width:'+Math.round(p.total/pmax*100)+'%"></i></div><b>'+p.total+' เวร</b></div>'}).join('');
-    if(el('summaryTipsV24'))el('summaryTipsV24').innerHTML='<div>✓ ตรวจสอบความสมดุลของแต่ละกลุ่มเวร</div><div>✓ กระจายแต่ละกลุ่มให้จำนวนมากสุด−น้อยสุดไม่เกิน 1 เวร</div><div>✓ ตรวจสอบกฎข้อ 21 ก่อนส่งตรวจ</div>';
+    if(el('summaryTipsV24'))el('summaryTipsV24').innerHTML='<div>✓ ตรวจสอบความสมดุลของแต่ละกลุ่มเวร</div><div>✓ กระจายแต่ละกลุ่มและยอดรวมให้จำนวนมากสุด−น้อยสุดไม่เกิน 1 เวร</div><div>✓ ตรวจสอบกฎข้อ 21 ก่อนส่งตรวจ</div>';
   }catch(e){}
 }
 function loadV24Settings(){
