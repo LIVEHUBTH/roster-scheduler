@@ -8893,7 +8893,7 @@ html.phone-device body.s37-settings-open .header-user-status{
         <div class="v244-news">
           <button data-home-go="holidays"><i class="pink-dot"></i><span>ตรวจสอบวันหยุดและข้อมูลบุคลากรก่อนรันตาราง</span><em>แนะนำ</em></button>
           <button data-home-go="internal"><i class="mint-dot"></i><span>ระบบบันทึก Workflow และ Audit Log อัตโนมัติ</span><em>ระบบ</em></button>
-          <button data-home-go="rules"><i class="yellow-dot"></i><span>กฎข้อ 21 กระจายเวร 7 กลุ่มให้ต่างกันไม่เกิน 1 เวร</span><em>กฎ</em></button>
+          <button data-home-go="rules"><i class="yellow-dot"></i><span>กฎ 21–23 กระจายเวร ประเภทวัน และระยะห่างวันขึ้นเวร</span><em>กฎ</em></button>
           <button data-home-go="history"><i class="purple-dot"></i><span id="homeLatestHistoryText">ตรวจสอบประวัติตารางย้อนหลังได้จากเมนูประวัติ</span><em>ประวัติ</em></button>
         </div>
       </section>
@@ -10202,7 +10202,10 @@ var DEFAULT_RULES=[
 {id:'r18',text:'ต้องหมุนเวียนตำแหน่งภายในแต่ละประเภทเวร และไม่ให้บุคคลเดิมอยู่ในเวรหรือตำแหน่งเดิมซ้ำ ๆ รวมถึงหลีกเลี่ยงชื่อเดียวกันติดต่อกันหลายวัน'},
 {id:'r19',text:'การจัดตารางเดือนใหม่ต้องอ้างอิงตารางเวรของเดือนก่อนหน้า โดยนำข้อมูลการหมุนคิว จำนวนเวรสะสม ประเภทเวร และประวัติการขึ้นเวรมาประกอบการจัดเดือนใหม่'},
 {id:'r20',text:'ต้องตรวจสอบรอยต่อระหว่างปลายเดือนก่อนหน้ากับต้นเดือนใหม่ โดยใช้กฎทั้งหมดเหมือนเป็นตารางต่อเนื่องกัน'},
-{id:'r21',text:'การกระจายเวรของเดือนปัจจุบันให้คิดเป็น 7 กลุ่มประเภทเวร ได้แก่ เวร1–2, OT1–2, SDMC เช้า1–4, SDMC บ่าย–ดึก1–4, SDMC เช้า–บ่าย5–6, SDMC บ่าย7–8 และ EXTRA1–3 โดยระบบต้องคำนวณค่าเฉลี่ยเป้าหมายของแต่ละกลุ่มจากจำนวนเวรที่ต้องจัดในเดือนนั้นหารด้วยจำนวนบุคลากรที่กำลังใช้งานและมีสิทธิ์ขึ้นเวรกลุ่มนั้น แล้วใช้ค่าเฉลี่ยดังกล่าวช่วยเลือกผู้ที่ยังมีเวรกลุ่มนั้นต่ำกว่าเป้าหมายก่อน ระหว่างจัดต้องหมุนตำแหน่งย่อยและหลีกเลี่ยงบุคคลเดิมลงช่องเดิมซ้ำ ๆ หลายวัน เกณฑ์ผ่านสุดท้ายของแต่ละกลุ่มคือจำนวนเวรของผู้ที่ได้มากที่สุดกับผู้ที่ได้น้อยที่สุดต้องต่างกันไม่เกิน 1 เวร (Max − Min ≤ 1) หากยังต่างกันเกิน 1 เวร ให้ระบบปรับสมดุลอัตโนมัติโดยห้ามทำให้ผิดกฎข้อ 1–20 บุคลากรที่พักเวรหรือไม่มีสิทธิ์ในกลุ่มนั้นไม่นำมาคิดค่าเฉลี่ยและไม่นำมาร่วมตรวจ และบุคลากร EXTRA-only ให้นำมาคิดและตรวจเฉพาะกลุ่ม EXTRA1–3'}
+{id:'r21',text:'การกระจายเวรของเดือนปัจจุบันให้คิดเป็น 7 กลุ่มประเภทเวร ได้แก่ เวร1–2, OT1–2, SDMC เช้า1–4, SDMC บ่าย–ดึก1–4, SDMC เช้า–บ่าย5–6, SDMC บ่าย7–8 และ EXTRA1–3 โดยระบบต้องคำนวณค่าเฉลี่ยเป้าหมายของแต่ละกลุ่มจากจำนวนเวรที่ต้องจัดในเดือนนั้นหารด้วยจำนวนบุคลากรที่กำลังใช้งานและมีสิทธิ์ขึ้นเวรกลุ่มนั้น แล้วใช้ค่าเฉลี่ยดังกล่าวช่วยเลือกผู้ที่ยังมีเวรกลุ่มนั้นต่ำกว่าเป้าหมายก่อน ระหว่างจัดต้องหมุนตำแหน่งย่อยและหลีกเลี่ยงบุคคลเดิมลงช่องเดิมซ้ำ ๆ หลายวัน เกณฑ์ผ่านสุดท้ายของแต่ละกลุ่มคือจำนวนเวรของผู้ที่ได้มากที่สุดกับผู้ที่ได้น้อยที่สุดต้องต่างกันไม่เกิน 1 เวร (Max − Min ≤ 1) หากยังต่างกันเกิน 1 เวร ให้ระบบปรับสมดุลอัตโนมัติโดยห้ามทำให้ผิดกฎข้อ 1–20 บุคลากรที่พักเวรหรือไม่มีสิทธิ์ในกลุ่มนั้นไม่นำมาคิดค่าเฉลี่ยและไม่นำมาร่วมตรวจ และบุคลากร EXTRA-only ให้นำมาคิดและตรวจเฉพาะกลุ่ม EXTRA1–3'},
+{id:'r22',text:'ในแต่ละกลุ่มประเภทเวร ต้องกระจายชนิดวันให้บุคลากรที่กำลังใช้งานและมีสิทธิ์ขึ้นเวรนั้นอย่างใกล้เคียงกัน โดยแยกตรวจเป็น วันจันทร์–ศุกร์ (ไม่รวมนักขัตฤกษ์) / วันเสาร์ / วันอาทิตย์ / วันหยุดนักขัตฤกษ์ เฉพาะชนิดวันที่เวรกลุ่มนั้นเปิดใช้งานจริง เกณฑ์เป้าหมายของแต่ละชนิดวันคือ Max − Min ≤ 1 เวร และการปรับสมดุลกฎนี้ห้ามทำให้กฎข้อ 1–21 เสีย'},
+{id:'r23',text:'ให้ระบบพยายามเว้นระยะการขึ้นเวรของบุคลากรเป็นวันเว้นวันก่อนเสมอ หากจำเป็นสามารถขึ้นเวรวันติดกันได้เป็นตัวเลือกท้ายสุด แต่ห้ามจัดเวรติดต่อกันเกิน 2 วัน เว้นแต่เป็นเวรบ่าย–ดึกต่อเนื่องในช่วงวันที่กฎข้อ 3 อนุญาต การจัดและการแก้สมดุลต้องไม่ทำให้กฎข้อ 1–22 เสีย'},
+{id:'r24',text:'EXTRA1 และ EXTRA2 ต้องหมุนเวียนทั้งตำแหน่ง EXTRA และฟลอของบุคลากร โดยอ้างอิงตารางเดือนปัจจุบันและประวัติเดือนก่อนหน้าเพื่อลดการตก EXTRA เดิม + ฟลอเดิมซ้ำ ๆ และลดการตกฟลอเดิมซ้ำ โดยฟลอตามวันคือ จันทร์ EXTRA1=SU / EXTRA2=OB, อังคาร EXTRA1=SU / EXTRA2=ENT, พุธ EXTRA1=OB / EXTRA2=SU, พฤหัสบดี EXTRA1=OT / EXTRA2=SK, ศุกร์ EXTRA1=ENT, เสาร์ EXTRA1=OT, อาทิตย์ EXTRA1=SK / EXTRA2=OT ส่วน EXTRA3 ให้รันตามกฎปกติเดิม และกฎนี้เป็นลำดับการเลือกคิวเท่านั้น ห้ามทำให้กฎข้อ 1–23 เสีย'}
 ];
 var state={people:[],assignments:{},holidays:{},rules:[],customRules:[],pdfNote:'',rotation:{},unitInfo:{}};
 var peopleV30Page=1,peopleV30PageSize=10,peopleV30SortDept=false;
@@ -10222,6 +10225,15 @@ function dateKey(y,m,d){return monthKey(y,m)+'-'+pad(d)} function ymd(y,m,d){ret
 function dowFor(y,m,d){return new Date(y,m,d).getDay()} function dow(d){return dowFor(gy(),cm(),d)} function isHoliday(d){return !!state.holidays[dkey(d)]}
 function isWeekend(d){var w=dow(d);return w===0||w===6} function isOffDay(d){return isWeekend(d)||isHoliday(d)}
 function weekdayNoHoliday(d){var w=dow(d);return w>=1&&w<=5&&!isHoliday(d)}
+var DAY_CLASS_LABELS={weekday:'จันทร์–ศุกร์',saturday:'วันเสาร์',sunday:'วันอาทิตย์',holiday:'วันหยุดนักขัตฤกษ์'};
+function dayClassFor(y,m,d){
+  if(!!state.holidays[dateKey(y,m,d)])return 'holiday';
+  var w=dowFor(y,m,d);
+  if(w===6)return 'saturday';
+  if(w===0)return 'sunday';
+  return 'weekday';
+}
+function dayClassCurrent(d){return dayClassFor(gy(),cm(),d)}
 function slotById(id){for(var i=0;i<SLOTS.length;i++)if(SLOTS[i].id===id)return SLOTS[i];return null} function hasRule(n){return state.rules.some(function(r){return r.id==='r'+n})}
 function defaultPeople(){var a=[];for(var i=1;i<=28;i++)a.push({id:'p'+i,name:'บุคลากร '+i,code:'EMP'+String(i).padStart(3,'0'),position:'',department:'',active:true,startDate:'',birthDate:''});return a}
 function storageKey(k){return 'roster_month_v7_'+k} function savedMonth(k){return parse(localStorage.getItem(storageKey(k)),null)}
@@ -10932,8 +10944,31 @@ function allowNightChain(y1,m1,d1,y2,m2,d2){return specialNightDay(y1,m1,d1)&&sp
 function prevMonthNight(pid){var p=prevYM(),d=savedMonth(prevKey());if(!d)return false;var last=new Date(p.y,p.m+1,0).getDate();return hadNight(d.assignments||{},pid,last)}
 function customAllowed(pid,sid){for(var i=0;i<state.customRules.length;i++){var r=state.customRules[i];if(r.personId!==pid)continue;if(r.type==='only'&&r.slots.indexOf(sid)<0)return false;if(r.type==='block'&&r.slots.indexOf(sid)>=0)return false}return true}
 function eligible(pid,d,slot){var _pp=state.people.find(function(x){return x.id===pid});if(_pp&&_pp.active===false)return false;if(!active(slot,d))return false;if(hasRule(2)&&usedToday(pid,d))return false;/* HARD LOCK: บุคลากร EXTRA-only มีสิทธิ์เฉพาะ EXTRA1-3 เท่านั้น ไม่ว่าถูกกำหนดจากกฎข้อ 4 หรือหน้าบุคลากร */if(isExtraOnlyPerson(pid)&&!isExtraSlot(slot))return false;if(!customAllowed(pid,slot.id))return false;if(hasRule(3)){if(d===1&&prevMonthNight(pid)){var p=prevYM(),last=new Date(p.y,p.m+1,0).getDate();if(!(slot.kind==='night'&&allowNightChain(p.y,p.m,last,gy(),cm(),1)))return false}if(d>1&&hadNight(state.assignments,pid,d-1)){if(!(slot.kind==='night'&&allowNightChain(gy(),cm(),d-1,gy(),cm(),d)))return false}}return true}
-function initCounts(){var c={total:{},slot:{},group:{},groupWeekday:{},groupOff:{}};state.people.forEach(function(p){c.total[p.id]=0});SLOTS.forEach(function(s){c.slot[s.id]={};state.people.forEach(function(p){c.slot[s.id][p.id]=0})});Object.keys(GROUPS).forEach(function(g){c.group[g]={};c.groupWeekday[g]={};c.groupOff[g]={};state.people.forEach(function(p){c.group[g][p.id]=0;c.groupWeekday[g][p.id]=0;c.groupOff[g][p.id]=0})});return c}
-function addCounts(c,a,y,m){Object.keys(a||{}).forEach(function(k){var pid=a[k];if(c.total[pid]===undefined)return;var p=k.split('|'),d=parseInt(p[0],10),sid=p[1],g=SLOT_GROUP[sid];c.total[pid]++;c.slot[sid][pid]++;c.group[g][pid]++;var w=dowFor(y,m,d),off=(w===0||w===6||!!state.holidays[dateKey(y,m,d)]);if(off)c.groupOff[g][pid]++;else c.groupWeekday[g][pid]++})}
+function initCounts(){
+  var c={total:{},slot:{},group:{},groupWeekday:{},groupOff:{},groupDayClass:{}};
+  state.people.forEach(function(p){c.total[p.id]=0});
+  SLOTS.forEach(function(s){c.slot[s.id]={};state.people.forEach(function(p){c.slot[s.id][p.id]=0})});
+  Object.keys(GROUPS).forEach(function(g){
+    c.group[g]={};c.groupWeekday[g]={};c.groupOff[g]={};
+    c.groupDayClass[g]={weekday:{},saturday:{},sunday:{},holiday:{}};
+    state.people.forEach(function(p){
+      c.group[g][p.id]=0;c.groupWeekday[g][p.id]=0;c.groupOff[g][p.id]=0;
+      Object.keys(c.groupDayClass[g]).forEach(function(cls){c.groupDayClass[g][cls][p.id]=0});
+    });
+  });
+  return c;
+}
+function addCounts(c,a,y,m){
+  Object.keys(a||{}).forEach(function(k){
+    var pid=a[k];if(c.total[pid]===undefined)return;
+    var p=k.split('|'),d=parseInt(p[0],10),sid=p[1],g=SLOT_GROUP[sid];
+    if(!g||!c.slot[sid])return;
+    c.total[pid]++;c.slot[sid][pid]++;c.group[g][pid]++;
+    var cls=dayClassFor(y,m,d),off=(cls!=='weekday');
+    if(off)c.groupOff[g][pid]++;else c.groupWeekday[g][pid]++;
+    if(c.groupDayClass[g]&&c.groupDayClass[g][cls])c.groupDayClass[g][cls][pid]++;
+  });
+}
 function previousCounts(){var c=initCounts(),d=savedMonth(prevKey());if(d){var p=prevYM();addCounts(c,d.assignments||{},p.y,p.m)}return c} function currentCounts(){var c=initCounts();addCounts(c,state.assignments,gy(),cm());return c}
 function personIndex(pid){for(var i=0;i<state.people.length;i++)if(state.people[i].id===pid)return i;return -1} function initialCursor(g){var d=savedMonth(prevKey());if(d&&d.rotation&&Number.isFinite(d.rotation[g]))return d.rotation[g]%Math.max(1,state.people.length);return 0}
 function queueDistance(pid,c){var i=personIndex(pid),n=Math.max(1,state.people.length);return (i-c+n)%n} function hadAny(pid,d){if(d<1)return false;for(var i=0;i<SLOTS.length;i++)if(state.assignments[akey(d,SLOTS[i].id)]===pid)return true;return false}
@@ -10967,8 +11002,116 @@ function recentSameSlotScore(pid,d,sid){
   return score;
 }
 function currentSlotLoad(current,pid,sid){return current.slot[sid][pid]||0}
+function relativeDateInfo(d,offset){
+  var dt=new Date(gy(),cm(),d+offset);
+  return {y:dt.getFullYear(),m:dt.getMonth(),d:dt.getDate()};
+}
+function assignmentsForRelativeDate(info){
+  if(info.y===gy()&&info.m===cm())return state.assignments||{};
+  var saved=savedMonth(monthKey(info.y,info.m));
+  return saved&&saved.assignments?saved.assignments:{};
+}
+function personWorkedRelative(pid,d,offset){
+  var info=relativeDateInfo(d,offset),a=assignmentsForRelativeDate(info);
+  for(var i=0;i<SLOTS.length;i++)if(a[akey(info.d,SLOTS[i].id)]===pid)return true;
+  return false;
+}
+function personNightRelative(pid,d,offset,candidateSlot){
+  if(offset===0)return !!candidateSlot&&candidateSlot.kind==='night';
+  var info=relativeDateInfo(d,offset),a=assignmentsForRelativeDate(info);
+  for(var i=0;i<SLOTS.length;i++)if(SLOTS[i].kind==='night'&&a[akey(info.d,SLOTS[i].id)]===pid)return true;
+  return false;
+}
+function allowedNightTriple(pid,d,slot,startOffset){
+  for(var k=0;k<3;k++)if(!personNightRelative(pid,d,startOffset+k,slot))return false;
+  var a=relativeDateInfo(d,startOffset),b=relativeDateInfo(d,startOffset+1),c=relativeDateInfo(d,startOffset+2);
+  return allowNightChain(a.y,a.m,a.d,b.y,b.m,b.d)&&allowNightChain(b.y,b.m,b.d,c.y,c.m,c.d);
+}
+function wouldCreateForbiddenStreak(pid,d,slot){
+  if(!hasRule(23))return false;
+  var windows=[-2,-1,0];
+  for(var wi=0;wi<windows.length;wi++){
+    var start=windows[wi],all=true;
+    for(var k=0;k<3;k++){
+      var off=start+k;
+      var worked=(off===0)?true:personWorkedRelative(pid,d,off);
+      if(!worked){all=false;break}
+    }
+    if(all&&!allowedNightTriple(pid,d,slot,start))return true;
+  }
+  return false;
+}
+function allowedAdjacentNight(pid,d,slot,offset){
+  if(!slot||slot.kind!=='night'||!personNightRelative(pid,d,offset,slot))return false;
+  var a=relativeDateInfo(d,Math.min(0,offset)),b=relativeDateInfo(d,Math.max(0,offset));
+  return allowNightChain(a.y,a.m,a.d,b.y,b.m,b.d);
+}
+function spacingPenalty(pid,d,slot){
+  if(!hasRule(23))return 0;
+  if(wouldCreateForbiddenStreak(pid,d,slot))return 100000;
+  var p=0;
+  [-1,1].forEach(function(off){
+    if(personWorkedRelative(pid,d,off)&&!allowedAdjacentNight(pid,d,slot,off))p+=500;
+  });
+  return p;
+}
+/* V39.26.18 - Rule 24: EXTRA1/EXTRA2 floor + slot rotation only.
+   Floor is derived from weekday, so no new data field/storage format is required.
+   EXTRA3 intentionally returns no penalty and follows the existing scheduler unchanged. */
+var EXTRA_FLOOR_BY_DOW={
+  1:{e1:'SU',e2:'OB'},
+  2:{e1:'SU',e2:'ENT'},
+  3:{e1:'OB',e2:'SU'},
+  4:{e1:'OT',e2:'SK'},
+  5:{e1:'ENT'},
+  6:{e1:'OT'},
+  0:{e1:'SK',e2:'OT'}
+};
+function extraFloorFor(y,m,d,sid){
+  if(sid!=='e1'&&sid!=='e2')return '';
+  var map=EXTRA_FLOOR_BY_DOW[dowFor(y,m,d)]||{};
+  return map[sid]||'';
+}
+function previousYMOffset(offset){
+  var y=gy(),m=cm()-offset;
+  while(m<0){m+=12;y--}
+  while(m>11){m-=12;y++}
+  return {y:y,m:m};
+}
+function extraRotationScore(pid,d,slot){
+  if(!hasRule(24)||!slot||(slot.id!=='e1'&&slot.id!=='e2'))return {pair:0,floor:0,slot:0,recentPair:0};
+  var floor=extraFloorFor(gy(),cm(),d,slot.id);
+  if(!floor)return {pair:0,floor:0,slot:0,recentPair:0};
+  var pair=0,floorCount=0,slotCount=0,recentPair=0;
+  /* current month assignments before this cell */
+  Object.keys(state.assignments||{}).forEach(function(k){
+    var p=k.split('|'),day=parseInt(p[0],10),sid=p[1];
+    if((sid!=='e1'&&sid!=='e2')||state.assignments[k]!==pid)return;
+    var f=extraFloorFor(gy(),cm(),day,sid);
+    if(!f)return;
+    if(sid===slot.id)slotCount++;
+    if(f===floor)floorCount++;
+    if(sid===slot.id&&f===floor){pair++;if(day>=d-14)recentPair+=2}
+  });
+  /* remember recent saved months; nearest month carries more weight */
+  for(var back=1;back<=3;back++){
+    var ym=previousYMOffset(back),saved=savedMonth(monthKey(ym.y,ym.m));
+    if(!saved||!saved.assignments)continue;
+    var weight=4-back;
+    Object.keys(saved.assignments).forEach(function(k){
+      var p=k.split('|'),day=parseInt(p[0],10),sid=p[1];
+      if((sid!=='e1'&&sid!=='e2')||saved.assignments[k]!==pid)return;
+      var f=extraFloorFor(ym.y,ym.m,day,sid);
+      if(!f)return;
+      if(sid===slot.id)slotCount+=weight;
+      if(f===floor)floorCount+=weight;
+      if(sid===slot.id&&f===floor){pair+=weight;if(back===1)recentPair+=weight*4}
+    });
+  }
+  return {pair:pair,floor:floorCount,slot:slotCount,recentPair:recentPair};
+}
 function choose(candidates,slot,current,previous,d,cursor){
-  var g=SLOT_GROUP[slot.id],off=isOffDay(d),best=null,bestKey=null;
+  var g=SLOT_GROUP[slot.id],off=isOffDay(d),dayCls=dayClassCurrent(d),best=null,bestKey=null;
 
   candidates.forEach(function(pid){
     var currentGroup=current.group[g][pid]||0;
@@ -10978,12 +11121,13 @@ function choose(candidates,slot,current,previous,d,cursor){
     var previousSlot=previous.slot[slot.id][pid]||0;
     var previousTotal=previous.total[pid]||0;
     var repeatScore=recentSameSlotScore(pid,d,slot.id);
-    var classLoad=off?((current.groupOff[g][pid]||0)+(previous.groupOff[g][pid]||0)):((current.groupWeekday[g][pid]||0)+(previous.groupWeekday[g][pid]||0));
+    var classLoad=((current.groupDayClass[g]&&current.groupDayClass[g][dayCls]?current.groupDayClass[g][dayCls][pid]:0)||0)+((previous.groupDayClass[g]&&previous.groupDayClass[g][dayCls]?previous.groupDayClass[g][dayCls][pid]:0)||0);
     var key;
     var targetAverage=hasRule(21)?groupTargetAverage(g):0;
     /* ค่ายิ่งติดลบมาก = ยังขาดจากค่าเฉลี่ยเป้าหมายมากกว่า จึงควรได้คิวก่อน */
     var targetDeficit=hasRule(21)?Math.max(0,targetAverage-currentGroup):0;
     var projectedTargetDistance=hasRule(21)?Math.abs((currentGroup+1)-targetAverage):0;
+    var extraRot=extraRotationScore(pid,d,slot);
 
     if(hasRule(21)){
       /* เดือนปัจจุบันยังเป็นตัวหลัก แต่ใช้เดือนก่อนเป็น baseline/ตัวตัดสินเมื่อยอดปัจจุบันใกล้กัน
@@ -10992,13 +11136,18 @@ function choose(candidates,slot,current,previous,d,cursor){
         -targetDeficit,
         currentGroup,
         projectedTargetDistance,
+        spacingPenalty(pid,d,slot),
+        classLoad,
+        extraRot.recentPair,
+        extraRot.pair,
+        extraRot.floor,
+        extraRot.slot,
         repeatScore,
         currentSlot,
         previousGroup,
         previousSlot,
         currentTotal,
         previousTotal,
-        classLoad,
         heavyPenalty(pid,d,slot),
         recentPenalty(pid,d),
         queueDistance(pid,cursor[g]||0)
@@ -11006,9 +11155,14 @@ function choose(candidates,slot,current,previous,d,cursor){
     }else{
       key=[
         currentGroup+previousGroup,
+        spacingPenalty(pid,d,slot),
+        classLoad,
+        extraRot.recentPair,
+        extraRot.pair,
+        extraRot.floor,
+        extraRot.slot,
         repeatScore,
         currentSlot+previousSlot,
-        classLoad,
         heavyPenalty(pid,d,slot),
         recentPenalty(pid,d),
         queueDistance(pid,cursor[g]||0)
@@ -11162,6 +11316,7 @@ function assignmentListForPerson(pid){
 
 function canAssignWithForward(pid,d,slot){
   if(!eligible(pid,d,slot))return false;
+  if(hasRule(23)&&wouldCreateForbiddenStreak(pid,d,slot))return false;
 
   if(hasRule(3)&&slot.kind==='night'&&d<dim()){
     for(var i=0;i<SLOTS.length;i++){
@@ -11460,6 +11615,114 @@ function rule21Report(){
   };
 }
 
+
+/* =========================
+   กฎข้อ 22: กระจายชนิดวันแยกตามกลุ่มเวร
+   - weekday / saturday / sunday / holiday
+   - ตรวจเฉพาะชนิดวันที่กลุ่มเวรนั้นมีช่องเปิดใช้งานจริง
+   - การ rebalance จะทำได้เฉพาะเมื่อไม่ทำให้กฎ 21 เสีย
+========================= */
+function plannedAssignmentsForGroupDayClass(group,cls){
+  var total=0,slotIds=GROUPS[group]||[];
+  for(var d=1;d<=dim();d++){
+    if(dayClassCurrent(d)!==cls)continue;
+    for(var i=0;i<slotIds.length;i++){
+      var slot=slotById(slotIds[i]);
+      if(slot&&active(slot,d))total++;
+    }
+  }
+  return total;
+}
+function personCanGroupOnDayClass(pid,group,cls){
+  var slotIds=GROUPS[group]||[];
+  for(var d=1;d<=dim();d++){
+    if(dayClassCurrent(d)!==cls)continue;
+    for(var i=0;i<slotIds.length;i++){
+      var slot=slotById(slotIds[i]);
+      if(slot&&active(slot,d)&&basePersonCanSlot(pid,slot))return true;
+    }
+  }
+  return false;
+}
+function eligiblePeopleForGroupDayClass(group,cls){
+  return state.people.filter(function(p){
+    return p.active!==false&&personCanGroupOnDayClass(p.id,group,cls);
+  }).map(function(p){return p.id});
+}
+function dayClassCountForPid(counts,group,cls,pid){
+  return counts.groupDayClass[group]&&counts.groupDayClass[group][cls]?(counts.groupDayClass[group][cls][pid]||0):0;
+}
+function rule22Report(){
+  var groups=['v','ot','morning','night','long','evening','extra'];
+  var classes=['weekday','saturday','sunday','holiday'];
+  var counts=currentCounts(),details=[];
+  groups.forEach(function(group){
+    classes.forEach(function(cls){
+      if(plannedAssignmentsForGroupDayClass(group,cls)<=0)return;
+      var ids=eligiblePeopleForGroupDayClass(group,cls);
+      if(!ids.length)return;
+      var entries=ids.map(function(pid){return {pid:pid,count:dayClassCountForPid(counts,group,cls,pid)}});
+      var range=distributionRange(entries.map(function(x){return x.count}));
+      if(range.spread>1){
+        details.push({
+          group:group,cls:cls,label:(FAIR_GROUP_LABELS[group]||group)+' • '+(DAY_CLASS_LABELS[cls]||cls),
+          min:range.min,max:range.max,spread:range.spread,
+          low:entries.filter(function(x){return x.count===range.min}).map(function(x){return x.pid}),
+          high:entries.filter(function(x){return x.count===range.max}).map(function(x){return x.pid})
+        });
+      }
+    });
+  });
+  return {ok:details.length===0,details:details};
+}
+function totalDistributionValidAfterMove22(donor,recv){
+  if(!hasRule(21))return true;
+  var info=totalAverageInfo(),ids=info.ids;
+  if(!ids.length)return true;
+  var vals=ids.map(function(pid){
+    var n=info.counts.total[pid]||0;
+    if(pid===donor)n--;
+    if(pid===recv)n++;
+    return n;
+  });
+  return spreadWithinOne(vals);
+}
+function rebalanceRule22(){
+  if(!hasRule(22))return {ok:true,moved:0,report:rule22Report()};
+  var moved=0,guard=0;
+  while(guard++<2500){
+    var report=rule22Report();
+    if(report.ok)return {ok:true,moved:moved,report:report};
+    var changed=false;
+    outer22:
+    for(var ri=0;ri<report.details.length;ri++){
+      var det=report.details[ri],group=det.group,cls=det.cls;
+      for(var hi=0;hi<det.high.length;hi++){
+        var donor=det.high[hi];
+        for(var d=1;d<=dim();d++){
+          if(dayClassCurrent(d)!==cls)continue;
+          var slots=GROUPS[group]||[];
+          for(var si=0;si<slots.length;si++){
+            var sid=slots[si],slot=slotById(sid);
+            if(state.assignments[akey(d,sid)]!==donor)continue;
+            for(var li=0;li<det.low.length;li++){
+              var recv=det.low[li];
+              if(hasRule(21)&&!groupDistributionValidAfterMove(group,donor,recv))continue;
+              if(hasRule(21)&&!totalDistributionValidAfterMove22(donor,recv))continue;
+              if(moveAssignment(d,sid,donor,recv)){
+                moved++;changed=true;break outer22;
+              }
+            }
+          }
+        }
+      }
+    }
+    if(!changed)break;
+  }
+  var finalReport=rule22Report();
+  return {ok:finalReport.ok,moved:moved,report:finalReport};
+}
+
 function rebalanceRule21(){
   if(!hasRule(21)){
     return {
@@ -11523,11 +11786,12 @@ async function runSchedule(){
         pid=choose(candidates,slot,current,previous,d,cursor);
         state.assignments[akey(d,slot.id)]=pid;
 
-        var g=SLOT_GROUP[slot.id],off=isOffDay(d);
+        var g=SLOT_GROUP[slot.id],off=isOffDay(d),cls=dayClassCurrent(d);
         current.total[pid]++;
         current.slot[slot.id][pid]++;
         current.group[g][pid]++;
         if(off)current.groupOff[g][pid]++;else current.groupWeekday[g][pid]++;
+        if(current.groupDayClass[g]&&current.groupDayClass[g][cls])current.groupDayClass[g][cls][pid]++;
         cursor[g]=(personIndex(pid)+1)%Math.max(1,state.people.length);
       }
     }
@@ -11535,6 +11799,9 @@ async function runSchedule(){
     state.rotation=cursor;
 
     var balance=rebalanceRule21();
+    var balance22=rebalanceRule22();
+    /* Rule22 ถูกอนุญาตให้ย้ายเฉพาะกรณีที่ยังคงกฎ 21 ผ่าน จึงตรวจ/เก็บสมดุลกฎเดิมซ้ำอีกครั้ง */
+    if(hasRule(21))balance=rebalanceRule21();
     renderSheet();
     var errors=validate(false);
     saveMonth(true);
@@ -11702,8 +11969,38 @@ function validateCore(show){
   return errors;
 }
 
+
+function currentDayHasNight(pid,d){
+  for(var i=0;i<SLOTS.length;i++)if(SLOTS[i].kind==='night'&&state.assignments[akey(d,SLOTS[i].id)]===pid)return true;
+  return false;
+}
+function rule23ConflictForDay(pid,d){
+  if(!hasRule(23)||d<1||d>dim())return false;
+  if(!personWorkedRelative(pid,d,0)||!personWorkedRelative(pid,d,-1)||!personWorkedRelative(pid,d,-2))return false;
+  var slot={kind:currentDayHasNight(pid,d)?'night':'other'};
+  return !allowedNightTriple(pid,d,slot,-2);
+}
+function markPersonDay(pid,d){
+  if(d<1||d>dim())return;
+  for(var i=0;i<SLOTS.length;i++)if(state.assignments[akey(d,SLOTS[i].id)]===pid)mark(d,SLOTS[i].id);
+}
+
 function validate(show){
   var errors=validateCore(false);
+
+  /* กฎ 23: วันติดกัน 2 วันยังอนุโลมได้เมื่อจำเป็น แต่ 3 วันติดขึ้นไปถือว่าไม่ผ่าน
+     ยกเว้นเวรบ่าย-ดึกต่อเนื่องในช่วงวันที่กฎ 3 อนุญาต */
+  if(hasRule(23)){
+    state.people.filter(function(p){return p.active!==false}).forEach(function(p){
+      for(var d=1;d<=dim();d++){
+        if(rule23ConflictForDay(p.id,d)){
+          errors++;markPersonDay(p.id,d);
+          pushConflict({day:d,name:p.name,slot:'เวรรวมทุกประเภท',rule:'กฎ 23',message:'พบการขึ้นเวรติดต่อกันอย่างน้อย 3 วัน ระบบกำหนดให้พยายามวันเว้นวัน และห้ามเกิน 2 วันติด เว้นแต่เป็นเวรบ่าย–ดึกต่อเนื่องที่กฎ 3 อนุญาต'});
+        }
+      }
+    });
+  }
+
   var r21=hasRule(21)?rule21Report():{ok:true,groupProblems:[],groupDetails:[],totalBad:[]};
   if(!r21.ok){
     (r21.groupDetails||[]).forEach(function(gd){
@@ -11716,6 +12013,14 @@ function validate(show){
       pushConflict({day:0,name:'',slot:'เวรรวมทั้งเดือน',rule:'กฎ 21.2',message:'ยอดรวมเวรของบุคลากร Active กลุ่มปกติยังห่างกัน '+td.spread+' เวร (ต่ำสุด '+td.min+' / สูงสุด '+td.max+') ต้องไม่เกิน 1 เวร'});
     }
   }
+  var r22=hasRule(22)?rule22Report():{ok:true,details:[]};
+  if(!r22.ok){
+    (r22.details||[]).forEach(function(det){
+      errors++;
+      pushConflict({day:0,name:'',slot:det.label,rule:'กฎ 22',message:'การกระจายชนิดวันของ '+det.label+' ยังห่างกัน '+det.spread+' เวร (ต่ำสุด '+det.min+' / สูงสุด '+det.max+') เป้าหมายต้องไม่เกิน 1 เวร'});
+    });
+  }
+
   if(show){
     setStatus(errors?'พบข้อขัดแย้ง '+errors+' จุด':'ไม่พบข้อขัดแย้ง',!errors);
     renderConflictDetails();
@@ -12666,6 +12971,7 @@ function eligibleReplacement(pid,day,sid){
 
   if(personAssignedSameDay(pid,day,sid))return false;
   if(personBlockedByPreviousNight(pid,day,sid))return false;
+  if(hasRule(23)&&wouldCreateForbiddenStreak(pid,day,slot))return false;
   return true;
 }
 function chooseReplacement(day,sid,oldPid){
@@ -12674,8 +12980,13 @@ function chooseReplacement(day,sid,oldPid){
   });
   if(!candidates.length)return null;
 
-  // Prefer fairer current-month distribution and less repetition in exact slot
+  // Prefer day-spacing first, then the same day-class fairness, then current-month slot/total fairness
+  var slot=SLOTS.find(function(x){return x.id===sid}),group=SLOT_GROUP[sid],cls=dayClassCurrent(day),cc=currentCounts();
   candidates.sort(function(a,b){
+    var pa=spacingPenalty(a.id,day,slot),pb=spacingPenalty(b.id,day,slot);
+    if(pa!==pb)return pa-pb;
+    var ca=dayClassCountForPid(cc,group,cls,a.id),cb=dayClassCountForPid(cc,group,cls,b.id);
+    if(ca!==cb)return ca-cb;
     var sa=currentSlotCount(a.id,sid), sb=currentSlotCount(b.id,sid);
     if(sa!==sb)return sa-sb;
     var ta=currentTotalCount(a.id), tb=currentTotalCount(b.id);
@@ -12727,7 +13038,7 @@ function autoFixConflicts(){
   /* แก้ข้อขัดแย้งระดับเซลล์ก่อน (กฎ 1–20) */
   for(var i=0;i<details.length;i++){
     var c=details[i];
-    if(c&&String(c.rule||'').indexOf('กฎ 21')>=0)continue;
+    if(c&&(String(c.rule||'').indexOf('กฎ 21')>=0||String(c.rule||'').indexOf('กฎ 22')>=0))continue;
     var target=locateConflictAssignment(c);
     if(!target){failed++;continue}
 
@@ -12760,20 +13071,33 @@ function autoFixConflicts(){
     }
   }
 
+  var balance22Moves=0;
+  if(hasRule(22)){
+    var before22=rule22Report();
+    if(!before22.ok){
+      var balance22Result=rebalanceRule22();
+      balance22Moves=Number(balance22Result&&balance22Result.moved||0);
+      if(hasRule(21)){
+        var keep21=rebalanceRule21();
+        balanceMoves+=Number(keep21&&keep21.moved||0);
+      }
+    }
+  }
+
   var remaining=validate(false);
   renderSheet();
   renderConflictDetails();
 
-  if(fixed||balanceMoves){
-    auditWorkflow('แก้ไขข้อขัดแย้งอัตโนมัติ '+fixed+' จุด • ปรับสมดุล '+balanceMoves+' ครั้ง');
+  if(fixed||balanceMoves||balance22Moves){
+    auditWorkflow('แก้ไขข้อขัดแย้งอัตโนมัติ '+fixed+' จุด • ปรับสมดุลกฎ 21 '+balanceMoves+' ครั้ง • กฎ 22 '+balance22Moves+' ครั้ง');
     saveMonth(true);
   }
 
   if(remaining===0){
-    showAutoFixSummary('✅ แก้ไขอัตโนมัติสำเร็จ • แก้จุดขัดแย้ง '+fixed+' จุด • ปรับสมดุลกฎ 21 '+balanceMoves+' ครั้ง • ตรวจสอบแล้วไม่พบข้อขัดแย้ง','ok');
+    showAutoFixSummary('✅ แก้ไขอัตโนมัติสำเร็จ • แก้จุดขัดแย้ง '+fixed+' จุด • ปรับสมดุลกฎ 21 '+balanceMoves+' ครั้ง • กฎ 22 '+balance22Moves+' ครั้ง • ตรวจสอบแล้วไม่พบข้อขัดแย้ง','ok');
     showActionFeedback('✅ แก้ไขข้อขัดแย้งและปรับสมดุลกฎ 21 แล้ว ตารางพร้อมสำหรับส่งตรวจ','ok');
   }else{
-    showAutoFixSummary('⚠️ แก้จุดขัดแย้งได้ '+fixed+' จุด • ปรับสมดุลกฎ 21 '+balanceMoves+' ครั้ง • ยังเหลือข้อขัดแย้ง '+remaining+' จุดที่ติดเงื่อนไขและต้องตรวจหรือแก้ด้วยตนเอง','warn');
+    showAutoFixSummary('⚠️ แก้จุดขัดแย้งได้ '+fixed+' จุด • ปรับสมดุลกฎ 21 '+balanceMoves+' ครั้ง • กฎ 22 '+balance22Moves+' ครั้ง • ยังเหลือข้อขัดแย้ง '+remaining+' จุดที่ติดเงื่อนไขและต้องตรวจหรือแก้ด้วยตนเอง','warn');
     showActionFeedback('⚠️ ยังเหลือข้อขัดแย้ง '+remaining+' จุด • ระบบไม่ฝืนกฎข้อ 1–20','err');
   }
 }
@@ -13354,7 +13678,7 @@ function renderSummaryV24(){
     if(el('summaryConflictV24'))el('summaryConflictV24').textContent=(r.groupProblems.length+(r.totalBad||[]).length+r.extraOnlyBad.length);
     var people=state.people.map(function(p){return {name:p.name,total:(counts.total[p.id]||0)}}).sort(function(a,b){return b.total-a.total}).slice(0,5),pmax=Math.max.apply(null,people.map(function(x){return x.total}).concat([1]));
     if(el('summaryTopPeopleV24'))el('summaryTopPeopleV24').innerHTML=people.map(function(p,i){return '<div class="v24-person-bar"><span>'+(i+1)+'.</span><div><b>'+esc(p.name)+'</b><i style="width:'+Math.round(p.total/pmax*100)+'%"></i></div><b>'+p.total+' เวร</b></div>'}).join('');
-    if(el('summaryTipsV24'))el('summaryTipsV24').innerHTML='<div>✓ ตรวจสอบความสมดุลของแต่ละกลุ่มเวร</div><div>✓ กระจายแต่ละกลุ่มและยอดรวมให้จำนวนมากสุด−น้อยสุดไม่เกิน 1 เวร</div><div>✓ ตรวจสอบกฎข้อ 21 ก่อนส่งตรวจ</div>';
+    if(el('summaryTipsV24'))el('summaryTipsV24').innerHTML='<div>✓ ตรวจสอบความสมดุลของแต่ละกลุ่มเวร</div><div>✓ กระจายแต่ละกลุ่มและยอดรวมให้จำนวนมากสุด−น้อยสุดไม่เกิน 1 เวร</div><div>✓ ตรวจสอบกฎข้อ 21–23 ก่อนส่งตรวจ</div>';
   }catch(e){}
 }
 function loadV24Settings(){
