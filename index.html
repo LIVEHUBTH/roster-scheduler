@@ -10653,6 +10653,23 @@ function auditWorkflow(action){
   workflow.audit.unshift({at:new Date().toISOString(),user:unitUser.name,role:unitUser.role,action:action});
   if(workflow.audit.length>100)workflow.audit=workflow.audit.slice(0,100);
 }
+/* V39.26.19 - INACTIVE HARD LOCK ONLY
+   - เดือนกันยายน 2569 เป็น baseline ย้อนหลัง ห้ามลบชื่อเดิม
+   - ตั้งแต่ ต.ค. 2569 เป็นต้นไป บุคลากรพักเวร/ไม่ใช้งานห้ามอยู่ในตารางร่าง
+   - ตารางที่ส่งตรวจ/อนุมัติ/ล็อกแล้วไม่แก้ย้อนหลัง */
+function purgeInactiveAssignmentsFromDraft(){
+  if(currentKey()==='2026-09')return 0;
+  if(!workflow)workflow=defaultWorkflow();
+  if(workflow.locked||workflow.status!=='draft')return 0;
+  var inactive={};
+  (state.people||[]).forEach(function(p){if(p&&p.active===false)inactive[p.id]=true});
+  var removed=0;
+  Object.keys(state.assignments||{}).forEach(function(k){
+    var pid=state.assignments[k];
+    if(pid&&inactive[pid]){delete state.assignments[k];removed++}
+  });
+  return removed;
+}
 function monthPayload(){return {version:'24.5-home-ipad-fit',key:currentKey(),year:gy(),month:cm(),savedAt:new Date().toISOString(),assignments:state.assignments,rotation:state.rotation,peopleSnapshot:state.people,workflow:normalizeWorkflow(workflow)}}
 function saveMonth(silent){
   if(!workflow)workflow=defaultWorkflow();
@@ -10787,7 +10804,11 @@ function loadMonth(silent){clearActionFeedback();hideAutoFixSummary();
   state.rotation=d&&d.rotation?d.rotation:{};
   workflow=normalizeWorkflow(d&&d.workflow);
   workflowEditLogged=false;
-  if(!silent)setStatus(d?'เปิดตารางที่บันทึกแล้ว':'เดือนนี้ยังไม่มีข้อมูลที่บันทึก',!!d);
+  var inactivePurged=purgeInactiveAssignmentsFromDraft();
+  if(inactivePurged){
+    saveMonth(true);
+  }
+  if(!silent)setStatus(d?(inactivePurged?'เปิดตารางแล้ว • นำบุคลากรพักเวรออกจากตารางร่าง '+inactivePurged+' ช่อง':'เปิดตารางที่บันทึกแล้ว'):'เดือนนี้ยังไม่มีข้อมูลที่บันทึก',!!d);
   renderSheet();renderHistory();renderUnitWorkflow();
   renderHomeV24();renderPeopleV24();renderHolidayV24();renderSummaryV24();
 }
@@ -11851,7 +11872,7 @@ function buildHeader(){return '<caption>ตารางเวรผู้ช่�
 '<th class="grp-sdmc56">7.00-23.00</th><th class="grp-sdmc56">7.00-23.00</th>'+
 '<th class="grp-sdmc78">16.00-24.00</th><th class="grp-sdmc78">16.00-24.00</th>'+
 '</tr></thead>'}
-function optionHtml(selected){var h='<option value=""></option>';state.people.forEach(function(p,i){h+='<option value="'+p.id+'"'+(selected===p.id?' selected':'')+'>'+(i+1)+'. '+esc(p.name)+'</option>'});return h}
+function optionHtml(selected){var h='<option value=""></option>';state.people.forEach(function(p,i){var inactive=(p.active===false&&currentKey()!=='2026-09');h+='<option value="'+p.id+'"'+(selected===p.id?' selected':'')+(inactive?' disabled':'')+'>'+(i+1)+'. '+esc(p.name)+(inactive?' (พักเวร)':'')+'</option>'});return h}
 function rosterCellLabel(pid){if(!pid)return '';for(var i=0;i<state.people.length;i++){if(state.people[i].id===pid)return (i+1)+'. '+state.people[i].name}return ''}
 function renderSheet(){if(!workflow)workflow=defaultWorkflow();var editable=canRosterEdit();var h=buildHeader()+'<tbody>';for(var d=1;d<=dim();d++){var w=dow(d);var cls=isHoliday(d)?'holiday':(w===6?'saturday':(w===0?'sunday':''));h+='<tr class="'+cls+'"><td class="date"><b>'+DAYS[dow(d)]+d+'</b>'+(isHoliday(d)?'<br><small>นักขัตฯ</small>':'')+'</td>';SLOTS.forEach(function(s){if(!active(s,d)){h+='<td class="inactive"></td>';return}var v=state.assignments[akey(d,s.id)]||'';h+='<td data-d="'+d+'" data-s="'+s.id+'"><span class="phone-sheet-value">'+esc(rosterCellLabel(v))+'</span><select '+(editable?'':'disabled')+' data-d="'+d+'" data-s="'+s.id+'">'+optionHtml(v)+'</select></td>'});h+='</tr>'}h+='</tbody>';el('sheet').innerHTML=h;el('sheet').classList.toggle('is-readonly',!editable);el('sheet').querySelectorAll('select').forEach(function(s){s.onchange=function(){if(!requireRosterEdit('แก้ไขตาราง')){renderSheet();return}var d=parseInt(this.dataset.d,10),sid=this.dataset.s;if(this.value)state.assignments[akey(d,sid)]=this.value;else delete state.assignments[akey(d,sid)];var label=this.parentNode.querySelector('.phone-sheet-value');if(label)label.textContent=rosterCellLabel(this.value);if(!workflowEditLogged){auditWorkflow('เริ่มแก้ไขตารางเวรด้วยตนเอง');workflowEditLogged=true}validate(false);renderSummary();renderUnitWorkflow();saveMonth(true)}});validate(false);renderSummary();renderHomePreview();applyUnitPermissions();}
 function mark(d,sid){var td=document.querySelector('td[data-d="'+d+'"][data-s="'+sid+'"]');if(td)td.classList.add('conflict')}
@@ -12635,6 +12656,8 @@ async function pullCloudLatest(force){
       if(!cloudSame(lm,r.data)){
         localStorage.setItem(storageKey(key),JSON.stringify(r.data));
         state.assignments=r.data.assignments||{};state.rotation=r.data.rotation||{};workflow=normalizeWorkflow(r.data.workflow);workflowEditLogged=false;
+        var cloudInactivePurged=purgeInactiveAssignmentsFromDraft();
+        if(cloudInactivePurged)saveMonth(true);
         renderSheet();renderHistory();renderUnitWorkflow();renderSummaryV24();renderHomeV24();
         cloudWatchMonthKey=key;cloudWatchMonthHash=cloudStableJson(cloudStableMonthSnapshot());
       }
@@ -13461,8 +13484,13 @@ function savePersonModalV30(ev){
     }
     setPersonAllowedGroupsV3921(p.id,allowedGroups);
 
+    /* Hard lock: เมื่อเปลี่ยนเป็นพักเวร/ไม่ใช้งาน ให้ล้างชื่อออกจากตารางร่างปัจจุบันทันที
+       ยกเว้น baseline กันยายน 2569 และตารางที่ส่งตรวจ/อนุมัติ/ล็อกแล้ว */
+    var inactiveRemoved=purgeInactiveAssignmentsFromDraft();
+
     /* Persist before any UI rebuild. */
     persistPeopleConfigV303();
+    if(inactiveRemoved)saveMonth(true);
 
     setPersonModalFeedbackV304('บันทึกข้อมูลเรียบร้อยแล้ว',true);
 
@@ -13475,7 +13503,7 @@ function savePersonModalV30(ev){
     try{renderSheet()}catch(e){console.warn('[] renderSheet',e)}
     try{renderPeopleV24()}catch(e){console.warn('[] renderPeople',e)}
     try{renderHomeV24()}catch(e){console.warn('[] renderHome',e)}
-    try{setStatus('บันทึกข้อมูลพนักงาน '+p.name+' แล้ว',true)}catch(e){}
+    try{setStatus('บันทึกข้อมูลพนักงาน '+p.name+' แล้ว'+(inactiveRemoved?' • นำออกจากตารางร่าง '+inactiveRemoved+' ช่อง':''),true)}catch(e){}
 
     return false;
   }catch(err){
