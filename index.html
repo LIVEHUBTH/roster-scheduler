@@ -56,7 +56,10 @@ html.phone-device .sheet .phone-sheet-value{display:block;width:100%;height:26px
 html.phone-device .sheet td[data-d][data-s]>select{position:absolute!important;inset:3px 4px!important;width:calc(100% - 8px)!important;height:26px!important;opacity:.001!important;z-index:2!important}
 @media print{.phone-sheet-value{display:none!important}}
 .sheet tr.weekend td.inactive,.sheet tr.holiday td.inactive{background:var(--weekend)!important;color:#222}
-.sheet td.conflict{box-shadow:inset 0 0 0 2px #f04438!important;background:#fff1f0!important;color:#111!important}
+.sheet td.conflict{box-shadow:inset 0 0 0 2px #f04438!important;background:#fff1f0!important;color:#111!important;position:relative!important}
+.sheet td.conflict .cell-conflict-note{position:absolute;left:2px;right:2px;bottom:1px;z-index:5;display:block;border:0;background:rgba(255,241,240,.96);color:#b42318;font-size:7px;font-weight:800;line-height:1.1;padding:1px 2px;border-radius:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+.sheet td.conflict .phone-sheet-value{padding-bottom:9px}
+@media(min-width:701px){.sheet td.conflict .cell-conflict-note{font-size:8px}}
 .section-title{font-weight:800;font-size:18px;margin-bottom:8px}.muted{font-size:12px;color:var(--muted);line-height:1.55}
 .names{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:7px;margin-top:9px}.name-row{display:grid;grid-template-columns:33px 1fr auto;gap:6px;align-items:center}
 .name-row input{width:100%;min-height:38px;border:1px solid var(--line);border-radius:8px;padding:6px 8px;font-size:14px}.lastbadge{font-size:10px;background:#efeefe;color:#4d3ed7;padding:4px 6px;border-radius:999px;white-space:nowrap;font-weight:800}
@@ -10202,7 +10205,7 @@ var DEFAULT_RULES=[
 {id:'r18',text:'ต้องหมุนเวียนตำแหน่งภายในแต่ละประเภทเวร และไม่ให้บุคคลเดิมอยู่ในเวรหรือตำแหน่งเดิมซ้ำ ๆ รวมถึงหลีกเลี่ยงชื่อเดียวกันติดต่อกันหลายวัน'},
 {id:'r19',text:'การจัดตารางเดือนใหม่ต้องอ้างอิงตารางเวรของเดือนก่อนหน้า โดยนำข้อมูลการหมุนคิว จำนวนเวรสะสม ประเภทเวร และประวัติการขึ้นเวรมาประกอบการจัดเดือนใหม่'},
 {id:'r20',text:'ต้องตรวจสอบรอยต่อระหว่างปลายเดือนก่อนหน้ากับต้นเดือนใหม่ โดยใช้กฎทั้งหมดเหมือนเป็นตารางต่อเนื่องกัน'},
-{id:'r21',text:'การกระจายเวรของเดือนปัจจุบันให้คิดเป็น 7 กลุ่มประเภทเวร ได้แก่ เวร1–2, OT1–2, SDMC เช้า1–4, SDMC บ่าย–ดึก1–4, SDMC เช้า–บ่าย5–6, SDMC บ่าย7–8 และ EXTRA1–3 โดยระบบต้องคำนวณค่าเฉลี่ยเป้าหมายของแต่ละกลุ่มจากจำนวนเวรที่ต้องจัดในเดือนนั้นหารด้วยจำนวนบุคลากรที่กำลังใช้งานและมีสิทธิ์ขึ้นเวรกลุ่มนั้น แล้วใช้ค่าเฉลี่ยดังกล่าวช่วยเลือกผู้ที่ยังมีเวรกลุ่มนั้นต่ำกว่าเป้าหมายก่อน ระหว่างจัดต้องหมุนตำแหน่งย่อยและหลีกเลี่ยงบุคคลเดิมลงช่องเดิมซ้ำ ๆ หลายวัน เกณฑ์ผ่านสุดท้ายของแต่ละกลุ่มคือจำนวนเวรของผู้ที่ได้มากที่สุดกับผู้ที่ได้น้อยที่สุดต้องต่างกันไม่เกิน 1 เวร (Max − Min ≤ 1) หากยังต่างกันเกิน 1 เวร ให้ระบบปรับสมดุลอัตโนมัติโดยห้ามทำให้ผิดกฎข้อ 1–20 บุคลากรที่พักเวรหรือไม่มีสิทธิ์ในกลุ่มนั้นไม่นำมาคิดค่าเฉลี่ยและไม่นำมาร่วมตรวจ และบุคลากร EXTRA-only ให้นำมาคิดและตรวจเฉพาะกลุ่ม EXTRA1–3'},
+{id:'r21',text:'การกระจายเวรของเดือนปัจจุบันให้คิดเป็น 7 กลุ่มประเภทเวร ได้แก่ เวร1–2, OT1–2, SDMC เช้า1–4, SDMC บ่าย–ดึก1–4, SDMC เช้า–บ่าย5–6, SDMC บ่าย7–8 และ EXTRA1–3 โดยระบบต้องคำนวณค่าเฉลี่ยเป้าหมายของแต่ละกลุ่มจากจำนวนเวรที่ต้องจัดในเดือนนั้นหารด้วยจำนวนบุคลากรที่กำลังใช้งานและมีสิทธิ์ขึ้นเวรกลุ่มนั้น แล้วใช้ค่าเฉลี่ยดังกล่าวช่วยเลือกผู้ที่ยังมีเวรกลุ่มนั้นต่ำกว่าเป้าหมายก่อน ระหว่างจัดต้องหมุนตำแหน่งย่อยและหลีกเลี่ยงบุคคลเดิมลงช่องเดิมซ้ำ ๆ หลายวัน เกณฑ์ผ่านสุดท้ายของแต่ละกลุ่มคือจำนวนเวรของผู้ที่ได้มากที่สุดกับผู้ที่ได้น้อยที่สุดต้องต่างกันไม่เกิน 1 เวร (Max − Min ≤ 1) สำหรับกลุ่ม EXTRA ให้ตรวจสมดุล EXTRA1, EXTRA2 และ EXTRA3 แยกแต่ละช่องด้วย โดยคนที่มีสิทธิ์ในช่องนั้นต้องมี Max − Min ≤ 1 เท่าที่กฎวันเปิดเวรและกฎเดิมทั้งหมดอนุญาต หากยังต่างกันเกิน 1 เวร ให้ระบบปรับสมดุลอัตโนมัติโดยห้ามทำให้ผิดกฎข้อ 1–20 บุคลากรที่พักเวรหรือไม่มีสิทธิ์ในกลุ่มนั้นไม่นำมาคิดค่าเฉลี่ยและไม่นำมาร่วมตรวจ และบุคลากร EXTRA-only ให้นำมาคิดและตรวจเฉพาะกลุ่ม EXTRA1–3'},
 {id:'r22',text:'ในแต่ละกลุ่มประเภทเวร ต้องกระจายชนิดวันให้บุคลากรที่กำลังใช้งานและมีสิทธิ์ขึ้นเวรนั้นอย่างใกล้เคียงกัน โดยแยกตรวจเป็น วันจันทร์–ศุกร์ (ไม่รวมนักขัตฤกษ์) / วันเสาร์ / วันอาทิตย์ / วันหยุดนักขัตฤกษ์ เฉพาะชนิดวันที่เวรกลุ่มนั้นเปิดใช้งานจริง เกณฑ์เป้าหมายของแต่ละชนิดวันคือ Max − Min ≤ 1 เวร และการปรับสมดุลกฎนี้ห้ามทำให้กฎข้อ 1–21 เสีย'},
 {id:'r23',text:'ให้ระบบพยายามเว้นระยะการขึ้นเวรของบุคลากรเป็นวันเว้นวันก่อนเสมอ หากจำเป็นสามารถขึ้นเวรวันติดกันได้เป็นตัวเลือกท้ายสุด แต่ห้ามจัดเวรติดต่อกันเกิน 2 วัน เว้นแต่เป็นเวรบ่าย–ดึกต่อเนื่องในช่วงวันที่กฎข้อ 3 อนุญาต การจัดและการแก้สมดุลต้องไม่ทำให้กฎข้อ 1–22 เสีย'},
 {id:'r24',text:'EXTRA1 และ EXTRA2 ต้องหมุนเวียนทั้งตำแหน่ง EXTRA และฟลอของบุคลากร โดยอ้างอิงตารางเดือนปัจจุบันและประวัติเดือนก่อนหน้าเพื่อลดการตก EXTRA เดิม + ฟลอเดิมซ้ำ ๆ และลดการตกฟลอเดิมซ้ำ โดยฟลอตามวันคือ จันทร์ EXTRA1=SU / EXTRA2=OB, อังคาร EXTRA1=SU / EXTRA2=ENT, พุธ EXTRA1=OB / EXTRA2=SU, พฤหัสบดี EXTRA1=OT / EXTRA2=SK, ศุกร์ EXTRA1=ENT, เสาร์ EXTRA1=OT, อาทิตย์ EXTRA1=SK / EXTRA2=OT ส่วน EXTRA3 ให้รันตามกฎปกติเดิม และกฎนี้เป็นลำดับการเลือกคิวเท่านั้น ห้ามทำให้กฎข้อ 1–23 เสีย'}
@@ -11148,6 +11151,9 @@ function choose(candidates,slot,current,previous,d,cursor){
     /* ค่ายิ่งติดลบมาก = ยังขาดจากค่าเฉลี่ยเป้าหมายมากกว่า จึงควรได้คิวก่อน */
     var targetDeficit=hasRule(21)?Math.max(0,targetAverage-currentGroup):0;
     var projectedTargetDistance=hasRule(21)?Math.abs((currentGroup+1)-targetAverage):0;
+    var exactTarget=(hasRule(21)&&g==='extra')?exactSlotTargetAverage(slot.id):0;
+    var exactDeficit=(hasRule(21)&&g==='extra')?Math.max(0,exactTarget-currentSlot):0;
+    var exactProjectedDistance=(hasRule(21)&&g==='extra')?Math.abs((currentSlot+1)-exactTarget):0;
     var extraRot=extraRotationScore(pid,d,slot);
 
     if(hasRule(21)){
@@ -11157,6 +11163,9 @@ function choose(candidates,slot,current,previous,d,cursor){
         -targetDeficit,
         currentGroup,
         projectedTargetDistance,
+        (g==='extra'?-exactDeficit:0),
+        (g==='extra'?currentSlot:0),
+        (g==='extra'?exactProjectedDistance:0),
         spacingPenalty(pid,d,slot),
         classLoad,
         extraRot.recentPair,
@@ -11302,6 +11311,43 @@ function plannedAssignmentsForGroup(group){
 function groupTargetAverage(group){
   var ids=averagePeopleForGroup(group);
   return ids.length?plannedAssignmentsForGroup(group)/ids.length:0;
+}
+
+/* V39.26.20 — EXTRA1/2/3 exact-slot fairness.
+   This is a sub-check of Rule 21 and does not change any existing eligibility/day rules. */
+function eligiblePeopleForExactSlot(sid){
+  var slot=slotById(sid);
+  if(!slot)return [];
+  var hasOpenDay=false;
+  for(var d=1;d<=dim();d++){if(active(slot,d)){hasOpenDay=true;break}}
+  if(!hasOpenDay)return [];
+  return state.people.filter(function(p){
+    return p.active!==false&&basePersonCanSlot(p.id,slot);
+  }).map(function(p){return p.id});
+}
+function plannedAssignmentsForExactSlot(sid){
+  var slot=slotById(sid),total=0;if(!slot)return 0;
+  for(var d=1;d<=dim();d++)if(active(slot,d))total++;
+  return total;
+}
+function exactSlotTargetAverage(sid){
+  var ids=eligiblePeopleForExactSlot(sid);
+  return ids.length?plannedAssignmentsForExactSlot(sid)/ids.length:0;
+}
+function exactSlotReport(){
+  var counts=currentCounts(),details=[];
+  EXTRA_IDS.forEach(function(sid){
+    var ids=eligiblePeopleForExactSlot(sid);
+    if(!ids.length)return;
+    var entries=ids.map(function(pid){return {pid:pid,count:(counts.slot[sid][pid]||0)}});
+    var range=distributionRange(entries.map(function(x){return x.count}));
+    if(range.spread>1){
+      details.push({sid:sid,label:conflictSlotLabel(sid),min:range.min,max:range.max,spread:range.spread,
+        low:entries.filter(function(x){return x.count===range.min}).map(function(x){return x.pid}),
+        high:entries.filter(function(x){return x.count===range.max}).map(function(x){return x.pid})});
+    }
+  });
+  return {ok:details.length===0,details:details};
 }
 
 function extraOnlyPeople(){
@@ -11624,12 +11670,14 @@ function rule21Report(){
     low:totalEntries.filter(function(x){return x.count===totalRange.min}).map(function(x){return x.pid}),
     high:totalEntries.filter(function(x){return x.count===totalRange.max}).map(function(x){return x.pid})
   }:null;
+  var exactExtra=exactSlotReport();
   return {
-    ok:groupProblems.length===0&&!totalProblem,
+    ok:groupProblems.length===0&&!totalProblem&&exactExtra.ok,
     groupProblems:groupProblems,
     groupDetails:groupDetails,
     totalBad:totalProblem?['เวรรวมทั้งเดือน']:[],
     totalDetail:totalDetail,
+    exactExtra:exactExtra,
     totalAvg:totalInfo.avg,
     extraAvg:extraInfo.avg,
     extraOnlyBad:[]
@@ -11744,6 +11792,51 @@ function rebalanceRule22(){
   return {ok:finalReport.ok,moved:moved,report:finalReport};
 }
 
+function dayClassDistributionValidAfterMove21(group,cls,donor,recv){
+  if(!hasRule(22))return true;
+  var ids=eligiblePeopleForGroupDayClass(group,cls);
+  if(!ids.length)return true;
+  var counts=currentCounts();
+  var vals=ids.map(function(pid){
+    var n=dayClassCountForPid(counts,group,cls,pid);
+    if(pid===donor)n--;
+    if(pid===recv)n++;
+    return n;
+  });
+  return spreadWithinOne(vals);
+}
+function rebalanceExtraExactSlots(){
+  if(!hasRule(21))return {ok:true,moved:0,report:exactSlotReport()};
+  var moved=0,guard=0;
+  while(guard++<2500){
+    var report=exactSlotReport();
+    if(report.ok)return {ok:true,moved:moved,report:report};
+    var changed=false;
+    outerExact:
+    for(var ri=0;ri<report.details.length;ri++){
+      var det=report.details[ri],sid=det.sid,slot=slotById(sid);
+      for(var hi=0;hi<det.high.length;hi++){
+        var donor=det.high[hi];
+        for(var d=1;d<=dim();d++){
+          if(state.assignments[akey(d,sid)]!==donor)continue;
+          var cls=dayClassCurrent(d);
+          for(var li=0;li<det.low.length;li++){
+            var recv=det.low[li];
+            if(!basePersonCanSlot(recv,slot))continue;
+            if(!groupDistributionValidAfterMove('extra',donor,recv))continue;
+            if(!totalDistributionValidAfterMove22(donor,recv))continue;
+            if(!dayClassDistributionValidAfterMove21('extra',cls,donor,recv))continue;
+            if(moveAssignment(d,sid,donor,recv)){moved++;changed=true;break outerExact}
+          }
+        }
+      }
+    }
+    if(!changed)break;
+  }
+  var finalReport=exactSlotReport();
+  return {ok:finalReport.ok,moved:moved,report:finalReport};
+}
+
 function rebalanceRule21(){
   if(!hasRule(21)){
     return {
@@ -11823,6 +11916,8 @@ async function runSchedule(){
     var balance22=rebalanceRule22();
     /* Rule22 ถูกอนุญาตให้ย้ายเฉพาะกรณีที่ยังคงกฎ 21 ผ่าน จึงตรวจ/เก็บสมดุลกฎเดิมซ้ำอีกครั้ง */
     if(hasRule(21))balance=rebalanceRule21();
+    var balanceExtraExact=rebalanceExtraExactSlots();
+    if(hasRule(21))balance=rebalanceRule21();
     renderSheet();
     var errors=validate(false);
     saveMonth(true);
@@ -11889,8 +11984,36 @@ function conflictSlotLabel(sid){
 function conflictDayLabel(d){
   return DAYS[dow(d)]+d+' '+MONTHS[cm()]+' '+py();
 }
+function conflictCellMatchesDetail(td,detail){
+  if(!td||!detail||!detail.day)return false;
+  var d=parseInt(td.dataset.d,10),sid=td.dataset.s;if(d!==detail.day)return false;
+  var pid=state.assignments[akey(d,sid)]||'';
+  var name=pid?conflictPersonName(pid):'';
+  var label=conflictSlotLabel(sid);
+  if(detail.name&&name!==detail.name)return false;
+  if(detail.slot==='เวรรวมทุกประเภท')return true;
+  if(!detail.slot)return true;
+  return String(detail.slot).indexOf(label)>=0;
+}
+function attachConflictNote(detail){
+  if(!detail||!detail.day)return;
+  document.querySelectorAll('td.conflict[data-d="'+detail.day+'"]').forEach(function(td){
+    if(!conflictCellMatchesDetail(td,detail))return;
+    var note=td.querySelector('.cell-conflict-note');
+    if(!note){note=document.createElement('span');note.className='cell-conflict-note';td.appendChild(note)}
+    var rules=(note.dataset.rules||'').split('|').filter(Boolean);
+    if(rules.indexOf(detail.rule)<0)rules.push(detail.rule);
+    note.dataset.rules=rules.join('|');
+    note.textContent='⚠ '+rules.join(', ');
+    var full=(note.dataset.full||'');
+    note.dataset.full=(full?full+'\n':'')+detail.rule+': '+detail.message;
+    note.title=note.dataset.full;
+    note.onclick=function(ev){ev.stopPropagation();showActionFeedback('⚠ '+note.dataset.full.replace(/\n/g,' • '),'err')};
+  });
+}
 function pushConflict(detail){
   lastConflictDetails.push(detail);
+  attachConflictNote(detail);
 }
 function renderConflictDetails(){
   ['roster','unit'].forEach(function(prefix){
@@ -11914,10 +12037,11 @@ function renderConflictDetails(){
     }).join('');
   });
 }
-function clearConflictDetails(){lastConflictDetails=[];renderConflictDetails()}
+function clearConflictDetails(){lastConflictDetails=[];document.querySelectorAll('.cell-conflict-note').forEach(function(n){n.remove()});renderConflictDetails()}
 
 function validateCore(show){
   document.querySelectorAll('.conflict').forEach(function(x){x.classList.remove('conflict')});
+  document.querySelectorAll('.cell-conflict-note').forEach(function(n){n.remove()});
   lastConflictDetails=[];
   var errors=0;
 
@@ -12032,6 +12156,12 @@ function validate(show){
       errors++;
       var td=r21.totalDetail;
       pushConflict({day:0,name:'',slot:'เวรรวมทั้งเดือน',rule:'กฎ 21.2',message:'ยอดรวมเวรของบุคลากร Active กลุ่มปกติยังห่างกัน '+td.spread+' เวร (ต่ำสุด '+td.min+' / สูงสุด '+td.max+') ต้องไม่เกิน 1 เวร'});
+    }
+    if(r21.exactExtra&&!r21.exactExtra.ok){
+      (r21.exactExtra.details||[]).forEach(function(ed){
+        errors++;
+        pushConflict({day:0,name:'',slot:ed.label,rule:'กฎ 21.3',message:'การเฉลี่ย '+ed.label+' แยกช่องยังห่างกัน '+ed.spread+' เวร (ต่ำสุด '+ed.min+' / สูงสุด '+ed.max+') ต้องไม่เกิน 1 เวรในกลุ่มคนที่มีสิทธิ์ขึ้นช่องนี้'});
+      });
     }
   }
   var r22=hasRule(22)?rule22Report():{ok:true,details:[]};
@@ -12274,7 +12404,7 @@ function renderSummary(){
        (report.ok?'#ecfdf3;color:#067647':'#fff1f0;color:#b42318')+'">'+
        (
          report.ok
-         ?'✓ กฎข้อ 21 ผ่าน: ทั้ง 7 กลุ่มและยอดรวมเวร มีจำนวนมากสุด−น้อยสุดไม่เกิน 1 เวร'
+         ?'✓ กฎข้อ 21 ผ่าน: ทั้ง 7 กลุ่ม ยอดรวมเวร และ EXTRA1–3 แยกช่อง มีจำนวนมากสุด−น้อยสุดไม่เกิน 1 เวร'
          :'⚠ กฎข้อ 21 ยังไม่ผ่านทั้งหมด'+
           (report.groupProblems.length?' • กลุ่มที่ยังห่างเกิน 1 เวร: '+esc(report.groupProblems.join(', ')):'')+
           (report.totalDetail?' • เวรรวมยังห่าง '+report.totalDetail.spread+' เวร (ต่ำสุด '+report.totalDetail.min+' / สูงสุด '+report.totalDetail.max+')':'')
