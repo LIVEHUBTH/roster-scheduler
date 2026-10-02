@@ -11883,6 +11883,178 @@ function rebalanceExtraExactSlots(){
   return {ok:finalReport.ok,moved:moved,report:finalReport};
 }
 
+/* V39.26.22 — RULE 21 HARD REPAIR ONLY
+   Scope: strengthen Max−Min <= 1 repair for the existing 7 duty groups,
+   monthly total, and EXTRA1/2/3 exact-slot sub-check. No eligibility/day/
+   rotation/UI/sync/PDF/history rule is changed here.
+
+   Why this exists: a direct donor -> receiver transfer can be blocked when
+   the receiver already works that day. In that case we may legally use a
+   two-step chain inside the existing assignments:
+       bridge assignment -> low person
+       high person's assignment -> bridge
+   The bridge keeps the same number of duties. A chain is committed only when
+   the overall Rule 21 hard-violation score improves; otherwise it is rolled
+   back byte-for-byte at the assignment level. */
+function rule21HardMetrics(report){
+  report=report||rule21Report();
+  var excess=0,failCount=0,maxSpread=0,sumSpread=0;
+  (report.groupDetails||[]).forEach(function(x){
+    var sp=Number(x.spread||0);excess+=Math.max(0,sp-1);failCount++;maxSpread=Math.max(maxSpread,sp);sumSpread+=sp;
+  });
+  if(report.totalDetail){
+    var tsp=Number(report.totalDetail.spread||0);excess+=Math.max(0,tsp-1);failCount++;maxSpread=Math.max(maxSpread,tsp);sumSpread+=tsp;
+  }
+  if(report.exactExtra&&!report.exactExtra.ok){
+    (report.exactExtra.details||[]).forEach(function(x){
+      var sp=Number(x.spread||0);excess+=Math.max(0,sp-1);failCount++;maxSpread=Math.max(maxSpread,sp);sumSpread+=sp;
+    });
+  }
+  return {ok:!!report.ok,excess:excess,failCount:failCount,maxSpread:maxSpread,sumSpread:sumSpread};
+}
+function rule21HardMetricsBetter(a,b){
+  if(a.ok&&!b.ok)return true;
+  if(a.excess!==b.excess)return a.excess<b.excess;
+  if(a.failCount!==b.failCount)return a.failCount<b.failCount;
+  if(a.maxSpread!==b.maxSpread)return a.maxSpread<b.maxSpread;
+  return a.sumSpread<b.sumSpread;
+}
+function rule21ItemsForPerson(pid,group,sidOnly){
+  var out=[];
+  for(var d=1;d<=dim();d++){
+    for(var i=0;i<SLOTS.length;i++){
+      var sid=SLOTS[i].id;
+      if(sidOnly&&sid!==sidOnly)continue;
+      if(group&&SLOT_GROUP[sid]!==group)continue;
+      if(state.assignments[akey(d,sid)]===pid)out.push({d:d,sid:sid});
+    }
+  }
+  return out;
+}
+function restoreRule21Chain(keyA,valA,keyB,valB){
+  if(valA)state.assignments[keyA]=valA;else delete state.assignments[keyA];
+  if(valB)state.assignments[keyB]=valB;else delete state.assignments[keyB];
+}
+function tryRule21ChainMove(donor,a,bridge,b,recv,baselineMetrics){
+  if(!donor||!bridge||!recv||donor===bridge||bridge===recv||donor===recv)return false;
+  var keyA=akey(a.d,a.sid),keyB=akey(b.d,b.sid);
+  if(keyA===keyB)return false;
+  var valA=state.assignments[keyA],valB=state.assignments[keyB];
+  if(valA!==donor||valB!==bridge)return false;
+
+  /* Move bridge away first. This can free the exact day needed for the
+     second leg while all existing hard eligibility checks remain active. */
+  if(!moveAssignment(b.d,b.sid,bridge,recv)){
+    restoreRule21Chain(keyA,valA,keyB,valB);return false;
+  }
+  if(!moveAssignment(a.d,a.sid,donor,bridge)){
+    restoreRule21Chain(keyA,valA,keyB,valB);return false;
+  }
+
+  var afterReport=rule21Report();
+  var afterMetrics=rule21HardMetrics(afterReport);
+  if(rule21HardMetricsBetter(afterMetrics,baselineMetrics))return true;
+
+  restoreRule21Chain(keyA,valA,keyB,valB);
+  return false;
+}
+function repairRule21ByTwoStepChains(){
+  if(!hasRule(21))return 0;
+  var moved=0,attempts=0,maxAttempts=4200;
+
+  while(attempts<maxAttempts){
+    var report=rule21Report();
+    if(report.ok)break;
+    var base=rule21HardMetrics(report),changed=false;
+
+    /* A) Repair any failing duty group. The bridge stays inside the same
+       group, so its group count is unchanged after the two legs. */
+    outerGroupChain:
+    for(var gi=0;gi<(report.groupDetails||[]).length;gi++){
+      var gd=report.groupDetails[gi],group=gd.group;
+      for(var hi=0;hi<gd.high.length;hi++){
+        var donor=gd.high[hi],donorItems=rule21ItemsForPerson(donor,group,null);
+        for(var li=0;li<gd.low.length;li++){
+          var recv=gd.low[li];
+          for(var bi=0;bi<state.people.length;bi++){
+            var bridge=state.people[bi].id;
+            if(bridge===donor||bridge===recv||state.people[bi].active===false)continue;
+            var bridgeItems=rule21ItemsForPerson(bridge,group,null);
+            for(var ai=0;ai<donorItems.length;ai++){
+              for(var bj=0;bj<bridgeItems.length;bj++){
+                if(++attempts>maxAttempts)break outerGroupChain;
+                if(tryRule21ChainMove(donor,donorItems[ai],bridge,bridgeItems[bj],recv,base)){
+                  moved+=2;changed=true;break outerGroupChain;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    if(changed)continue;
+
+    /* B) Repair EXTRA exact-slot imbalance using a bridge in the same exact
+       EXTRA slot. This changes only donor/receiver counts for that slot. */
+    if(report.exactExtra&&!report.exactExtra.ok){
+      outerExactChain:
+      for(var ei=0;ei<(report.exactExtra.details||[]).length;ei++){
+        var ed=report.exactExtra.details[ei],sid=ed.sid;
+        for(var ehi=0;ehi<ed.high.length;ehi++){
+          var edonor=ed.high[ehi],eDonorItems=rule21ItemsForPerson(edonor,null,sid);
+          for(var eli=0;eli<ed.low.length;eli++){
+            var erecv=ed.low[eli];
+            for(var ebi=0;ebi<state.people.length;ebi++){
+              var ebridge=state.people[ebi].id;
+              if(ebridge===edonor||ebridge===erecv||state.people[ebi].active===false)continue;
+              var eBridgeItems=rule21ItemsForPerson(ebridge,null,sid);
+              for(var eai=0;eai<eDonorItems.length;eai++){
+                for(var ebj=0;ebj<eBridgeItems.length;ebj++){
+                  if(++attempts>maxAttempts)break outerExactChain;
+                  if(tryRule21ChainMove(edonor,eDonorItems[eai],ebridge,eBridgeItems[ebj],erecv,base)){
+                    moved+=2;changed=true;break outerExactChain;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      if(changed)continue;
+    }
+
+    /* C) Repair monthly total. The two legs may belong to different groups;
+       therefore the chain is accepted only if the complete Rule 21 metric
+       improves after both moves. */
+    if(report.totalDetail){
+      outerTotalChain:
+      for(var thi=0;thi<report.totalDetail.high.length;thi++){
+        var tdonor=report.totalDetail.high[thi],tDonorItems=rule21ItemsForPerson(tdonor,null,null);
+        for(var tli=0;tli<report.totalDetail.low.length;tli++){
+          var trecv=report.totalDetail.low[tli];
+          for(var tbi=0;tbi<state.people.length;tbi++){
+            var tbridge=state.people[tbi].id;
+            if(tbridge===tdonor||tbridge===trecv||state.people[tbi].active===false)continue;
+            var tBridgeItems=rule21ItemsForPerson(tbridge,null,null);
+            for(var tai=0;tai<tDonorItems.length;tai++){
+              for(var tbj=0;tbj<tBridgeItems.length;tbj++){
+                if(++attempts>maxAttempts)break outerTotalChain;
+                if(tryRule21ChainMove(tdonor,tDonorItems[tai],tbridge,tBridgeItems[tbj],trecv,base)){
+                  moved+=2;changed=true;break outerTotalChain;
+                }
+              }
+            }
+          }
+        }
+      }
+      if(changed)continue;
+    }
+
+    if(!changed)break;
+  }
+  return moved;
+}
+
 function rebalanceRule21(){
   if(!hasRule(21)){
     return {ok:true,moved:0,report:rule21Report()};
@@ -11891,8 +12063,9 @@ function rebalanceRule21(){
   var moved=0;
 
   /* Rule 21 เป็น hard priority: 21.1 รายกลุ่ม -> 21.3 EXTRA แยกช่อง -> 21.2 เวรรวม
-     วนจนทั้งสามส่วนผ่านพร้อมกัน หรือจนไม่มีการย้ายที่ถูกกฎ 1–20/23 ได้อีก */
-  for(var round=0;round<12;round++){
+     รอบ V39.26.22 เพิ่ม two-step chain repair เฉพาะเมื่อ direct transfer ติดกฎเดิม
+     เพื่อไม่ให้ Max−Min > 1 ถูกปล่อยค้างเพียงเพราะผู้รับมีเวรในวันเดียวกัน */
+  for(var round=0;round<24;round++){
     var roundMoves=0;
     var m1=rebalanceGroups();roundMoves+=m1;moved+=m1;
     var ex=rebalanceExtraExactSlots();var m3=Number(ex&&ex.moved||0);roundMoves+=m3;moved+=m3;
@@ -11900,6 +12073,16 @@ function rebalanceRule21(){
 
     var check=rule21Report();
     if(check.ok)return {ok:true,moved:moved,report:check};
+
+    /* Direct move may be blocked by same-day/rest constraints. Try a legal
+       two-step chain, then immediately return to the normal direct passes. */
+    var chainMoves=repairRule21ByTwoStepChains();
+    roundMoves+=chainMoves;moved+=chainMoves;
+    if(chainMoves){
+      check=rule21Report();
+      if(check.ok)return {ok:true,moved:moved,report:check};
+    }
+
     if(roundMoves===0)break;
   }
 
