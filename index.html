@@ -3,6 +3,8 @@
 <!-- BUILD: ADMIN PASSWORD UI  / 2026-08-25 -->
 <html lang="th">
 <head>
+<!-- V39.26.21 RULE21 HARD PRIORITY MAX-MIN <= 1 ONLY -->
+
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <!--  FAST-LOAD: preload sidebar artwork only; no layout/system changes -->
@@ -10205,7 +10207,7 @@ var DEFAULT_RULES=[
 {id:'r18',text:'ต้องหมุนเวียนตำแหน่งภายในแต่ละประเภทเวร และไม่ให้บุคคลเดิมอยู่ในเวรหรือตำแหน่งเดิมซ้ำ ๆ รวมถึงหลีกเลี่ยงชื่อเดียวกันติดต่อกันหลายวัน'},
 {id:'r19',text:'การจัดตารางเดือนใหม่ต้องอ้างอิงตารางเวรของเดือนก่อนหน้า โดยนำข้อมูลการหมุนคิว จำนวนเวรสะสม ประเภทเวร และประวัติการขึ้นเวรมาประกอบการจัดเดือนใหม่'},
 {id:'r20',text:'ต้องตรวจสอบรอยต่อระหว่างปลายเดือนก่อนหน้ากับต้นเดือนใหม่ โดยใช้กฎทั้งหมดเหมือนเป็นตารางต่อเนื่องกัน'},
-{id:'r21',text:'การกระจายเวรของเดือนปัจจุบันให้คิดเป็น 7 กลุ่มประเภทเวร ได้แก่ เวร1–2, OT1–2, SDMC เช้า1–4, SDMC บ่าย–ดึก1–4, SDMC เช้า–บ่าย5–6, SDMC บ่าย7–8 และ EXTRA1–3 โดยระบบต้องคำนวณค่าเฉลี่ยเป้าหมายของแต่ละกลุ่มจากจำนวนเวรที่ต้องจัดในเดือนนั้นหารด้วยจำนวนบุคลากรที่กำลังใช้งานและมีสิทธิ์ขึ้นเวรกลุ่มนั้น แล้วใช้ค่าเฉลี่ยดังกล่าวช่วยเลือกผู้ที่ยังมีเวรกลุ่มนั้นต่ำกว่าเป้าหมายก่อน ระหว่างจัดต้องหมุนตำแหน่งย่อยและหลีกเลี่ยงบุคคลเดิมลงช่องเดิมซ้ำ ๆ หลายวัน เกณฑ์ผ่านสุดท้ายของแต่ละกลุ่มคือจำนวนเวรของผู้ที่ได้มากที่สุดกับผู้ที่ได้น้อยที่สุดต้องต่างกันไม่เกิน 1 เวร (Max − Min ≤ 1) สำหรับกลุ่ม EXTRA ให้ตรวจสมดุล EXTRA1, EXTRA2 และ EXTRA3 แยกแต่ละช่องด้วย โดยคนที่มีสิทธิ์ในช่องนั้นต้องมี Max − Min ≤ 1 เท่าที่กฎวันเปิดเวรและกฎเดิมทั้งหมดอนุญาต หากยังต่างกันเกิน 1 เวร ให้ระบบปรับสมดุลอัตโนมัติโดยห้ามทำให้ผิดกฎข้อ 1–20 บุคลากรที่พักเวรหรือไม่มีสิทธิ์ในกลุ่มนั้นไม่นำมาคิดค่าเฉลี่ยและไม่นำมาร่วมตรวจ และบุคลากร EXTRA-only ให้นำมาคิดและตรวจเฉพาะกลุ่ม EXTRA1–3'},
+{id:'r21',text:'การกระจายเวรของเดือนปัจจุบันให้คิดเป็น 7 กลุ่มประเภทเวร ได้แก่ เวร1–2, OT1–2, SDMC เช้า1–4, SDMC บ่าย–ดึก1–4, SDMC เช้า–บ่าย5–6, SDMC บ่าย7–8 และ EXTRA1–3 โดยระบบต้องคำนวณค่าเฉลี่ยเป้าหมายของแต่ละกลุ่มจากจำนวนเวรที่ต้องจัดในเดือนนั้นหารด้วยจำนวนบุคลากรที่กำลังใช้งานและมีสิทธิ์ขึ้นเวรกลุ่มนั้น แล้วใช้ค่าเฉลี่ยดังกล่าวช่วยเลือกผู้ที่ยังมีเวรกลุ่มนั้นต่ำกว่าเป้าหมายก่อน ระหว่างจัดต้องหมุนตำแหน่งย่อยและหลีกเลี่ยงบุคคลเดิมลงช่องเดิมซ้ำ ๆ หลายวัน เกณฑ์ผ่านหลักและต้องตรวจทุกเดือนของแต่ละกลุ่มคือจำนวนเวรของผู้ที่ได้มากที่สุดกับผู้ที่ได้น้อยที่สุดต้องต่างกันไม่เกิน 1 เวร (Max − Min ≤ 1) โดยถือเป็น Hard Priority ห้ามกฎช่วยกระจายข้อ 22–24 ทำให้เกณฑ์นี้เสีย สำหรับกลุ่ม EXTRA ให้ตรวจสมดุล EXTRA1, EXTRA2 และ EXTRA3 แยกแต่ละช่องด้วย โดยคนที่มีสิทธิ์ในช่องนั้นต้องมี Max − Min ≤ 1 เท่าที่กฎวันเปิดเวรและกฎเดิมทั้งหมดอนุญาต หากยังต่างกันเกิน 1 เวร ให้ระบบปรับสมดุลอัตโนมัติโดยห้ามทำให้ผิดกฎข้อ 1–20 บุคลากรที่พักเวรหรือไม่มีสิทธิ์ในกลุ่มนั้นไม่นำมาคิดค่าเฉลี่ยและไม่นำมาร่วมตรวจ และบุคลากร EXTRA-only ให้นำมาคิดและตรวจเฉพาะกลุ่ม EXTRA1–3'},
 {id:'r22',text:'ในแต่ละกลุ่มประเภทเวร ต้องกระจายชนิดวันให้บุคลากรที่กำลังใช้งานและมีสิทธิ์ขึ้นเวรนั้นอย่างใกล้เคียงกัน โดยแยกตรวจเป็น วันจันทร์–ศุกร์ (ไม่รวมนักขัตฤกษ์) / วันเสาร์ / วันอาทิตย์ / วันหยุดนักขัตฤกษ์ เฉพาะชนิดวันที่เวรกลุ่มนั้นเปิดใช้งานจริง เกณฑ์เป้าหมายของแต่ละชนิดวันคือ Max − Min ≤ 1 เวร และการปรับสมดุลกฎนี้ห้ามทำให้กฎข้อ 1–21 เสีย'},
 {id:'r23',text:'ให้ระบบพยายามเว้นระยะการขึ้นเวรของบุคลากรเป็นวันเว้นวันก่อนเสมอ หากจำเป็นสามารถขึ้นเวรวันติดกันได้เป็นตัวเลือกท้ายสุด แต่ห้ามจัดเวรติดต่อกันเกิน 2 วัน เว้นแต่เป็นเวรบ่าย–ดึกต่อเนื่องในช่วงวันที่กฎข้อ 3 อนุญาต การจัดและการแก้สมดุลต้องไม่ทำให้กฎข้อ 1–22 เสีย'},
 {id:'r24',text:'EXTRA1 และ EXTRA2 ต้องหมุนเวียนทั้งตำแหน่ง EXTRA และฟลอของบุคลากร โดยอ้างอิงตารางเดือนปัจจุบันและประวัติเดือนก่อนหน้าเพื่อลดการตก EXTRA เดิม + ฟลอเดิมซ้ำ ๆ และลดการตกฟลอเดิมซ้ำ โดยฟลอตามวันคือ จันทร์ EXTRA1=SU / EXTRA2=OB, อังคาร EXTRA1=SU / EXTRA2=ENT, พุธ EXTRA1=OB / EXTRA2=SU, พฤหัสบดี EXTRA1=OT / EXTRA2=SK, ศุกร์ EXTRA1=ENT, เสาร์ EXTRA1=OT, อาทิตย์ EXTRA1=SK / EXTRA2=OT ส่วน EXTRA3 ให้รันตามกฎปกติเดิม และกฎนี้เป็นลำดับการเลือกคิวเท่านั้น ห้ามทำให้กฎข้อ 1–23 เสีย'}
@@ -11134,6 +11136,32 @@ function extraRotationScore(pid,d,slot){
   }
   return {pair:pair,floor:floorCount,slot:slotCount,recentPair:recentPair};
 }
+/* V39.26.21 — Rule 21 HARD PRIORITY helpers.
+   Rule 21 (7 groups + monthly total + EXTRA exact slots) is evaluated before
+   spacing/day-class/rotation preferences. These helpers only rank eligible
+   candidates; they do not bypass any existing hard eligibility rule. */
+function projectedRule21GroupSpread(current,group,candidatePid){
+  var ids=fairnessPeopleForGroup(group);
+  if(!ids.length)return 0;
+  return distributionRange(ids.map(function(pid){
+    return (current.group[group][pid]||0)+(pid===candidatePid?1:0);
+  })).spread;
+}
+function projectedRule21TotalSpread(current,candidatePid){
+  var ids=normalFairnessPeople();
+  if(!ids.length)return 0;
+  return distributionRange(ids.map(function(pid){
+    return (current.total[pid]||0)+(pid===candidatePid?1:0);
+  })).spread;
+}
+function projectedRule21ExactSpread(current,sid,candidatePid){
+  if(EXTRA_IDS.indexOf(sid)<0)return 0;
+  var ids=eligiblePeopleForExactSlot(sid);
+  if(!ids.length)return 0;
+  return distributionRange(ids.map(function(pid){
+    return (current.slot[sid][pid]||0)+(pid===candidatePid?1:0);
+  })).spread;
+}
 function choose(candidates,slot,current,previous,d,cursor){
   var g=SLOT_GROUP[slot.id],off=isOffDay(d),dayCls=dayClassCurrent(d),best=null,bestKey=null;
 
@@ -11157,11 +11185,18 @@ function choose(candidates,slot,current,previous,d,cursor){
     var extraRot=extraRotationScore(pid,d,slot);
 
     if(hasRule(21)){
-      /* เดือนปัจจุบันยังเป็นตัวหลัก แต่ใช้เดือนก่อนเป็น baseline/ตัวตัดสินเมื่อยอดปัจจุบันใกล้กัน
-         เพื่อให้การหมุนเวรต่อเนื่องข้ามเดือน โดยไม่เอายอดเดือนก่อนมารวมเป็นค่าเฉลี่ยของเดือนใหม่ */
+      /* HARD PRIORITY: ระหว่างรันให้เลือกคนที่ทำให้ Max−Min ของกลุ่มและยอดรวมต่ำที่สุดก่อน
+         แล้วจึงใช้ค่าเฉลี่ยเป้าหมาย / วันเว้นวัน / กระจายชนิดวัน / หมุนตำแหน่งเป็นตัวตัดสินถัดไป */
+      var projectedGroupSpread=projectedRule21GroupSpread(current,g,pid);
+      var projectedTotalSpread=projectedRule21TotalSpread(current,pid);
+      var projectedExactSpread=(g==='extra')?projectedRule21ExactSpread(current,slot.id,pid):0;
       key=[
-        -targetDeficit,
+        projectedGroupSpread,
+        projectedTotalSpread,
+        (g==='extra'?projectedExactSpread:0),
         currentGroup,
+        currentTotal,
+        -targetDeficit,
         projectedTargetDistance,
         (g==='extra'?-exactDeficit:0),
         (g==='extra'?currentSlot:0),
@@ -11494,6 +11529,19 @@ function groupDistributionValidAfterMove(group,donor,recv){
   });
   return spreadWithinOne(values);
 }
+function exactSlotDistributionValidAfterMove(sid,donor,recv){
+  if(EXTRA_IDS.indexOf(sid)<0)return true;
+  var ids=eligiblePeopleForExactSlot(sid);
+  if(!ids.length)return true;
+  var counts=currentCounts();
+  var values=ids.map(function(pid){
+    var n=(counts.slot[sid]&&counts.slot[sid][pid])||0;
+    if(pid===donor)n--;
+    if(pid===recv)n++;
+    return n;
+  });
+  return spreadWithinOne(values);
+}
 
 /* รอบ 1: ปรับสมดุล 7 ประเภท */
 function rebalanceGroups(){
@@ -11562,24 +11610,19 @@ function rebalanceTotal(){
 
   while(guard++<6000){
     var info=totalAverageInfo();
-    var avg=info.avg;
     var totals=info.counts.total;
-
     if(!info.ids.length)break;
 
+    var range=distributionRange(info.ids.map(function(pid){return totals[pid]||0}));
+    if(range.spread<=1)break;
+
+    /* ใช้ Max/Min โดยตรง ไม่อิงช่วง avg±1 เพราะเกณฑ์ผ่านจริงคือ Max−Min ≤ 1 */
     var over=info.ids.filter(function(pid){
-      return (totals[pid]||0)>avg+1.0000001;
-    }).sort(function(a,b){
-      return (totals[b]||0)-(totals[a]||0);
+      return (totals[pid]||0)===range.max;
     });
-
     var under=info.ids.filter(function(pid){
-      return (totals[pid]||0)<avg-1.0000001;
-    }).sort(function(a,b){
-      return (totals[a]||0)-(totals[b]||0);
+      return (totals[pid]||0)===range.min;
     });
-
-    if(!over.length||!under.length)break;
 
     var changed=false;
 
@@ -11605,6 +11648,8 @@ function rebalanceTotal(){
           var recv=receivers[ui];
           if(!basePersonCanSlot(recv,slot))continue;
           if(!groupDistributionValidAfterMove(group,donor,recv))continue;
+          /* ถ้าช่อง EXTRA1–3 สมดุลอยู่แล้ว ห้ามแก้ยอดรวมด้วยการทำ Rule 21.3 เสีย */
+          if(!exactSlotDistributionValidAfterMove(item.sid,donor,recv))continue;
           if(moveAssignment(item.d,item.sid,donor,recv)){
             moved++;
             changed=true;
@@ -11778,6 +11823,7 @@ function rebalanceRule22(){
               var recv=det.low[li];
               if(hasRule(21)&&!groupDistributionValidAfterMove(group,donor,recv))continue;
               if(hasRule(21)&&!totalDistributionValidAfterMove22(donor,recv))continue;
+              if(hasRule(21)&&!exactSlotDistributionValidAfterMove(sid,donor,recv))continue;
               if(moveAssignment(d,sid,donor,recv)){
                 moved++;changed=true;break outer22;
               }
@@ -11824,8 +11870,8 @@ function rebalanceExtraExactSlots(){
             var recv=det.low[li];
             if(!basePersonCanSlot(recv,slot))continue;
             if(!groupDistributionValidAfterMove('extra',donor,recv))continue;
-            if(!totalDistributionValidAfterMove22(donor,recv))continue;
-            if(!dayClassDistributionValidAfterMove21('extra',cls,donor,recv))continue;
+            /* Rule 21.3 เป็นกฎหลัก จึงไม่ให้ Rule 22/24 ขวางการแก้ EXTRA exact-slot;
+               หลังย้ายจะวนกลับไปปรับยอดรวม Rule 21.2 อีกครั้ง */
             if(moveAssignment(d,sid,donor,recv)){moved++;changed=true;break outerExact}
           }
         }
@@ -11839,38 +11885,26 @@ function rebalanceExtraExactSlots(){
 
 function rebalanceRule21(){
   if(!hasRule(21)){
-    return {
-      ok:true,
-      moved:0,
-      report:rule21Report()
-    };
+    return {ok:true,moved:0,report:rule21Report()};
   }
 
   var moved=0;
 
-  for(var round=0;round<8;round++){
-    /* 21.1 ปรับสมดุล 7 กลุ่ม และ 21.2 ปรับยอดรวมบุคลากร Active กลุ่มปกติ */
-    moved+=rebalanceGroups();
-    moved+=rebalanceTotal();
+  /* Rule 21 เป็น hard priority: 21.1 รายกลุ่ม -> 21.3 EXTRA แยกช่อง -> 21.2 เวรรวม
+     วนจนทั้งสามส่วนผ่านพร้อมกัน หรือจนไม่มีการย้ายที่ถูกกฎ 1–20/23 ได้อีก */
+  for(var round=0;round<12;round++){
+    var roundMoves=0;
+    var m1=rebalanceGroups();roundMoves+=m1;moved+=m1;
+    var ex=rebalanceExtraExactSlots();var m3=Number(ex&&ex.moved||0);roundMoves+=m3;moved+=m3;
+    var m2=rebalanceTotal();roundMoves+=m2;moved+=m2;
 
     var check=rule21Report();
-
-    if(check.ok){
-      return {
-        ok:true,
-        moved:moved,
-        report:check
-      };
-    }
+    if(check.ok)return {ok:true,moved:moved,report:check};
+    if(roundMoves===0)break;
   }
 
   var report=rule21Report();
-
-  return {
-    ok:report.ok,
-    moved:moved,
-    report:report
-  };
+  return {ok:report.ok,moved:moved,report:report};
 }
 
 async function runSchedule(){
@@ -11914,9 +11948,7 @@ async function runSchedule(){
 
     var balance=rebalanceRule21();
     var balance22=rebalanceRule22();
-    /* Rule22 ถูกอนุญาตให้ย้ายเฉพาะกรณีที่ยังคงกฎ 21 ผ่าน จึงตรวจ/เก็บสมดุลกฎเดิมซ้ำอีกครั้ง */
-    if(hasRule(21))balance=rebalanceRule21();
-    var balanceExtraExact=rebalanceExtraExactSlots();
+    /* FINAL HARD PASS: กฎ 22–24 เป็นกฎช่วยกระจายและห้ามทำให้ Rule 21 เสีย */
     if(hasRule(21))balance=rebalanceRule21();
     renderSheet();
     var errors=validate(false);
