@@ -1,3 +1,4 @@
+<!-- ROSTER V39.26.23 — STABLE ANTI-ORDER ROTATION ONLY -->
 <!DOCTYPE html>
 <!-- BUILD: HOME  HISTORY-FRAME-MATCH 2026-08-25 -->
 <!-- BUILD: ADMIN PASSWORD UI  / 2026-08-25 -->
@@ -11213,9 +11214,13 @@ function choose(candidates,slot,current,previous,d,cursor){
         previousSlot,
         currentTotal,
         previousTotal,
+        /* V39.26.23 — STABLE ANTI-ORDER ROTATION
+           When the stronger Rule 21/23/24 signals are tied, rotate through
+           the cyclic queue instead of letting personnel list order 1–28
+           become the deciding factor. Deterministic, not random. */
+        queueDistance(pid,cursor[g]||0),
         heavyPenalty(pid,d,slot),
-        recentPenalty(pid,d),
-        queueDistance(pid,cursor[g]||0)
+        recentPenalty(pid,d)
       ];
     }else{
       key=[
@@ -13359,6 +13364,13 @@ function chooseReplacement(day,sid,oldPid){
     if(sa!==sb)return sa-sb;
     var ta=currentTotalCount(a.id), tb=currentTotalCount(b.id);
     if(ta!==tb)return ta-tb;
+
+    /* V39.26.23 — same deterministic cyclic queue used by the generator.
+       Person ID/name order is now only the final absolute tie-break. */
+    var q=(state.rotation&&state.rotation[group]);
+    if(!Number.isFinite(q))q=initialCursor(group);
+    var qa=queueDistance(a.id,q), qb=queueDistance(b.id,q);
+    if(qa!==qb)return qa-qb;
     return String(a.id).localeCompare(String(b.id));
   });
   return candidates[0].id;
