@@ -1,4 +1,4 @@
-<!-- ROSTER V39.26.23 — STABLE ANTI-ORDER ROTATION ONLY -->
+<!-- ROSTER V39.26.24 — STABLE ANTI-ORDER + WEEKEND ROTATION ONLY -->
 <!DOCTYPE html>
 <!-- BUILD: HOME  HISTORY-FRAME-MATCH 2026-08-25 -->
 <!-- BUILD: ADMIN PASSWORD UI  / 2026-08-25 -->
@@ -11000,6 +11000,31 @@ function previousCounts(){var c=initCounts(),d=savedMonth(prevKey());if(d){var p
 function personIndex(pid){for(var i=0;i<state.people.length;i++)if(state.people[i].id===pid)return i;return -1} function initialCursor(g){var d=savedMonth(prevKey());if(d&&d.rotation&&Number.isFinite(d.rotation[g]))return d.rotation[g]%Math.max(1,state.people.length);return 0}
 function queueDistance(pid,c){var i=personIndex(pid),n=Math.max(1,state.people.length);return (i-c+n)%n} function hadAny(pid,d){if(d<1)return false;for(var i=0;i<SLOTS.length;i++)if(state.assignments[akey(d,SLOTS[i].id)]===pid)return true;return false}
 function recentPenalty(pid,d){if(!hasRule(18))return 0;return d>1&&hadAny(pid,d-1)?3:0}
+function weekendRotationPenalty(pid,d,g){
+  /* V39.26.24 — WEEKEND ROTATION ONLY
+     Avoid giving the same person more than one Saturday/Sunday duty in the
+     same month when another candidate can preserve the stronger constraints.
+     This is a soft tie-break and never overrides Hard Constraint / Rule 21. */
+  var w=dow(d);
+  if(w!==0&&w!==6)return 0;
+  var n=0,sameDay=0;
+  for(var x=1;x<d;x++){
+    var wx=dow(x);
+    if(wx!==0&&wx!==6)continue;
+    var hit=false;
+    var ids=GROUPS[g]||[];
+    for(var i=0;i<ids.length;i++){
+      if(state.assignments[akey(x,ids[i])]===pid){hit=true;break}
+    }
+    if(hit){
+      n++;
+      if(wx===w)sameDay++;
+    }
+  }
+  /* One prior weekend in the same group is already a strong reason to rotate.
+     Same weekday (Sat->Sat / Sun->Sun) receives an additional penalty. */
+  return n*100+sameDay*35;
+}
 function heavyPenalty(pid,d,slot){if(!hasRule(5)||(slot.kind!=='night'&&slot.kind!=='long'))return 0;if(d>1){for(var i=0;i<SLOTS.length;i++){var s=SLOTS[i];if((s.kind==='night'||s.kind==='long')&&state.assignments[akey(d-1,s.id)]===pid)return 5}}return 0}
 function sameSlotPenalty(pid,d,sid){if(!hasRule(18))return 0;for(var x=d-1;x>=Math.max(1,d-7);x--)if(state.assignments[akey(x,sid)]===pid)return 1;return 0}
 
@@ -11203,6 +11228,7 @@ function choose(candidates,slot,current,previous,d,cursor){
         (g==='extra'?currentSlot:0),
         (g==='extra'?exactProjectedDistance:0),
         spacingPenalty(pid,d,slot),
+        weekendRotationPenalty(pid,d,g),
         classLoad,
         extraRot.recentPair,
         extraRot.pair,
@@ -13358,6 +13384,8 @@ function chooseReplacement(day,sid,oldPid){
   candidates.sort(function(a,b){
     var pa=spacingPenalty(a.id,day,slot),pb=spacingPenalty(b.id,day,slot);
     if(pa!==pb)return pa-pb;
+    var wa=weekendRotationPenalty(a.id,day,group),wb=weekendRotationPenalty(b.id,day,group);
+    if(wa!==wb)return wa-wb;
     var ca=dayClassCountForPid(cc,group,cls,a.id),cb=dayClassCountForPid(cc,group,cls,b.id);
     if(ca!==cb)return ca-cb;
     var sa=currentSlotCount(a.id,sid), sb=currentSlotCount(b.id,sid);
@@ -13365,7 +13393,7 @@ function chooseReplacement(day,sid,oldPid){
     var ta=currentTotalCount(a.id), tb=currentTotalCount(b.id);
     if(ta!==tb)return ta-tb;
 
-    /* V39.26.23 — same deterministic cyclic queue used by the generator.
+    /* V39.26.24 — same deterministic cyclic queue used by the generator.
        Person ID/name order is now only the final absolute tie-break. */
     var q=(state.rotation&&state.rotation[group]);
     if(!Number.isFinite(q))q=initialCursor(group);
