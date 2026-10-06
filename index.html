@@ -8770,6 +8770,10 @@ html.phone-device body.s37-settings-open .header-user-status{
 }
 </style>
 <link rel="stylesheet" href="login-v39.26.14.css?v=39.26.14">
+
+<style id="multi-review-workflow-v1">
+.multi-review-panel{margin-top:10px;padding:12px;border:1px solid #e6def5;border-radius:14px;background:#fcfaff}.multi-review-head{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap}.multi-review-head b{font-size:11px;color:#4b4267}.multi-review-count{font-size:9px;font-weight:900;color:#725cbb}.multi-review-config{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end;margin-top:9px}.multi-review-config textarea{min-height:54px;resize:vertical}.multi-review-list{display:grid;gap:6px;margin-top:9px}.multi-review-item{display:grid;grid-template-columns:24px 1fr auto;gap:7px;align-items:center;padding:8px;border:1px solid #ece8f3;border-radius:10px;background:#fff}.multi-review-dot{width:10px;height:10px;border-radius:50%;background:#ddd}.multi-review-item.done .multi-review-dot{background:#55b99f}.multi-review-item b{font-size:9.5px;color:#3f4658}.multi-review-item small{display:block;font-size:8px;color:#9095a2;margin-top:2px}.multi-review-item button{font-size:8.5px;padding:6px 9px}.multi-review-comment{margin-top:8px}.multi-review-comment textarea{width:100%;min-height:48px;resize:vertical}.multi-review-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:7px}.multi-review-note{font-size:8.5px;color:#8b8f99;margin-top:6px;line-height:1.5}
+</style>
 </head>
 <body>
 
@@ -9181,6 +9185,22 @@ html.phone-device body.s37-settings-open .header-user-status{
         <button id="unitApproveBtn" class="workflow-btn-approve"><span class="r29-pastel-icon r29-pi-mint" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="currentColor"/><path d="m8 12.4 2.5 2.5 5.8-6" fill="none" stroke="#fff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>อนุมัติตาราง</span></button>
         <button id="unitLockBtn" class="workflow-btn-lock"><span class="r29-pastel-icon r29-pi-lav" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="3" fill="currentColor" opacity=".22"/><rect x="7" y="10" width="10" height="8" rx="2" fill="currentColor"/><path d="M8 10V8a4 4 0 0 1 8 0v2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><span>ล็อกตาราง</span></button>
         <button id="unitUnlockBtn"><span class="r29-btn-icon r29-pi-blue" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="3" fill="currentColor"/><path d="M9 10V8a4 4 0 0 1 7-2.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><span>ปลดล็อก</span></button>
+      </div>
+      <div class="multi-review-panel" id="multiReviewPanel">
+        <div class="multi-review-head"><b>👥 หัวหน้าหลายคนตรวจตาราง</b><span id="multiReviewCount" class="multi-review-count">ยังไม่ได้กำหนดผู้ตรวจ</span></div>
+        <div class="multi-review-config" id="multiReviewConfig">
+          <label class="field">บัญชีหัวหน้าผู้ตรวจ (Username) — 1 คนต่อบรรทัด<textarea id="multiReviewersInput" placeholder="หัวหน้าคนที่ 1
+หัวหน้าคนที่ 2
+หัวหน้าคนที่ 3"></textarea></label>
+          <button id="multiReviewersSaveBtn">💾 บันทึกผู้ตรวจ</button>
+        </div>
+        <div id="multiReviewList" class="multi-review-list"></div>
+        <div class="multi-review-comment"><label class="field">ความคิดเห็นของผู้ตรวจ<textarea id="multiReviewComment" placeholder="ข้อสังเกต / ความเห็นในการตรวจ (ไม่บังคับ)"></textarea></label></div>
+        <div class="multi-review-actions">
+          <button id="multiReviewDoneBtn" class="workflow-btn-approve">✓ ตรวจแล้ว</button>
+          <button id="multiReviewReturnBtn" class="workflow-btn-return">↩ ส่งกลับแก้ไข</button>
+        </div>
+        <div class="multi-review-note">เมื่อกำหนดผู้ตรวจหลายคน แต่ละคนต้องกด “ตรวจแล้ว” แยกกัน จึงจะครบเงื่อนไขก่อนอนุมัติขั้นสุดท้าย</div>
       </div>
       <div id="unitActionFeedback" class="action-feedback"></div>
       <div id="unitConflictPanel" class="conflict-detail-panel">
@@ -10407,12 +10427,15 @@ function removeUnitLogo(){
 }
 
 function defaultWorkflow(){
-  return {status:'draft',locked:false,submittedAt:'',submittedBy:'',approvedAt:'',approvedBy:'',lockedAt:'',lockedBy:'',audit:[]};
+  return {status:'draft',locked:false,submittedAt:'',submittedBy:'',approvedAt:'',approvedBy:'',lockedAt:'',lockedBy:'',audit:[],requiredReviewers:[],reviews:[]};
 }
 function normalizeWorkflow(w){
   var d=defaultWorkflow(),x=w||{};
   Object.keys(d).forEach(function(k){if(x[k]!==undefined)d[k]=x[k]});
   if(!Array.isArray(d.audit))d.audit=[];
+  if(!Array.isArray(d.requiredReviewers))d.requiredReviewers=[];
+  if(!Array.isArray(d.reviews))d.reviews=[];
+  d.requiredReviewers=d.requiredReviewers.map(function(x){return String(x||'').trim().toLowerCase()}).filter(Boolean).filter(function(x,i,a){return a.indexOf(x)===i});
   if(['draft','submitted','approved'].indexOf(d.status)<0)d.status='draft';
   d.locked=!!d.locked;
   return d;
@@ -10639,10 +10662,15 @@ function formatUnitTime(v){
 }
 function canRosterEdit(){return (unitUser.role==='scheduler'||unitUser.role==='admin')&&!workflow.locked&&workflow.status==='draft'}
 function canSubmit(){return (unitUser.role==='scheduler'||unitUser.role==='admin')&&!workflow.locked&&workflow.status==='draft'}
-function canApprove(){return (unitUser.role==='approver'||unitUser.role==='admin')&&!workflow.locked&&workflow.status==='submitted'}
+function canApprove(){return (unitUser.role==='approver'||unitUser.role==='admin')&&!workflow.locked&&workflow.status==='submitted'&&allReviewsComplete()}
 function canReturn(){return (unitUser.role==='approver'||unitUser.role==='admin')&&!workflow.locked&&(workflow.status==='submitted'||workflow.status==='approved')}
 function canLock(){return (unitUser.role==='approver'||unitUser.role==='admin')&&!workflow.locked&&workflow.status==='approved'}
 function canUnlock(){return unitUser.role==='admin'&&workflow.locked}
+function multiReviewEnabled(){return !!(workflow&&workflow.requiredReviewers&&workflow.requiredReviewers.length)}
+function currentReviewerEntry(){if(!workflow||!Array.isArray(workflow.reviews))return null;var u=String(unitUser.username||'').trim().toLowerCase();return workflow.reviews.find(function(x){return String(x.username||'').toLowerCase()===u})||null}
+function completedReviewCount(){if(!workflow||!Array.isArray(workflow.requiredReviewers))return 0;return workflow.requiredReviewers.filter(function(u){return workflow.reviews.some(function(r){return String(r.username||'').toLowerCase()===String(u).toLowerCase()&&r.done})}).length}
+function allReviewsComplete(){return !multiReviewEnabled()||completedReviewCount()>=workflow.requiredReviewers.length}
+function canReview(){return (unitUser.role==='approver'||unitUser.role==='admin')&&!workflow.locked&&workflow.status==='submitted'&&(!multiReviewEnabled()||workflow.requiredReviewers.indexOf(String(unitUser.username||'').toLowerCase())>=0)}
 function requireRosterEdit(action){
   if(!workflow)workflow=defaultWorkflow();
   if(workflow.locked){setStatus('ตารางเดือนนี้ถูกล็อกแล้ว ไม่สามารถ'+action+'ได้',false);return false}
@@ -13098,6 +13126,7 @@ function submitWorkflow(){
   workflow.submittedAt=new Date().toISOString();
   workflow.submittedBy=unitUser.name;
   workflow.approvedAt='';workflow.approvedBy='';
+  workflow.reviews=[];
   workflow.locked=false;workflow.lockedAt='';workflow.lockedBy='';
   auditWorkflow('ส่งตารางให้หัวหน้าตรวจ');
   persistWorkflow();
@@ -13109,14 +13138,41 @@ function returnWorkflow(){
   if(!canReturn()){showActionFeedback('❌ ไม่สามารถส่งกลับแก้ไขได้ในบทบาทหรือสถานะปัจจุบัน','err');setStatus('ไม่มีสิทธิ์หรือสถานะไม่พร้อมสำหรับส่งกลับแก้ไข',false);return}
   workflow.status='draft';
   workflow.approvedAt='';workflow.approvedBy='';
+  workflow.reviews=[];
   auditWorkflow('ส่งตารางกลับให้แก้ไข');
   persistWorkflow();
   showActionFeedback('↩ ส่งกลับแก้ไขแล้ว ตารางกลับเป็น “ร่างตาราง”','info');
   setStatus('ส่งกลับแก้ไขแล้ว ผู้จัดตารางสามารถแก้ไขได้',true);
 }
+function saveMultiReviewers(){
+  clearActionFeedback();
+  if(unitUser.role!=='admin'){showActionFeedback('❌ กำหนดผู้ตรวจหลายคนได้เฉพาะ Admin','err');return}
+  if(workflow.locked){showActionFeedback('❌ ตารางถูกล็อกแล้ว','err');return}
+  var raw=el('multiReviewersInput')?el('multiReviewersInput').value:'';
+  var list=raw.split(/[,\n]+/).map(function(x){return x.trim().toLowerCase()}).filter(Boolean).filter(function(x,i,a){return a.indexOf(x)===i});
+  workflow.requiredReviewers=list;
+  workflow.reviews=[];
+  auditWorkflow(list.length?'กำหนดหัวหน้าผู้ตรวจหลายคน '+list.length+' บัญชี':'ยกเลิกการกำหนดผู้ตรวจหลายคน');
+  persistWorkflow();
+  showActionFeedback(list.length?'✅ บันทึกผู้ตรวจ '+list.length+' คนแล้ว':'ℹ️ ยกเลิกการกำหนดผู้ตรวจหลายคนแล้ว','ok');
+}
+function markMultiReviewDone(){
+  clearActionFeedback();
+  if(!canReview()){showActionFeedback('❌ บัญชีนี้ไม่มีสิทธิ์ตรวจ หรือสถานะยังไม่อยู่ในขั้นส่งตรวจ','err');return}
+  var errors=validate(false);
+  if(errors){renderConflictDetails();showActionFeedback('❌ ตรวจรับรองไม่ได้: พบข้อขัดแย้ง '+errors+' จุด','err');return}
+  var u=String(unitUser.username||'').trim().toLowerCase();
+  var now=new Date().toISOString();
+  var entry=workflow.reviews.find(function(x){return String(x.username||'').toLowerCase()===u});
+  if(entry){entry.done=true;entry.at=now;entry.name=unitUser.name;entry.comment=(el('multiReviewComment')&&el('multiReviewComment').value||'').trim();}
+  else workflow.reviews.push({username:u,name:unitUser.name,done:true,at:now,comment:(el('multiReviewComment')&&el('multiReviewComment').value||'').trim()});
+  auditWorkflow('หัวหน้าตรวจแล้ว • '+unitUser.name);
+  persistWorkflow();
+  showActionFeedback('✅ บันทึกผลการตรวจแล้ว '+completedReviewCount()+'/'+workflow.requiredReviewers.length+' คน','ok');
+}
 function approveWorkflow(){
   clearActionFeedback();
-  if(!canApprove()){showActionFeedback('❌ อนุมัติไม่ได้: ต้องอยู่ในสถานะ “ส่งตรวจแล้ว” และใช้บทบาท Approver หรือ Admin','err');setStatus('ต้องอยู่ในสถานะส่งตรวจ และใช้บทบาทหัวหน้าผู้อนุมัติหรือ Admin',false);return}
+  if(!canApprove()){showActionFeedback(multiReviewEnabled()?'❌ อนุมัติไม่ได้: หัวหน้าผู้ตรวจยังตรวจไม่ครบ '+completedReviewCount()+'/'+workflow.requiredReviewers.length+' คน':'❌ อนุมัติไม่ได้: ต้องอยู่ในสถานะ “ส่งตรวจแล้ว” และใช้บทบาท Approver หรือ Admin','err');setStatus('ต้องอยู่ในสถานะส่งตรวจ และใช้บทบาทหัวหน้าผู้อนุมัติหรือ Admin',false);return}
   var errors=validate(false);
   if(errors){renderConflictDetails();showActionFeedback('❌ อนุมัติไม่ได้: พบข้อขัดแย้ง '+errors+' จุด • ดูรายละเอียดด้านล่าง','err');setStatus('อนุมัติไม่ได้ พบข้อขัดแย้ง '+errors+' จุด',false);return}
   workflow.status='approved';
@@ -13208,6 +13264,12 @@ function renderUnitWorkflow(){
   if(el('unitReadOnlyNotice')){
     el('unitReadOnlyNotice').textContent=workflow.locked?'🔒 ล็อกตารางเรียบร้อยแล้ว ตารางเดือนนี้เป็นแบบอ่านอย่างเดียว':'สถานะตารางปัจจุบัน: '+label;
   }
+  if(el('multiReviewersInput'))el('multiReviewersInput').value=(workflow.requiredReviewers||[]).join('\n');
+  if(el('multiReviewCount'))el('multiReviewCount').textContent=multiReviewEnabled()?(completedReviewCount()+'/'+workflow.requiredReviewers.length+' คนตรวจแล้ว'):'ไม่ได้กำหนดผู้ตรวจหลายคน';
+  if(el('multiReviewList')){
+    var rr=workflow.requiredReviewers||[];
+    el('multiReviewList').innerHTML=rr.length?rr.map(function(u){var r=(workflow.reviews||[]).find(function(x){return String(x.username||'').toLowerCase()===String(u).toLowerCase()&&x.done});var nm=r?(r.name||u):u;var meta=r?('ตรวจแล้ว • '+formatUnitTime(r.at)+(r.comment?' • '+r.comment:'')):'รอตรวจ';return '<div class="multi-review-item '+(r?'done':'')+'"><span class="multi-review-dot"></span><div><b>'+esc(nm)+'</b><small>'+esc(meta)+'</small></div><span>'+(r?'✓':'รอ')+'</span></div>';}).join(''):'<div class="multi-review-note">ยังไม่ได้กำหนดรายชื่อหัวหน้าผู้ตรวจ</div>';
+  }
   renderAudit();
   applyUnitPermissions();
 }
@@ -13229,6 +13291,10 @@ function applyUnitPermissions(){
   setDisabled('unitSubmitBtn',!canSubmit());
   setDisabled('unitReturnBtn',!canReturn());
   setDisabled('unitApproveBtn',!canApprove());
+  setDisabled('multiReviewersSaveBtn',unitUser.role!=='admin');
+  setDisabled('multiReviewDoneBtn',!canReview());
+  setDisabled('multiReviewReturnBtn',!canReview()&&!canReturn());
+  if(el('multiReviewConfig'))el('multiReviewConfig').style.display=unitUser.role==='admin'?'grid':'none';
   setDisabled('unitLockBtn',!canLock());
   setDisabled('unitUnlockBtn',!canUnlock());
   setDisabled('unitStepSubmitBtn',!canSubmit());
@@ -14140,6 +14206,9 @@ if(el('unitReturnBtn'))el('unitReturnBtn').onclick=returnWorkflow;
 if(el('unitApproveBtn'))el('unitApproveBtn').onclick=approveWorkflow;
 if(el('unitLockBtn'))el('unitLockBtn').onclick=lockWorkflow;
 if(el('unitUnlockBtn'))el('unitUnlockBtn').onclick=unlockWorkflow;
+if(el('multiReviewersSaveBtn'))el('multiReviewersSaveBtn').onclick=saveMultiReviewers;
+if(el('multiReviewDoneBtn'))el('multiReviewDoneBtn').onclick=markMultiReviewDone;
+if(el('multiReviewReturnBtn'))el('multiReviewReturnBtn').onclick=returnWorkflow;
 if(el('manualFixBtn'))el('manualFixBtn').onclick=enableManualFixMode;
 if(el('autoFixConflictsBtn'))el('autoFixConflictsBtn').onclick=autoFixConflicts;
 if(el('rosterGoWorkflowBtn'))el('rosterGoWorkflowBtn').onclick=function(){showPage('internal',true)};
