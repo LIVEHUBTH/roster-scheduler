@@ -11000,28 +11000,37 @@ function previousCounts(){var c=initCounts(),d=savedMonth(prevKey());if(d){var p
 function personIndex(pid){for(var i=0;i<state.people.length;i++)if(state.people[i].id===pid)return i;return -1} function initialCursor(g){var d=savedMonth(prevKey());if(d&&d.rotation&&Number.isFinite(d.rotation[g]))return d.rotation[g]%Math.max(1,state.people.length);return 0}
 function queueDistance(pid,c){var i=personIndex(pid),n=Math.max(1,state.people.length);return (i-c+n)%n} function hadAny(pid,d){if(d<1)return false;for(var i=0;i<SLOTS.length;i++)if(state.assignments[akey(d,SLOTS[i].id)]===pid)return true;return false}
 function recentPenalty(pid,d){if(!hasRule(18))return 0;return d>1&&hadAny(pid,d-1)?3:0}
-function weekendRotationPenalty(pid,d,g){
-  /* V39.26.24 — WEEKEND ROTATION ONLY
-     Avoid giving the same person more than one Saturday/Sunday duty in the
-     same month when another candidate can preserve the stronger constraints.
+function weekendRotationPenalty(pid,d,g,sid){
+  /* V39.26.25 — WEEKEND ROTATION / SLOT-SPECIFIC EXTRA
+     For EXTRA1/2/3, weekend rotation is tracked separately by EXTRA slot:
+       - prior EXTRA3 weekend does NOT block/penalize EXTRA1 or EXTRA2
+       - prior EXTRA1 Saturday strongly penalizes another EXTRA1 Saturday
+       - prior EXTRA1 Sunday strongly penalizes another EXTRA1 Sunday
+     For non-EXTRA groups, retain the existing group-level weekend rotation.
      This is a soft tie-break and never overrides Hard Constraint / Rule 21. */
   var w=dow(d);
   if(w!==0&&w!==6)return 0;
+  var isExtraGroup=(g==='extra'&&EXTRA_IDS.indexOf(sid)>=0);
   var n=0,sameDay=0;
   for(var x=1;x<d;x++){
     var wx=dow(x);
     if(wx!==0&&wx!==6)continue;
     var hit=false;
-    var ids=GROUPS[g]||[];
-    for(var i=0;i<ids.length;i++){
-      if(state.assignments[akey(x,ids[i])]===pid){hit=true;break}
+    if(isExtraGroup){
+      /* EXTRA weekend rotation is slot-specific. */
+      hit=state.assignments[akey(x,sid)]===pid;
+    }else{
+      var ids=GROUPS[g]||[];
+      for(var i=0;i<ids.length;i++){
+        if(state.assignments[akey(x,ids[i])]===pid){hit=true;break}
+      }
     }
     if(hit){
       n++;
       if(wx===w)sameDay++;
     }
   }
-  /* One prior weekend in the same group is already a strong reason to rotate.
+  /* Same slot is the primary weekend repeat signal for EXTRA1/2/3.
      Same weekday (Sat->Sat / Sun->Sun) receives an additional penalty. */
   return n*100+sameDay*35;
 }
@@ -11228,7 +11237,7 @@ function choose(candidates,slot,current,previous,d,cursor){
         (g==='extra'?currentSlot:0),
         (g==='extra'?exactProjectedDistance:0),
         spacingPenalty(pid,d,slot),
-        weekendRotationPenalty(pid,d,g),
+        weekendRotationPenalty(pid,d,g,slot.id),
         classLoad,
         extraRot.recentPair,
         extraRot.pair,
