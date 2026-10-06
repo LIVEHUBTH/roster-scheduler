@@ -877,6 +877,7 @@ button:disabled,input:disabled,select:disabled,textarea:disabled{cursor:not-allo
 .auto-fix-summary.show{display:block}
 .auto-fix-summary.ok{background:#e8f8f1;border:1px solid #bde6d5;color:#25745f}
 .auto-fix-summary.warn{background:#fff8df;border:1px solid #efdca0;color:#81661d}
+.accept-conflicts-btn{background:linear-gradient(135deg,#fff4d8,#ffe9dc)!important;color:#8a5b18!important;border:1px solid #efd49b!important;font-weight:900!important}.accept-conflicts-btn:disabled{opacity:.5!important}
 
 /* =====  MANUAL / AUTO CONFLICT FIX CHOICE ===== */
 .fix-choice-wrap{
@@ -9058,6 +9059,7 @@ html.phone-device body.s37-settings-open .header-user-status{
         <div class="fix-choice-actions">
           <button id="manualFixBtn" class="manual-fix-btn">✏️ แก้ไขเอง</button>
           <button id="autoFixConflictsBtn" class="auto-fix-btn">🪄 แก้ไขอัตโนมัติ</button>
+          <button id="submitWithAcceptedConflictsBtn" class="accept-conflicts-btn" style="display:none">⚠️ ยอมรับตารางนี้และส่งตรวจ</button>
         </div>
         <div id="manualModeNote" class="manual-mode-note">
           โหมดแก้ไขเอง: ให้แก้ชื่อในช่องเวรที่ระบุไว้ใน “รายละเอียดข้อขัดแย้ง” ด้านบน เมื่อแก้เสร็จให้กด “ตรวจสอบ” อีกครั้ง
@@ -10427,7 +10429,7 @@ function removeUnitLogo(){
 }
 
 function defaultWorkflow(){
-  return {status:'draft',locked:false,submittedAt:'',submittedBy:'',approvedAt:'',approvedBy:'',lockedAt:'',lockedBy:'',audit:[],requiredReviewers:[],reviews:[]};
+  return {status:'draft',locked:false,submittedAt:'',submittedBy:'',approvedAt:'',approvedBy:'',lockedAt:'',lockedBy:'',audit:[],requiredReviewers:[],reviews:[],overrideConflicts:false,overrideConflictCount:0,overrideAt:'',overrideBy:''};
 }
 function normalizeWorkflow(w){
   var d=defaultWorkflow(),x=w||{};
@@ -10435,6 +10437,8 @@ function normalizeWorkflow(w){
   if(!Array.isArray(d.audit))d.audit=[];
   if(!Array.isArray(d.requiredReviewers))d.requiredReviewers=[];
   if(!Array.isArray(d.reviews))d.reviews=[];
+  d.overrideConflicts=!!d.overrideConflicts;
+  d.overrideConflictCount=Number(d.overrideConflictCount||0);
   d.requiredReviewers=d.requiredReviewers.map(function(x){return String(x||'').trim().toLowerCase()}).filter(Boolean).filter(function(x,i,a){return a.indexOf(x)===i});
   if(['draft','submitted','approved'].indexOf(d.status)<0)d.status='draft';
   d.locked=!!d.locked;
@@ -13126,6 +13130,7 @@ function submitWorkflow(){
   workflow.submittedAt=new Date().toISOString();
   workflow.submittedBy=unitUser.name;
   workflow.approvedAt='';workflow.approvedBy='';
+  workflow.overrideConflicts=false;workflow.overrideConflictCount=0;workflow.overrideAt='';workflow.overrideBy='';
   workflow.reviews=[];
   workflow.locked=false;workflow.lockedAt='';workflow.lockedBy='';
   auditWorkflow('ส่งตารางให้หัวหน้าตรวจ');
@@ -13133,11 +13138,31 @@ function submitWorkflow(){
   showActionFeedback('✅ ส่งตารางให้หัวหน้าตรวจแล้ว สถานะเปลี่ยนเป็น “ส่งตรวจแล้ว”','ok');
   setStatus('ส่งตารางให้หัวหน้าตรวจแล้ว',true);
 }
+function submitWorkflowWithAcceptedConflicts(){
+  clearActionFeedback();
+  if(!canSubmit()){showActionFeedback('❌ ยังส่งตรวจไม่ได้: บทบาทหรือสถานะปัจจุบันไม่อนุญาตให้ส่งตรวจ','err');setStatus('บทบาทหรือสถานะปัจจุบันไม่อนุญาตให้ส่งตรวจ',false);return}
+  if(assignmentsCount()===0){showActionFeedback('❌ ยังส่งตรวจไม่ได้: ยังไม่มีตารางเวร กรุณารันหรือเปิดตารางก่อน','err');setStatus('ยังไม่มีตารางเวร กรุณารันหรือเปิดตารางก่อนส่งตรวจ',false);return}
+  var errors=validate(false);
+  if(!errors){submitWorkflow();return}
+  if(!confirm('ตารางยังมีข้อขัดแย้ง '+errors+' จุด\n\nหากคุณตรวจสอบแล้วและยอมรับตารางนี้ ระบบจะส่งตารางให้หัวหน้าตรวจต่อ โดยบันทึกว่าผู้จัดตารางยอมรับข้อขัดแย้งไว้ในประวัติ\n\nต้องการส่งตรวจต่อหรือไม่?'))return;
+  workflow.status='submitted';
+  workflow.submittedAt=new Date().toISOString();
+  workflow.submittedBy=unitUser.name;
+  workflow.approvedAt='';workflow.approvedBy='';
+  workflow.overrideConflicts=true;workflow.overrideConflictCount=errors;workflow.overrideAt=new Date().toISOString();workflow.overrideBy=unitUser.name;
+  workflow.reviews=[];
+  workflow.locked=false;workflow.lockedAt='';workflow.lockedBy='';
+  auditWorkflow('ส่งตรวจโดยยอมรับข้อขัดแย้ง '+errors+' จุด • '+unitUser.name);
+  persistWorkflow();
+  showActionFeedback('⚠️ ส่งตารางให้หัวหน้าตรวจแล้ว โดยยอมรับข้อขัดแย้ง '+errors+' จุด','ok');
+  setStatus('ส่งตารางให้หัวหน้าตรวจแล้ว (ผู้จัดตารางยอมรับข้อขัดแย้ง)',true);
+}
 function returnWorkflow(){
   clearActionFeedback();
   if(!canReturn()){showActionFeedback('❌ ไม่สามารถส่งกลับแก้ไขได้ในบทบาทหรือสถานะปัจจุบัน','err');setStatus('ไม่มีสิทธิ์หรือสถานะไม่พร้อมสำหรับส่งกลับแก้ไข',false);return}
   workflow.status='draft';
   workflow.approvedAt='';workflow.approvedBy='';
+  workflow.overrideConflicts=false;workflow.overrideConflictCount=0;workflow.overrideAt='';workflow.overrideBy='';
   workflow.reviews=[];
   auditWorkflow('ส่งตารางกลับให้แก้ไข');
   persistWorkflow();
@@ -13160,7 +13185,7 @@ function markMultiReviewDone(){
   clearActionFeedback();
   if(!canReview()){showActionFeedback('❌ บัญชีนี้ไม่มีสิทธิ์ตรวจ หรือสถานะยังไม่อยู่ในขั้นส่งตรวจ','err');return}
   var errors=validate(false);
-  if(errors){renderConflictDetails();showActionFeedback('❌ ตรวจรับรองไม่ได้: พบข้อขัดแย้ง '+errors+' จุด','err');return}
+  if(errors&&!workflow.overrideConflicts){renderConflictDetails();showActionFeedback('❌ ตรวจรับรองไม่ได้: พบข้อขัดแย้ง '+errors+' จุด','err');return}
   var u=String(unitUser.username||'').trim().toLowerCase();
   var now=new Date().toISOString();
   var entry=workflow.reviews.find(function(x){return String(x.username||'').toLowerCase()===u});
@@ -13174,7 +13199,7 @@ function approveWorkflow(){
   clearActionFeedback();
   if(!canApprove()){showActionFeedback(multiReviewEnabled()?'❌ อนุมัติไม่ได้: หัวหน้าผู้ตรวจยังตรวจไม่ครบ '+completedReviewCount()+'/'+workflow.requiredReviewers.length+' คน':'❌ อนุมัติไม่ได้: ต้องอยู่ในสถานะ “ส่งตรวจแล้ว” และใช้บทบาท Approver หรือ Admin','err');setStatus('ต้องอยู่ในสถานะส่งตรวจ และใช้บทบาทหัวหน้าผู้อนุมัติหรือ Admin',false);return}
   var errors=validate(false);
-  if(errors){renderConflictDetails();showActionFeedback('❌ อนุมัติไม่ได้: พบข้อขัดแย้ง '+errors+' จุด • ดูรายละเอียดด้านล่าง','err');setStatus('อนุมัติไม่ได้ พบข้อขัดแย้ง '+errors+' จุด',false);return}
+  if(errors&&!workflow.overrideConflicts){renderConflictDetails();showActionFeedback('❌ อนุมัติไม่ได้: พบข้อขัดแย้ง '+errors+' จุด • ดูรายละเอียดด้านล่าง','err');setStatus('อนุมัติไม่ได้ พบข้อขัดแย้ง '+errors+' จุด',false);return}
   workflow.status='approved';
   workflow.approvedAt=new Date().toISOString();
   workflow.approvedBy=unitUser.name;
@@ -13266,6 +13291,7 @@ function renderUnitWorkflow(){
   }
   if(el('multiReviewersInput'))el('multiReviewersInput').value=(workflow.requiredReviewers||[]).join('\n');
   if(el('multiReviewCount'))el('multiReviewCount').textContent=multiReviewEnabled()?(completedReviewCount()+'/'+workflow.requiredReviewers.length+' คนตรวจแล้ว'):'ไม่ได้กำหนดผู้ตรวจหลายคน';
+  if(el('submitWithAcceptedConflictsBtn'))el('submitWithAcceptedConflictsBtn').style.display=(canSubmit()&&window.__autoFixHasRemainingConflicts)?'inline-flex':'none';
   if(el('multiReviewList')){
     var rr=workflow.requiredReviewers||[];
     el('multiReviewList').innerHTML=rr.length?rr.map(function(u){var r=(workflow.reviews||[]).find(function(x){return String(x.username||'').toLowerCase()===String(u).toLowerCase()&&x.done});var nm=r?(r.name||u):u;var meta=r?('ตรวจแล้ว • '+formatUnitTime(r.at)+(r.comment?' • '+r.comment:'')):'รอตรวจ';return '<div class="multi-review-item '+(r?'done':'')+'"><span class="multi-review-dot"></span><div><b>'+esc(nm)+'</b><small>'+esc(meta)+'</small></div><span>'+(r?'✓':'รอ')+'</span></div>';}).join(''):'<div class="multi-review-note">ยังไม่ได้กำหนดรายชื่อหัวหน้าผู้ตรวจ</div>';
@@ -13509,6 +13535,8 @@ function autoFixConflicts(){
 
   var before=validate(false);
   if(!before){
+    window.__autoFixHasRemainingConflicts=false;
+    if(el('submitWithAcceptedConflictsBtn'))el('submitWithAcceptedConflictsBtn').style.display='none';
     renderConflictDetails();
     showAutoFixSummary('✅ ไม่พบข้อขัดแย้งที่ต้องแก้ไข','ok');
     showActionFeedback('✅ ตารางไม่มีข้อขัดแย้ง','ok');
@@ -13576,6 +13604,8 @@ function autoFixConflicts(){
     saveMonth(true);
   }
 
+  window.__autoFixHasRemainingConflicts=remaining>0;
+  if(el('submitWithAcceptedConflictsBtn'))el('submitWithAcceptedConflictsBtn').style.display=remaining>0?'inline-flex':'none';
   if(remaining===0){
     showAutoFixSummary('✅ แก้ไขอัตโนมัติสำเร็จ • แก้จุดขัดแย้ง '+fixed+' จุด • ปรับสมดุลกฎ 21 '+balanceMoves+' ครั้ง • กฎ 22 '+balance22Moves+' ครั้ง • ตรวจสอบแล้วไม่พบข้อขัดแย้ง','ok');
     showActionFeedback('✅ แก้ไขข้อขัดแย้งและปรับสมดุลกฎ 21 แล้ว ตารางพร้อมสำหรับส่งตรวจ','ok');
@@ -14211,6 +14241,7 @@ if(el('multiReviewDoneBtn'))el('multiReviewDoneBtn').onclick=markMultiReviewDone
 if(el('multiReviewReturnBtn'))el('multiReviewReturnBtn').onclick=returnWorkflow;
 if(el('manualFixBtn'))el('manualFixBtn').onclick=enableManualFixMode;
 if(el('autoFixConflictsBtn'))el('autoFixConflictsBtn').onclick=autoFixConflicts;
+if(el('submitWithAcceptedConflictsBtn'))el('submitWithAcceptedConflictsBtn').onclick=submitWorkflowWithAcceptedConflicts;
 if(el('rosterGoWorkflowBtn'))el('rosterGoWorkflowBtn').onclick=function(){showPage('internal',true)};
 if(el('loginBtn')&&el('loginBtn').dataset.v242LoginBound!=='1')el('loginBtn').onclick=login;
 if(el('loginPassword')&&el('loginPassword').dataset.v242LoginBound!=='1')el('loginPassword').onkeydown=function(e){if(e.key==='Enter')login()};
