@@ -1,4 +1,4 @@
-<!-- ROSTER V39.26.24 — STABLE ANTI-ORDER + WEEKEND ROTATION ONLY -->
+<!-- ROSTER V39.26.29 — USER ACCOUNT CREATE/DELETE FIX ONLY -->
 <!DOCTYPE html>
 <!-- BUILD: HOME  HISTORY-FRAME-MATCH 2026-08-25 -->
 <!-- BUILD: ADMIN PASSWORD UI  / 2026-08-25 -->
@@ -10666,14 +10666,14 @@ async function createUserAccount(){
     role:el('newUserRole').value
   };
   if(!payload.username||!payload.displayName||!payload.password){setStatus('กรุณากรอกข้อมูลบัญชีให้ครบ',false);return}
-  if(!/^[a-z0-9._-]+$/.test(payload.username)){setStatus('Username ต้องใช้ a-z, 0-9, จุด ขีดกลาง หรือขีดล่างเท่านั้น',false);return}
+  if(!/^[a-z0-9._-]{2,50}$/.test(payload.username)){setStatus('Username ต้องมี 2–50 ตัว และใช้ a-z, 0-9, จุด ขีดกลาง หรือขีดล่างเท่านั้น',false);return}
   try{
     await authFetch('/api/admin/users',{method:'POST',body:JSON.stringify(payload)});
     el('newUserUsername').value='';el('newUserDisplayName').value='';el('newUserPassword').value='';
     await loadAdminUsers();
     setStatus('สร้างบัญชีผู้ใช้งานเรียบร้อยแล้ว',true);
   }catch(err){
-    var map={username_exists:'Username นี้มีอยู่แล้ว',password_too_short:'รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร',invalid_username:'Username ใช้ a-z, 0-9, จุด ขีดกลาง หรือขีดล่าง'};
+    var map={username_exists:'Username นี้มีอยู่แล้ว',password_too_short:'รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร',invalid_username:'Username ต้องมี 2–50 ตัว และใช้ a-z, 0-9, จุด ขีดกลาง หรือขีดล่าง',invalid_display_name:'ชื่อที่แสดงไม่ถูกต้อง',invalid_role:'บทบาทไม่ถูกต้อง',cannot_remove_own_admin_access:'ไม่สามารถลบบัญชี Admin ที่กำลังใช้งานอยู่',cannot_delete_own_account:'ไม่สามารถลบบัญชีที่กำลังใช้งานอยู่',user_not_found:'ไม่พบบัญชีผู้ใช้'};
     setStatus('สร้างบัญชีไม่สำเร็จ: '+(map[err.message]||err.message),false);
   }
 }
