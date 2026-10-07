@@ -1,4 +1,4 @@
-<!-- ROSTER V39.26.29 — USER ACCOUNT CREATE/DELETE FIX ONLY -->
+<!-- ROSTER V39.26.32 — USER DELETE + APPROVAL ACTION FIX ONLY -->
 <!DOCTYPE html>
 <!-- BUILD: HOME  HISTORY-FRAME-MATCH 2026-08-25 -->
 <!-- BUILD: ADMIN PASSWORD UI  / 2026-08-25 -->
@@ -9202,7 +9202,7 @@ html.phone-device body.s37-settings-open .header-user-status{
           <button id="multiReviewDoneBtn" class="workflow-btn-approve">✓ ตรวจแล้ว</button>
           <button id="multiReviewReturnBtn" class="workflow-btn-return">↩ ส่งกลับแก้ไข</button>
         </div>
-        <div class="multi-review-note">เมื่อกำหนดผู้ตรวจหลายคน แต่ละคนต้องกด “ตรวจแล้ว” แยกกัน จึงจะครบเงื่อนไขก่อนอนุมัติขั้นสุดท้าย</div>
+        <div class="multi-review-note">ผู้ตรวจหลายคนสามารถกด “ตรวจแล้ว” แยกกันเพื่อบันทึกผลการตรวจได้ แต่ไม่บล็อกสิทธิ์หัวหน้าผู้อนุมัติในการอนุมัติตาราง</div>
       </div>
       <div id="unitActionFeedback" class="action-feedback"></div>
       <div id="unitConflictPanel" class="conflict-detail-panel">
@@ -10648,7 +10648,13 @@ async function loadAdminUsers(){
             await authFetch('/api/admin/users/'+id,{method:'DELETE'});
           }catch(firstErr){
             if(firstErr&&/HTTP (404|405)/.test(String(firstErr.message||''))){
-              await authFetch('/api/admin/users/'+id+'/delete',{method:'POST'});
+              try{
+                await authFetch('/api/admin/users/'+id+'/delete',{method:'POST'});
+              }catch(secondErr){
+                if(secondErr&&/HTTP (404|405)/.test(String(secondErr.message||''))){
+                  await authFetch('/api/admin/users/'+id,{method:'POST',body:JSON.stringify({action:'delete'})});
+                }else throw secondErr;
+              }
             }else throw firstErr;
           }
           await loadAdminUsers();
@@ -10692,7 +10698,7 @@ function formatUnitTime(v){
 }
 function canRosterEdit(){return (unitUser.role==='scheduler'||unitUser.role==='admin')&&!workflow.locked&&workflow.status==='draft'}
 function canSubmit(){return (unitUser.role==='scheduler'||unitUser.role==='admin')&&!workflow.locked&&workflow.status==='draft'}
-function canApprove(){return (unitUser.role==='approver'||unitUser.role==='admin')&&!workflow.locked&&workflow.status==='submitted'&&allReviewsComplete()}
+function canApprove(){return (unitUser.role==='approver'||unitUser.role==='admin')&&!workflow.locked&&workflow.status==='submitted'}
 function canReturn(){return (unitUser.role==='approver'||unitUser.role==='admin')&&!workflow.locked&&(workflow.status==='submitted'||workflow.status==='approved')}
 function canLock(){return (unitUser.role==='approver'||unitUser.role==='admin')&&!workflow.locked&&workflow.status==='approved'}
 function canUnlock(){return unitUser.role==='admin'&&workflow.locked}
@@ -13328,7 +13334,7 @@ function renderUnitWorkflow(){
     el('unitReadOnlyNotice').textContent=workflow.locked?'🔒 ล็อกตารางเรียบร้อยแล้ว ตารางเดือนนี้เป็นแบบอ่านอย่างเดียว':'สถานะตารางปัจจุบัน: '+label;
   }
   if(el('multiReviewersInput'))el('multiReviewersInput').value=(workflow.requiredReviewers||[]).join('\n');
-  if(el('multiReviewCount'))el('multiReviewCount').textContent=multiReviewEnabled()?(completedReviewCount()+'/'+workflow.requiredReviewers.length+' คนตรวจแล้ว'):'ไม่ได้กำหนดผู้ตรวจหลายคน';
+  if(el('multiReviewCount'))el('multiReviewCount').textContent=multiReviewEnabled()?(completedReviewCount()+'/'+workflow.requiredReviewers.length+' คนตรวจแล้ว • '+(canApprove()?'อนุมัติได้':'รอตรวจ')):'ไม่ได้กำหนดผู้ตรวจหลายคน';
   if(el('submitWithAcceptedConflictsBtn'))el('submitWithAcceptedConflictsBtn').style.display=(canSubmit()&&window.__autoFixHasRemainingConflicts)?'inline-flex':'none';
   if(el('multiReviewList')){
     var rr=workflow.requiredReviewers||[];
