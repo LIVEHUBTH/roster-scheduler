@@ -742,7 +742,6 @@ export default {
       }
 
       const userMatch = path.match(/^\/api\/admin\/users\/(\d+)$/);
-
       if (userMatch && request.method === 'DELETE') {
         const auth = await requireIdentity(request, env, ['admin']);
         if (!auth.ok) return json(request, env, { ok: false, error: auth.error }, auth.status);
@@ -753,7 +752,7 @@ export default {
         }
 
         const target = await env.DB.prepare(`
-          SELECT id, username, display_name, role
+          SELECT id, username, display_name, role, is_active
           FROM users
           WHERE id = ?
         `).bind(userId).first();
@@ -762,13 +761,24 @@ export default {
           return json(request, env, { ok: false, error: 'user_not_found' }, 404);
         }
 
-        await env.DB.prepare('DELETE FROM auth_sessions WHERE user_id = ?').bind(userId).run();
-        await env.DB.prepare('DELETE FROM users WHERE id = ?').bind(userId).run();
+        const now = new Date().toISOString();
+
+        // Revoke all sessions first so the account cannot remain authenticated.
+        await env.DB.prepare(`
+          DELETE FROM auth_sessions
+          WHERE user_id = ?
+        `).bind(userId).run();
+
+        await env.DB.prepare(`
+          DELETE FROM users
+          WHERE id = ?
+        `).bind(userId).run();
 
         await audit(env, auth.identity.user, 'user_deleted', {
           targetUserId: target.id,
           targetUsername: target.username,
           targetRole: target.role,
+          deletedAt: now,
         });
 
         return json(request, env, { ok: true, deletedUserId: userId });

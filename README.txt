@@ -1,10 +1,24 @@
-ROSTER V39.26.29 — USER ACCOUNT CREATE/DELETE FIX ONLY
+ROSTER V39.26.30 — USER ACCOUNT CREATE/DELETE FIX
 
-แก้เฉพาะระบบบัญชีผู้ใช้งาน:
-1) สร้างบัญชีใหม่: รองรับ Username 2–50 ตัว (a-z, 0-9, จุด, ขีดกลาง, ขีดล่าง) ให้ตรงกับหน้าเว็บและ API ที่แก้แล้ว
-2) ลบบัญชี: เพิ่ม DELETE /api/admin/users/:id ใน Worker และลบ session ของบัญชีนั้นก่อนลบ
-3) ป้องกันการลบบัญชีที่กำลังใช้งานอยู่
+แก้เฉพาะระบบบัญชีผู้ใช้งาน ไม่แก้กฎจัดตารางเวรหรือ workflow อื่น
 
-สำคัญ: ต้อง deploy worker-admin-users-v22.2.js ไปยัง Cloudflare Worker ตัวเดียวกับ API ที่หน้าเว็บใช้อยู่ก่อน การลบบัญชีจึงจะทำงานจริงบนฐานข้อมูลกลาง
+Frontend:
+- ใช้ index.html จาก V39.26.29
+- Username รองรับ 2–50 ตัวอักษรตาม backend
+- เรียก POST /api/admin/users เพื่อเพิ่มบัญชี
+- เรียก DELETE /api/admin/users/:id เพื่อลบบัญชี
 
-ไม่แก้ระบบจัดเวร กฎจัดเวร Workflow ตารางเวร หรือระบบอื่นนอกเหนือจากบัญชีผู้ใช้
+Backend Worker:
+- worker-admin-users-v22.2.js
+- Username validator: 2–50 ตัวอักษร
+- เพิ่ม DELETE /api/admin/users/:id
+- ป้องกัน Admin ลบบัญชีที่กำลังใช้งานอยู่
+- revoke auth_sessions ของบัญชีที่ลบ
+- บันทึก audit user_deleted
+
+สำคัญ:
+ต้อง Deploy Worker ไฟล์ worker-admin-users-v22.2.js ไปยัง Worker ที่ frontend ใช้งานจริง
+(https://roster-scheduler-api.supaporn-gf.workers.dev)
+ก่อนเพิ่ม/ลบบัญชีจึงจะทำงานจริง
+
+ห้ามนำเฉพาะ index.html ไปแทน Worker เพราะ API เพิ่ม/ลบบัญชีอยู่ฝั่ง backend
