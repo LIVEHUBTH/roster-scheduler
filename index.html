@@ -10644,7 +10644,13 @@ async function loadAdminUsers(){
         var username=row&&row.children[0]?row.children[0].textContent.trim():'';
         if(!confirm('ยืนยันลบบัญชี '+username+' หรือไม่?\n\nการลบบัญชีไม่กระทบข้อมูลตารางเวร'))return;
         try{
-          await authFetch('/api/admin/users/'+id,{method:'DELETE'});
+          try{
+            await authFetch('/api/admin/users/'+id,{method:'DELETE'});
+          }catch(firstErr){
+            if(firstErr&&/HTTP (404|405)/.test(String(firstErr.message||''))){
+              await authFetch('/api/admin/users/'+id+'/delete',{method:'POST'});
+            }else throw firstErr;
+          }
           await loadAdminUsers();
           setStatus('ลบบัญชีผู้ใช้งานเรียบร้อยแล้ว',true);
         }catch(err){setStatus('ลบบัญชีไม่สำเร็จ: '+err.message,false)}
@@ -12485,7 +12491,9 @@ function validate(show){
     if(errors===0){
       hideFixChoice();showActionFeedback('✅ ตรวจสอบแล้ว ไม่พบข้อขัดแย้ง • กฎ 21.1 ทั้ง 7 กลุ่ม และกฎ 21.2 เวรรวม มี Max − Min ≤ 1 ตารางพร้อมสำหรับขั้นตอนถัดไป','ok');
     }else{
-      showActionFeedback('❌ ตรวจสอบแล้ว พบข้อขัดแย้ง '+errors+' จุด • รวมการตรวจกฎ 21.1 รายกลุ่ม และ 21.2 เวรรวม Max − Min ≤ 1','err');
+      showFixChoice();
+      if(el('submitWithAcceptedConflictsBtn'))el('submitWithAcceptedConflictsBtn').style.display=canSubmit()?'inline-flex':'none';
+      showActionFeedback('❌ ตรวจสอบแล้ว พบข้อขัดแย้ง '+errors+' จุด • สามารถแก้ไข หรือหากตรวจสอบแล้วและยอมรับได้ ให้กด “ยอมรับตารางนี้และส่งตรวจ”','err');
     }
   }
   return errors;
@@ -13145,7 +13153,17 @@ function submitWorkflow(){
   if(!canSubmit()){showActionFeedback('❌ ยังส่งตรวจไม่ได้: บทบาทหรือสถานะปัจจุบันไม่อนุญาตให้ส่งตรวจ','err');setStatus('บทบาทหรือสถานะปัจจุบันไม่อนุญาตให้ส่งตรวจ',false);return}
   if(assignmentsCount()===0){showActionFeedback('❌ ยังส่งตรวจไม่ได้: ยังไม่มีตารางเวร กรุณารันหรือเปิดตารางก่อน','err');setStatus('ยังไม่มีตารางเวร กรุณารันหรือเปิดตารางก่อนส่งตรวจ',false);return}
   var errors=validate(false);
-  if(errors){renderConflictDetails();showActionFeedback('❌ ยังส่งตรวจไม่ได้: พบข้อขัดแย้ง '+errors+' จุด • ดูรายละเอียดด้านล่าง','err');setStatus('ยังส่งตรวจไม่ได้ พบข้อขัดแย้ง '+errors+' จุด',false);return}
+  if(errors){
+    renderConflictDetails();
+    showFixChoice();
+    if(el('submitWithAcceptedConflictsBtn'))el('submitWithAcceptedConflictsBtn').style.display='inline-flex';
+    if(confirm('ตารางยังมีข้อขัดแย้ง '+errors+' จุด\n\nหากคุณตรวจสอบแล้วและยอมรับตารางนี้ ระบบจะส่งตารางให้หัวหน้าตรวจต่อ โดยบันทึกว่าผู้จัดตารางยอมรับข้อขัดแย้งไว้ในประวัติ\n\nต้องการส่งตรวจต่อหรือไม่?')){
+      return submitWorkflowWithAcceptedConflicts(true);
+    }
+    showActionFeedback('⚠️ ยังส่งตรวจไม่ได้: พบข้อขัดแย้ง '+errors+' จุด • หากยอมรับตาราง ให้กด “ยอมรับตารางนี้และส่งตรวจ”','err');
+    setStatus('พบข้อขัดแย้ง '+errors+' จุด กรุณาแก้ไขหรือยอมรับก่อนส่งตรวจ',false);
+    return;
+  }
   workflow.status='submitted';
   workflow.submittedAt=new Date().toISOString();
   workflow.submittedBy=unitUser.name;
@@ -13158,13 +13176,13 @@ function submitWorkflow(){
   showActionFeedback('✅ ส่งตารางให้หัวหน้าตรวจแล้ว สถานะเปลี่ยนเป็น “ส่งตรวจแล้ว”','ok');
   setStatus('ส่งตารางให้หัวหน้าตรวจแล้ว',true);
 }
-function submitWorkflowWithAcceptedConflicts(){
+function submitWorkflowWithAcceptedConflicts(skipConfirm){
   clearActionFeedback();
   if(!canSubmit()){showActionFeedback('❌ ยังส่งตรวจไม่ได้: บทบาทหรือสถานะปัจจุบันไม่อนุญาตให้ส่งตรวจ','err');setStatus('บทบาทหรือสถานะปัจจุบันไม่อนุญาตให้ส่งตรวจ',false);return}
   if(assignmentsCount()===0){showActionFeedback('❌ ยังส่งตรวจไม่ได้: ยังไม่มีตารางเวร กรุณารันหรือเปิดตารางก่อน','err');setStatus('ยังไม่มีตารางเวร กรุณารันหรือเปิดตารางก่อนส่งตรวจ',false);return}
   var errors=validate(false);
   if(!errors){submitWorkflow();return}
-  if(!confirm('ตารางยังมีข้อขัดแย้ง '+errors+' จุด\n\nหากคุณตรวจสอบแล้วและยอมรับตารางนี้ ระบบจะส่งตารางให้หัวหน้าตรวจต่อ โดยบันทึกว่าผู้จัดตารางยอมรับข้อขัดแย้งไว้ในประวัติ\n\nต้องการส่งตรวจต่อหรือไม่?'))return;
+  if(!skipConfirm && !confirm('ตารางยังมีข้อขัดแย้ง '+errors+' จุด\n\nหากคุณตรวจสอบแล้วและยอมรับตารางนี้ ระบบจะส่งตารางให้หัวหน้าตรวจต่อ โดยบันทึกว่าผู้จัดตารางยอมรับข้อขัดแย้งไว้ในประวัติ\n\nต้องการส่งตรวจต่อหรือไม่?'))return;
   workflow.status='submitted';
   workflow.submittedAt=new Date().toISOString();
   workflow.submittedBy=unitUser.name;

@@ -1,24 +1,14 @@
-ROSTER V39.26.30 — USER ACCOUNT CREATE/DELETE FIX
+ROSTER V39.26.31 — ACCOUNT + WORKFLOW FIX
 
-แก้เฉพาะระบบบัญชีผู้ใช้งาน ไม่แก้กฎจัดตารางเวรหรือ workflow อื่น
+แก้เฉพาะ 2 เรื่องตามคำสั่งล่าสุด:
+1) ระบบลบบัญชีผู้ใช้ รองรับทั้ง DELETE /api/admin/users/:id และ POST /api/admin/users/:id/delete เพื่อให้ผ่านกรณีสภาพแวดล้อมที่ไม่รองรับ DELETE ตรง ๆ
+2) ส่งตรวจ: หากตรวจพบข้อขัดแย้ง ผู้จัดตารางสามารถกดส่งตรวจและยืนยัน “ยอมรับตารางนี้และส่งตรวจ” ได้ทันที โดยบันทึก overrideConflicts และประวัติไว้
 
-Frontend:
-- ใช้ index.html จาก V39.26.29
-- Username รองรับ 2–50 ตัวอักษรตาม backend
-- เรียก POST /api/admin/users เพื่อเพิ่มบัญชี
-- เรียก DELETE /api/admin/users/:id เพื่อลบบัญชี
+คงระบบ Multi-review เดิม: ถ้ากำหนดหัวหน้าผู้ตรวจหลายคน ทุกคนต้องกด “ตรวจแล้ว” ครบตามรายชื่อก่อนปุ่มอนุมัติจะใช้งานได้
 
-Backend Worker:
-- worker-admin-users-v22.2.js
-- Username validator: 2–50 ตัวอักษร
-- เพิ่ม DELETE /api/admin/users/:id
-- ป้องกัน Admin ลบบัญชีที่กำลังใช้งานอยู่
-- revoke auth_sessions ของบัญชีที่ลบ
-- บันทึก audit user_deleted
+ไฟล์:
+- index.html
+- worker-admin-users-v22.3.js
 
-สำคัญ:
-ต้อง Deploy Worker ไฟล์ worker-admin-users-v22.2.js ไปยัง Worker ที่ frontend ใช้งานจริง
-(https://roster-scheduler-api.supaporn-gf.workers.dev)
-ก่อนเพิ่ม/ลบบัญชีจึงจะทำงานจริง
-
-ห้ามนำเฉพาะ index.html ไปแทน Worker เพราะ API เพิ่ม/ลบบัญชีอยู่ฝั่ง backend
+ต้อง Deploy Worker v22.3 ไปยัง Worker API ตัวเดียวกับที่ระบบใช้งานจริงด้วย
+ไม่แก้กฎจัดเวร Rule 1–24 และไม่แก้ algorithm จัดตาราง
