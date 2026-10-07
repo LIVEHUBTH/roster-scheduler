@@ -9875,7 +9875,7 @@ html.phone-device body.s37-settings-open .header-user-status{
             <option value="scheduler">Scheduler</option><option value="approver">Approver</option><option value="viewer">Viewer</option><option value="admin">Admin</option>
           </select>
         </label>
-        <button id="createUserBtn">+ สร้างบัญชี</button>
+        <button id="createUserBtn" type="button">+ สร้างบัญชี</button>
       </div>
       <div style="overflow:auto">
         <table class="admin-users-table">
@@ -10622,7 +10622,7 @@ async function loadAdminUsers(){
         '<td>'+esc(u.displayName)+'</td>'+
         '<td>'+esc(roleLabel(u.role))+'</td>'+
         '<td><span class="account-badge '+(active?'account-on':'account-off')+'">'+(active?'ใช้งาน':'ปิดใช้งาน')+'</span></td>'+
-        '<td><button data-user-toggle="'+u.id+'" data-active="'+(active?'1':'0')+'" '+(u.id===unitUser.id?'disabled':'')+'>'+(active?'ปิดบัญชี':'เปิดบัญชี')+'</button></td>'+
+        '<td><button data-user-toggle="'+u.id+'" data-active="'+(active?'1':'0')+'" '+(u.id===unitUser.id?'disabled':'')+'>'+(active?'ปิดบัญชี':'เปิดบัญชี')+'</button> <button data-user-delete="'+u.id+'" '+(u.id===unitUser.id?'disabled':'')+'>ลบ</button></td>'+
       '</tr>';
     }).join(''):'<tr><td colspan="5">ยังไม่มีผู้ใช้</td></tr>';
     body.querySelectorAll('[data-user-toggle]').forEach(function(btn){
@@ -10636,17 +10636,37 @@ async function loadAdminUsers(){
         }catch(err){setStatus('จัดการบัญชีไม่สำเร็จ: '+err.message,false)}
       };
     });
+    body.querySelectorAll('[data-user-delete]').forEach(function(btn){
+      btn.onclick=async function(){
+        var id=this.dataset.userDelete;
+        if(id===unitUser.id)return;
+        var row=this.closest('tr');
+        var username=row&&row.children[0]?row.children[0].textContent.trim():'';
+        if(!confirm('ยืนยันลบบัญชี '+username+' หรือไม่?\n\nการลบบัญชีไม่กระทบข้อมูลตารางเวร'))return;
+        try{
+          await authFetch('/api/admin/users/'+id,{method:'DELETE'});
+          await loadAdminUsers();
+          setStatus('ลบบัญชีผู้ใช้งานเรียบร้อยแล้ว',true);
+        }catch(err){setStatus('ลบบัญชีไม่สำเร็จ: '+err.message,false)}
+      };
+    });
   }catch(err){body.innerHTML='<tr><td colspan="5">โหลดบัญชีไม่สำเร็จ: '+esc(err.message)+'</td></tr>'}
 }
 async function createUserAccount(){
   if(unitUser.role!=='admin')return;
+  var rawUsername=(el('newUserUsername').value||'').trim().toLowerCase();
+  var normalizedUsername=rawUsername.replace(/[^a-z0-9._-]/g,'');
+  if(rawUsername!==normalizedUsername){
+    el('newUserUsername').value=normalizedUsername;
+  }
   var payload={
-    username:(el('newUserUsername').value||'').trim(),
+    username:normalizedUsername,
     displayName:(el('newUserDisplayName').value||'').trim(),
     password:el('newUserPassword').value||'',
     role:el('newUserRole').value
   };
   if(!payload.username||!payload.displayName||!payload.password){setStatus('กรุณากรอกข้อมูลบัญชีให้ครบ',false);return}
+  if(!/^[a-z0-9._-]+$/.test(payload.username)){setStatus('Username ต้องใช้ a-z, 0-9, จุด ขีดกลาง หรือขีดล่างเท่านั้น',false);return}
   try{
     await authFetch('/api/admin/users',{method:'POST',body:JSON.stringify(payload)});
     el('newUserUsername').value='';el('newUserDisplayName').value='';el('newUserPassword').value='';
@@ -14247,6 +14267,7 @@ if(el('loginBtn')&&el('loginBtn').dataset.v242LoginBound!=='1')el('loginBtn').on
 if(el('loginPassword')&&el('loginPassword').dataset.v242LoginBound!=='1')el('loginPassword').onkeydown=function(e){if(e.key==='Enter')login()};
 if(el('logoutBtn'))el('logoutBtn').onclick=logout;
 if(el('createUserBtn'))el('createUserBtn').onclick=createUserAccount;
+if(el('newUserUsername'))el('newUserUsername').addEventListener('input',function(){this.value=this.value.toLowerCase().replace(/[^a-z0-9._-]/g,'')});
 
 if(el('unitStepPrepareBtn'))el('unitStepPrepareBtn').onclick=function(){showPage('people',true)};
 if(el('unitStepScheduleBtn'))el('unitStepScheduleBtn').onclick=function(){showPage('roster',true)};
