@@ -10623,7 +10623,7 @@ async function loadAdminUsers(){
         '<td>'+esc(u.displayName)+'</td>'+
         '<td>'+esc(roleLabel(u.role))+'</td>'+
         '<td><span class="account-badge '+(active?'account-on':'account-off')+'">'+(active?'ใช้งาน':'ปิดใช้งาน')+'</span></td>'+
-        '<td><button data-user-toggle="'+u.id+'" data-active="'+(active?'1':'0')+'" '+(u.id===unitUser.id?'disabled':'')+'>'+(active?'ปิดบัญชี':'เปิดบัญชี')+'</button> <button data-user-reset-password="'+u.id+'">🔑 รีเซ็ตรหัสผ่าน</button> <button data-user-delete="'+u.id+'" '+(u.id===unitUser.id?'disabled':'')+'>ลบ</button></td>'+
+        '<td><button data-user-edit-password="'+u.id+'">🔑 เปลี่ยนรหัสผ่าน</button> <button data-user-toggle="'+u.id+'" data-active="'+(active?'1':'0')+'" '+(u.id===unitUser.id?'disabled':'')+'>'+(active?'ปิดบัญชี':'เปิดบัญชี')+'</button> <button data-user-reset-password="'+u.id+'">🔑 รีเซ็ตรหัสผ่าน</button> <button data-user-delete="'+u.id+'" '+(u.id===unitUser.id?'disabled':'')+'>ลบ</button></td>'+
       '</tr>';
     }).join(''):'<tr><td colspan="5">ยังไม่มีผู้ใช้</td></tr>';
     body.querySelectorAll('[data-user-toggle]').forEach(function(btn){
@@ -10635,6 +10635,46 @@ async function loadAdminUsers(){
           await loadAdminUsers();
           setStatus((isActive?'ปิด':'เปิด')+'บัญชีเรียบร้อยแล้ว',true);
         }catch(err){setStatus('จัดการบัญชีไม่สำเร็จ: '+err.message,false)}
+      };
+    });
+    body.querySelectorAll('[data-user-edit-password]').forEach(function(btn){
+      btn.onclick=function(){
+        var id=this.dataset.userEditPassword;
+        var row=this.closest('tr');
+        var username=row&&row.children[0]?row.children[0].textContent.trim():'';
+        var existing=document.getElementById('adminUserPasswordDialog');
+        if(existing)existing.remove();
+        var dialog=document.createElement('div');
+        dialog.id='adminUserPasswordDialog';
+        dialog.setAttribute('role','dialog');
+        dialog.setAttribute('aria-modal','true');
+        dialog.style.cssText='position:fixed;inset:0;z-index:999999;background:rgba(33,38,58,.42);display:flex;align-items:center;justify-content:center;padding:16px';
+        dialog.innerHTML='<div style="background:white;border-radius:20px;padding:22px;width:min(440px,100%);box-shadow:0 15px 50px #0002">'+
+          '<h3 style="margin:0 0 14px">🔑 เปลี่ยนรหัสผ่านบัญชี</h3>'+
+          '<div id="adminResetUsername" style="font-weight:800;margin-bottom:12px"></div>'+
+          '<label style="display:block;margin:9px 0">รหัสผ่านใหม่<input id="adminResetPassword1" type="password" autocomplete="new-password" minlength="8" maxlength="200" style="width:100%;margin-top:5px;padding:11px;border:1px solid #ddd;border-radius:10px"></label>'+
+          '<label style="display:block;margin:9px 0">ยืนยันรหัสผ่านใหม่<input id="adminResetPassword2" type="password" autocomplete="new-password" minlength="8" maxlength="200" style="width:100%;margin-top:5px;padding:11px;border:1px solid #ddd;border-radius:10px"></label>'+
+          '<label style="font-size:12px"><input id="adminResetShowPassword" type="checkbox"> แสดงรหัสผ่าน</label>'+
+          '<p id="adminResetError" style="color:#b42318;font-size:12px;min-height:18px"></p>'+
+          '<div style="display:flex;justify-content:flex-end;gap:8px"><button id="adminResetCancel" type="button">ยกเลิก</button><button id="adminResetSave" type="button" class="save">บันทึกรหัสผ่านใหม่</button></div></div>';
+        document.body.appendChild(dialog);
+        dialog.querySelector('#adminResetUsername').textContent=username;
+        var a=dialog.querySelector('#adminResetPassword1'),b=dialog.querySelector('#adminResetPassword2');
+        var error=dialog.querySelector('#adminResetError');
+        dialog.querySelector('#adminResetCancel').onclick=function(){dialog.remove()};
+        dialog.querySelector('#adminResetShowPassword').onchange=function(){a.type=b.type=this.checked?'text':'password'};
+        dialog.querySelector('#adminResetSave').onclick=async function(){
+          if(a.value.length<8||a.value.length>200){error.textContent='รหัสผ่านต้องมี 8–200 ตัวอักษร';return}
+          if(a.value!==b.value){error.textContent='ยืนยันรหัสผ่านไม่ตรงกัน';return}
+          if(!confirm('ยืนยันเปลี่ยนรหัสผ่านของ '+username+' หรือไม่?'))return;
+          this.disabled=true;error.textContent='';
+          try{
+            await authFetch('/api/admin/users/'+id,{method:'PATCH',body:JSON.stringify({password:a.value})});
+            a.value='';b.value='';dialog.remove();
+            setStatus('เปลี่ยนรหัสผ่าน '+username+' สำเร็จ • กรุณาเข้าสู่ระบบใหม่',true);
+          }catch(e){error.textContent='บันทึกไม่สำเร็จ: '+e.message;this.disabled=false}
+        };
+        a.focus();
       };
     });
     body.querySelectorAll('[data-user-reset-password]').forEach(function(btn){
