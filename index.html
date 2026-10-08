@@ -10623,7 +10623,7 @@ async function loadAdminUsers(){
         '<td>'+esc(u.displayName)+'</td>'+
         '<td>'+esc(roleLabel(u.role))+'</td>'+
         '<td><span class="account-badge '+(active?'account-on':'account-off')+'">'+(active?'ใช้งาน':'ปิดใช้งาน')+'</span></td>'+
-        '<td><button data-user-toggle="'+u.id+'" data-active="'+(active?'1':'0')+'" '+(u.id===unitUser.id?'disabled':'')+'>'+(active?'ปิดบัญชี':'เปิดบัญชี')+'</button> <button data-user-delete="'+u.id+'" '+(u.id===unitUser.id?'disabled':'')+'>ลบ</button></td>'+
+        '<td><button data-user-toggle="'+u.id+'" data-active="'+(active?'1':'0')+'" '+(u.id===unitUser.id?'disabled':'')+'>'+(active?'ปิดบัญชี':'เปิดบัญชี')+'</button> <button data-user-reset-password="'+u.id+'">🔑 รีเซ็ตรหัสผ่าน</button> <button data-user-delete="'+u.id+'" '+(u.id===unitUser.id?'disabled':'')+'>ลบ</button></td>'+
       '</tr>';
     }).join(''):'<tr><td colspan="5">ยังไม่มีผู้ใช้</td></tr>';
     body.querySelectorAll('[data-user-toggle]').forEach(function(btn){
@@ -10635,6 +10635,26 @@ async function loadAdminUsers(){
           await loadAdminUsers();
           setStatus((isActive?'ปิด':'เปิด')+'บัญชีเรียบร้อยแล้ว',true);
         }catch(err){setStatus('จัดการบัญชีไม่สำเร็จ: '+err.message,false)}
+      };
+    });
+    body.querySelectorAll('[data-user-reset-password]').forEach(function(btn){
+      btn.onclick=async function(){
+        var id=this.dataset.userResetPassword;
+        var row=this.closest('tr');
+        var username=row&&row.children[0]?row.children[0].textContent.trim():'';
+        var password=prompt('กำหนดรหัสผ่านใหม่สำหรับ '+username+' (อย่างน้อย 8 ตัวอักษร)');
+        if(password===null)return;
+        if(password.length<8||password.length>200){setStatus('รหัสผ่านต้องมี 8–200 ตัวอักษร',false);return}
+        var confirmPassword=prompt('กรอกรหัสผ่านใหม่อีกครั้งเพื่อยืนยัน');
+        if(confirmPassword===null)return;
+        if(password!==confirmPassword){setStatus('รหัสผ่านทั้งสองครั้งไม่ตรงกัน',false);return}
+        if(!confirm('ยืนยันรีเซ็ตรหัสผ่านบัญชี '+username+' หรือไม่?\nบัญชีนี้จะต้องเข้าสู่ระบบใหม่'))return;
+        this.disabled=true;
+        try{
+          await authFetch('/api/admin/users/'+id,{method:'PATCH',body:JSON.stringify({password:password})});
+          setStatus('รีเซ็ตรหัสผ่านบัญชี '+username+' สำเร็จ กรุณาเข้าสู่ระบบด้วยรหัสผ่านใหม่',true);
+        }catch(err){setStatus('รีเซ็ตรหัสผ่านไม่สำเร็จ: '+err.message,false)}
+        finally{this.disabled=false;password='';confirmPassword=''}
       };
     });
     body.querySelectorAll('[data-user-delete]').forEach(function(btn){
