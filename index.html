@@ -10439,6 +10439,7 @@ function normalizeWorkflow(w){
   if(!Array.isArray(d.reviews))d.reviews=[];
   d.overrideConflicts=!!d.overrideConflicts;
   d.overrideConflictCount=Number(d.overrideConflictCount||0);
+  if(d.legacyApproval&&!d.legacyApproval.name)d.legacyApproval=null;
   d.requiredReviewers=d.requiredReviewers.map(function(x){return String(x||'').trim().toLowerCase()}).filter(Boolean).filter(function(x,i,a){return a.indexOf(x)===i});
   if(['draft','submitted','approved'].indexOf(d.status)<0)d.status='draft';
   d.locked=!!d.locked;
@@ -10704,7 +10705,7 @@ function formatUnitTime(v){
 }
 function canRosterEdit(){return (unitUser.role==='scheduler'||unitUser.role==='admin')&&!workflow.locked&&workflow.status==='draft'}
 function canSubmit(){return (unitUser.role==='scheduler'||unitUser.role==='admin')&&!workflow.locked&&workflow.status==='draft'}
-function canApprove(){return (unitUser.role==='approver'||unitUser.role==='admin')&&!workflow.locked&&workflow.status==='submitted'&&allReviewsComplete()}
+function canApprove(){return (unitUser.role==='approver'||unitUser.role==='admin')&&!workflow.locked&&workflow.status==='submitted'&&(!multiReviewEnabled()||allReviewsComplete())}
 function canReturn(){return (unitUser.role==='approver'||unitUser.role==='admin')&&!workflow.locked&&(workflow.status==='submitted'||workflow.status==='approved')}
 function canLock(){return (unitUser.role==='approver'||unitUser.role==='admin')&&!workflow.locked&&workflow.status==='approved'}
 function canUnlock(){return unitUser.role==='admin'&&workflow.locked}
@@ -10879,7 +10880,9 @@ function loadMonth(silent){clearActionFeedback();hideAutoFixSummary();
   state.assignments=d&&d.assignments?d.assignments:{};
   state.rotation=d&&d.rotation?d.rotation:{};
   workflow=normalizeWorkflow(d&&d.workflow);
+  var repairedLegacyApproval=repairLegacyMultiApproval();
   workflowEditLogged=false;
+  if(repairedLegacyApproval)saveMonth(true);
   var inactivePurged=purgeInactiveAssignmentsFromDraft();
   if(inactivePurged){
     saveMonth(true);
@@ -13112,7 +13115,7 @@ async function pullCloudLatest(force){
       var lm=savedMonth(key);
       if(!cloudSame(lm,r.data)){
         localStorage.setItem(storageKey(key),JSON.stringify(r.data));
-        state.assignments=r.data.assignments||{};state.rotation=r.data.rotation||{};workflow=normalizeWorkflow(r.data.workflow);workflowEditLogged=false;
+        state.assignments=r.data.assignments||{};state.rotation=r.data.rotation||{};workflow=normalizeWorkflow(r.data.workflow);var repairedLegacyApproval=repairLegacyMultiApproval();workflowEditLogged=false;if(repairedLegacyApproval)saveMonth(true);
         var cloudInactivePurged=purgeInactiveAssignmentsFromDraft();
         if(cloudInactivePurged)saveMonth(true);
         renderSheet();renderHistory();renderUnitWorkflow();renderSummaryV24();renderHomeV24();
@@ -13219,17 +13222,44 @@ function returnWorkflow(){
   showActionFeedback('↩ ส่งกลับแก้ไขแล้ว ตารางกลับเป็น “ร่างตาราง”','info');
   setStatus('ส่งกลับแก้ไขแล้ว ผู้จัดตารางสามารถแก้ไขได้',true);
 }
-function saveMultiReviewers(){
+async function cloudWorkflowAction(action,body){
+  if(!cloud.connected&&!(await connectCloud(false)))throw new Error('เชื่อมฐานข้อมูลออนไลน์ไม่สำเร็จ');
+  return await cloudRequest('/api/month/'+encodeURIComponent(currentKey())+'/workflow/'+action,{method:'POST',body:JSON.stringify(body||{})});
+}
+function applyServerMonthData(data){
+  if(!data||typeof data!=='object')return;
+  state.assignments=data.assignments||state.assignments||{};
+  state.rotation=data.rotation||state.rotation||{};
+  workflow=normalizeWorkflow(data.workflow);
+  localStorage.setItem(storageKey(currentKey()),JSON.stringify(data));
+}
+function repairLegacyMultiApproval(){
+  if(!workflow||workflow.status!=='approved'||!multiReviewEnabled())return false;
+  if(completedReviewCount()>=workflow.requiredReviewers.length)return false;
+  var legacyName=String(workflow.approvedBy||'').trim();
+  var legacyAt=workflow.approvedAt||new Date().toISOString();
+  workflow.legacyApproval=legacyName?{name:legacyName,at:legacyAt}:null;
+  workflow.status='submitted';
+  workflow.approvedAt='';
+  workflow.approvedBy='';
+  workflow.audit=Array.isArray(workflow.audit)?workflow.audit:[];
+  workflow.audit.unshift({at:new Date().toISOString(),user:unitUser.name,role:unitUser.role,action:'ระบบแก้สถานะอนุมัติเดี่ยวกลับเป็นส่งตรวจ • ต้องรอหัวหน้าที่กำหนดอนุมัติครบ'});
+  if(workflow.audit.length>100)workflow.audit=workflow.audit.slice(0,100);
+  return true;
+}
+async function saveMultiReviewers(){
   clearActionFeedback();
   if(unitUser.role!=='admin'){showActionFeedback('❌ กำหนดผู้ตรวจหลายคนได้เฉพาะ Admin','err');return}
   if(workflow.locked){showActionFeedback('❌ ตารางถูกล็อกแล้ว','err');return}
   var raw=el('multiReviewersInput')?el('multiReviewersInput').value:'';
   var list=raw.split(/[,\n]+/).map(function(x){return x.trim().toLowerCase()}).filter(Boolean).filter(function(x,i,a){return a.indexOf(x)===i});
-  workflow.requiredReviewers=list;
-  workflow.reviews=[];
-  auditWorkflow(list.length?'กำหนดหัวหน้าผู้ตรวจหลายคน '+list.length+' บัญชี':'ยกเลิกการกำหนดผู้ตรวจหลายคน');
-  persistWorkflow();
-  showActionFeedback(list.length?'✅ บันทึกผู้ตรวจ '+list.length+' คนแล้ว':'ℹ️ ยกเลิกการกำหนดผู้ตรวจหลายคนแล้ว','ok');
+  try{
+    var r=await cloudWorkflowAction('reviewers',{requiredReviewers:list});
+    if(r&&r.data)applyServerMonthData(r.data);
+    else{workflow.requiredReviewers=list;workflow.reviews=[];persistWorkflow();}
+    showActionFeedback(list.length?'✅ บันทึกผู้ตรวจ '+list.length+' คนแล้ว':'ℹ️ ยกเลิกการกำหนดผู้ตรวจหลายคนแล้ว','ok');
+    renderUnitWorkflow();
+  }catch(err){showActionFeedback('❌ บันทึกผู้ตรวจไม่สำเร็จ: '+err.message,'err');setStatus('บันทึกผู้ตรวจไม่สำเร็จ: '+err.message,false)}
 }
 async function markMultiReviewDone(){
   clearActionFeedback();
@@ -13238,28 +13268,46 @@ async function markMultiReviewDone(){
   if(errors&&!workflow.overrideConflicts){renderConflictDetails();showActionFeedback('❌ อนุมัติตารางไม่ได้: พบข้อขัดแย้ง '+errors+' จุด','err');return}
   var u=String(unitUser.username||'').trim().toLowerCase();
   var now=new Date().toISOString();
-  var entry=workflow.reviews.find(function(x){return String(x.username||'').toLowerCase()===u});
   var comment=(el('multiReviewComment')&&el('multiReviewComment').value||'').trim();
-  if(entry){entry.done=true;entry.approved=true;entry.at=now;entry.approvedAt=now;entry.name=unitUser.name;entry.comment=comment;}
-  else workflow.reviews.push({username:u,name:unitUser.name,done:true,approved:true,at:now,approvedAt:now,comment:comment});
-  auditWorkflow('หัวหน้าอนุมัติตาราง • '+unitUser.name);
-  persistWorkflow();
-  showActionFeedback('✅ '+unitUser.name+' อนุมัติตารางแล้ว • '+completedReviewCount()+'/'+workflow.requiredReviewers.length+' คน','ok');
-  setStatus('บันทึกการอนุมัติของ '+unitUser.name+' แล้ว',true);
-  renderUnitWorkflow();
+  try{
+    var r=await cloudWorkflowAction('review',{username:u,name:unitUser.name,comment:comment,approved:true,at:now,approvedAt:now});
+    if(r&&r.data)applyServerMonthData(r.data);
+    else{
+      var entry=workflow.reviews.find(function(x){return String(x.username||'').toLowerCase()===u});
+      if(entry){entry.done=true;entry.approved=true;entry.at=now;entry.approvedAt=now;entry.name=unitUser.name;entry.comment=comment;}
+      else workflow.reviews.push({username:u,name:unitUser.name,done:true,approved:true,at:now,approvedAt:now,comment:comment});
+      workflow.status='submitted';
+      persistWorkflow();
+    }
+    auditWorkflow('หัวหน้าอนุมัติตาราง • '+unitUser.name);
+    saveMonth(true);
+    showActionFeedback('✅ '+unitUser.name+' อนุมัติตารางแล้ว • '+completedReviewCount()+'/'+workflow.requiredReviewers.length+' คน • ยังไม่อนุมัติรวมจนกว่าจะครบ','ok');
+    setStatus('บันทึกการอนุมัติของ '+unitUser.name+' แล้ว • รอหัวหน้าคนอื่น',true);
+    renderUnitWorkflow();
+  }catch(err){showActionFeedback('❌ บันทึกการอนุมัติไม่สำเร็จ: '+err.message,'err');setStatus('บันทึกการอนุมัติไม่สำเร็จ: '+err.message,false)}
 }
-function approveWorkflow(){
+async function approveWorkflow(){
   clearActionFeedback();
-  if(!canApprove()){showActionFeedback(multiReviewEnabled()?'❌ ยังอนุมัติตารางรวมไม่ได้: หัวหน้าที่กำหนดยังอนุมัติไม่ครบ '+completedReviewCount()+'/'+workflow.requiredReviewers.length+' คน':'❌ อนุมัติไม่ได้: ต้องอยู่ในสถานะ “ส่งตรวจแล้ว” และใช้บทบาท Approver หรือ Admin','err');setStatus(multiReviewEnabled()?'รอหัวหน้าที่กำหนดอนุมัติครบ '+completedReviewCount()+'/'+workflow.requiredReviewers.length+' คน':'ต้องอยู่ในสถานะส่งตรวจ และใช้บทบาทหัวหน้าผู้อนุมัติหรือ Admin',false);return}
+  if(multiReviewEnabled()&&!canReview()&&completedReviewCount()<workflow.requiredReviewers.length){
+    showActionFeedback('❌ ยังอนุมัติตารางรวมไม่ได้: หัวหน้าที่กำหนดยังอนุมัติไม่ครบ '+completedReviewCount()+'/'+workflow.requiredReviewers.length+' คน','err');
+    setStatus('รอหัวหน้าที่กำหนดอนุมัติครบ '+completedReviewCount()+'/'+workflow.requiredReviewers.length+' คน',false);return;
+  }
+  if(multiReviewEnabled()&&canReview()&&completedReviewCount()<workflow.requiredReviewers.length){
+    await markMultiReviewDone();return;
+  }
+  if(!canApprove()){showActionFeedback('❌ อนุมัติไม่ได้: ต้องอยู่ในสถานะ “ส่งตรวจแล้ว” และมีสิทธิ์ Approver/Admin','err');setStatus('ต้องอยู่ในสถานะส่งตรวจ และใช้บทบาทหัวหน้าผู้อนุมัติหรือ Admin',false);return}
   var errors=validate(false);
   if(errors&&!workflow.overrideConflicts){renderConflictDetails();showActionFeedback('❌ อนุมัติไม่ได้: พบข้อขัดแย้ง '+errors+' จุด • ดูรายละเอียดด้านล่าง','err');setStatus('อนุมัติไม่ได้ พบข้อขัดแย้ง '+errors+' จุด',false);return}
-  workflow.status='approved';
-  workflow.approvedAt=new Date().toISOString();
-  workflow.approvedBy=unitUser.name;
-  auditWorkflow('อนุมัติตารางเวร');
-  persistWorkflow();
-  showActionFeedback('✅ อนุมัติตารางเวรเรียบร้อยแล้ว พร้อมสำหรับการล็อกตาราง','ok');
-  setStatus('อนุมัติตารางเวรเรียบร้อยแล้ว',true);
+  try{
+    var r=await cloudWorkflowAction('approve',{approvedBy:unitUser.name,approvedByUsername:String(unitUser.username||'').toLowerCase(),at:new Date().toISOString(),overrideConflicts:!!workflow.overrideConflicts});
+    if(r&&r.data)applyServerMonthData(r.data);
+    else{
+      workflow.status='approved';workflow.approvedAt=new Date().toISOString();workflow.approvedBy=unitUser.name;persistWorkflow();
+    }
+    showActionFeedback('✅ อนุมัติตารางเวรเรียบร้อยแล้ว พร้อมสำหรับการล็อกตาราง','ok');
+    setStatus('อนุมัติตารางเวรเรียบร้อยแล้ว',true);
+    renderUnitWorkflow();
+  }catch(err){showActionFeedback('❌ อนุมัติตารางไม่สำเร็จ: '+err.message,'err');setStatus('อนุมัติตารางไม่สำเร็จ: '+err.message,false)}
 }
 function lockWorkflow(){
   clearActionFeedback();
@@ -13362,7 +13410,7 @@ function renderUnitWorkflow(){
     el('unitReadOnlyNotice').textContent=workflow.locked?'🔒 ล็อกตารางเรียบร้อยแล้ว ตารางเดือนนี้เป็นแบบอ่านอย่างเดียว':'สถานะตารางปัจจุบัน: '+label;
   }
   if(el('multiReviewersInput'))el('multiReviewersInput').value=(workflow.requiredReviewers||[]).join('\n');
-  if(el('multiReviewCount'))el('multiReviewCount').textContent=multiReviewEnabled()?(completedReviewCount()+'/'+workflow.requiredReviewers.length+' คนอนุมัติแล้ว • '+(canApprove()?'อนุมัติรวมได้':'รอหัวหน้าอนุมัติครบ')):'ไม่ได้กำหนดผู้ตรวจหลายคน';
+  if(el('multiReviewCount'))el('multiReviewCount').textContent=multiReviewEnabled()?(completedReviewCount()+'/'+workflow.requiredReviewers.length+' คนอนุมัติแล้ว'+(workflow.legacyApproval?' • พบประวัติอนุมัติเดิมโดย '+workflow.legacyApproval.name:'')+' • '+(canApprove()?'อนุมัติรวมได้':'รอหัวหน้าอนุมัติครบ')):'ไม่ได้กำหนดผู้ตรวจหลายคน';
   if(el('submitWithAcceptedConflictsBtn'))el('submitWithAcceptedConflictsBtn').style.display=(canSubmit()&&window.__autoFixHasRemainingConflicts)?'inline-flex':'none';
   if(el('multiReviewList')){
     var rr=workflow.requiredReviewers||[];
