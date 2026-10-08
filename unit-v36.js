@@ -84,6 +84,8 @@
     q('#u36EditRole').value=u.role||'viewer';
     var m=userMap();
     q('#u36EditUnit').value=m[u.id]||m[u.userId]||m[u._id]||m[u.username]||selected;
+    q('#u36EditNewPass').value='';
+    q('#u36EditConfirmPass').value='';
     q('#u36EditUserModal').classList.add('show');
   }
   function openViewFromButton(btn){
@@ -123,7 +125,7 @@
     }
   }
   async function toggleUser(){var id=this.dataset.toggleUser,on=this.dataset.active==='1';try{await api('/api/admin/users/'+encodeURIComponent(id),{method:'PATCH',body:JSON.stringify({isActive:!on})});toast((on?'ปิด':'เปิด')+'บัญชีแล้ว');await loadUsers()}catch(e){toast('จัดการบัญชีไม่ได้: '+e.message)}}
-  function openEditUser(id){var u=users.find(function(x){return userRef(x)===String(id)});if(!u){toast('ไม่พบข้อมูลบัญชีผู้ใช้');return}q('#u36EditUserId').value=userRef(u);q('#u36EditDisplay').value=u.displayName||'';q('#u36EditRole').value=u.role||'viewer';var mm=userMap();q('#u36EditUnit').value=mm[u.id]||mm[u.userId]||mm[u._id]||mm[u.username]||selected;q('#u36EditUserModal').classList.add('show')}
+  function openEditUser(id){var u=users.find(function(x){return userRef(x)===String(id)});if(!u){toast('ไม่พบข้อมูลบัญชีผู้ใช้');return}q('#u36EditUserId').value=userRef(u);q('#u36EditDisplay').value=u.displayName||'';q('#u36EditRole').value=u.role||'viewer';var mm=userMap();q('#u36EditUnit').value=mm[u.id]||mm[u.userId]||mm[u._id]||mm[u.username]||selected;q('#u36EditNewPass').value='';q('#u36EditConfirmPass').value='';q('#u36EditUserModal').classList.add('show')}
   function openViewUser(id){
     var u=users.find(function(x){return userRef(x)===String(id)});
     if(!u){toast('ไม่พบข้อมูลบัญชีผู้ใช้');return}
@@ -139,7 +141,28 @@
     q('#u36ViewUserModal').classList.add('show');
   }
   function openPassword(id){q('#u36PassUserId').value=id;q('#u36NewPass').value='';q('#u36PasswordModal').classList.add('show')}
-  async function saveEditUser(){var id=q('#u36EditUserId').value,payload={displayName:q('#u36EditDisplay').value.trim(),role:q('#u36EditRole').value};try{await api('/api/admin/users/'+encodeURIComponent(id),{method:'PATCH',body:JSON.stringify(payload)});var m=userMap();m[id]=q('#u36EditUnit').value;saveMap(m);q('#u36EditUserModal').classList.remove('show');toast('บันทึกบัญชีแล้ว');await loadUsers()}catch(e){toast('แก้ไขบัญชีไม่ได้: '+e.message)}}
+  async function saveEditUser(){
+    var id=q('#u36EditUserId').value;
+    var payload={displayName:q('#u36EditDisplay').value.trim(),role:q('#u36EditRole').value};
+    var pass=q('#u36EditNewPass').value;
+    var confirmPass=q('#u36EditConfirmPass').value;
+    if(pass||confirmPass){
+      if(pass.length<8||pass.length>200){toast('รหัสผ่านใหม่ต้องมี 8–200 ตัวอักษร');return}
+      if(pass!==confirmPass){toast('ยืนยันรหัสผ่านใหม่ไม่ตรงกัน');return}
+      payload.password=pass;
+    }
+    var saveBtn=q('#u36SaveEditUser');
+    if(saveBtn.disabled)return;
+    saveBtn.disabled=true;
+    try{
+      await api('/api/admin/users/'+encodeURIComponent(id),{method:'PATCH',body:JSON.stringify(payload)});
+      var m=userMap();m[id]=q('#u36EditUnit').value;saveMap(m);
+      q('#u36EditUserModal').classList.remove('show');
+      q('#u36EditNewPass').value='';q('#u36EditConfirmPass').value='';
+      toast('บันทึกบัญชีแล้ว');await loadUsers();
+    }catch(e){toast('แก้ไขบัญชีไม่ได้: '+e.message)}
+    finally{saveBtn.disabled=false}
+  }
   async function savePassword(){var id=q('#u36PassUserId').value,p=q('#u36NewPass').value;if(p.length<8){toast('รหัสผ่านต้องมีอย่างน้อย 8 ตัว');return}try{await api('/api/admin/users/'+encodeURIComponent(id),{method:'PATCH',body:JSON.stringify({password:p})});q('#u36PasswordModal').classList.remove('show');toast('เปลี่ยนรหัสผ่านแล้ว')}catch(e){toast('เปลี่ยนรหัสผ่านไม่ได้: '+e.message)}}
   async function createUser(){var p={username:q('#u36NewUsername').value.trim(),displayName:q('#u36NewDisplay').value.trim(),password:q('#u36NewPassword').value,role:q('#u36NewRole').value};if(!p.username||!p.displayName||p.password.length<8){toast('กรอกข้อมูลให้ครบ และรหัสผ่านอย่างน้อย 8 ตัว');return}try{var d=await api('/api/admin/users',{method:'POST',body:JSON.stringify(p)});var m=userMap(),id=(d.user&&d.user.id)||p.username;m[id]=selected;saveMap(m);q('#u36NewUserModal').classList.remove('show');toast('สร้างบัญชีเรียบร้อย');await loadUsers()}catch(e){toast('สร้างบัญชีไม่ได้: '+e.message)}}
   function saveInfo(){var obj={name:q('#u36_name').value.trim()||current().name,organization:q('#u36_organization').value.trim(),head:q('#u36_head').value.trim(),scheduler:q('#u36_scheduler').value.trim(),phone:q('#u36_phone').value.trim(),contact:q('#u36_contact').value.trim()};saveCurrent(obj);proxyValue('unitInfoName',obj.name);proxyValue('unitInfoOrganization',obj.organization);proxyValue('unitInfoHead',obj.head);proxyValue('unitInfoScheduler',obj.scheduler);proxyValue('unitInfoPhone',obj.phone);proxyValue('unitInfoContact',obj.contact);proxyClick('saveUnitInfoBtn');renderUnits();renderInfo();toast('บันทึกข้อมูลหน่วยงานแล้ว')}
@@ -167,7 +190,7 @@
     modals()+'<div class="u36-toast" id="u36Toast"></div>'}
   function modals(){return '<div class="u36-modal" id="u36AddUnitModal"><div class="u36-modal-card"><div class="u36-modal-head"><b>เพิ่มหน่วยงาน</b><button data-close-modal>×</button></div><label class="u36-field">ชื่อหน่วยงาน<input id="u36AddUnitName" placeholder="ชื่อหน่วยงาน"></label><div class="u36-actions"><button class="u36-btn" data-close-modal>ยกเลิก</button><button class="u36-btn mint" id="u36SaveNewUnit">เพิ่มหน่วยงาน</button></div></div></div>'+ 
     '<div class="u36-modal" id="u36NewUserModal"><div class="u36-modal-card"><div class="u36-modal-head"><b>เพิ่มบัญชีผู้ใช้</b><button data-close-modal>×</button></div><div class="u36-grid"><label class="u36-field">Username<input id="u36NewUsername"></label><label class="u36-field">ชื่อที่แสดง<input id="u36NewDisplay"></label><label class="u36-field">รหัสผ่าน<input id="u36NewPassword" type="password" placeholder="อย่างน้อย 8 ตัว"></label><label class="u36-field">บทบาท<select id="u36NewRole"><option value="scheduler">ผู้จัดตาราง</option><option value="approver">หัวหน้าหน่วยงาน</option><option value="viewer">ผู้ดูตาราง</option><option value="admin">ผู้ดูแลระบบ</option></select></label><label class="u36-field">หน่วยงาน<select id="u36NewUnit"></select></label></div><div class="u36-actions"><button class="u36-btn" data-close-modal>ยกเลิก</button><button class="u36-btn mint" id="u36CreateUser">สร้างบัญชี</button></div></div></div>'+ 
-    '<div class="u36-modal" id="u36EditUserModal"><div class="u36-modal-card"><div class="u36-modal-head"><b>แก้ไขบัญชีผู้ใช้</b><button data-close-modal>×</button></div><input id="u36EditUserId" type="hidden"><div class="u36-grid"><label class="u36-field">ชื่อที่แสดง<input id="u36EditDisplay"></label><label class="u36-field">บทบาท<select id="u36EditRole"><option value="scheduler">ผู้จัดตาราง</option><option value="approver">หัวหน้าหน่วยงาน</option><option value="viewer">ผู้ดูตาราง</option><option value="admin">ผู้ดูแลระบบ</option></select></label><label class="u36-field">หน่วยงาน<select id="u36EditUnit"></select></label></div><div class="u36-actions"><button class="u36-btn" data-close-modal>ยกเลิก</button><button class="u36-btn mint" id="u36SaveEditUser">บันทึก</button></div></div></div>'+ 
+    '<div class="u36-modal" id="u36EditUserModal"><div class="u36-modal-card"><div class="u36-modal-head"><b>แก้ไขบัญชีผู้ใช้</b><button data-close-modal>×</button></div><input id="u36EditUserId" type="hidden"><div class="u36-grid"><label class="u36-field">ชื่อที่แสดง<input id="u36EditDisplay"></label><label class="u36-field">บทบาท<select id="u36EditRole"><option value="scheduler">ผู้จัดตาราง</option><option value="approver">หัวหน้าหน่วยงาน</option><option value="viewer">ผู้ดูตาราง</option><option value="admin">ผู้ดูแลระบบ</option></select></label><label class="u36-field">หน่วยงาน<select id="u36EditUnit"></select></label><label class="u36-field">รหัสผ่านใหม่ (ไม่เปลี่ยนให้เว้นว่าง)<input id="u36EditNewPass" type="password" minlength="8" maxlength="200" autocomplete="new-password" placeholder="อย่างน้อย 8 ตัวอักษร"></label><label class="u36-field">ยืนยันรหัสผ่านใหม่<input id="u36EditConfirmPass" type="password" maxlength="200" autocomplete="new-password" placeholder="พิมพ์รหัสผ่านใหม่อีกครั้ง"></label></div><div class="u36-actions"><button class="u36-btn" data-close-modal>ยกเลิก</button><button class="u36-btn mint" id="u36SaveEditUser">บันทึก</button></div></div></div>'+ 
     '<div class="u36-modal" id="u36PasswordModal"><div class="u36-modal-card"><div class="u36-modal-head"><b>ตั้งรหัสผ่านใหม่</b><button data-close-modal>×</button></div><input id="u36PassUserId" type="hidden"><label class="u36-field">รหัสผ่านใหม่<input id="u36NewPass" type="password" placeholder="อย่างน้อย 8 ตัว"></label><div class="u36-actions"><button class="u36-btn" data-close-modal>ยกเลิก</button><button class="u36-btn mint" id="u36SavePass">บันทึกรหัสผ่าน</button></div></div></div>'+
     '<div class="u36-modal" id="u36ViewUserModal"><div class="u36-modal-card u36-view-card"><div class="u36-modal-head"><b>ข้อมูลบัญชีผู้ใช้งาน</b><button data-close-modal>×</button></div><div class="u36-view-user-head"><span class="u36-view-user-icon">'+icon('users')+'</span><div><b id="u36ViewName">-</b><small id="u36ViewUsername">@-</small></div></div><div class="u36-view-grid"><div><small>หน่วยงาน</small><b id="u36ViewUnit">-</b></div><div><small>บทบาท</small><b id="u36ViewRole">-</b></div><div><small>สถานะ</small><b id="u36ViewStatus">-</b></div><div><small>เข้าใช้ล่าสุด</small><b id="u36ViewLast">-</b></div></div><div class="u36-actions"><button class="u36-btn" data-close-modal>ปิด</button><button type="button" class="u36-btn u36-view-edit" id="u36ViewEditBtn">'+actionIcon('edit')+' แก้ไขบัญชี</button></div></div></div>'}
   function wire(){

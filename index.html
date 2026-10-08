@@ -8775,24 +8775,11 @@ html.phone-device body.s37-settings-open .header-user-status{
 <style id="multi-review-workflow-v1">
 .multi-review-panel{margin-top:10px;padding:12px;border:1px solid #e6def5;border-radius:14px;background:#fcfaff}.multi-review-head{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap}.multi-review-head b{font-size:11px;color:#4b4267}.multi-review-count{font-size:9px;font-weight:900;color:#725cbb}.multi-review-config{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end;margin-top:9px}.multi-review-config textarea{min-height:54px;resize:vertical}.multi-review-list{display:grid;gap:6px;margin-top:9px}.multi-review-item{display:grid;grid-template-columns:24px 1fr auto;gap:7px;align-items:center;padding:8px;border:1px solid #ece8f3;border-radius:10px;background:#fff}.multi-review-dot{width:10px;height:10px;border-radius:50%;background:#ddd}.multi-review-item.done .multi-review-dot{background:#55b99f}.multi-review-item b{font-size:9.5px;color:#3f4658}.multi-review-item small{display:block;font-size:8px;color:#9095a2;margin-top:2px}.multi-review-item button{font-size:8.5px;padding:6px 9px}.multi-review-comment{margin-top:8px}.multi-review-comment textarea{width:100%;min-height:48px;resize:vertical}.multi-review-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:7px}.multi-review-note{font-size:8.5px;color:#8b8f99;margin-top:6px;line-height:1.5}
 </style>
-
-<style id="roster-v392634-logout-admin-editor-only-css">
+<style id="roster-v392634-profile-logout-fix">
 .roster-safe-logout-wrap{padding:0 12px 14px}
 .roster-safe-logout-btn{display:block!important;width:100%;min-height:42px!important;border:1px solid #f5c4d6!important;border-radius:13px!important;background:#fff0f6!important;color:#bd4777!important;font-size:13px!important;font-weight:900!important}
-.roster-safe-account-dialog{box-sizing:border-box;width:min(440px,calc(100vw - 28px));max-width:calc(100vw - 28px);max-height:calc(100dvh - 40px);overflow:auto;border:1px solid #f1dfe8;border-radius:20px;padding:22px;background:#fff;box-shadow:0 18px 60px #0003;color:#34425d;font-family:inherit}
-.roster-safe-account-dialog::backdrop{background:rgba(31,34,54,.43)}
-.roster-safe-account-dialog form{display:flex;flex-direction:column;gap:12px;margin:0}
-.roster-safe-editor-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.roster-safe-editor-head h3{font-size:19px;margin:0;color:#23304d}
-#rosterSafeCloseEditor{min-height:36px;width:36px;padding:0;border-radius:12px;background:#fff0f6;color:#d34e88;font-size:25px}
-.roster-safe-account-dialog label{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:800}
-.roster-safe-account-dialog input,.roster-safe-account-dialog select{width:100%;box-sizing:border-box;min-height:44px;border:1px solid #dadfea;border-radius:11px;padding:9px 12px;background:white;color:#29374f;font-size:14px}
-.roster-safe-account-dialog input[readonly]{background:#f7f8fb;color:#65718b}
-.roster-safe-password-heading{font-size:12px;font-weight:800;color:#b64c7f;padding-top:4px;border-top:1px solid #f7e5eb}
-.roster-safe-editor-error{min-height:16px;color:#c72e51;font-size:12px;font-weight:700}
-.roster-safe-editor-actions{display:flex;gap:10px;justify-content:flex-end}
-.roster-safe-editor-actions button{min-width:100px;min-height:42px}
-#rosterSafeSaveEditor{background:#e7fbf2;color:#16896a}
+/* Only the existing account editor may scroll if mobile keyboard makes it too tall. */
+#page-internal #u36EditUserModal .u36-modal-card{max-height:calc(100dvh - 32px);overflow-y:auto;-webkit-overflow-scrolling:touch}
 </style>
 </head>
 <body>
@@ -10591,6 +10578,8 @@ async function logout(){
   cloud.connected=false;
   showLogin('');
 }
+// Connect the existing logout flow to the separate profile-popup script.
+window.rosterV392634Logout = logout;
 async function afterAuthenticated(){
   function safe(fn,label){
     try{return fn()}catch(e){console.warn(label||'render',e)}
@@ -10642,78 +10631,9 @@ async function loadAdminUsers(){
         '<td>'+esc(u.displayName)+'</td>'+
         '<td>'+esc(roleLabel(u.role))+'</td>'+
         '<td><span class="account-badge '+(active?'account-on':'account-off')+'">'+(active?'ใช้งาน':'ปิดใช้งาน')+'</span></td>'+
-        '<td><button type="button" data-roster-safe-edit="'+u.id+'">✎ แก้ไข</button> <button data-user-toggle="'+u.id+'" data-active="'+(active?'1':'0')+'" '+(u.id===unitUser.id?'disabled':'')+'>'+(active?'ปิดบัญชี':'เปิดบัญชี')+'</button> <button data-user-delete="'+u.id+'" '+(u.id===unitUser.id?'disabled':'')+'>ลบ</button></td>'+
+        '<td><button data-user-toggle="'+u.id+'" data-active="'+(active?'1':'0')+'" '+(u.id===unitUser.id?'disabled':'')+'>'+(active?'ปิดบัญชี':'เปิดบัญชี')+'</button> <button data-user-delete="'+u.id+'" '+(u.id===unitUser.id?'disabled':'')+'>ลบ</button></td>'+
       '</tr>';
     }).join(''):'<tr><td colspan="5">ยังไม่มีผู้ใช้</td></tr>';
-
-    // Scope-limited V39.26.34 admin editor. Editing other accounts uses the Worker API
-    // that already exists. Does not persist a department because Worker 22.6 has no such field.
-    body.querySelectorAll('[data-roster-safe-edit]').forEach(function(btn){
-      btn.onclick=function(){
-        var id=String(this.dataset.rosterSafeEdit);
-        var target=users.find(function(x){return String(x.id)===id});
-        if(!target)return;
-        var dialog=el('rosterSafeAccountEditor');
-        if(!dialog){
-          dialog=document.createElement('dialog');
-          dialog.id='rosterSafeAccountEditor';
-          dialog.className='roster-safe-account-dialog';
-          dialog.innerHTML='<form id="rosterSafeAccountForm" novalidate>'+ 
-            '<div class="roster-safe-editor-head"><h3>แก้ไขบัญชีผู้ใช้</h3><button type="button" id="rosterSafeCloseEditor" aria-label="ปิด">×</button></div>'+ 
-            '<label>Username<input id="rosterSafeEditUsername" type="text" readonly></label>'+ 
-            '<label>ชื่อที่แสดง<input id="rosterSafeEditName" type="text" maxlength="100" required></label>'+ 
-            '<label>บทบาท<select id="rosterSafeEditRole"><option value="admin">ผู้ดูแลระบบ</option><option value="scheduler">ผู้จัดตารางเวร</option><option value="approver">หัวหน้าผู้อนุมัติ</option><option value="viewer">ผู้ดูตาราง</option></select></label>'+ 
-            '<div class="roster-safe-password-heading">เปลี่ยนรหัสผ่าน (เว้นว่างไว้หากไม่ต้องการเปลี่ยน)</div>'+ 
-            '<label>รหัสผ่านใหม่<input id="rosterSafeEditPassword" type="password" minlength="8" maxlength="200" autocomplete="new-password" placeholder="อย่างน้อย 8 ตัวอักษร"></label>'+ 
-            '<label>ยืนยันรหัสผ่านใหม่<input id="rosterSafeEditConfirm" type="password" maxlength="200" autocomplete="new-password"></label>'+ 
-            '<div id="rosterSafeEditError" class="roster-safe-editor-error" role="alert"></div>'+ 
-            '<div class="roster-safe-editor-actions"><button type="button" id="rosterSafeCancelEditor">ยกเลิก</button><button type="submit" id="rosterSafeSaveEditor">บันทึก</button></div>'+ 
-            '</form>';
-          document.body.appendChild(dialog);
-          el('rosterSafeCloseEditor').onclick=function(){dialog.close()};
-          el('rosterSafeCancelEditor').onclick=function(){dialog.close()};
-          dialog.addEventListener('click',function(event){if(event.target===dialog)dialog.close()});
-          el('rosterSafeAccountForm').addEventListener('submit',async function(event){
-            event.preventDefault();
-            var form=event.currentTarget;
-            var id=form.dataset.userId;
-            var username=el('rosterSafeEditUsername').value;
-            var name=el('rosterSafeEditName').value.trim();
-            var role=el('rosterSafeEditRole').value;
-            var password=el('rosterSafeEditPassword').value;
-            var confirmPassword=el('rosterSafeEditConfirm').value;
-            var err=el('rosterSafeEditError');
-            err.textContent='';
-            if(!name){err.textContent='กรุณากรอกชื่อที่แสดง';return}
-            if(password||confirmPassword){
-              if(password.length<8||password.length>200){err.textContent='รหัสผ่านต้องมี 8–200 ตัวอักษร';return}
-              if(password!==confirmPassword){err.textContent='ยืนยันรหัสผ่านไม่ตรงกัน';return}
-              if(String(unitUser.id)===id){err.textContent='รหัสผ่านแอดมินของบัญชีปัจจุบัน ให้ใช้เมนูเปลี่ยนรหัสผ่านแอดมินในการตั้งค่า';return}
-            }
-            if(String(unitUser.id)===id&&role!=='admin'){err.textContent='ไม่สามารถเปลี่ยนบทบาทแอดมินของบัญชีที่กำลังใช้งานได้';return}
-            var payload={displayName:name,role:role};
-            if(password)payload.password=password;
-            var saveButton=el('rosterSafeSaveEditor');
-            saveButton.disabled=true;
-            try{
-              await authFetch('/api/admin/users/'+encodeURIComponent(id),{method:'PATCH',body:JSON.stringify(payload)});
-              dialog.close();
-              await loadAdminUsers();
-              setStatus('บันทึกข้อมูลบัญชี '+username+' เรียบร้อยแล้ว',true);
-            }catch(e){err.textContent='บันทึกไม่สำเร็จ: '+e.message}
-            finally{saveButton.disabled=false}
-          });
-        }
-        el('rosterSafeAccountForm').dataset.userId=id;
-        el('rosterSafeEditUsername').value=target.username||'';
-        el('rosterSafeEditName').value=target.displayName||'';
-        el('rosterSafeEditRole').value=target.role||'viewer';
-        el('rosterSafeEditPassword').value='';
-        el('rosterSafeEditConfirm').value='';
-        el('rosterSafeEditError').textContent='';
-        dialog.showModal();
-      };
-    });
     body.querySelectorAll('[data-user-toggle]').forEach(function(btn){
       btn.onclick=async function(){
         var id=this.dataset.userToggle;
@@ -14908,7 +14828,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <script src="home-v26.js?v=28.5"></script>
 
 <script src="summary-v34.js?v=34.8"></script>
-<script src="unit-v36.js?v=36.5"></script><script src="settings-v37.js?v=37.3"></script>
+<script src="unit-v36.js?v=36.5.1"></script><script src="settings-v37.js?v=37.3"></script>
 
 <script id="roster-v2944-topbar-only">
 (function(){
@@ -16257,8 +16177,13 @@ html body #page-home [data-home-version]{
     });
     var exitBtn=el('rosterSafeLogout');
     if(exitBtn)exitBtn.onclick=function(){
+      if(!confirm('ต้องการออกจากระบบหรือไม่?'))return;
+      if(typeof window.rosterV392634Logout!=='function'){
+        alert('ไม่สามารถออกจากระบบได้ กรุณาโหลดหน้าใหม่แล้วลองอีกครั้ง');
+        return;
+      }
       closeAll();
-      if(confirm('ต้องการออกจากระบบหรือไม่?'))logout();
+      window.rosterV392634Logout();
     };
   }
 
