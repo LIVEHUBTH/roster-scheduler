@@ -647,6 +647,67 @@ async function adminUpdateUser(request, env, identity, userId) {
   return json(request, env, { ok: true, user: publicUser(updated) });
 }
 
+
+// Multi-review workflow actions; updates are scoped to the existing month record.
+async function monthWorkflowAction(request, env, monthKey, action) {
+  const roles = action === 'reviewers' ? ['admin'] : ['admin', 'approver'];
+  const auth = await requireIdentity(request, env, roles);
+  if (!auth.ok) return json(request, env, {ok:false,error:auth.error}, auth.status);
+  const body = await readJson(request);
+  if (!body || typeof body !== 'object' || Array.isArray(body)) return json(request,env,{ok:false,error:'invalid_json'},400);
+  const key = 'month:' + monthKey;
+  // Optimistic compare-and-swap prevents two heads approving simultaneously from losing each other's votes.
+  for (let attempt=0;attempt<8;attempt++) {
+    const row=await getKey(env,key);
+    if (!row) return json(request,env,{ok:false,error:'month_not_found'},404);
+    let data;
+    try {data=JSON.parse(row.value)} catch {return json(request,env,{ok:false,error:'invalid_month_data'},409)}
+    if (!data || typeof data!=='object' || !data.workflow) return json(request,env,{ok:false,error:'workflow_not_found'},409);
+    const wf=data.workflow;
+    if (wf.locked) return json(request,env,{ok:false,error:'workflow_locked'},409);
+    const required=Array.isArray(wf.requiredReviewers)?wf.requiredReviewers.map(cleanUsername).filter(Boolean):[];
+    const reviews=Array.isArray(wf.reviews)?wf.reviews:[];
+    const actor=cleanUsername(auth.identity.user.username);
+    const now=new Date().toISOString();
+    if (action==='reviewers') {
+      if (!Array.isArray(body.requiredReviewers)) return json(request,env,{ok:false,error:'invalid_reviewers'},400);
+      const next=[...new Set(body.requiredReviewers.map(cleanUsername).filter(Boolean))];
+      if (next.length>50 || next.some(x=>!validUsername(x))) return json(request,env,{ok:false,error:'invalid_reviewers'},400);
+      // Preserve existing votes if the reviewer roster has not changed.
+      if (JSON.stringify(next)!==JSON.stringify(required)) {
+        if (reviews.some(r=>r && (r.done || r.approved))) return json(request,env,{ok:false,error:'reviews_already_recorded'},409);
+        wf.reviews=[];
+      }
+      wf.requiredReviewers=next;
+    } else if (action==='review') {
+      if (wf.status!=='submitted') return json(request,env,{ok:false,error:'workflow_not_submitted'},409);
+      if (!required.length) return json(request,env,{ok:false,error:'reviewers_not_configured'},409);
+      if (auth.identity.kind!=='session' || !required.includes(actor)) return json(request,env,{ok:false,error:'reviewer_not_assigned'},403);
+      if (body.approved!==true) return json(request,env,{ok:false,error:'invalid_review_action'},400);
+      const idx=reviews.findIndex(r=>cleanUsername(r?.username)===actor);
+      if (idx>=0 && (reviews[idx].done || reviews[idx].approved)) return json(request,env,{ok:true,data});
+      const entry={username:actor,name:auth.identity.user.display_name||actor,done:true,approved:true,at:now,approvedAt:now,comment:String(body.comment||'').slice(0,2000)};
+      if (idx>=0) reviews[idx]=entry; else reviews.push(entry);
+      wf.reviews=reviews;
+      // Aggregate approval stays submitted until every assigned reviewer has voted.
+      if (required.every(u=>reviews.some(r=>cleanUsername(r?.username)===u && (r.done||r.approved)))) {
+        wf.status='approved';wf.approvedAt=now;wf.approvedBy='หัวหน้าครบ '+required.length+' คน';
+      }
+    } else if (action==='approve') {
+      if (wf.status!=='submitted') return json(request,env,{ok:false,error:'workflow_not_submitted'},409);
+      if (required.length && !required.every(u=>reviews.some(r=>cleanUsername(r?.username)===u && (r.done||r.approved)))) return json(request,env,{ok:false,error:'reviews_incomplete'},409);
+      wf.status='approved';wf.approvedAt=now;wf.approvedBy=auth.identity.user.display_name||actor;
+    } else return json(request,env,{ok:false,error:'not_found'},404);
+    const updated=await env.DB.prepare('UPDATE app_data SET value = ?, updated_at = ? WHERE key = ? AND value = ?')
+      .bind(JSON.stringify(data),now,key,row.value).run();
+    if ((updated.meta?.changes||0)>0) {
+      await audit(env,auth.identity.user,'workflow_'+action,{monthKey});
+      return json(request,env,{ok:true,data,updatedAt:now});
+    }
+  }
+  return json(request,env,{ok:false,error:'concurrent_update_retry'},409);
+}
+
 async function cleanupExpiredSessions(env) {
   const now = new Date().toISOString();
   await env.DB.prepare(
@@ -808,6 +869,11 @@ export default {
           const updatedAt = await putKey(env, 'config', body);
           return json(request, env, { ok: true, updatedAt });
         }
+      }
+
+      const workflowMatch = path.match(/^\/api\/month\/(\d{4}-\d{2})\/workflow\/(reviewers|review|approve)$/);
+      if (workflowMatch && request.method === 'POST') {
+        return monthWorkflowAction(request, env, workflowMatch[1], workflowMatch[2]);
       }
 
       const monthMatch = path.match(/^\/api\/month\/(\d{4}-\d{2})$/);
