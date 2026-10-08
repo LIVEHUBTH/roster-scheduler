@@ -1,4 +1,4 @@
-<!-- ROSTER V39.26.32 — USER DELETE + APPROVAL ACTION FIX ONLY -->
+<!-- ROSTER V39.26.32 — MULTI-REVIEW SYNC PATCH (OTHER SYSTEMS UNCHANGED) -->
 <!DOCTYPE html>
 <!-- BUILD: HOME  HISTORY-FRAME-MATCH 2026-08-25 -->
 <!-- BUILD: ADMIN PASSWORD UI  / 2026-08-25 -->
@@ -13253,6 +13253,10 @@ async function saveMultiReviewers(){
   if(workflow.locked){showActionFeedback('❌ ตารางถูกล็อกแล้ว','err');return}
   var raw=el('multiReviewersInput')?el('multiReviewersInput').value:'';
   var list=raw.split(/[,\n]+/).map(function(x){return x.trim().toLowerCase()}).filter(Boolean).filter(function(x,i,a){return a.indexOf(x)===i});
+  if(JSON.stringify(list)===JSON.stringify(workflow.requiredReviewers||[])){
+    showActionFeedback('ℹ️ รายชื่อผู้ตรวจไม่เปลี่ยนแปลง ไม่ต้องบันทึกซ้ำ • ใช้ปุ่มรีเฟรชผลอนุมัติ','info');return;
+  }
+  if((workflow.reviews||[]).some(function(r){return r.approved||r.done})&&!confirm('การเปลี่ยนรายชื่อผู้ตรวจอาจรีเซ็ตผลอนุมัติเดิม ต้องการดำเนินการต่อหรือไม่?'))return;
   try{
     var r=await cloudWorkflowAction('reviewers',{requiredReviewers:list});
     if(r&&r.data)applyServerMonthData(r.data);
@@ -13260,6 +13264,29 @@ async function saveMultiReviewers(){
     showActionFeedback(list.length?'✅ บันทึกผู้ตรวจ '+list.length+' คนแล้ว':'ℹ️ ยกเลิกการกำหนดผู้ตรวจหลายคนแล้ว','ok');
     renderUnitWorkflow();
   }catch(err){showActionFeedback('❌ บันทึกผู้ตรวจไม่สำเร็จ: '+err.message,'err');setStatus('บันทึกผู้ตรวจไม่สำเร็จ: '+err.message,false)}
+}
+async function refreshMultiReviewStatus(){
+  clearActionFeedback();
+  var key=currentKey();
+  try{
+    if(!cloud.connected&&!(await connectCloud(false)))throw new Error('ไม่สามารถเชื่อมต่อฐานข้อมูลออนไลน์');
+    var r=await cloudRequest('/api/month/'+encodeURIComponent(key),{method:'GET'});
+    if(!r||!r.found||!r.data)throw new Error('ไม่พบข้อมูลตารางเดือนนี้บนเซิร์ฟเวอร์');
+    if(key!==currentKey())return;
+    applyServerMonthData(r.data);
+    renderUnitWorkflow();
+    showActionFeedback('🔄 โหลดผลอนุมัติล่าสุดแล้ว • '+completedReviewCount()+'/'+workflow.requiredReviewers.length+' คน','ok');
+  }catch(err){showActionFeedback('❌ รีเฟรชผลอนุมัติไม่สำเร็จ: '+err.message,'err')}
+}
+function installMultiReviewRefreshButton(){
+  var save=el('multiReviewersSaveBtn');
+  if(!save||el('multiReviewRefreshBtn'))return;
+  var btn=document.createElement('button');
+  btn.id='multiReviewRefreshBtn';btn.type='button';
+  btn.textContent='🔄 รีเฟรชผลอนุมัติ';
+  btn.style.marginLeft='6px';
+  btn.onclick=refreshMultiReviewStatus;
+  save.insertAdjacentElement('afterend',btn);
 }
 async function markMultiReviewDone(){
   clearActionFeedback();
@@ -13279,8 +13306,9 @@ async function markMultiReviewDone(){
       workflow.status='submitted';
       persistWorkflow();
     }
-    auditWorkflow('หัวหน้าอนุมัติตาราง • '+unitUser.name);
-    saveMonth(true);
+    // Approval is persisted by the workflow endpoint. Do not PUT a stale month
+    // snapshot here: it could overwrite another reviewer's approval.
+    localStorage.setItem(storageKey(currentKey()),JSON.stringify(monthPayload()));
     showActionFeedback('✅ '+unitUser.name+' อนุมัติตารางแล้ว • '+completedReviewCount()+'/'+workflow.requiredReviewers.length+' คน • ยังไม่อนุมัติรวมจนกว่าจะครบ','ok');
     setStatus('บันทึกการอนุมัติของ '+unitUser.name+' แล้ว • รอหัวหน้าคนอื่น',true);
     renderUnitWorkflow();
@@ -13409,6 +13437,7 @@ function renderUnitWorkflow(){
   if(el('unitReadOnlyNotice')){
     el('unitReadOnlyNotice').textContent=workflow.locked?'🔒 ล็อกตารางเรียบร้อยแล้ว ตารางเดือนนี้เป็นแบบอ่านอย่างเดียว':'สถานะตารางปัจจุบัน: '+label;
   }
+  installMultiReviewRefreshButton();
   if(el('multiReviewersInput'))el('multiReviewersInput').value=(workflow.requiredReviewers||[]).join('\n');
   if(el('multiReviewCount'))el('multiReviewCount').textContent=multiReviewEnabled()?(completedReviewCount()+'/'+workflow.requiredReviewers.length+' คนอนุมัติแล้ว'+(workflow.legacyApproval?' • พบประวัติอนุมัติเดิมโดย '+workflow.legacyApproval.name:'')+' • '+(canApprove()?'อนุมัติรวมได้':'รอหัวหน้าอนุมัติครบ')):'ไม่ได้กำหนดผู้ตรวจหลายคน';
   if(el('submitWithAcceptedConflictsBtn'))el('submitWithAcceptedConflictsBtn').style.display=(canSubmit()&&window.__autoFixHasRemainingConflicts)?'inline-flex':'none';
