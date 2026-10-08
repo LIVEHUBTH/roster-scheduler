@@ -9189,9 +9189,9 @@ html.phone-device body.s37-settings-open .header-user-status{
         <button id="unitUnlockBtn"><span class="r29-btn-icon r29-pi-blue" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="3" fill="currentColor"/><path d="M9 10V8a4 4 0 0 1 7-2.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><span>ปลดล็อก</span></button>
       </div>
       <div class="multi-review-panel" id="multiReviewPanel">
-        <div class="multi-review-head"><b>👥 หัวหน้าหลายคนตรวจตาราง</b><span id="multiReviewCount" class="multi-review-count">ยังไม่ได้กำหนดผู้ตรวจ</span></div>
+        <div class="multi-review-head"><b>👥 หัวหน้าหลายคนอนุมัติตาราง</b><span id="multiReviewCount" class="multi-review-count">ยังไม่ได้กำหนดผู้ตรวจ</span></div>
         <div class="multi-review-config" id="multiReviewConfig">
-          <label class="field">บัญชีหัวหน้าผู้ตรวจ (Username) — 1 คนต่อบรรทัด<textarea id="multiReviewersInput" placeholder="หัวหน้าคนที่ 1
+          <label class="field">บัญชีหัวหน้าผู้อนุมัติ (Username) — 1 คนต่อบรรทัด<textarea id="multiReviewersInput" placeholder="หัวหน้าคนที่ 1
 หัวหน้าคนที่ 2
 หัวหน้าคนที่ 3"></textarea></label>
           <button id="multiReviewersSaveBtn">💾 บันทึกผู้ตรวจ</button>
@@ -9199,10 +9199,10 @@ html.phone-device body.s37-settings-open .header-user-status{
         <div id="multiReviewList" class="multi-review-list"></div>
         <div class="multi-review-comment"><label class="field">ความคิดเห็นของผู้ตรวจ<textarea id="multiReviewComment" placeholder="ข้อสังเกต / ความเห็นในการตรวจ (ไม่บังคับ)"></textarea></label></div>
         <div class="multi-review-actions">
-          <button id="multiReviewDoneBtn" class="workflow-btn-approve">✓ ตรวจแล้ว</button>
+          <button id="multiReviewDoneBtn" class="workflow-btn-approve">✓ อนุมัติตารางนี้</button>
           <button id="multiReviewReturnBtn" class="workflow-btn-return">↩ ส่งกลับแก้ไข</button>
         </div>
-        <div class="multi-review-note">หัวหน้าแต่ละคนกด “อนุมัติตาราง” ได้แยกกัน ระบบจะบันทึกว่าใครอนุมัติแล้ว และจะเปลี่ยนสถานะเป็น “อนุมัติแล้ว” เมื่อหัวหน้าที่กำหนดอนุมัติครบทุกคน</div>
+        <div class="multi-review-note">หัวหน้าที่กำหนดไว้แต่ละคนต้องกด “อนุมัติตารางนี้” แยกกัน ระบบจะแสดงชื่อและเวลาที่อนุมัติให้ทุกบัญชีเห็น และจะอนุมัติตารางโดยรวมได้เมื่อหัวหน้าที่กำหนดอนุมัติครบทุกคน</div>
       </div>
       <div id="unitActionFeedback" class="action-feedback"></div>
       <div id="unitConflictPanel" class="conflict-detail-panel">
@@ -10442,19 +10442,6 @@ function normalizeWorkflow(w){
   d.requiredReviewers=d.requiredReviewers.map(function(x){return String(x||'').trim().toLowerCase()}).filter(Boolean).filter(function(x,i,a){return a.indexOf(x)===i});
   if(['draft','submitted','approved'].indexOf(d.status)<0)d.status='draft';
   d.locked=!!d.locked;
-  /* Migrate the old multi-review behavior: a single old global approval must not
-     make a 6-person approval round look fully approved. Reopen as submitted so
-     each configured reviewer can record an individual approval. */
-  if(d.status==='approved'&&d.requiredReviewers.length){
-    var approvedCount=d.requiredReviewers.filter(function(u){return d.reviews.some(function(r){return String(r.username||'').toLowerCase()===u&&r.approved})}).length;
-    if(approvedCount<d.requiredReviewers.length){
-      d.status='submitted';
-      d.locked=false;
-      d.approvedAt='';
-      d.approvedBy='';
-      d.audit.unshift({at:new Date().toISOString(),user:'ระบบ',role:'system',action:'ปรับสถานะจากอนุมัติรวมเดิมกลับเป็นส่งตรวจ เพื่อรออนุมัติรายหัวหน้า'});
-    }
-  }
   return d;
 }
 
@@ -10627,7 +10614,7 @@ async function loadAdminUsers(){
   body.innerHTML='<tr><td colspan="5">กำลังโหลด...</td></tr>';
   try{
     var data=await authFetch('/api/admin/users',{method:'GET'});
-    var users=(data.users||[]).filter(function(u){return !u.isDeleted});
+    var users=data.users||[];
     body.innerHTML=users.length?users.map(function(u){
       var active=u.isActive;
       return '<tr>'+
@@ -10665,7 +10652,13 @@ async function loadAdminUsers(){
                 await authFetch('/api/admin/users/'+id+'/delete',{method:'POST'});
               }catch(secondErr){
                 if(secondErr&&/HTTP (404|405)/.test(String(secondErr.message||''))){
-                  await authFetch('/api/admin/users/'+id,{method:'POST',body:JSON.stringify({action:'delete'})});
+                  try{
+                    await authFetch('/api/admin/users/'+id,{method:'POST',body:JSON.stringify({action:'delete'})});
+                  }catch(thirdErr){
+                    if(thirdErr&&/HTTP (404|405)/.test(String(thirdErr.message||''))){
+                      await authFetch('/api/admin/users/delete',{method:'POST',body:JSON.stringify({userId:id})});
+                    }else throw thirdErr;
+                  }
                 }else throw secondErr;
               }
             }else throw firstErr;
@@ -10698,7 +10691,7 @@ async function createUserAccount(){
     await loadAdminUsers();
     setStatus('สร้างบัญชีผู้ใช้งานเรียบร้อยแล้ว',true);
   }catch(err){
-    var map={username_exists:'Username นี้มีอยู่แล้ว',password_too_short:'รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร',invalid_username:'Username ต้องมี 2–50 ตัว และใช้ a-z, 0-9, จุด ขีดกลาง หรือขีดล่าง',invalid_display_name:'ชื่อที่แสดงไม่ถูกต้อง',invalid_role:'บทบาทไม่ถูกต้อง',cannot_remove_own_admin_access:'ไม่สามารถลบบัญชี Admin ที่กำลังใช้งานอยู่',cannot_delete_own_account:'ไม่สามารถลบบัญชีที่กำลังใช้งานอยู่',user_not_found:'ไม่พบบัญชีผู้ใช้',delete_user_failed:'ลบบัญชีไม่สำเร็จจากข้อจำกัดของฐานข้อมูล'};
+    var map={username_exists:'Username นี้มีอยู่แล้ว',password_too_short:'รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร',invalid_username:'Username ต้องมี 2–50 ตัว และใช้ a-z, 0-9, จุด ขีดกลาง หรือขีดล่าง',invalid_display_name:'ชื่อที่แสดงไม่ถูกต้อง',invalid_role:'บทบาทไม่ถูกต้อง',cannot_remove_own_admin_access:'ไม่สามารถลบบัญชี Admin ที่กำลังใช้งานอยู่',cannot_delete_own_account:'ไม่สามารถลบบัญชีที่กำลังใช้งานอยู่',user_not_found:'ไม่พบบัญชีผู้ใช้'};
     setStatus('สร้างบัญชีไม่สำเร็จ: '+(map[err.message]||err.message),false);
   }
 }
@@ -10711,22 +10704,13 @@ function formatUnitTime(v){
 }
 function canRosterEdit(){return (unitUser.role==='scheduler'||unitUser.role==='admin')&&!workflow.locked&&workflow.status==='draft'}
 function canSubmit(){return (unitUser.role==='scheduler'||unitUser.role==='admin')&&!workflow.locked&&workflow.status==='draft'}
-function currentApprovalEntry(){if(!workflow||!Array.isArray(workflow.reviews))return null;var u=String(unitUser.username||'').trim().toLowerCase();return workflow.reviews.find(function(x){return String(x.username||'').toLowerCase()===u})||null}
-function completedApprovalCount(){if(!workflow||!Array.isArray(workflow.requiredReviewers))return 0;return workflow.requiredReviewers.filter(function(u){return workflow.reviews.some(function(r){return String(r.username||'').toLowerCase()===String(u).toLowerCase()&&r.approved})}).length}
-function allApprovalsComplete(){return !multiReviewEnabled()||completedApprovalCount()>=workflow.requiredReviewers.length}
-function canApprove(){
-  if(!((unitUser.role==='approver'||unitUser.role==='admin')&&!workflow.locked&&workflow.status==='submitted'))return false;
-  if(!multiReviewEnabled())return true;
-  var u=String(unitUser.username||'').trim().toLowerCase();
-  var entry=currentApprovalEntry();
-  return workflow.requiredReviewers.indexOf(u)>=0 && !(entry&&entry.approved);
-}
+function canApprove(){return (unitUser.role==='approver'||unitUser.role==='admin')&&!workflow.locked&&workflow.status==='submitted'&&allReviewsComplete()}
 function canReturn(){return (unitUser.role==='approver'||unitUser.role==='admin')&&!workflow.locked&&(workflow.status==='submitted'||workflow.status==='approved')}
 function canLock(){return (unitUser.role==='approver'||unitUser.role==='admin')&&!workflow.locked&&workflow.status==='approved'}
 function canUnlock(){return unitUser.role==='admin'&&workflow.locked}
 function multiReviewEnabled(){return !!(workflow&&workflow.requiredReviewers&&workflow.requiredReviewers.length)}
 function currentReviewerEntry(){if(!workflow||!Array.isArray(workflow.reviews))return null;var u=String(unitUser.username||'').trim().toLowerCase();return workflow.reviews.find(function(x){return String(x.username||'').toLowerCase()===u})||null}
-function completedReviewCount(){if(!workflow||!Array.isArray(workflow.requiredReviewers))return 0;return workflow.requiredReviewers.filter(function(u){return workflow.reviews.some(function(r){return String(r.username||'').toLowerCase()===String(u).toLowerCase()&&r.done})}).length}
+function completedReviewCount(){if(!workflow||!Array.isArray(workflow.requiredReviewers))return 0;return workflow.requiredReviewers.filter(function(u){return workflow.reviews.some(function(r){return String(r.username||'').toLowerCase()===String(u).toLowerCase()&&(r.approved||r.done)})}).length}
 function allReviewsComplete(){return !multiReviewEnabled()||completedReviewCount()>=workflow.requiredReviewers.length}
 function canReview(){return (unitUser.role==='approver'||unitUser.role==='admin')&&!workflow.locked&&workflow.status==='submitted'&&(!multiReviewEnabled()||workflow.requiredReviewers.indexOf(String(unitUser.username||'').toLowerCase())>=0)}
 function requireRosterEdit(action){
@@ -13247,53 +13231,30 @@ function saveMultiReviewers(){
   persistWorkflow();
   showActionFeedback(list.length?'✅ บันทึกผู้ตรวจ '+list.length+' คนแล้ว':'ℹ️ ยกเลิกการกำหนดผู้ตรวจหลายคนแล้ว','ok');
 }
-function markMultiReviewDone(){
+async function markMultiReviewDone(){
   clearActionFeedback();
-  if(!canReview()){showActionFeedback('❌ บัญชีนี้ไม่มีสิทธิ์ตรวจ หรือสถานะยังไม่อยู่ในขั้นส่งตรวจ','err');return}
+  if(!canReview()){showActionFeedback('❌ บัญชีนี้ไม่มีสิทธิ์อนุมัติ หรือสถานะยังไม่อยู่ในขั้นส่งตรวจ','err');return}
   var errors=validate(false);
-  if(errors&&!workflow.overrideConflicts){renderConflictDetails();showActionFeedback('❌ ตรวจรับรองไม่ได้: พบข้อขัดแย้ง '+errors+' จุด','err');return}
+  if(errors&&!workflow.overrideConflicts){renderConflictDetails();showActionFeedback('❌ อนุมัติตารางไม่ได้: พบข้อขัดแย้ง '+errors+' จุด','err');return}
   var u=String(unitUser.username||'').trim().toLowerCase();
   var now=new Date().toISOString();
   var entry=workflow.reviews.find(function(x){return String(x.username||'').toLowerCase()===u});
-  if(entry){entry.done=true;entry.at=now;entry.name=unitUser.name;entry.comment=(el('multiReviewComment')&&el('multiReviewComment').value||'').trim();}
-  else workflow.reviews.push({username:u,name:unitUser.name,done:true,approved:false,at:now,comment:(el('multiReviewComment')&&el('multiReviewComment').value||'').trim()});
-  auditWorkflow('หัวหน้าตรวจแล้ว • '+unitUser.name);
+  var comment=(el('multiReviewComment')&&el('multiReviewComment').value||'').trim();
+  if(entry){entry.done=true;entry.approved=true;entry.at=now;entry.approvedAt=now;entry.name=unitUser.name;entry.comment=comment;}
+  else workflow.reviews.push({username:u,name:unitUser.name,done:true,approved:true,at:now,approvedAt:now,comment:comment});
+  auditWorkflow('หัวหน้าอนุมัติตาราง • '+unitUser.name);
   persistWorkflow();
-  showActionFeedback('✅ บันทึกผลการตรวจแล้ว '+completedReviewCount()+'/'+workflow.requiredReviewers.length+' คน','ok');
+  showActionFeedback('✅ '+unitUser.name+' อนุมัติตารางแล้ว • '+completedReviewCount()+'/'+workflow.requiredReviewers.length+' คน','ok');
+  setStatus('บันทึกการอนุมัติของ '+unitUser.name+' แล้ว',true);
+  renderUnitWorkflow();
 }
 function approveWorkflow(){
   clearActionFeedback();
-  if(!canApprove()){
-    var msg=multiReviewEnabled()?'❌ อนุมัติไม่ได้: บัญชีนี้ไม่มีสิทธิ์อนุมัติ หรืออนุมัติไปแล้ว':'❌ อนุมัติไม่ได้: ต้องอยู่ในสถานะ “ส่งตรวจแล้ว” และใช้บทบาท Approver หรือ Admin';
-    showActionFeedback(msg,'err');setStatus('บัญชีนี้ไม่มีสิทธิ์อนุมัติ หรืออนุมัติไปแล้ว',false);return;
-  }
+  if(!canApprove()){showActionFeedback(multiReviewEnabled()?'❌ ยังอนุมัติตารางรวมไม่ได้: หัวหน้าที่กำหนดยังอนุมัติไม่ครบ '+completedReviewCount()+'/'+workflow.requiredReviewers.length+' คน':'❌ อนุมัติไม่ได้: ต้องอยู่ในสถานะ “ส่งตรวจแล้ว” และใช้บทบาท Approver หรือ Admin','err');setStatus(multiReviewEnabled()?'รอหัวหน้าที่กำหนดอนุมัติครบ '+completedReviewCount()+'/'+workflow.requiredReviewers.length+' คน':'ต้องอยู่ในสถานะส่งตรวจ และใช้บทบาทหัวหน้าผู้อนุมัติหรือ Admin',false);return}
   var errors=validate(false);
   if(errors&&!workflow.overrideConflicts){renderConflictDetails();showActionFeedback('❌ อนุมัติไม่ได้: พบข้อขัดแย้ง '+errors+' จุด • ดูรายละเอียดด้านล่าง','err');setStatus('อนุมัติไม่ได้ พบข้อขัดแย้ง '+errors+' จุด',false);return}
-  var u=String(unitUser.username||'').trim().toLowerCase();
-  var now=new Date().toISOString();
-  if(multiReviewEnabled()){
-    var entry=workflow.reviews.find(function(x){return String(x.username||'').toLowerCase()===u});
-    if(entry){entry.approved=true;entry.approvedAt=now;entry.approvedBy=unitUser.name;entry.name=unitUser.name;entry.comment=(el('multiReviewComment')&&el('multiReviewComment').value||'').trim();entry.done=true;entry.at=entry.at||now;}
-    else workflow.reviews.push({username:u,name:unitUser.name,done:true,approved:true,at:now,approvedAt:now,approvedBy:unitUser.name,comment:(el('multiReviewComment')&&el('multiReviewComment').value||'').trim()});
-    auditWorkflow('หัวหน้าอนุมัติตาราง • '+unitUser.name);
-    if(allApprovalsComplete()){
-      workflow.status='approved';
-      workflow.approvedAt=now;
-      workflow.approvedBy='อนุมัติครบ '+workflow.requiredReviewers.length+' คน';
-      auditWorkflow('อนุมัติตารางเวรครบทุกหัวหน้า');
-      persistWorkflow();
-      showActionFeedback('✅ อนุมัติครบทุกหัวหน้าแล้ว ตารางเปลี่ยนเป็น “อนุมัติแล้ว”','ok');
-      setStatus('อนุมัติตารางเวรครบทุกหัวหน้าแล้ว',true);
-    }else{
-      persistWorkflow();
-      var left=Math.max(0,workflow.requiredReviewers.length-completedApprovalCount());
-      showActionFeedback('✅ บันทึกการอนุมัติของ '+unitUser.name+' แล้ว • '+completedApprovalCount()+'/'+workflow.requiredReviewers.length+' คน • เหลือ '+left+' คน','ok');
-      setStatus('บันทึกการอนุมัติแล้ว รอหัวหน้าคนอื่นอีก '+left+' คน',true);
-    }
-    return;
-  }
   workflow.status='approved';
-  workflow.approvedAt=now;
+  workflow.approvedAt=new Date().toISOString();
   workflow.approvedBy=unitUser.name;
   auditWorkflow('อนุมัติตารางเวร');
   persistWorkflow();
@@ -13337,8 +13298,27 @@ function renderAudit(){
     }).join(''):'<tr><td colspan="3" style="text-align:center;color:#8b8f99">ยังไม่มีประวัติ</td></tr>';
   }
 }
+function migrateLegacySingleApproval(){
+  if(!workflow||workflow.status!=='approved'||!multiReviewEnabled()||completedReviewCount()>=workflow.requiredReviewers.length)return false;
+  var approvedBy=String(workflow.approvedBy||'').trim().toLowerCase();
+  var me=String(unitUser.username||'').trim().toLowerCase();
+  var myName=String(unitUser.name||'').trim().toLowerCase();
+  if(!me||workflow.requiredReviewers.indexOf(me)<0)return false;
+  if(!approvedBy|| (approvedBy!==me && approvedBy!==myName))return false;
+  if(!Array.isArray(workflow.reviews))workflow.reviews=[];
+  if(!workflow.reviews.some(function(r){return String(r.username||'').toLowerCase()===me})){
+    workflow.reviews.push({username:me,name:unitUser.name,done:true,approved:true,at:workflow.approvedAt||new Date().toISOString(),approvedAt:workflow.approvedAt||new Date().toISOString(),comment:''});
+  }
+  workflow.status='submitted';
+  workflow.approvedAt='';workflow.approvedBy='';
+  workflow.__legacyApprovalMigrated=true;
+  localStorage.setItem(storageKey(currentKey()),JSON.stringify(monthPayload()));
+  cloudSaveMonth(monthPayload());
+  return true;
+}
 function renderUnitWorkflow(){
   if(!workflow)workflow=defaultWorkflow();
+  migrateLegacySingleApproval();
   if(el('headerCurrentUser'))el('headerCurrentUser').textContent=unitUser.name||unitUser.username||'ผู้ใช้งาน';
   if(el('headerCurrentRole'))el('headerCurrentRole').textContent=(unitUser.username?'@'+unitUser.username+' • ':'')+roleLabel(unitUser.role)+' • ออนไลน์';
   if(el('unitRoleBadge'))el('unitRoleBadge').textContent=(unitUser.name||'ผู้ใช้งาน')+' • '+roleLabel(unitUser.role);
@@ -13382,11 +13362,11 @@ function renderUnitWorkflow(){
     el('unitReadOnlyNotice').textContent=workflow.locked?'🔒 ล็อกตารางเรียบร้อยแล้ว ตารางเดือนนี้เป็นแบบอ่านอย่างเดียว':'สถานะตารางปัจจุบัน: '+label;
   }
   if(el('multiReviewersInput'))el('multiReviewersInput').value=(workflow.requiredReviewers||[]).join('\n');
-  if(el('multiReviewCount'))el('multiReviewCount').textContent=multiReviewEnabled()?(completedApprovalCount()+'/'+workflow.requiredReviewers.length+' คนอนุมัติแล้ว • '+(workflow.status==='approved'?'อนุมัติครบแล้ว':(Math.max(0,workflow.requiredReviewers.length-completedApprovalCount())+' คนรออนุมัติ'))):'ไม่ได้กำหนดผู้ตรวจหลายคน';
+  if(el('multiReviewCount'))el('multiReviewCount').textContent=multiReviewEnabled()?(completedReviewCount()+'/'+workflow.requiredReviewers.length+' คนอนุมัติแล้ว • '+(canApprove()?'อนุมัติรวมได้':'รอหัวหน้าอนุมัติครบ')):'ไม่ได้กำหนดผู้ตรวจหลายคน';
   if(el('submitWithAcceptedConflictsBtn'))el('submitWithAcceptedConflictsBtn').style.display=(canSubmit()&&window.__autoFixHasRemainingConflicts)?'inline-flex':'none';
   if(el('multiReviewList')){
     var rr=workflow.requiredReviewers||[];
-    el('multiReviewList').innerHTML=rr.length?rr.map(function(u){var r=(workflow.reviews||[]).find(function(x){return String(x.username||'').toLowerCase()===String(u).toLowerCase()});var nm=r?(r.name||u):u;var approved=!!(r&&r.approved);var done=!!(r&&r.done);var meta=approved?('อนุมัติแล้ว • '+formatUnitTime(r.approvedAt||r.at)+(r.comment?' • '+r.comment:'')):(done?('ตรวจแล้ว • '+formatUnitTime(r.at)+(r.comment?' • '+r.comment:'')):'รออนุมัติ');return '<div class="multi-review-item '+(approved?'done':'')+'"><span class="multi-review-dot"></span><div><b>'+esc(nm)+'</b><small>'+esc(meta)+'</small></div><span>'+(approved?'✓':'รอ')+'</span></div>';}).join(''):'<div class="multi-review-note">ยังไม่ได้กำหนดรายชื่อหัวหน้าผู้ตรวจ</div>';
+    el('multiReviewList').innerHTML=rr.length?rr.map(function(u){var r=(workflow.reviews||[]).find(function(x){return String(x.username||'').toLowerCase()===String(u).toLowerCase()&&(x.approved||x.done)});var nm=r?(r.name||u):u;var meta=r?('อนุมัติแล้ว • '+formatUnitTime(r.approvedAt||r.at)+(r.comment?' • '+r.comment:'')):'รออนุมัติ';return '<div class="multi-review-item '+(r?'done':'')+'"><span class="multi-review-dot"></span><div><b>'+esc(nm)+'</b><small>'+esc(meta)+'</small></div><span>'+(r?'✓':'รอ')+'</span></div>';}).join(''):'<div class="multi-review-note">ยังไม่ได้กำหนดรายชื่อหัวหน้าผู้อนุมัติ</div>';
   }
   renderAudit();
   applyUnitPermissions();
