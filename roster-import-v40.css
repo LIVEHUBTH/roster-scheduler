@@ -1,0 +1,31 @@
+/* Isolated import workspace: does not override existing roster or approval styles. */
+#ri40Modal{position:fixed;inset:0;z-index:9000;background:rgba(38,30,57,.58);display:none;align-items:center;justify-content:center;padding:12px;font-family:inherit}
+#ri40Modal.ri40-open{display:flex}
+#ri40Modal *{box-sizing:border-box}
+#ri40Modal .ri40-panel{width:min(1200px,100%);max-height:94dvh;min-height:240px;overflow:auto;background:#fff;border:1px solid #f1dbe5;border-radius:21px;padding:18px;box-shadow:0 22px 60px #45213b35}
+#ri40Modal .ri40-head{display:flex;justify-content:space-between;align-items:center;gap:12px;position:sticky;top:-18px;background:#fff;padding:8px 0 12px;z-index:2}
+#ri40Modal h2{font-size:19px;margin:0;color:#a53e74}#ri40Modal p{line-height:1.65;font-size:13px;margin:5px 0 12px;color:#677087}
+#ri40Modal .ri40-close{font-size:23px;padding:0;width:42px;min-height:42px;background:#fff1f6;color:#bc4778}
+#ri40Modal .ri40-tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:12px 0}
+#ri40Modal button,#ri40Modal .ri40-pick{border:1px solid #f3d6e4;border-radius:11px;min-height:39px;padding:8px 12px;background:#fff1f7;color:#a13c6f;font-size:13px;font-weight:750;cursor:pointer}
+#ri40Modal button:disabled{opacity:.5;cursor:not-allowed}#ri40Modal .ri40-main{background:#eaf9f4;color:#167d65;border-color:#bce8d9}
+#ri40Modal .ri40-file{display:none}#ri40Modal .ri40-guide{padding:10px;border:1px solid #eadff2;border-radius:11px;background:#fbf8ff}
+#ri40Modal .ri40-gridsettings{display:flex;flex-wrap:wrap;gap:10px;padding:8px 0}
+#ri40Modal .ri40-gridsettings label{display:flex;flex-direction:column;gap:3px;font-size:11px;color:#60677b}
+#ri40Modal .ri40-gridsettings input{width:85px;min-height:34px;border:1px solid #ddd;border-radius:8px;padding:4px 6px}
+#ri40Modal #ri40ImageBox{max-height:260px;overflow:auto;position:relative;border-radius:11px;border:1px solid #eee;margin:8px 0}
+#ri40Modal #ri40ImageBox img{width:100%;height:auto;display:block}#ri40Modal #ri40ImageBox svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+#ri40Modal .ri40-state{font-size:12px;font-weight:700;color:#a23c70;margin:8px 0;white-space:pre-wrap}
+#ri40Modal .ri40-tablebox{overflow:auto;max-height:49dvh;border:1px solid #e9e1ea;border-radius:11px}
+#ri40Modal table{border-collapse:separate;border-spacing:0;width:max-content;font-size:11px}
+#ri40Modal th,#ri40Modal td{border-right:1px solid #eee;border-bottom:1px solid #eee;padding:3px;min-width:118px;text-align:center}
+#ri40Modal th{position:sticky;top:0;background:#fff1f7;color:#8b4b69;z-index:1}
+#ri40Modal th:first-child,#ri40Modal td:first-child{position:sticky;left:0;min-width:43px;background:#fbf9fc;z-index:2;font-weight:800}
+#ri40Modal td input{width:112px;border:1px solid #dedce8;border-radius:6px;min-height:31px;padding:4px;font-size:11px}
+#ri40Modal td.ri40-bad input{border-color:#e0565b;background:#fff2f2}#ri40Modal td.ri40-good input{background:#f0fcf7;border-color:#c0e7d7}
+#ri40Modal .ri40-footer{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-top:12px}
+#ri40Modal .ri40-footer label{display:flex;align-items:center;gap:7px;font-size:12px}
+#ri40Modal .ri40-footer input[type=checkbox]{width:18px;height:18px}
+#ri40Modal .ri40-danger{color:#ba2649;font-weight:800}
+@media(max-width:600px){#ri40Modal{padding:3px;align-items:stretch}#ri40Modal .ri40-panel{max-height:100dvh;border-radius:12px;padding:12px}#ri40Modal .ri40-head{top:-12px}}
+@media print{#ri40Modal{display:none!important}}
