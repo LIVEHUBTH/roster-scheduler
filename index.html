@@ -9067,7 +9067,7 @@ html body #page-roster button#ri40Open .ri40-orange-icon svg{
         <button class="r29-action r29-run" id="runBtn"><span class="r29-toolbar-icon pink" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 17c4-1 8-5 9-9l3 3c-4 1-8 5-9 9l-3-3Z" fill="currentColor"/><path d="m16 4 .7 2.3L19 7l-2.3.7L16 10l-.7-2.3L13 7l2.3-.7L16 4Zm4 8 .5 1.6L22 14l-1.5.5L20 16l-.5-1.5L18 14l1.5-.4L20 12Z" fill="currentColor" opacity=".72"/></svg></span><b>รันตารางเวร</b></button>
         <button class="r29-action r29-save" id="saveBtn"><span class="r29-toolbar-icon mint" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 4h12l2 2v14H5V4Z" fill="currentColor"/><path d="M8 4h7v6H8V4Zm1 10h6v4H9v-4Z" fill="#fff" opacity=".95"/></svg></span><b>บันทึกตาราง</b></button>
         <button class="r29-action r29-open" id="loadBtn"><span class="r29-toolbar-icon lav" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 7h7l2 2h9v10H3V7Z" fill="currentColor" opacity=".35"/><path d="M3 10h18l-3 9H6l-3-9Z" fill="currentColor"/></svg></span><b>เปิดตารางเดิม</b></button>
-        <button class="r29-action ri40-toolbar-action" type="button" id="ri40Open" data-import-build="40.2" onclick="if(window.RosterImportV40 &amp;&amp; typeof window.RosterImportV40.open==='function'){window.RosterImportV40.open()}else{alert('ระบบนำเข้ายังไม่พร้อมใช้งาน กรุณาตรวจสอบเวอร์ชัน 40.2 แล้วเปิดหน้าเว็บใหม่')}" aria-label="นำเข้าไฟล์หรือรูปตารางเวร"><span class="r29-toolbar-icon ri40-orange-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13v5.5A1.5 1.5 0 0 0 6.5 20h11a1.5 1.5 0 0 0 1.5-1.5V13"/><path d="M12 4v11m-4-4 4 4 4-4"/><path d="M5.5 17.2h13"/></svg></span><b>นำเข้าไฟล์ / รูปตาราง <small class="ri40-version">v40.2</small></b></button>
+        <button class="r29-action ri40-toolbar-action" type="button" id="ri40Open" data-import-build="40.3" onclick="if(window.RosterImportV40 &amp;&amp; typeof window.RosterImportV40.open==='function'){window.RosterImportV40.open()}else{alert('ระบบนำเข้ายังไม่พร้อมใช้งาน กรุณาตรวจสอบเวอร์ชัน 40.3 แล้วเปิดหน้าเว็บใหม่')}" aria-label="นำเข้าไฟล์หรือรูปตารางเวร"><span class="r29-toolbar-icon ri40-orange-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13v5.5A1.5 1.5 0 0 0 6.5 20h11a1.5 1.5 0 0 0 1.5-1.5V13"/><path d="M12 4v11m-4-4 4 4 4-4"/><path d="M5.5 17.2h13"/></svg></span><b>นำเข้าไฟล์ / รูปตาราง <small class="ri40-version">v40.3</small></b></button>
         <button class="r29-action r29-check" id="validateBtn"><span class="r29-toolbar-icon blue" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 20 6v5c0 5-3.2 8-8 10-4.8-2-8-5-8-10V6l8-3Z" fill="currentColor"/><path d="m8.5 12 2.2 2.2 4.8-5" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><b>ตรวจสอบ</b></button>
         <button class="r29-action r29-print" id="printBtn"><span class="r29-toolbar-icon yellow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4h10v5H7V4Z" fill="currentColor"/><rect x="4" y="8" width="16" height="8" rx="3" fill="currentColor" opacity=".65"/><path d="M7 13h10v7H7v-7Z" fill="currentColor"/><path d="M9 15h6M9 17h6" stroke="#fff" stroke-width="1.2"/></svg></span><b>พิมพ์</b></button>
         <button class="r29-action r29-pdf" id="pdfBtn"><span class="r29-toolbar-icon orange" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6V3Z" fill="currentColor" opacity=".85"/><path d="M14 3v5h5" fill="none" stroke="#fff" stroke-width="1.6"/><path d="M9 14h6M9 17h5" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg></span><b>บันทึก PDF</b></button>
@@ -16642,6 +16642,7 @@ html body #page-home [data-home-version]{
 <script id="ri40-inline-module">
 /* Roster photo/spreadsheet importer v40.1.0
  * Add-on only. Does not change schedule generation, approval, authentication, or cloud APIs.
+ * v40.3: visible import feedback near Apply + verified local month save, no silent failures.
  * Nothing is written until the user confirms an editable draft and reviews the preview.
  */
 (function(){
@@ -16681,7 +16682,17 @@ html body #page-home [data-home-version]{
  function people(){return (typeof state!=='undefined'&&state.people)||[]}
  function monthDays(){return (typeof dim==='function')?dim():31}
  function ready(){return !!(q('page-roster')&&q('loadBtn')&&attachRoster()&&Array.isArray(SLOTS)&&SLOTS.length===19)}
- function status(t,error){var e=q('ri40Status');if(e){e.textContent=t||'';e.style.color=error?'#b42338':'#567b78'}}
+ function status(t,error){
+   var e=q('ri40Status'),bottom=q('ri40ActionResult');
+   if(e){e.textContent=t||'';e.style.color=error?'#b42338':'#567b78'}
+   if(bottom){
+     bottom.textContent=t||'';
+     bottom.style.display=t?'block':'none';
+     bottom.style.color=error?'#963b2b':'#286957';
+     bottom.style.borderColor=error?'#f0b1a0':'#a9e2cf';
+     bottom.style.background=error?'#fff1eb':'#effbf5';
+   }
+ }
  function parseNum(val){var s=String(val||'').trim();var m=s.match(/^\s*(\d{1,2})(?:[\s.．)\-:]|$)/);return m?Number(m[1]):null}
  function clean(v){return String(v||'').toLowerCase().replace(/[\s\u200b\.\-_,()\[\]]/g,'')}
  function resolve(raw){
@@ -16761,7 +16772,8 @@ html body #page-home [data-home-version]{
   if(currentKey()!=='2026-10'){status('กรุณาเลือกตุลาคม 2569 ก่อน',true);return}
   R.raw=OCT_2569_PHOTO_CANDIDATE.map(function(r){return r.map(function(n){return n?String(n):''})});R.source='octoberPhotoCandidate';R.coverageDays=31;q('ri40SourceDetails').hidden=false;if(!q('ri40SourceImage').src)q('ri40SourceImage').src=OCT_SOURCE_PHOTO;
   q('ri40Confirm').checked=false;rowTable();
-  status('ข้อมูลจากภาพต้นฉบับ 413 ช่องเป็นฉบับรอตรวจทาน • ภาพหน้าตารางเวรเดิมของคุณมี 407 ช่อง ซึ่งเป็นคนละชุดข้อมูล กรุณาเลือกวิธีนำเข้าและตรวจเทียบรายชื่อต้นฉบับก่อนบันทึก');
+  var old=(state.assignments||{}),nOld=Object.keys(old).filter(function(k){return !!old[k]}).length;
+  status('โหลดภาพเดือนตุลาคมแล้ว • ตารางปัจจุบัน '+nOld+' เวร | เอกสาร '+R.raw.reduce(function(n,row){return n+row.filter(Boolean).length},0)+' เวร • โหมด “เพิ่มเฉพาะช่องว่าง” ไม่แทนเวรเดิม หากต้องการให้ตรงภาพ ให้ตรวจครบแล้วเลือก “ใช้ตารางที่ตรวจแล้วแทน 19 ช่องเวรทั้งเดือน”');
  }
  function close(){q('ri40Modal').classList.remove('ri40-open');}
  function loadScript(url,globalName){return new Promise(function(resolveP,reject){if(window[globalName])return resolveP();var tag=document.createElement('script');tag.src=url;tag.async=true;tag.onload=function(){window[globalName]?resolveP():reject(new Error('โหลดโมดูล '+globalName+' ไม่สำเร็จ'))};tag.onerror=function(){reject(new Error('ไม่สามารถโหลดโมดูล '+globalName+' ได้ กรุณาตรวจสอบอินเทอร์เน็ต'))};document.head.appendChild(tag)});}
@@ -16851,35 +16863,70 @@ html body #page-home [data-home-version]{
      for(var dt=1;dt<=R.raw.length;dt++)for(var sc=0;sc<19;sc++){
        var k=akey(dt,IDS[sc]);if(state.assignments[k]){oldMapped++;if(!changes.some(function(ch){return ch.key===k}))removed++;}
      }
-     if(!confirm('ยืนยันนำเข้าตารางที่ตรวจทานแล้ว '+changes.length+' ช่อง โดยแทนที่ช่องเวรทั้ง 19 ประเภทของเดือนนี้\nข้อมูลเดิม '+oldMapped+' ช่อง (มี '+removed+' ช่องที่จะถูกลบเพราะไม่อยู่ในไฟล์)\nระบบจะสำรองข้อมูลก่อนบันทึก • เดือนอื่นและกฎจัดเวรไม่เปลี่ยน'))return;
-     if(!confirm('ยืนยันครั้งสุดท้าย: คุณตรวจชื่อบุคลากร วันที่ และประเภทเวรทุกช่องกับภาพต้นฉบับแล้วใช่หรือไม่?'))return;
    }
-   if(mode==='replace'&&overwrite&&!confirm('รายการใหม่จะแทนที่ '+overwrite+' ช่องในตารางเดิม โดยไม่ลบช่องที่ไม่ได้อยู่ในไฟล์ ยืนยันหรือไม่?'))return;
-   if(existing&&mode==='blank'&&!confirm('เดือนนี้มีข้อมูลเดิม '+existing+' ช่อง ระบบจะเพิ่มเฉพาะช่องว่างโดยรักษารายชื่อเดิมทั้งหมด ยืนยันหรือไม่?'))return;
    var next=Object.assign({},state.assignments||{}),applied=0,skipped=0;
    if(mode==='exact')for(var dt=1;dt<=R.raw.length;dt++)for(var sc=0;sc<19;sc++)delete next[akey(dt,IDS[sc])];
    changes.forEach(function(change){if(mode==='blank'&&next[change.key]){skipped++;return}if(next[change.key]!==change.id){next[change.key]=change.id;applied++}});
    // Validate all staff uniqueness, including already-existing assignments: do not force overwrite.
    var daySlots={};Object.keys(next).forEach(function(key){var pid=next[key];if(!pid)return;var parts=key.split('|'),day=Number(parts[0]);daySlots[day]=daySlots[day]||{};if(daySlots[day][pid])errors.push('วันที่ '+day+': บุคลากรซ้ำรวมกับข้อมูลเดิม');daySlots[day][pid]=true});
-   if(errors.length){status('พบความขัดแย้งกับข้อมูลเดิม: '+errors.slice(0,4).join(', '),true);return}
-   if(!applied&&!(mode==='exact'&&removed)){status('ไม่มีช่องใหม่ให้เพิ่ม (ข้ามช่องที่มีชื่ออยู่แล้ว '+skipped+' ช่อง)',true);return}
+   if(errors.length){
+     status('นำเข้าไม่สำเร็จ • '+errors.length+' จุดขัดแย้งกับตารางเดิม ('+mode+') ตัวอย่าง: '+errors.slice(0,3).join(' / ')+(mode==='blank'?' • โหมดเพิ่มเฉพาะช่องว่างไม่แก้ชื่อเดิม กรุณาตรวจเอกสารและเลือกโหมดแทนที่ให้เหมาะสม':'')+' • ตารางเดิมยังไม่ถูกแก้ไข',true);
+     return;
+   }
+   if(!applied&&!(mode==='exact'&&removed)){
+     status('ยังไม่มีการเปลี่ยนแปลง • ข้ามช่องเดิม '+skipped+' ช่อง'+(mode==='blank'?' • ถ้าต้องการแทนข้อมูล 407 เวรเดิม ให้ตรวจภาพก่อนแล้วเลือกโหมดแทนที่ (ระบบจะขอยืนยัน)':'')+' • ตารางเดิมยังอยู่ครบ',true);return;
+   }
+   // Confirm only after the merged table passed every check.
+   if(mode==='exact'){
+     if(!confirm('ยืนยันนำเข้าตารางที่ตรวจทานแล้ว '+changes.length+' ช่อง โดยแทนที่ช่องเวรทั้ง 19 ประเภทของเดือนนี้\nข้อมูลเดิม '+oldMapped+' ช่อง (มี '+removed+' ช่องที่จะถูกลบเพราะไม่อยู่ในไฟล์)\nระบบจะสำรองข้อมูลก่อนบันทึก • เดือนอื่นและกฎจัดเวรไม่เปลี่ยน'))return;
+     if(!confirm('ยืนยันครั้งสุดท้าย: คุณตรวจชื่อบุคลากร วันที่ และประเภทเวรทุกช่องกับภาพต้นฉบับแล้วใช่หรือไม่?'))return;
+
+   }
+   if(mode==='replace'&&overwrite&&!confirm('รายการใหม่จะแทนที่ '+overwrite+' ช่องในตารางเดิม โดยไม่ลบช่องที่ไม่ได้อยู่ในไฟล์ ยืนยันหรือไม่?'))return;
+   if(existing&&mode==='blank'&&!confirm('เดือนนี้มีข้อมูลเดิม '+existing+' ช่อง ระบบจะเพิ่มเฉพาะช่องว่างโดยรักษารายชื่อเดิมทั้งหมด ยืนยันหรือไม่?'))return;
+   // Only update this month's draft. The original algorithm, reviewer workflow,
+   // Cloud worker and other month storage are never modified by this importer.
+   var beforeAssignments=state.assignments,beforeHolidays=Object.assign({},state.holidays||{});
+   var backup='',savedLocal=false,changedConfig=false;
+   var applyButton=q('ri40Apply');
+   if(applyButton)applyButton.disabled=true;
    try{
-    // Local rollback snapshot, with unique key; does not overwrite any prior month data.
-    var backup='roster_import_backup_'+currentKey()+'_'+Date.now();
-    localStorage.setItem(backup,JSON.stringify({at:new Date().toISOString(),month:currentKey(),assignments:state.assignments,holidays:state.holidays,workflow:workflow,reason:'roster-import-before-change'}));
-    if(currentKey()==='2026-10'&&q('ri40OctHolidays').checked){
-      ['13','16','23'].forEach(function(ds){var key='2026-10-'+ds;if(!state.holidays[key])state.holidays[key]={name:'วันหยุดตามตารางที่นำเข้า',type:'official'}});
-      if(typeof saveConfig==='function')saveConfig();
-    }
-    state.assignments=next;
-    if(typeof auditWorkflow==='function')auditWorkflow('นำเข้าตารางเวรจากไฟล์ที่ตรวจสอบแล้ว '+applied+' ช่อง');
-    if(typeof saveMonth==='function')saveMonth(true);
-    if(typeof renderSheet==='function')renderSheet();
-    if(typeof renderHistory==='function')renderHistory();
-    if(typeof renderHomeV24==='function')renderHomeV24();
-    close();
-    if(typeof setStatus==='function')setStatus('นำเข้าข้อมูล '+applied+' ช่องแล้ว'+(mode==='exact'?' (แทนที่เดือนปัจจุบัน; ลบข้อมูลเก่าที่ไม่อยู่ในไฟล์ '+removed+' ช่อง)':' (ข้ามช่องเดิม '+skipped+' ช่อง)')+' • กรุณากด “ตรวจสอบ” ก่อนส่งอนุมัติ',true);
-   }catch(e){status('บันทึกไม่สำเร็จ: '+e.message,true)}
+     backup='roster_import_backup_'+currentKey()+'_'+Date.now();
+     localStorage.setItem(backup,JSON.stringify({at:new Date().toISOString(),month:currentKey(),assignments:beforeAssignments,holidays:beforeHolidays,workflow:workflow,reason:'roster-import-before-change'}));
+     if(currentKey()==='2026-10'&&q('ri40OctHolidays').checked){
+       ['13','16','23'].forEach(function(ds){var key='2026-10-'+ds;if(!state.holidays[key]){state.holidays[key]={name:'วันหยุดตามตารางที่นำเข้า',type:'official'};changedConfig=true}});
+     }
+     state.assignments=next;
+     if(changedConfig)saveConfig();
+     if(typeof auditWorkflow==='function')auditWorkflow('นำเข้าตารางเวรจากไฟล์ที่ตรวจสอบแล้ว '+applied+' ช่อง');
+     saveMonth(true);
+     // Do not report success just because a save function returned. Verify the
+     // exact month payload that the existing Save button stores locally.
+     var stored=JSON.parse(localStorage.getItem('roster_month_v7_'+currentKey())||'null');
+     if(!stored||!stored.assignments)throw new Error('ไม่พบข้อมูลเดือนที่บันทึกในเครื่อง');
+     var verify=stored.assignments;
+     if(Object.keys(next).length!==Object.keys(verify).length ||
+        Object.keys(next).some(function(key){return String(next[key]||'')!==String(verify[key]||'')})){
+       throw new Error('ข้อมูลหลังบันทึกไม่ตรงกับข้อมูลที่นำเข้า');
+     }
+     savedLocal=true;
+     renderSheet();renderHistory();renderHomeV24();
+     close();
+     if(typeof setStatus==='function')setStatus('นำเข้าสำเร็จและตรวจสอบการบันทึกในเครื่องแล้ว '+applied+' ช่อง'+(mode==='exact'?' • แทนที่ตารางทั้งเดือน; ลบช่องเก่า '+removed+' ช่อง':' • ข้ามช่องเดิม '+skipped+' ช่อง')+' • รอ Cloud Sync และตรวจสอบกฎก่อนส่งอนุมัติ',true);
+     // The cloud save is asynchronous; do not claim the server is done.
+   }catch(e){
+     if(!savedLocal){
+       state.assignments=beforeAssignments;
+       if(changedConfig){state.holidays=beforeHolidays;try{saveConfig()}catch(_) {}}
+       // If a partial local write occurred, restore the prior payload too.
+       try{saveMonth(true)}catch(_){}
+     }
+     if(savedLocal){
+       status('บันทึกในเครื่องแล้ว แต่การรีเฟรชหน้าตารางผิดพลาด: '+(e&&e.message||e)+' • กรุณากด “เปิดตารางเดิม” เพื่อตรวจข้อมูลที่บันทึก และตรวจสถานะ Cloud Sync',true);
+     }else{
+       status('นำเข้าไม่สำเร็จ: '+(e&&e.message||e)+' • คืนข้อมูลเดิมในเครื่องแล้ว • ยังไม่มีการยืนยันว่าข้อมูลขึ้น Cloud',true);
+     }
+   }finally{if(applyButton)applyButton.disabled=false}
  }
  function init(){
    var btn=q('ri40Open');
@@ -16890,7 +16937,7 @@ html body #page-home [data-home-version]{
    if(!btn){btn=document.createElement('button');btn.type='button';btn.id='ri40Open';btn.className='r29-action';btn.textContent='⇩ นำเข้าไฟล์ / รูปตาราง';var parent=q('loadBtn');parent.parentNode.insertBefore(btn,parent.nextSibling);}
    var modal=document.createElement('div');modal.id='ri40Modal';modal.className='no-print';modal.setAttribute('role','dialog');modal.setAttribute('aria-modal','true');modal.innerHTML=
    '<div class="ri40-panel">'+
-    '<div class="ri40-head"><h2>📥 นำเข้าตารางเวร <span id="ri40TitleMonth"></span> <small style="font-size:10px;color:#b67d4c">v40.2</small></h2><button type="button" class="ri40-close" id="ri40Close" aria-label="ปิด">×</button></div>'+
+    '<div class="ri40-head"><h2>📥 นำเข้าตารางเวร <span id="ri40TitleMonth"></span> <small style="font-size:10px;color:#b67d4c">v40.3</small></h2><button type="button" class="ri40-close" id="ri40Close" aria-label="ปิด">×</button></div>'+
     '<p>รองรับ Excel, CSV และภาพ JPG/PNG/WebP ตารางรูปแบบ <b>วันที่ + เวร 19 ช่อง</b> ตามตารางเดิม ภาพถ่ายจะใช้ OCR ช่วยอ่าน <b>ต้องตรวจทุกช่องก่อนบันทึก</b> ระบบจะไม่เปลี่ยนเดือนหรือรันเวรใหม่เอง</p>'+
     '<div class="ri40-tools"><button type="button" id="ri40FromOctober">📅 ตารางจากภาพ ต.ค. 2569 (รอตรวจทาน 413 ช่อง)</button><label class="ri40-pick">📎 เลือกไฟล์ / รูปภาพ<input id="ri40File" class="ri40-file" type="file" accept=".xlsx,.xls,.csv,.tsv,.txt,.jpg,.jpeg,.png,.webp,.bmp,image/*"></label><button id="ri40Template" type="button">ดาวน์โหลด CSV ตัวอย่าง</button><button id="ri40OCR" class="ri40-main" type="button" disabled>🔎 อ่านรายชื่อจากรูป (OCR)</button></div>'+
     '<div class="ri40-guide">📌 เอกสารตัวอย่าง: แถว 1 = วันที่ 1, ช่องถัดไปเรียง เวร1, เวร2, OT1, OT2, SDMC1 เช้า/บ่ายดึก ... จนถึง EXTRA3 หากข้อมูลต้นฉบับมีหมายเลข 4.ชื่อ ระบบจะจับคู่กับบุคลากรลำดับ 4 และตรวจชื่อประกอบ</div>'+
@@ -16899,11 +16946,12 @@ html body #page-home [data-home-version]{
     '<div id="ri40ImageBox" hidden><img id="ri40Photo" alt="ภาพตารางเวรต้นฉบับ"><svg id="ri40Guide" aria-hidden="true"></svg></div>'+
     '<div id="ri40Status" class="ri40-state"></div><div id="ri40Compare" class="ri40-compare" role="status"></div><div class="ri40-tablebox" id="ri40Table"></div>'+
     '<div id="ri40OctOptions" style="margin-top:10px"><label style="font-size:12px;display:flex;align-items:center;gap:8px"><input type="checkbox" id="ri40OctHolidays"> ตั้งวันหยุด 13, 16 และ 23 ต.ค. 2569 ตามเอกสาร (เฉพาะกรณียังไม่ตั้งค่า)</label></div>'+
-    '<div class="ri40-footer"><label>การนำเข้า: <select id="ri40Mode"><option value="blank">เพิ่มเฉพาะช่องว่าง (ปลอดภัยที่สุด)</option><option value="replace">แทนที่เฉพาะช่องที่มีข้อมูลในไฟล์</option><option value="exact">ใช้ตารางที่ตรวจแล้วแทน 19 ช่องเวรทั้งเดือน (ลบช่องเก่าที่ไม่อยู่ในไฟล์)</option></select></label><label><input type="checkbox" id="ri40Confirm"> ฉันตรวจรายชื่อและวันเวรตรงกับต้นฉบับแล้ว</label><button id="ri40Apply" class="ri40-main" type="button">✅ นำเข้าตารางที่ตรวจแล้ว</button></div>'+ 
+    '<div class="ri40-footer"><label>การนำเข้า: <select id="ri40Mode"><option value="blank">เพิ่มเฉพาะช่องว่าง (ปลอดภัยที่สุด)</option><option value="replace">แทนที่เฉพาะช่องที่มีข้อมูลในไฟล์</option><option value="exact">ใช้ตารางที่ตรวจแล้วแทน 19 ช่องเวรทั้งเดือน (ลบช่องเก่าที่ไม่อยู่ในไฟล์)</option></select></label><label><input type="checkbox" id="ri40Confirm"> ฉันตรวจรายชื่อและวันเวรตรงกับต้นฉบับแล้ว</label><button id="ri40Apply" class="ri40-main" type="button">✅ นำเข้าตารางที่ตรวจแล้ว</button><div id="ri40ActionResult" role="status" aria-live="polite" style="display:none;margin:12px 0 6px;padding:12px;border:1px solid #a9e2cf;border-radius:12px;white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;line-height:1.7"></div></div>'+ 
     '<div class="ri40-exact-note">⚠️ หากตุลาคมมีเวรที่รันไว้แล้ว ระบบจะไม่แก้ชื่อเดิมเพียงเพราะกดดูตัวอย่าง ต้องเลือกโหมดแทนที่ แล้วตรวจชื่อครบทุกช่องก่อนยืนยัน การแทนที่ทั้งเดือนจะสำรองข้อมูลไว้ก่อน และไม่กระทบเดือนอื่น</div><p class="ri40-danger">ข้อมูลจากภาพเป็นฉบับถอดเบื้องต้น ยังไม่รับรองความถูกต้องทุกช่อง โดยเฉพาะการจับคู่หมายเลขกับทะเบียนปัจจุบัน OCR อาจอ่านผิด ต้องตรวจเทียบเอกสารจริงก่อนบันทึก</p>'+ 
    '</div>';
    document.body.appendChild(modal);
-   q('ri40Close').onclick=close;q('ri40Template').onclick=downloadTemplate;q('ri40FromOctober').onclick=loadOctoberPhoto;q('ri40OCR').onclick=imageOCR;q('ri40Apply').onclick=commit;
+   q('ri40Close').onclick=close;q('ri40Template').onclick=downloadTemplate;q('ri40FromOctober').onclick=loadOctoberPhoto;q('ri40OCR').onclick=imageOCR;q('ri40Apply').onclick=function(){try{commit()}catch(e){status('เกิดข้อผิดพลาดขณะนำเข้า: '+(e&&e.message||e)+' • ตารางเดิมยังไม่เปลี่ยน',true)}};
+   q('ri40Mode').addEventListener('change',function(){var name={blank:'เพิ่มเฉพาะช่องว่าง',replace:'แทนที่เฉพาะช่องจากไฟล์',exact:'แทนที่ตารางทั้งเดือน'}[this.value];status('เลือกโหมด '+name+' • ระบบยังไม่แก้ไขเวรจริงจนกว่าจะตรวจชื่อและกดยืนยัน'+(this.value==='exact'?' 2 ครั้ง':''))});
    q('ri40File').onchange=async function(){try{await selectFile(this.files&&this.files[0]);q('ri40OCR').disabled=!R.img}catch(e){status('เปิดไฟล์ไม่สำเร็จ: '+e.message,true)}};
    modal.addEventListener('click',function(e){if(e.target===modal)close()});
    ['ri40_left','ri40_right','ri40_top','ri40_bottom'].forEach(function(id){q(id).addEventListener('input',showGuides)});
@@ -16915,7 +16963,7 @@ html body #page-home [data-home-version]{
    // Some saved versions initialize roster state asynchronously. Retry a bounded number of times without affecting any existing handlers.
    var attempts=0,timer=setInterval(function(){if(init()||++attempts>=40)clearInterval(timer)},250);
  }
- window.RosterImportV40={build:'40.2',open:open,parseCSV:parseCSV,resolve:resolve,rowsFromMatrix:rowsFromMatrix,preview:function(){return R.raw.map(function(a){return a.slice()})}};
+ window.RosterImportV40={build:'40.3',open:open,parseCSV:parseCSV,resolve:resolve,rowsFromMatrix:rowsFromMatrix,preview:function(){return R.raw.map(function(a){return a.slice()})}};
  // Capture-phase delegation is scoped strictly to this button, and survives a toolbar re-render.
  document.addEventListener('click',function(ev){
    var target=ev.target&&ev.target.closest&&ev.target.closest('#ri40Open');
