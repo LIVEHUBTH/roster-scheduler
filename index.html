@@ -12925,8 +12925,8 @@ function prepareSchedulePdfNode(phoneMode){
   var table=el('sheet').cloneNode(true);
   var pdfW=phoneMode?1800:1600;
   var pdfH=phoneMode?1235:1131;
-  var bodyFont=phoneMode?'13.2px':'15.5px';
-  var headFont=phoneMode?'14px':'16px';
+  var bodyFont=phoneMode?'14px':'16.3px';
+  var headFont=phoneMode?'14.8px':'16.8px';
   table.style.minWidth='0';table.style.width=pdfW+'px';table.style.maxWidth=pdfW+'px';table.style.tableLayout='fixed';table.style.borderCollapse='collapse';table.style.background='#fff';
   var caption=table.querySelector('caption');if(caption){caption.style.fontSize=phoneMode?'24px':'24px';caption.style.fontWeight='800';caption.style.padding='2px 0 5px'}
   table.querySelectorAll('th').forEach(function(th){th.style.position='static';th.style.minWidth='0';th.style.fontWeight='800';th.style.fontSize=headFont;th.style.lineHeight='1.1';th.style.padding='1px';th.style.height='25px';th.style.whiteSpace='nowrap';th.style.overflow='hidden';th.style.background='#e7e7ea';th.style.color='#111'})
