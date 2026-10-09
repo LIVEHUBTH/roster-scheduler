@@ -12925,26 +12925,26 @@ function prepareSchedulePdfNode(phoneMode){
   var table=el('sheet').cloneNode(true);
   var pdfW=phoneMode?1800:1600;
   var pdfH=phoneMode?1235:1131;
-  var bodyFont=phoneMode?'19px':'17px';
-  var headFont=phoneMode?'20px':'18px';
+  var bodyFont=phoneMode?'13.2px':'15.5px';
+  var headFont=phoneMode?'14px':'16px';
   table.style.minWidth='0';table.style.width=pdfW+'px';table.style.maxWidth=pdfW+'px';table.style.tableLayout='fixed';table.style.borderCollapse='collapse';table.style.background='#fff';
-  var caption=table.querySelector('caption');if(caption){caption.style.fontSize=phoneMode?'30px':'27px';caption.style.fontWeight='800';caption.style.padding='2px 0 5px'}
-  table.querySelectorAll('th').forEach(function(th){th.style.position='static';th.style.minWidth='0';th.style.fontWeight='800';th.style.fontSize=headFont;th.style.lineHeight='1.05';th.style.padding='1px';th.style.height='25px';th.style.whiteSpace='nowrap';th.style.overflow='hidden';th.style.background='#e7e7ea';th.style.color='#111'})
-  table.querySelectorAll('td').forEach(function(td){td.style.position='static';td.style.minWidth='0';td.style.fontWeight='400';td.style.fontSize=bodyFont;td.style.lineHeight='1';td.style.padding='1px';td.style.height='25px';td.style.whiteSpace='nowrap';td.style.overflow='hidden';td.style.textOverflow='clip';td.style.textAlign='center';td.style.verticalAlign='middle'})
-  table.querySelectorAll('.date').forEach(function(c){var dw=phoneMode?'57px':'54px';c.style.width=dw;c.style.minWidth=dw;c.style.maxWidth=dw;c.style.fontWeight=c.tagName==='TH'?'800':'400';c.style.fontSize=bodyFont;c.style.padding='1px';c.style.overflow='hidden'})
+  var caption=table.querySelector('caption');if(caption){caption.style.fontSize=phoneMode?'24px':'24px';caption.style.fontWeight='800';caption.style.padding='2px 0 5px'}
+  table.querySelectorAll('th').forEach(function(th){th.style.position='static';th.style.minWidth='0';th.style.fontWeight='800';th.style.fontSize=headFont;th.style.lineHeight='1.1';th.style.padding='1px';th.style.height='25px';th.style.whiteSpace='nowrap';th.style.overflow='hidden';th.style.background='#e7e7ea';th.style.color='#111'})
+  table.querySelectorAll('td').forEach(function(td){td.style.position='static';td.style.minWidth='0';td.style.fontWeight='400';td.style.fontSize=bodyFont;td.style.lineHeight='1.12';td.style.padding='1px';td.style.height='25px';td.style.whiteSpace='nowrap';td.style.overflow='hidden';td.style.textOverflow='clip';td.style.textAlign='center';td.style.verticalAlign='middle'})
+  table.querySelectorAll('.date').forEach(function(c){var dw=phoneMode?'50px':'48px';c.style.width=dw;c.style.minWidth=dw;c.style.maxWidth=dw;c.style.fontWeight=c.tagName==='TH'?'800':'400';c.style.fontSize=c.tagName==='TH'?headFont:bodyFont;c.style.padding='1px';c.style.overflow='hidden'})
   table.querySelectorAll('tbody td.date b').forEach(function(b){b.style.fontWeight='400'});
-  table.querySelectorAll('td .phone-sheet-value').forEach(function(span){span.style.display='flex';span.style.width='100%';span.style.maxWidth='100%';span.style.height='100%';span.style.boxSizing='border-box';span.style.alignItems='center';span.style.justifyContent='center';span.style.textAlign='center';span.style.fontSize=bodyFont;span.style.lineHeight='1';span.style.fontWeight='400';span.style.whiteSpace='nowrap';span.style.overflow='hidden';span.style.textOverflow='clip';span.style.color='#111'})
+  table.querySelectorAll('td .phone-sheet-value').forEach(function(span){span.style.display='flex';span.style.width='100%';span.style.maxWidth='100%';span.style.height='100%';span.style.boxSizing='border-box';span.style.alignItems='center';span.style.justifyContent='center';span.style.textAlign='center';span.style.fontSize=bodyFont;span.style.lineHeight='1.12';span.style.fontWeight='400';span.style.whiteSpace='nowrap';span.style.overflow='hidden';span.style.textOverflow='clip';span.style.color='#111'})
   table.querySelectorAll('select').forEach(function(select){
     var cell=select.parentNode;
     var label=cell.querySelector('.phone-sheet-value');
     var text=select.options[select.selectedIndex]?select.options[select.selectedIndex].text:'';
     if(label){label.textContent=text;select.remove();}
-    else{var span=document.createElement('span');span.textContent=text;span.style.display='flex';span.style.width='100%';span.style.maxWidth='100%';span.style.height='100%';span.style.boxSizing='border-box';span.style.alignItems='center';span.style.justifyContent='center';span.style.textAlign='center';span.style.fontSize=bodyFont;span.style.lineHeight='1';span.style.fontWeight='400';span.style.whiteSpace='nowrap';span.style.overflow='hidden';span.style.textOverflow='clip';cell.replaceChild(span,select)}
+    else{var span=document.createElement('span');span.textContent=text;span.style.display='flex';span.style.width='100%';span.style.maxWidth='100%';span.style.height='100%';span.style.boxSizing='border-box';span.style.alignItems='center';span.style.justifyContent='center';span.style.textAlign='center';span.style.fontSize=bodyFont;span.style.lineHeight='1.12';span.style.fontWeight='400';span.style.whiteSpace='nowrap';span.style.overflow='hidden';span.style.textOverflow='clip';cell.replaceChild(span,select)}
   })
   table.querySelectorAll('tbody tr').forEach(function(row){var shade=row.classList.contains('saturday')||row.classList.contains('sunday')||row.classList.contains('holiday');row.querySelectorAll('td').forEach(function(td){td.style.background=shade?'#e6e6e6':'#fff';td.style.color='#111'})});
   var wrap=document.createElement('div');wrap.style.position='fixed';wrap.style.left='-12000px';wrap.style.top='0';wrap.style.width=pdfW+'px';wrap.style.height=pdfH+'px';wrap.style.overflow='hidden';wrap.style.boxSizing='border-box';wrap.style.background='#fff';wrap.style.padding='0';wrap.style.margin='0';wrap.dataset.pdfPhone=phoneMode?'1':'0';wrap.appendChild(table);
   var note=(el('pdfNote').value||'').trim();
-  var noteBox=document.createElement('div');noteBox.style.marginTop='3px';noteBox.style.fontFamily='-apple-system,BlinkMacSystemFont,"Noto Sans Thai",Tahoma,Arial,sans-serif';noteBox.style.fontSize=phoneMode?'18px':'17px';noteBox.style.lineHeight='1.15';noteBox.style.color='#111';noteBox.style.textAlign='left';noteBox.style.whiteSpace='pre-wrap';
+  var noteBox=document.createElement('div');noteBox.style.marginTop='3px';noteBox.style.fontFamily='-apple-system,BlinkMacSystemFont,"Noto Sans Thai",Tahoma,Arial,sans-serif';noteBox.style.fontSize=phoneMode?'15px':'15px';noteBox.style.lineHeight='1.15';noteBox.style.color='#111';noteBox.style.textAlign='left';noteBox.style.whiteSpace='pre-wrap';
   noteBox.innerHTML='<b>หมายเหตุ:</b> '+esc(note||'-');wrap.appendChild(noteBox);
   document.body.appendChild(wrap);
   // PDF typography only: keep full labels inside their printed column while using a larger default font.
@@ -12952,22 +12952,22 @@ function prepareSchedulePdfNode(phoneMode){
   table.querySelectorAll('tbody td[data-d][data-s] .phone-sheet-value, tbody td[data-d][data-s] > span').forEach(function(label){
     var word=label.textContent||'';
     if(!word)return;
-    var width=label.parentNode.clientWidth-4;
+    var width=label.parentNode.clientWidth-8;
     if(width<=0)return;
     var size=parseFloat(bodyFont);
     pdfMeasure.font='400 '+size+'px '+getComputedStyle(label).fontFamily;
     var textWidth=pdfMeasure.measureText(word).width;
-    if(textWidth>width){label.style.fontSize=Math.max(10,Math.floor(size*width/textWidth*10)/10)+'px'}
+    if(textWidth>width){label.style.fontSize=Math.max(8.5,Math.floor(size*width/textWidth*10)/10)+'px'}
   });
   table.querySelectorAll('thead th').forEach(function(head){
     var text=head.textContent||'';
     if(!text)return;
-    var width=head.clientWidth-4;
+    var width=head.clientWidth-6;
     if(width<=0)return;
     var size=parseFloat(getComputedStyle(head).fontSize);
     pdfMeasure.font='800 '+size+'px '+getComputedStyle(head).fontFamily;
     var textWidth=pdfMeasure.measureText(text).width;
-    if(textWidth>width){head.style.fontSize=Math.max(10,Math.floor(size*width/textWidth*10)/10)+'px'}
+    if(textWidth>width){head.style.fontSize=Math.max(8.5,Math.floor(size*width/textWidth*10)/10)+'px'}
   });
   return wrap;
 }
