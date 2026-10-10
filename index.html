@@ -14804,7 +14804,37 @@ window.__ROSTER_HISTORY_V33__={
   getMonth:function(yThai,m){return savedMonth(historyKeyFromThaiYear(yThai,m))},
   getHolidays:function(){return state.holidays||{}},
   getYearRecords:function(yThai){var a=[];for(var m=0;m<12;m++){var d=savedMonth(historyKeyFromThaiYear(yThai,m));if(d)a.push({month:m,data:d})}return a},
-  getAvailableYears:function(){var set={};for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i)||'';var mm=k.match(/^roster_month_v7_(\\d{4})-(\\d{2})$/);if(mm)set[parseInt(mm[1],10)+543]=1}set[py()]=1;return Object.keys(set).map(Number).sort(function(a,b){return b-a})},
+  getAvailableYears:function(){var set={};for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i)||'';var mm=k.match(/^roster_month_v7_(\d{4})-(\d{2})$/);if(mm)set[parseInt(mm[1],10)+543]=1}set[py()]=1;return Object.keys(set).map(Number).sort(function(a,b){return b-a})},
+  /* History-only read: load every archived month from Cloud without overwriting a locally saved month. */
+  loadHistoryAcrossYears:async function(){
+    if(!auth.token||!cloud.apiUrl)return {loaded:0,available:false};
+    if(!cloud.connected&&!(await connectCloud(false)))return {loaded:0,available:false};
+    var reply=await cloudRequest('/api/months',{method:'GET'});
+    var items=Array.isArray(reply&&reply.months)?reply.months:[];
+    var keys=[],seen={};
+    items.forEach(function(item){
+      var key=typeof item==='string'?item:(item&&item.key);
+      if(/^\d{4}-(0[1-9]|1[0-2])$/.test(String(key||''))&&!seen[key]){
+        seen[key]=true;
+        if(!savedMonth(key))keys.push(key);
+      }
+    });
+    var next=0,loaded=0;
+    async function reader(){
+      while(next<keys.length){
+        var k=keys[next++];
+        try{
+          var r=await cloudRequest('/api/month/'+encodeURIComponent(k),{method:'GET'});
+          if(r&&r.found&&r.data&&!savedMonth(k)){
+            localStorage.setItem(storageKey(k),JSON.stringify(r.data));
+            loaded++;
+          }
+        }catch(err){console.warn('history read-only archive fetch',k,err)}
+      }
+    }
+    await Promise.all([reader(),reader(),reader()]);
+    return {loaded:loaded,available:true};
+  },
   openMonth:function(yThai,m,type){openSystemHistoryMonth(yThai,m,type||'roster')},
   deleteMonth:async function(yThai,m){
     var key=historyKeyFromThaiYear(yThai,m);
@@ -14979,6 +15009,89 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 </script>
 <script src="holidays-v32.js?v=32.14"></script>
 <script src="history-v33.js?v=33.19"></script>
+<script id="history-v33-cross-year-readonly-fix">
+/* History page only: refresh archived-year options, totals and Cloud-backed history on entry. */
+(function(){
+  'use strict';
+  var B=window.__ROSTER_HISTORY_V33__;
+  if(!B)return;
+  var lastCloudRead=0,cloudBusy=null;
+  function $(id){return document.getElementById(id)}
+  function allYears(){
+    try{return (B.getAvailableYears?B.getAvailableYears():[]).filter(function(x){return Number.isInteger(Number(x))&&Number(x)>2500})}
+    catch(err){return []}
+  }
+  function syncYears(){
+    var sel=$('historyYearSelectV33');if(!sel)return;
+    var years=allYears(),values=['all'].concat(years.map(String));
+    var old=Array.from(sel.options).map(function(o){return o.value});
+    if(old.join('|')===values.join('|'))return;
+    var chosen=sel.value;
+    sel.innerHTML='';
+    values.forEach(function(val){
+      var option=document.createElement('option');
+      option.value=val;option.textContent=val==='all'?'ทั้งหมด':val;
+      sel.appendChild(option);
+    });
+    sel.value=values.indexOf(chosen)>=0?chosen:'all';
+  }
+  function allSavedCount(){
+    var n=0;
+    allYears().forEach(function(y){
+      try{n+=(B.getYearRecords?B.getYearRecords(Number(y)):[]).length}catch(e){}
+    });
+    return n;
+  }
+  function syncTotal(){
+    var n=$('historyTotalV24');if(n)n.textContent=String(allSavedCount());
+  }
+  function refreshHistory(){
+    syncYears();
+    var search=$('historyRefreshBtn');
+    if(search&&typeof search.onclick==='function')search.click();
+    syncTotal();
+  }
+  function loadFromCloud(){
+    if(!B.loadHistoryAcrossYears||cloudBusy||Date.now()-lastCloudRead<30000)return;
+    cloudBusy=Promise.resolve().then(function(){return B.loadHistoryAcrossYears()})
+      .then(function(result){if(result&&result.available)lastCloudRead=Date.now();if(isOpen())refreshHistory()})
+      .catch(function(err){console.warn('Could not load all history years',err)})
+      .then(function(){cloudBusy=null});
+  }
+  function isOpen(){var p=$('page-history');return !!(p&&p.classList.contains('active'))}
+  function onHistoryOpened(){
+    if(!isOpen())return;
+    refreshHistory();
+    loadFromCloud();
+  }
+  function init(){
+    var root=$('page-history');if(!root)return;
+    var observer=new MutationObserver(function(mutations){
+      if(mutations.some(function(m){return m.attributeName==='class'}))onHistoryOpened();
+    });
+    observer.observe(root,{attributes:true,attributeFilter:['class']});
+    root.addEventListener('pointerdown',function(e){
+      if(e.target&&e.target.id==='historyYearSelectV33')syncYears();
+    },true);
+    root.addEventListener('focusin',function(e){
+      if(e.target&&e.target.id==='historyYearSelectV33')syncYears();
+    },true);
+    root.addEventListener('click',function(e){
+      if(e.target&&e.target.id==='historyRefreshBtn')syncYears();
+      if(e.target&&e.target.id==='historyResetV33')syncYears();
+      setTimeout(syncTotal,0);
+    },true);
+    root.addEventListener('change',function(){setTimeout(syncTotal,0)},true);
+    root.addEventListener('input',function(e){if(e.target&&e.target.id==='historySearchV24')setTimeout(syncTotal,0)},true);
+    syncYears();syncTotal();
+    onHistoryOpened();
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+  window.addEventListener('pageshow',function(){onHistoryOpened()});
+  document.addEventListener('visibilitychange',function(){if(!document.hidden)onHistoryOpened()});
+})();
+</script>
+
 <script src="rules-v31.js?v=31.1"></script>
 <script src="roster-v29.js?v=29.3"></script>
 <script src="login-fix-v26-1.js?v=30.0"></script>
@@ -17048,14 +17161,8 @@ html body #page-home [data-home-version]{
    if(!Number.isInteger(monthsIndex)||monthsIndex<0||monthsIndex>11||!Number.isInteger(daysCount)||daysCount<28||daysCount>31)throw new Error('กรุณาเลือกเดือนและปีให้ถูกต้อง');
    var pMap={};data.people.forEach(function(p,i){if(p&&p.id!=null)pMap[String(p.id)]=(i+1)+'. '+String(p.name||'').trim()});
    var slots=b.slots.map(function(s){return {id:s.id,label:String(s.label||s.id),time:String(s.time||'')}});
-   // Export-only multi-row header: mirrors buildHeader() in the live roster table.
-   // Values stay in b.slots order; this changes exported layout, never assignments.
-   var expected=['v1','v2','ot1','ot2','s1d','s1n','s2d','s2n','s3d','s3n','s4d','s4n','s5','s6','s7','s8','e1','e2','e3'];
-   if(slots.some(function(s,i){return s.id!==expected[i]}))throw new Error('ลำดับช่องเวรในโปรแกรมเปลี่ยนไป กรุณาตรวจสอบหัวตารางก่อนส่งออก');
-   var heading1=['วันที่','เวร1','เวร2','OT1','OT2','SDMC1','','SDMC2','','SDMC3','','SDMC4','','SDMC5','SDMC6','SDMC7','SDMC8','EXTRA1','EXTRA2','EXTRA3'];
-   var heading2=['','','','','','เช้า','บ่าย-ดึก','เช้า','บ่าย-ดึก','เช้า','บ่าย-ดึก','เช้า','บ่าย-ดึก','เช้า-บ่าย','เช้า-บ่าย','บ่าย','บ่าย','','',''];
-   var heading3=['','','','','','8.00-16.00','16.00-8.00','8.00-16.00','16.00-8.00','8.00-16.00','16.00-8.00','8.00-16.00','16.00-8.00','7.00-23.00','7.00-23.00','16.00-24.00','16.00-24.00','','',''];
-   var rows=[heading1,heading2,heading3],types=[],total=0,holidays=data.holidays||{};
+   var headings=['วันที่'].concat(slots.map(function(s){return s.label}));
+   var rows=[headings],types=[],total=0,holidays=data.holidays||{};
    for(var d=1;d<=daysCount;d++){
      var wd=new Date(yearBE-543,monthsIndex,d).getDay(),dateKey=String(yearBE-543)+'-'+String(monthsIndex+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
      var isHoliday=!!holidays[dateKey],kind=isHoliday?'holiday':(wd===6?'saturday':(wd===0?'sunday':'weekday'));
@@ -17100,7 +17207,9 @@ html body #page-home [data-home-version]{
  }
  function csvCell(v){var s=String(v==null?'':v);return '"'+s.replace(/"/g,'""')+'"'}
  function exportCSV(s){
-   var csv='\uFEFF'+s.rows.map(function(line){return line.map(csvCell).join(',')}).join('\r\n')+'\r\n';
+   var csvRows=s.rows.map(function(line){return line.slice()});
+   csvRows[0]=['วันที่'].concat(s.slots.map(function(slot){return slot.label+(slot.time?' ('+slot.time+')':'')}));
+   var csv='\uFEFF'+csvRows.map(function(line){return line.map(csvCell).join(',')}).join('\r\n')+'\r\n';
    download(new Blob([csv],{type:'text/csv;charset=utf-8'}),'ตารางเวร_'+s.monthName+'_'+s.yearBE+'_GoogleSheets.csv');
  }
  // Minimal, dependency-free OOXML XLSX writer. ZIP entries are STORE-only to support iOS/Android offline.
@@ -17109,44 +17218,81 @@ html body #page-home [data-home-version]{
  function col(n){var s='';for(n++;n>0;n=Math.floor((n-1)/26))s=String.fromCharCode(65+(n-1)%26)+s;return s}
  function cell(ref,v,style){return '<c r="'+ref+'" s="'+style+'" t="inlineStr"><is><t xml:space="preserve">'+xesc(v)+'</t></is></c>'}
  function rosterXml(s){
-   // Three heading rows and the exact grouped merges of the roster table.
-   var last=s.days+3;
-   var merged=['A1:A3','B1:B3','C1:C3','D1:D3','E1:E3',
-     'F1:G1','H1:I1','J1:K1','L1:M1',
-     'R1:R3','S1:S3','T1:T3'];
-   // SDMC5–8 have their own group/shift/time cells and therefore need no merge.
-   var out=['<?xml version="1.0" encoding="UTF-8" standalone="yes"?>',
-     '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetPr><pageSetUpPr fitToPage="1"/></sheetPr><dimension ref="A1:T'+last+'"/>',
-     '<sheetViews><sheetView workbookViewId="0" showGridLines="0"><pane xSplit="1" ySplit="3" topLeftCell="B4" activePane="bottomRight" state="frozen"/></sheetView></sheetViews>',
-     '<sheetFormatPr defaultRowHeight="24"/><cols><col min="1" max="1" width="16" customWidth="1"/><col min="2" max="20" width="22" customWidth="1"/></cols><sheetData>'];
-   // Header palette mirrors the roster screen's date / V / OT / each SDMC group / EXTRA.
-   var headerStyles=[8,9,9,10,10,11,11,12,12,13,13,14,14,15,15,16,16,17,17,17];
-   s.rows.forEach(function(row,r){out.push('<row r="'+(r+1)+'" ht="'+(r<3?(r===0?28:22):24)+'" customHeight="1">');
-     row.forEach(function(v,c){var style=r<3?headerStyles[c]:(s.types[r-3]==='holiday'?7:s.types[r-3]==='saturday'?5:s.types[r-3]==='sunday'?6:0);out.push(cell(col(c)+(r+1),v,style))});out.push('</row>');
-   });
-   out.push('</sheetData><mergeCells count="'+merged.length+'">'+merged.map(function(range){return '<mergeCell ref="'+range+'"/>'}).join('')+'</mergeCells>',
+   // Three header tiers exactly follow the primary roster's buildHeader():
+   // SDMC 1-4 grouped in pairs; SDMC 5-8 have separate labels; other shifts span 3 rows.
+   var last=s.days+3, out=['<?xml version="1.0" encoding="UTF-8" standalone="yes"?>',
+    '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">',
+    '<sheetPr><pageSetUpPr fitToPage="1"/></sheetPr><dimension ref="A1:T'+last+'"/>',
+    '<sheetViews><sheetView workbookViewId="0" showGridLines="0"><pane xSplit="1" ySplit="3" topLeftCell="B4" activePane="bottomRight" state="frozen"/></sheetView></sheetViews>',
+    '<sheetFormatPr defaultRowHeight="24"/>',
+    '<cols><col min="1" max="1" width="17" customWidth="1"/><col min="2" max="20" width="21" customWidth="1"/></cols><sheetData>'];
+   function headerStyle(c){
+     if(c===0)return 1;
+     var id=s.slots[c-1].id;
+     if(/^v[12]$/.test(id))return 2;
+     if(/^ot[12]$/.test(id))return 3;
+     if(/^s1/.test(id))return 4;
+     if(/^s2/.test(id))return 5;
+     if(/^s3/.test(id))return 6;
+     if(/^s4/.test(id))return 7;
+     if(/^s[56]$/.test(id))return 8;
+     if(/^s[78]$/.test(id))return 9;
+     return 10;
+   }
+   // Displayed main-table header: วันที่, เวร1, เวร2, OT1, OT2,
+   // SDMC1 pair, SDMC2 pair, SDMC3 pair, SDMC4 pair,
+   // SDMC5, SDMC6, SDMC7, SDMC8, EXTRA1, EXTRA2, EXTRA3.
+   var top=['วันที่','เวร1','เวร2','OT1','OT2','SDMC1','', 'SDMC2','', 'SDMC3','', 'SDMC4','', 'SDMC5','SDMC6','SDMC7','SDMC8','EXTRA1','EXTRA2','EXTRA3'];
+   var row1=['<row r="1" ht="30" customHeight="1">'];
+   top.forEach(function(v,c){row1.push(cell(col(c)+'1',v,headerStyle(c)))});
+   out.push(row1.join('')+'</row>');
+   var row2=['<row r="2" ht="28" customHeight="1">'], row3=['<row r="3" ht="25" customHeight="1">'];
+   for(var c=5;c<=16;c++){
+      var slot=s.slots[c-1], label=slot.label.replace(/^SDMC\d+\s*/, '').trim();
+      row2.push(cell(col(c)+'2',label,headerStyle(c)));
+      row3.push(cell(col(c)+'3',slot.time,headerStyle(c)));
+   }
+   out.push(row2.join('')+'</row>',row3.join('')+'</row>');
+   for(var r=1;r<s.rows.length;r++){
+     var excelRow=r+3, kind=s.types[r-1];
+     var bodyStyle=kind==='holiday'?13:kind==='saturday'?11:kind==='sunday'?12:0;
+     out.push('<row r="'+excelRow+'" ht="25" customHeight="1">');
+     s.rows[r].forEach(function(v,c){out.push(cell(col(c)+excelRow,v,bodyStyle))});
+     out.push('</row>');
+   }
+   out.push('</sheetData>',
+     '<mergeCells count="12">',
+     '<mergeCell ref="A1:A3"/><mergeCell ref="B1:B3"/><mergeCell ref="C1:C3"/>',
+     '<mergeCell ref="D1:D3"/><mergeCell ref="E1:E3"/>',
+     '<mergeCell ref="F1:G1"/><mergeCell ref="H1:I1"/><mergeCell ref="J1:K1"/><mergeCell ref="L1:M1"/>',
+     '<mergeCell ref="R1:R3"/><mergeCell ref="S1:S3"/><mergeCell ref="T1:T3"/>',
+     '</mergeCells>',
      '<printOptions horizontalCentered="1"/><pageMargins left="0.25" right="0.25" top="0.4" bottom="0.4" header="0.1" footer="0.1"/>',
      '<pageSetup paperSize="9" orientation="landscape" fitToWidth="1" fitToHeight="1"/></worksheet>');
    return out.join('');
  }
- function infoXml(s){
+  function infoXml(s){
    var data=[['ตารางเวรเดือน',s.monthName+' '+s.yearBE],['จำนวนวัน',s.days],['จำนวนช่องเวรต่อวัน',19],['จำนวนรายการที่มีชื่อ',s.total],['วันหยุดนักขัตฤกษ์',s.holidayCount],['คำแนะนำ','แก้ไขต่อใน Excel หรืออัปโหลดเข้า Google Sheets ได้'],['ข้อควรทราบ','ไฟล์นี้เป็นข้อมูลส่งออก ณ เวลาที่ดาวน์โหลด ไม่เปลี่ยนแปลงข้อมูลในโปรแกรม']];
    var out=['<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><dimension ref="A1:B'+data.length+'"/><sheetViews><sheetView workbookViewId="0" showGridLines="0"/></sheetViews><cols><col min="1" max="1" width="29" customWidth="1"/><col min="2" max="2" width="80" customWidth="1"/></cols><sheetData>'];
    data.forEach(function(row,i){out.push('<row r="'+(i+1)+'">'+cell('A'+(i+1),row[0],1)+cell('B'+(i+1),row[1],0)+'</row>')});out.push('</sheetData></worksheet>');return out.join('');
  }
  function stylesXml(){
-   // Preserve existing date/sat/sun/holiday styles (0..7); add export-header-only group fills.
-   var colors=['FFFFE5EE','FFE8FBF4','FFFFE6CA','FFF3ECFF','FFFFE9F0','FFFFF2C9'];
-   var groupColors=['FFFFDFE3','FFFFE2EE','FFFFE8D5','FFFFF2BD','FFDDF4E6','FFDFF0FF','FFE9E0FF','FFFFDFE3','FFFFE2EE','FFFFE8D5'];
-   var fills=['<fill><patternFill patternType="none"/></fill>','<fill><patternFill patternType="gray125"/></fill>'].concat(colors.concat(groupColors).map(function(c){return '<fill><patternFill patternType="solid"><fgColor rgb="'+c+'"/><bgColor indexed="64"/></patternFill></fill>'}));
-   var xfs=[[0,0],[1,2],[1,3],[1,4],[1,4],[0,5],[0,6],[0,7]];
-   groupColors.forEach(function(_,i){xfs.push([1,i+8])});
+   // Header colors copy the exact live table CSS for grp-date/v/ot/sdmc1..78/extra.
+   var colors=['FFFFDFE3','FFFFE2EE','FFFFE8D5','FFFFF2BD','FFDDF4E6',
+      'FFDFF0FF','FFE9E0FF','FFFFDFE3','FFFFE2EE','FFFFE8D5',
+      'FFF3ECFF','FFFFEAF1','FFFFF2C9'];
+   var fills=['<fill><patternFill patternType="none"/></fill>',
+      '<fill><patternFill patternType="gray125"/></fill>'].concat(colors.map(function(c){
+       return '<fill><patternFill patternType="solid"><fgColor rgb="'+c+'"/><bgColor indexed="64"/></patternFill></fill>';
+      }));
+   var xfs=[[0,0]];
+   for(var i=0;i<colors.length;i++)xfs.push([i<10?1:0,i+2]);
    return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'+
      '<fonts count="2"><font><sz val="11"/><name val="Tahoma"/><color rgb="FF26334B"/></font><font><b/><sz val="11"/><name val="Tahoma"/><color rgb="FF26334B"/></font></fonts>'+
      '<fills count="'+fills.length+'">'+fills.join('')+'</fills><borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border><border><left style="thin"><color rgb="FFE5E4ED"/></left><right style="thin"><color rgb="FFE5E4ED"/></right><top style="thin"><color rgb="FFE5E4ED"/></top><bottom style="thin"><color rgb="FFE5E4ED"/></bottom><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>'+
-     '<cellXfs count="'+xfs.length+'">'+xfs.map(function(x,i){return '<xf numFmtId="0" fontId="'+x[0]+'" fillId="'+x[1]+'" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center" wrapText="'+(i>=8||i===1||i===2||i===3||i===4?'1':'0')+'"/></xf>'}).join('')+'</cellXfs></styleSheet>';
+     '<cellXfs count="'+xfs.length+'">'+xfs.map(function(x,i){return '<xf numFmtId="0" fontId="'+x[0]+'" fillId="'+x[1]+'" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center" wrapText="'+(i>=1&&i<=10?'1':'0')+'"/></xf>'}).join('')+'</cellXfs></styleSheet>';
  }
- var crcTable=null;
+  var crcTable=null;
  function crc32(data){
    if(!crcTable){crcTable=[];for(var n=0;n<256;n++){var v=n;for(var k=0;k<8;k++)v=v&1?(0xedb88320^(v>>>1)):(v>>>1);crcTable[n]=v>>>0}}
    var crc=0xffffffff;for(var i=0;i<data.length;i++)crc=(crc>>>8)^crcTable[(crc^data[i])&255];return (crc^0xffffffff)>>>0;
@@ -17177,7 +17323,7 @@ html body #page-home [data-home-version]{
      status('เตรียมไฟล์'+(format==='xlsx'?' Excel (.xlsx)':' Google Sheets (.csv)')+' เรียบร้อยแล้ว • เปิดไฟล์ที่ดาวน์โหลดบนอุปกรณ์ของคุณได้เลย',false);
    }catch(e){status('ส่งออกไม่สำเร็จ: '+(e&&e.message||e),true)}
  }
- window.RosterExportV1={open:open,close:close,buildSnapshot:snapshot,makeExcel:makeExcel,makeCSV:function(s){return '\uFEFF'+s.rows.map(function(row){return row.map(csvCell).join(',')}).join('\r\n')}};
+ window.RosterExportV1={open:open,close:close,buildSnapshot:snapshot,makeExcel:makeExcel,makeCSV:function(s){var lines=s.rows.map(function(row){return row.slice()});lines[0]=['วันที่'].concat(s.slots.map(function(slot){return slot.label+(slot.time?' ('+slot.time+')':'')}));return '\uFEFF'+lines.map(function(row){return row.map(csvCell).join(',')}).join('\r\n')}};
 })();
 
 </script>
