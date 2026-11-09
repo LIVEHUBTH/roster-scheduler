@@ -8892,6 +8892,52 @@ html body #page-roster button#re40Open .re40-toolbar-icon svg{width:21px;height:
 @media print{#re40Modal{display:none!important}}
 
 </style>
+<style id="festival-only-style">
+/* FESTIVAL FEATURE: all selectors scoped to #page-festival */
+#page-festival{--fs-rose:#eaa2bb;--fs-ink:#534357;--fs-line:#eedde7;color:var(--fs-ink)}
+#page-festival .fstm-shell{max-width:1180px;margin:0 auto;padding:16px 18px 60px;font-family:inherit}
+#page-festival .fs-head{border-radius:22px;padding:22px;background:linear-gradient(115deg,#fff4f8,#f5f3ff);display:flex;justify-content:space-between;align-items:center;gap:12px;border:1px solid var(--fs-line)}
+#page-festival .fs-head h2{font-size:clamp(20px,3vw,29px);margin:0 0 6px;color:#764c65}
+#page-festival .fs-head p{font-size:13px;color:#866b7a;margin:0}
+#page-festival .fs-chip{background:#fff;border:1px solid #f0dae5;color:#926982;border-radius:30px;padding:7px 12px;font-size:12px;white-space:nowrap}
+#page-festival .fs-tabs{display:flex;gap:8px;margin:16px 0;overflow:auto;padding:4px 0}
+#page-festival .fs-tab{flex:1;min-width:116px;border:1px solid var(--fs-line);background:#fff;border-radius:12px;padding:12px 8px;color:#836275;font-size:14px;font-weight:700;cursor:pointer}
+#page-festival .fs-tab.on{background:#e986aa;color:#fff;border-color:#e986aa}
+#page-festival .fs-card{background:#fff;border:1px solid var(--fs-line);border-radius:18px;padding:18px;margin:14px 0;box-shadow:0 5px 18px #9c53750c}
+#page-festival .fs-card h3{font-size:16px;margin:0 0 14px;color:#74465d}
+#page-festival .fs-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+#page-festival label.fs-field{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:600;color:#74566b;min-width:0}
+#page-festival .fs-field input,#page-festival .fs-field select,#page-festival .fs-search{border:1px solid #e7d7e2;border-radius:11px;background:#fff;width:100%;min-height:41px;padding:8px 10px;font:inherit;color:#433544;min-width:0}
+#page-festival .fs-actions{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-top:15px}
+#page-festival button.fs-btn{border:1px solid #dfc4d4;border-radius:11px;padding:10px 15px;background:#fff;color:#82546d;font-weight:700;font-family:inherit;cursor:pointer;font-size:13px}
+#page-festival button.fs-btn.primary{background:#d77e9e;border-color:#d77e9e;color:white}
+#page-festival button.fs-btn.danger{color:#b33d62;border-color:#f2ccd6}
+#page-festival button.fs-btn:disabled{opacity:.45;cursor:not-allowed}
+#page-festival .fs-note{font-size:12px;color:#856b7d;line-height:1.6;margin-top:11px}
+#page-festival .fs-msg{border:1px solid #e4d1dc;border-radius:11px;padding:12px;margin:12px 0;background:#fff6fa;color:#784c65;font-size:13px}
+#page-festival .fs-msg.err{background:#fff1ee;color:#a34e48;border-color:#efccc7}
+#page-festival .fs-slots{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}
+#page-festival .fs-slot{display:flex;gap:7px;align-items:center;background:#faf7fa;border:1px solid #efe3eb;border-radius:11px;padding:10px 9px;font-size:12px;min-height:43px;cursor:pointer}
+#page-festival .fs-slot.off{background:#fff0f3;border-color:#edbcca;color:#a05268}
+#page-festival .fs-slot input{accent-color:#d8779a;width:16px;height:16px}
+#page-festival .fs-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+#page-festival .fs-stat{background:#fdf4f8;border:1px solid #f2e0ea;border-radius:12px;padding:14px}
+#page-festival .fs-stat b{display:block;font-size:23px;color:#9f5777}
+#page-festival .fs-stat span{font-size:12px;color:#927386}
+#page-festival .fs-table-wrap{overflow-x:auto;border:1px solid #eee1e8;border-radius:12px}
+#page-festival .fs-table{width:100%;border-collapse:collapse;font-size:12px;white-space:nowrap}
+#page-festival .fs-table th{background:#fbeaf1;color:#764a62}
+#page-festival .fs-table th,#page-festival .fs-table td{padding:11px 10px;border-bottom:1px solid #f2e7ed;text-align:left}
+#page-festival .fs-table tr:last-child td{border-bottom:0}
+#page-festival .fs-empty{text-align:center;padding:24px;color:#947887;font-size:13px}
+#page-festival .fs-toolbar{display:flex;gap:10px;align-items:end;flex-wrap:wrap;margin-bottom:12px}
+#page-festival .fs-toolbar .fs-field{flex:1;min-width:130px}
+#page-festival .fs-checkline{display:flex;gap:7px;align-items:center;color:#714b60;font-size:13px}
+#page-festival .fs-checkline input{accent-color:#d8779a}
+@media(max-width:650px){#page-festival .fstm-shell{padding:10px 10px 50px}#page-festival .fs-head{padding:16px}#page-festival .fs-chip{display:none}#page-festival .fs-fields{grid-template-columns:1fr 1fr;gap:9px}#page-festival .fs-slots{grid-template-columns:repeat(2,minmax(0,1fr))}#page-festival .fs-card{padding:13px}#page-festival .fs-tabs{gap:5px}#page-festival .fs-tab{font-size:12px;min-width:100px}}
+@media print{body.fs-festival-print .page-view:not(#page-festival),body.fs-festival-print .sidebar,body.fs-festival-print header,body.fs-festival-print .fs-tabs,body.fs-festival-print .fs-actions,body.fs-festival-print .fs-toolbar{display:none!important}body.fs-festival-print #page-festival{display:block!important}}
+
+</style>
 </head>
 <body>
 
@@ -8926,7 +8972,8 @@ html body #page-roster button#re40Open .re40-toolbar-icon svg{width:21px;height:
     <a href="#people" data-page="people"><span class="ico nav-svg"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3.5 20v-2.3A4.7 4.7 0 0 1 8.2 13h1.6a4.7 4.7 0 0 1 4.7 4.7V20"/><path d="M14.5 14.2a4 4 0 0 1 6 3.5V20"/></svg></span><span class="nav-label">ข้อมูลบุคลากร</span></a>
     <a href="#rules" data-page="rules"><span class="ico nav-svg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 19 6v5.3c0 4.4-2.8 7.8-7 9.7-4.2-1.9-7-5.3-7-9.7V6l7-3Z"/><path d="m9 12 2 2 4-4"/></svg></span><span class="nav-label">กฎการจัดเวร</span></a>
     <a href="#holidays" data-page="holidays"><span class="ico nav-svg"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 9h18"/><path d="M8 13h3v3H8zM14 13h3v3h-3z"/></svg></span><span class="nav-label">วันหยุด/นักขัตฤกษ์</span></a>
-    <a href="#history" data-page="history"><span class="ico nav-svg"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.5 2M5.7 5.7 4 4"/></svg></span><span class="nav-label">ประวัติการจัดเวร</span></a>
+<a href="#festival" data-page="festival"><span class="ico nav-svg" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 3v4m10-4v4M4 10h16M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/><path d="m9 15 2 2 4-4"/></svg></span><span class="nav-label">จัดเวรเทศกาล</span></a>
+        <a href="#history" data-page="history"><span class="ico nav-svg"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.5 2M5.7 5.7 4 4"/></svg></span><span class="nav-label">ประวัติการจัดเวร</span></a>
     <a href="#summary" data-page="summary"><span class="ico nav-svg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10h4v10M10 20V5h4v15M16 20v-7h4v7"/><path d="M3 20h18"/></svg></span><span class="nav-label">รายงานสรุป</span></a>
     <a href="#internal" data-page="internal"><span class="ico nav-svg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21V7l8-4 8 4v14"/><path d="M8 9h2M14 9h2M8 13h2M14 13h2M8 17h2M14 17h2M3 21h18"/></svg></span><span class="nav-label">ระบบหน่วยงาน</span></a>
     <a href="#settings" data-page="settings"><span class="ico nav-svg"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V21h-4v-.2a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H3v-4h.2a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.4 7 7.2 4.2l.1.1a1.7 1.7 0 0 0 1.9.3 1.7 1.7 0 0 0 1-1.6V3h4v.2a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L20 7.2l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1H21v4h-.2a1.7 1.7 0 0 0-1.4.8Z"/></svg></span><span class="nav-label">ตั้งค่าโปรแกรม</span></a>
@@ -9700,6 +9747,8 @@ html body #page-roster button#re40Open .re40-toolbar-icon svg{width:21px;height:
   </div>
 </section>
 
+<section class="page-view" id="page-festival" data-view="festival"><div id="festivalApp" class="fstm-shell"></div></section>
+
 <section class="page-view" id="page-history" data-view="history">
   <div class="h33-shell">
     <header class="h33-page-head">
@@ -10354,7 +10403,7 @@ var DEFAULT_RULES=[
 {id:'r23',text:'ให้ระบบพยายามเว้นระยะการขึ้นเวรของบุคลากรเป็นวันเว้นวันก่อนเสมอ หากจำเป็นสามารถขึ้นเวรวันติดกันได้เป็นตัวเลือกท้ายสุด แต่ห้ามจัดเวรติดต่อกันเกิน 2 วัน เว้นแต่เป็นเวรบ่าย–ดึกต่อเนื่องในช่วงวันที่กฎข้อ 3 อนุญาต การจัดและการแก้สมดุลต้องไม่ทำให้กฎข้อ 1–22 เสีย'},
 {id:'r24',text:'EXTRA1 และ EXTRA2 ต้องหมุนเวียนทั้งตำแหน่ง EXTRA และฟลอของบุคลากร โดยอ้างอิงตารางเดือนปัจจุบันและประวัติเดือนก่อนหน้าเพื่อลดการตก EXTRA เดิม + ฟลอเดิมซ้ำ ๆ และลดการตกฟลอเดิมซ้ำ โดยฟลอตามวันคือ จันทร์ EXTRA1=SU / EXTRA2=OB, อังคาร EXTRA1=SU / EXTRA2=ENT, พุธ EXTRA1=OB / EXTRA2=SU, พฤหัสบดี EXTRA1=OT / EXTRA2=SK, ศุกร์ EXTRA1=ENT, เสาร์ EXTRA1=OT, อาทิตย์ EXTRA1=SK / EXTRA2=OT ส่วน EXTRA3 ให้รันตามกฎปกติเดิม และกฎนี้เป็นลำดับการเลือกคิวเท่านั้น ห้ามทำให้กฎข้อ 1–23 เสีย'}
 ];
-var state={people:[],assignments:{},holidays:{},rules:[],customRules:[],pdfNote:'',rotation:{},unitInfo:{}};
+var state={people:[],assignments:{},holidays:{},rules:[],customRules:[],pdfNote:'',rotation:{},unitInfo:{},festivalPlans:[]};
 var peopleV30Page=1,peopleV30PageSize=10,peopleV30SortDept=false;
 var unitUser={name:'-',role:'viewer',username:'',id:null};
 var auth={token:'',expiresAt:'',user:null};
@@ -10399,6 +10448,7 @@ function loadConfig(){
   state.people.forEach(function(p,i){if(!p.code)p.code='EMP'+String(i+1).padStart(3,'0');if(typeof p.position!=='string')p.position='';if(typeof p.department!=='string')p.department='';if(typeof p.active!=='boolean')p.active=true;if(typeof p.startDate!=='string')p.startDate='';if(typeof p.birthDate!=='string')p.birthDate='';});
   state.holidays=c&&c.holidays?c.holidays:{};
   state.customRules=c&&c.customRules?c.customRules:[];
+  state.festivalPlans=c&&Array.isArray(c.festivalPlans)?c.festivalPlans:[];
   /* V39.21: ย้ายกฎ EXTRA-only แบบเดิมจากการผูกกับรายชื่อสุดท้าย มาเป็นสิทธิ์ของบุคคลโดยตรง
      เพื่อให้เพิ่ม/ลบบุคลากรภายหลังได้โดยไม่ทำให้คนสุดท้ายกลายเป็น EXTRA-only อัตโนมัติ */
   if(state.people.length===28){
@@ -10445,7 +10495,7 @@ function loadConfig(){
   });
 }
 function syncedUiSettings(){var x={};try{x=parse(localStorage.getItem('roster_ui_v24'),{})||{}}catch(e){}return x}
-function configPayload(){return {people:state.people,holidays:state.holidays,customRules:state.customRules,pdfNote:state.pdfNote,rules:state.rules,unitInfo:state.unitInfo||{},uiSettings:syncedUiSettings(),updatedAt:new Date().toISOString()}}
+function configPayload(){return {people:state.people,holidays:state.holidays,customRules:state.customRules,festivalPlans:state.festivalPlans||[],pdfNote:state.pdfNote,rules:state.rules,unitInfo:state.unitInfo||{},uiSettings:syncedUiSettings(),updatedAt:new Date().toISOString()}}
 function saveConfig(){state.pdfNote=el('pdfNote').value;var p=configPayload();localStorage.setItem('roster_config_v8',JSON.stringify(p));scheduleCloudConfigSave(p)}
 
 function normalizeUnitInfo(info){
@@ -10899,7 +10949,7 @@ function purgeInactiveAssignmentsFromDraft(){
   });
   return removed;
 }
-function monthPayload(){return {version:'24.5-home-ipad-fit',key:currentKey(),year:gy(),month:cm(),savedAt:new Date().toISOString(),assignments:state.assignments,rotation:state.rotation,peopleSnapshot:state.people,workflow:normalizeWorkflow(workflow)}}
+function monthPayload(){return {version:'24.5-home-ipad-fit',key:currentKey(),year:gy(),month:cm(),savedAt:new Date().toISOString(),assignments:state.assignments,rotation:state.rotation,peopleSnapshot:state.people,workflow:normalizeWorkflow(workflow),festivalPlanSnapshot:festivalMonthSnapshots()}}
 function saveMonth(silent){
   if(!workflow)workflow=defaultWorkflow();
   var d=monthPayload();
@@ -11188,7 +11238,114 @@ function closeHistoryViewer(){
   if(v)v.classList.remove('show');
 }
 function setStatus(t,ok){el('status').textContent=t;el('status').className='status'+(ok?'':' err')}
-function active(slot,d){var w=dow(d);if(slot.id==='v1'||slot.id==='v2')return true;if(slot.id==='ot1'||slot.id==='ot2')return hasRule(8)?weekdayNoHoliday(d):true;if(slot.kind==='morning')return hasRule(9)?isOffDay(d):true;if(slot.kind==='night')return true;if(slot.kind==='long')return hasRule(11)?isOffDay(d):true;if(slot.kind==='evening')return hasRule(12)?weekdayNoHoliday(d):true;if(slot.id==='e1')return hasRule(13)?!isHoliday(d):true;if(slot.id==='e2')return hasRule(14)?(!isHoliday(d)&&(w===0||w===1||w===2||w===3||w===4)):true;if(slot.id==='e3')return true;return true}
+/* FESTIVAL FEATURE V1: isolated opt-in calendar overlay; all existing scheduler rules stay unchanged. */
+function festivalValidDate(s){return /^\d{4}-\d{2}-\d{2}$/.test(String(s||''))}
+function festivalDates(plan){
+  if(!plan||!festivalValidDate(plan.start)||!festivalValidDate(plan.end)||plan.start>plan.end)return [];
+  var a=[],from=new Date(plan.start+'T12:00:00Z'),to=new Date(plan.end+'T12:00:00Z');
+  if(!Number.isFinite(+from)||!Number.isFinite(+to))return [];
+  for(var t=+from;t<=+to&&a.length<32;t+=86400000)a.push(new Date(t).toISOString().slice(0,10));
+  return a;
+}
+function festivalPlansForDay(day){
+  var k=dkey(day);
+  return (state.festivalPlans||[]).filter(function(p){return p.enabled!==false&&p.start<=k&&k<=p.end});
+}
+function festivalSlotDisabled(sid,day){
+  var date=dkey(day);
+  return festivalPlansForDay(day).some(function(p){
+    var entry=p.days&&p.days[date];return entry&&Array.isArray(entry.disabled)&&entry.disabled.indexOf(sid)>=0;
+  });
+}
+function festivalDayIsLocked(day){return festivalPlansForDay(day).some(function(p){return p.locked===true})}
+function festivalRunIsLocked(){for(var d=1;d<=dim();d++)if(festivalDayIsLocked(d))return true;return false}
+function festivalMonthSnapshots(){
+  var start=currentKey()+'-01',end=currentKey()+'-'+pad(dim());
+  return (state.festivalPlans||[]).filter(function(p){return p.enabled!==false&&p.end>=start&&p.start<=end}).map(function(p){return JSON.parse(JSON.stringify(p))});
+}
+function festivalDefaultDates(type,yearBE){
+  var y=Number(yearBE)-543;
+  if(type==='newyear')return {start:(y-1)+'-12-31',end:y+'-01-03'};
+  if(type==='songkran')return {start:y+'-04-13',end:y+'-04-15'};
+  return null;
+}
+function festivalPeriod(type,yearBE){
+  var p=(state.festivalPlans||[]).find(function(x){return x.type===type&&Number(x.yearBE)===Number(yearBE)});
+  if(p)return {start:p.start,end:p.end};
+  if(type==='newyear'||type==='songkran')return festivalDefaultDates(type,yearBE);
+  return null;
+}
+function festivalHistoryRecords(type,yearBE){
+  var range=festivalPeriod(type,yearBE);if(!range)return [];
+  var dates=festivalDates(range),out=[],seen={};
+  dates.forEach(function(date){
+    var m=date.slice(0,7),day=Number(date.slice(8)),data=savedMonth(m);
+    if(!data||!data.assignments)return;
+    var snap=data.peopleSnapshot||state.people;
+    SLOTS.forEach(function(s){
+      var pid=data.assignments[day+'|'+s.id];if(!pid)return;
+      var id=date+'|'+s.id;if(seen[id])return;seen[id]=true;
+      var person=snap.find(function(x){return x.id===pid})||state.people.find(function(x){return x.id===pid});
+      out.push({festival:type,yearBE:Number(yearBE),date:date,slotId:s.id,slotLabel:s.label,personId:pid,personName:person?person.name:pid,department:person?person.department||'':'',status:'ตามตารางบันทึก',workflowStatus:(data.workflow&&data.workflow.status)||'draft'});
+    });
+  });
+  return out;
+}
+function festivalHistoryYears(type){
+  var years={};(state.festivalPlans||[]).filter(function(p){return !type||p.type===type}).forEach(function(p){years[p.yearBE]=true});
+  var cur=py();for(var y=cur-10;y<=cur+1;y++){if(type==='newyear'||type==='songkran')years[y]=true}
+  for(var i=0;i<localStorage.length;i++){var match=(localStorage.key(i)||'').match(/^roster_month_v7_(\d{4})-(\d{2})$/);if(!match)continue;var yBE=Number(match[1])+543;years[yBE]=true;if(type==='newyear'&&match[2]==='12')years[yBE+1]=true}
+  return Object.keys(years).map(Number).filter(function(y){return y>2500&&y<2700}).sort(function(a,b){return b-a});
+}
+function festivalPastScore(type,yearBE,pid){
+  var count=0,last=0,years=festivalHistoryYears(type).filter(function(y){return y<yearBE});
+  years.forEach(function(y){var n=festivalHistoryRecords(type,y).filter(function(r){return r.personId===pid}).length;
+    if(n){count+=n;if(y>last)last=y}
+  });
+  return {count:count,last:last};
+}
+function festivalCandidatePool(candidates,slot,current,day){
+  var plans=festivalPlansForDay(day);if(!plans.length||candidates.length<2)return candidates;
+  var plan=plans[0],group=SLOT_GROUP[slot.id],selectedCount=Math.min.apply(null,candidates.map(function(pid){return current.group[group][pid]||0}));
+  var balanceCandidates=candidates.filter(function(pid){return (current.group[group][pid]||0)===selectedCount});
+  if(balanceCandidates.length<2)return candidates;
+  var minTotal=Math.min.apply(null,balanceCandidates.map(function(pid){return current.total[pid]||0}));
+  balanceCandidates=balanceCandidates.filter(function(pid){return (current.total[pid]||0)===minTotal});
+  if(balanceCandidates.length<2)return candidates;
+  var ranked=balanceCandidates.map(function(pid){return {pid:pid,s:festivalPastScore(plan.type,Number(plan.yearBE),pid)}});
+  ranked.sort(function(a,b){return a.s.count-b.s.count||a.s.last-b.s.last});
+  var first=ranked[0].s;
+  return ranked.filter(function(r){return r.s.count===first.count&&r.s.last===first.last}).map(function(r){return r.pid});
+}
+window.__ROSTER_FESTIVAL_BRIDGE__={
+  slots:SLOTS.map(function(s){return {id:s.id,label:s.label,kind:s.kind,time:s.time}}),
+  getPlans:function(){return JSON.parse(JSON.stringify(state.festivalPlans||[]))},
+  getCurrent:function(){return {yearBE:py(),month:cm(),key:currentKey()}},
+  getUser:function(){return {role:unitUser.role,name:unitUser.name}},
+  canEdit:function(){return unitUser.role==='scheduler'||unitUser.role==='admin'},
+  canRun:function(){return canRosterEdit()},
+  people:function(){return state.people.map(function(p){return {id:p.id,name:p.name,active:p.active,department:p.department}})},
+  savePlans:function(plans){
+    if(!(unitUser.role==='admin'||unitUser.role==='scheduler'))throw new Error('เฉพาะผู้จัดเวรหรือ Admin สามารถบันทึกได้');
+    if(!Array.isArray(plans)||plans.length>250)throw new Error('ข้อมูลเทศกาลไม่ถูกต้อง');
+    plans.forEach(function(p){
+      if(!p||!p.id||!p.type||!/^\d{4}-\d{2}-\d{2}$/.test(p.start)||!festivalDates(p).length)throw new Error('วันที่เทศกาลไม่ถูกต้องหรือยาวเกิน 32 วัน');
+    });
+    state.festivalPlans=JSON.parse(JSON.stringify(plans));
+    saveConfig();renderSheet();
+    return true;
+  },
+  run:async function(){if(!canRosterEdit())throw new Error('ตารางนี้ไม่อนุญาตให้รันเวร');await runSchedule()},
+  getRecords:festivalHistoryRecords,
+  loadHistory:async function(){var b=window.__ROSTER_HISTORY_V33__;return b&&b.loadHistoryAcrossYears?b.loadHistoryAcrossYears():{available:false,loaded:0}},
+  getYears:festivalHistoryYears,
+  getPeriod:festivalPeriod,
+  savedMonths:function(){var n=0;for(var i=0;i<localStorage.length;i++)if(/^roster_month_v7_\d{4}-\d{2}$/.test(localStorage.key(i)||''))n++;return n},
+  saveCurrent:function(){saveMonth(true)},
+  status:setStatus
+};
+
+function active(slot,d){if(festivalSlotDisabled(slot.id,d))return false;var w=dow(d);if(slot.id==='v1'||slot.id==='v2')return true;if(slot.id==='ot1'||slot.id==='ot2')return hasRule(8)?weekdayNoHoliday(d):true;if(slot.kind==='morning')return hasRule(9)?isOffDay(d):true;if(slot.kind==='night')return true;if(slot.kind==='long')return hasRule(11)?isOffDay(d):true;if(slot.kind==='evening')return hasRule(12)?weekdayNoHoliday(d):true;if(slot.id==='e1')return hasRule(13)?!isHoliday(d):true;if(slot.id==='e2')return hasRule(14)?(!isHoliday(d)&&(w===0||w===1||w===2||w===3||w===4)):true;if(slot.id==='e3')return true;return true}
 function usedToday(pid,d){for(var i=0;i<SLOTS.length;i++)if(state.assignments[akey(d,SLOTS[i].id)]===pid)return true;return false}
 function hadNight(assign,pid,d){for(var i=0;i<SLOTS.length;i++)if(SLOTS[i].kind==='night'&&assign[akey(d,SLOTS[i].id)]===pid)return true;return false}
 function specialNightDay(y,m,d){var w=dowFor(y,m,d);return w===5||w===6||w===0||!!state.holidays[dateKey(y,m,d)]}
@@ -12358,6 +12515,7 @@ function rebalanceRule21(){
 async function runSchedule(){
   if(!requireRosterEdit('รันตารางเวร'))return;
   try{
+    if(festivalRunIsLocked())throw new Error('มีช่วงเทศกาลที่ล็อกไว้ในเดือนนี้ กรุณาปลดล็อกจากเมนูจัดเวรเทศกาลก่อนรันใหม่');
     if(cloud.connected)await ensureCloudMonths([prevKey(),currentKey()]);
     /* กันยายน 2569 เป็น baseline ที่ผู้ใช้จัดเอง: ก่อนรัน ต.ค. ให้รับประกันว่าข้อมูลอ้างอิงนี้อยู่ใน local storage
        เดือนถัดจากนั้นจะอ้างอิงเดือนก่อนหน้าที่บันทึกไว้ตามปกติ */
@@ -12379,7 +12537,7 @@ async function runSchedule(){
         }
         if(!candidates.length)continue;
 
-        pid=choose(candidates,slot,current,previous,d,cursor);
+        pid=choose(festivalCandidatePool(candidates,slot,current,d),slot,current,previous,d,cursor);
         state.assignments[akey(d,slot.id)]=pid;
 
         var g=SLOT_GROUP[slot.id],off=isOffDay(d),cls=dayClassCurrent(d);
@@ -12449,7 +12607,7 @@ function buildHeader(){return '<caption>ตารางเวรผู้ช่�
 '</tr></thead>'}
 function optionHtml(selected){var h='<option value=""></option>';state.people.forEach(function(p,i){var inactive=(p.active===false&&currentKey()!=='2026-09');h+='<option value="'+p.id+'"'+(selected===p.id?' selected':'')+(inactive?' disabled':'')+'>'+(i+1)+'. '+esc(p.name)+(inactive?' (พักเวร)':'')+'</option>'});return h}
 function rosterCellLabel(pid){if(!pid)return '';for(var i=0;i<state.people.length;i++){if(state.people[i].id===pid)return (i+1)+'. '+state.people[i].name}return ''}
-function renderSheet(){if(!workflow)workflow=defaultWorkflow();var editable=canRosterEdit();var h=buildHeader()+'<tbody>';for(var d=1;d<=dim();d++){var w=dow(d);var cls=isHoliday(d)?'holiday':(w===6?'saturday':(w===0?'sunday':''));h+='<tr class="'+cls+'"><td class="date"><b>'+DAYS[dow(d)]+d+'</b>'+(isHoliday(d)?'<br><small>นักขัตฯ</small>':'')+'</td>';SLOTS.forEach(function(s){if(!active(s,d)){h+='<td class="inactive"></td>';return}var v=state.assignments[akey(d,s.id)]||'';h+='<td data-d="'+d+'" data-s="'+s.id+'"><span class="phone-sheet-value">'+esc(rosterCellLabel(v))+'</span><select '+(editable?'':'disabled')+' data-d="'+d+'" data-s="'+s.id+'">'+optionHtml(v)+'</select></td>'});h+='</tr>'}h+='</tbody>';el('sheet').innerHTML=h;el('sheet').classList.toggle('is-readonly',!editable);el('sheet').querySelectorAll('select').forEach(function(s){s.onchange=function(){if(!requireRosterEdit('แก้ไขตาราง')){renderSheet();return}var d=parseInt(this.dataset.d,10),sid=this.dataset.s;if(this.value)state.assignments[akey(d,sid)]=this.value;else delete state.assignments[akey(d,sid)];var label=this.parentNode.querySelector('.phone-sheet-value');if(label)label.textContent=rosterCellLabel(this.value);if(!workflowEditLogged){auditWorkflow('เริ่มแก้ไขตารางเวรด้วยตนเอง');workflowEditLogged=true}validate(false);renderSummary();renderUnitWorkflow();saveMonth(true)}});validate(false);renderSummary();renderHomePreview();applyUnitPermissions();}
+function renderSheet(){if(!workflow)workflow=defaultWorkflow();var editable=canRosterEdit();var h=buildHeader()+'<tbody>';for(var d=1;d<=dim();d++){var w=dow(d);var cls=isHoliday(d)?'holiday':(w===6?'saturday':(w===0?'sunday':''));h+='<tr class="'+cls+'"><td class="date"><b>'+DAYS[dow(d)]+d+'</b>'+(isHoliday(d)?'<br><small>นักขัตฯ</small>':'')+'</td>';SLOTS.forEach(function(s){if(!active(s,d)){h+='<td class="inactive"></td>';return}var v=state.assignments[akey(d,s.id)]||'';h+='<td data-d="'+d+'" data-s="'+s.id+'"><span class="phone-sheet-value">'+esc(rosterCellLabel(v))+'</span><select '+(editable?'':'disabled')+' data-d="'+d+'" data-s="'+s.id+'">'+optionHtml(v)+'</select></td>'});h+='</tr>'}h+='</tbody>';el('sheet').innerHTML=h;el('sheet').classList.toggle('is-readonly',!editable);el('sheet').querySelectorAll('select').forEach(function(s){s.onchange=function(){if(!requireRosterEdit('แก้ไขตาราง')){renderSheet();return}var d=parseInt(this.dataset.d,10),sid=this.dataset.s;if(festivalDayIsLocked(d)){showActionFeedback('ช่วงเทศกาลนี้ล็อกไว้แล้ว กรุณาปลดล็อกก่อนแก้ไข','err');renderSheet();return}if(this.value)state.assignments[akey(d,sid)]=this.value;else delete state.assignments[akey(d,sid)];var label=this.parentNode.querySelector('.phone-sheet-value');if(label)label.textContent=rosterCellLabel(this.value);if(!workflowEditLogged){auditWorkflow('เริ่มแก้ไขตารางเวรด้วยตนเอง');workflowEditLogged=true}validate(false);renderSummary();renderUnitWorkflow();saveMonth(true)}});validate(false);renderSummary();renderHomePreview();applyUnitPermissions();}
 function mark(d,sid){var td=document.querySelector('td[data-d="'+d+'"][data-s="'+sid+'"]');if(td)td.classList.add('conflict')}
 var lastConflictDetails=[];
 
@@ -12739,7 +12897,7 @@ function renderHomePreview(){
   host.appendChild(clone);
 }
 function showPage(page,updateHash){
-  var allowed=['home','roster','people','rules','holidays','history','summary','internal','settings'];
+  var allowed=['home','roster','people','rules','holidays','history','festival','summary','internal','settings'];
   if(allowed.indexOf(page)<0)page='home';
 
   document.querySelectorAll('.page-view').forEach(function(v){
@@ -12781,6 +12939,8 @@ function showPage(page,updateHash){
     renderHolidayV24();
   }else if(page==='history'){
     renderHistory();
+  }else if(page==='festival'){
+    if(window.__FESTIVAL_UI__)window.__FESTIVAL_UI__.render();
   }else if(page==='summary'){
     renderSummary();
     renderSummaryV24();
@@ -14693,7 +14853,7 @@ async function init(){
 /*  NAVIGATION HOTFIX */
 (function wireCriticalNavigation(){
   function fallbackShow(page){
-    var allowed=['home','roster','people','rules','holidays','history','summary','internal','settings'];
+    var allowed=['home','roster','people','rules','holidays','history','festival','summary','internal','settings'];
     if(allowed.indexOf(page)<0)page='home';
     document.querySelectorAll('.page-view').forEach(function(v){
       v.classList.toggle('active',v.getAttribute('data-view')===page);
@@ -17355,6 +17515,92 @@ html body #page-home [data-home-version]{
    }catch(e){status('ส่งออกไม่สำเร็จ: '+(e&&e.message||e),true)}
  }
  window.RosterExportV1={open:open,close:close,buildSnapshot:snapshot,makeExcel:makeExcel,makeCSV:function(s){var lines=s.rows.map(function(row){return row.slice()});lines[0]=['วันที่'].concat(s.slots.map(function(slot){return slot.label+(slot.time?' ('+slot.time+')':'')}));return '\uFEFF'+lines.map(function(row){return row.map(csvCell).join(',')}).join('\r\n')}};
+})();
+
+</script>
+<script id="festival-ui-script">
+(function(){
+'use strict';
+var api=window.__ROSTER_FESTIVAL_BRIDGE__;if(!api)return;
+var root=document.getElementById('festivalApp');if(!root)return;
+var current=api.getCurrent(),selectedTab='settings',selectedType='newyear',selectedYear=current.yearBE,selectedPlanId='',selectedDay='',historyType='newyear',historyYear='all',historySearch='';
+var names={newyear:'ปีใหม่',songkran:'สงกรานต์'};
+var plans=api.getPlans(),cloudHistoryFetched=false;
+function h(v){return String(v===null||v===undefined?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function trDate(s){try{return new Date(s+'T12:00:00Z').toLocaleDateString('th-TH',{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'})}catch(e){return s}}
+function pad(n){return String(n).padStart(2,'0')}
+function dateRange(p){var out=[];if(!p||!p.start||!p.end||p.end<p.start)return out;var from=Date.parse(p.start+'T12:00:00Z'),to=Date.parse(p.end+'T12:00:00Z');for(var i=from;i<=to&&out.length<32;i+=86400000)out.push(new Date(i).toISOString().slice(0,10));return out}
+function defaultPeriod(type,yearBE){var y=Number(yearBE)-543;return type==='newyear'?{start:(y-1)+'-12-31',end:y+'-01-03'}:type==='songkran'?{start:y+'-04-13',end:y+'-04-15'}:{start:y+'-01-01',end:y+'-01-03'}}
+function findPlan(){return plans.find(function(p){return p.id===selectedPlanId})||plans.find(function(p){return p.type===selectedType&&Number(p.yearBE)===Number(selectedYear)})||null}
+function formatName(type){var p=plans.find(function(x){return x.type===type});return names[type]||(p&&p.name)||type}
+function makePlan(){var period=defaultPeriod(selectedType,selectedYear);return {id:selectedType+'_'+selectedYear,type:selectedType,name:formatName(selectedType),yearBE:Number(selectedYear),start:period.start,end:period.end,days:{},enabled:true,locked:false}}
+function ensurePlan(){var p=findPlan();if(!p){p=makePlan();plans.push(p)}selectedPlanId=p.id;return p}
+function yearOptions(){var years=[];for(var y=current.yearBE-5;y<=current.yearBE+6;y++)years.push(y);plans.forEach(function(p){if(years.indexOf(Number(p.yearBE))<0)years.push(Number(p.yearBE))});return years.sort(function(a,b){return a-b})}
+function typeOptions(){var types=['newyear','songkran'];plans.forEach(function(p){if(types.indexOf(p.type)<0)types.push(p.type)});return types.map(function(t){return '<option value="'+h(t)+'"'+(t===selectedType?' selected':'')+'>'+h(formatName(t))+'</option>'}).join('')}
+function notify(msg,err){var n=root.querySelector('#fsMsg');if(n){n.textContent=msg;n.classList.toggle('err',!!err)}else alert(msg)}
+function save(p){try{api.savePlans(plans);notify('บันทึกการตั้งค่าเทศกาลแล้ว • ระบบเดิมไม่ได้เปลี่ยนกฎ',false);return true}catch(e){notify(e.message,true);return false}}
+function isEditable(){return api.canEdit()}
+function render(){plans=api.getPlans();current=api.getCurrent();var html='<div class="fs-head"><div><h2>🌸 จัดเวรเทศกาล</h2><p>กำหนดเวรวันหยุดยาว • หมุนเวียนบุคลากร • ประวัติแยกแต่ละเทศกาล</p></div><span class="fs-chip">ส่วนเสริม ไม่แก้กฎเดิม</span></div>'+
+'<div class="fs-tabs">'+[['settings','⚙️ ตั้งค่าเวร'],['run','📅 จัดเวรเทศกาล'],['history','🕘 ประวัติย้อนหลัง'],['fairness','📊 ความยุติธรรม']].map(function(a){return '<button class="fs-tab'+(selectedTab===a[0]?' on':'')+'" data-fstab="'+a[0]+'">'+a[1]+'</button>'}).join('')+'</div><div id="fsMsg" class="fs-msg" style="display:none"></div>';
+if(selectedTab==='settings')html+=settingsHTML();
+if(selectedTab==='run')html+=runHTML();
+if(selectedTab==='history'||selectedTab==='fairness')html+=historyHTML();
+root.innerHTML=html;var msg=root.querySelector('#fsMsg');if(msg)msg.style.display='none';
+}
+function commonOptions(){return '<div class="fs-fields"><label class="fs-field">เทศกาล<select id="fsType">'+typeOptions()+'</select></label><label class="fs-field">ปี พ.ศ.<select id="fsYear">'+yearOptions().map(function(y){return '<option value="'+y+'"'+(Number(selectedYear)===y?' selected':'')+'>'+y+'</option>'}).join('')+'</select></label></div>'}
+function settingsHTML(){var p=findPlan(),d=p?dateRange(p):[],days=p&&p.days||{},day=selectedDay&&d.indexOf(selectedDay)>=0?selectedDay:d[0]||'';selectedDay=day;var disabled=days[day]&&days[day].disabled||[];
+return '<section class="fs-card"><h3>1. เลือกเทศกาลและช่วงวันหยุด</h3>'+commonOptions()+'<div class="fs-fields" style="margin-top:13px"><label class="fs-field">เริ่มต้น<input id="fsStart" type="date" value="'+h(p?p.start:defaultPeriod(selectedType,selectedYear).start)+'"></label><label class="fs-field">สิ้นสุด<input id="fsEnd" type="date" value="'+h(p?p.end:defaultPeriod(selectedType,selectedYear).end)+'"></label></div>'+
+'<div class="fs-actions"><button class="fs-btn" id="fsNewCustom"'+(!isEditable()?' disabled':'')+'>+ เพิ่มเทศกาลอื่น</button><button class="fs-btn primary" id="fsSavePeriod"'+(!isEditable()?' disabled':'')+'>บันทึกเทศกาล/วันที่</button>'+(p?'<button class="fs-btn danger" id="fsDeletePlan"'+(!isEditable()?' disabled':'')+'>ลบการตั้งค่า</button>':'')+'</div><p class="fs-note">เทศกาลปีใหม่และสงกรานต์แยกประวัติและคิวหมุนเวียนกัน ระบบรองรับช่วงวันหยุดข้ามเดือน และไม่ปรับวันหยุดราชการเดิม</p></section>'+
+'<section class="fs-card"><h3>2. เลือกเวรที่ต้องเปิดในแต่ละวัน</h3>'+(p?'<div class="fs-fields"><label class="fs-field">เลือกวันที่ของเทศกาล<select id="fsDay">'+d.map(function(x){return '<option value="'+x+'"'+(x===day?' selected':'')+'>'+h(trDate(x))+'</option>'}).join('')+'</select></label><label class="fs-field">เปิดใช้งานเทศกาล<select id="fsEnabled"><option value="yes"'+(p.enabled!==false?' selected':'')+'>เปิดใช้งาน</option><option value="no"'+(p.enabled===false?' selected':'')+'>ปิดการใช้งาน</option></select></label></div><div class="fs-slots">'+api.slots.map(function(slot){var off=disabled.indexOf(slot.id)>=0;return '<label class="fs-slot'+(off?' off':'')+'"><input class="fsSlot" type="checkbox" data-slot="'+h(slot.id)+'"'+(!off?' checked':'')+(!isEditable()||p.locked?' disabled':'')+'><span>'+h(slot.label)+'</span></label>'}).join('')+'</div><div class="fs-actions"><button class="fs-btn" id="fsCopyDays"'+(!isEditable()||p.locked?' disabled':'')+'>คัดลอกเวรวันนี้ไปทุกวัน</button><button class="fs-btn primary" id="fsSaveSlots"'+(!isEditable()||p.locked?' disabled':'')+'>บันทึกเวรที่เปิด–ปิด</button></div><p class="fs-note">✓ = เปิดเวรตามกฎเดิม • ไม่เลือก = งดเวรเฉพาะเทศกาล (ระบบจะไม่เปิดเวรที่กฎเดิมห้ามจัด) การเปลี่ยนรายการจะไม่ลบข้อมูลเวรที่จัดแล้วโดยอัตโนมัติ</p>':'<div class="fs-empty">กรุณาบันทึกเทศกาลก่อนจึงจะกำหนดเวรได้</div>')+'</section>';
+}
+function runHTML(){var p=findPlan(),dateList=p?dateRange(p):[],from=api.getCurrent(),inMonth=dateList.filter(function(x){return x.slice(0,7)===from.key});return '<section class="fs-card"><h3>จัดเวรเทศกาลด้วยระบบรันเวรเดิม</h3>'+commonOptions()+'<div class="fs-msg" style="display:block">'+(p?'กำหนดค่าแล้ว: '+h(trDate(p.start))+' – '+h(trDate(p.end))+' ('+dateList.length+' วัน)':'ยังไม่มีการตั้งค่าเทศกาลนี้')+'</div>'+'<div class="fs-stats"><div class="fs-stat"><b>'+dateList.length+'</b><span>จำนวนวันเทศกาล</span></div><div class="fs-stat"><b>'+inMonth.length+'</b><span>วันตรงกับเดือนที่เปิด</span></div><div class="fs-stat"><b>'+(p&&p.locked?'🔒':'🔓')+'</b><span>สถานะล็อกเทศกาล</span></div></div><p class="fs-note">เดือนที่กำลังเปิดในโปรแกรมคือ '+h(from.key)+' หากเทศกาลข้ามเดือน ให้เปิดแต่ละเดือนจากหน้าตารางเวรแล้วรันแยกเดือน กฎเวรเดิมยังตรวจเหมือนเดิม</p>'+
+'<div class="fs-actions"><button class="fs-btn primary" id="fsRun"'+(!p||!inMonth.length||!api.canRun()||p.locked?' disabled':'')+'>รันตารางเดือนที่เปิด โดยใช้เงื่อนไขเทศกาล</button><button class="fs-btn" id="fsLock"'+(!p||!isEditable()?' disabled':'')+'>'+(p&&p.locked?'ปลดล็อกเทศกาล':'ล็อกเวรเทศกาล')+'</button></div><p class="fs-note">การรันจะจัดทั้งเดือนด้วยเครื่องมือเดิม ไม่ใช่รันเฉพาะวันที่เทศกาล และอาจจัดชื่อใหม่ในวันที่อื่นของเดือน กรุณาสำรอง/ตรวจตารางก่อนกดรัน หากล็อกเทศกาลจะป้องกันการรันเดือนที่เกี่ยวข้องใหม่</p></section>';
+}
+function getRecords(){var years=historyYear==='all'?api.getYears(historyType):[Number(historyYear)];var rows=[];years.forEach(function(y){rows=rows.concat(api.getRecords(historyType,y))});return rows.filter(function(r){return !historySearch||((r.personName+' '+r.department+' '+r.slotLabel).toLowerCase().indexOf(historySearch.toLowerCase())>=0)}).sort(function(a,b){return b.date.localeCompare(a.date)||a.personName.localeCompare(b.personName)})}
+function historyHTML(){var types=['newyear','songkran'];plans.forEach(function(p){if(types.indexOf(p.type)<0)types.push(p.type)});var records=getRecords(),unique={};records.forEach(function(r){unique[r.personId]=true});var yearList=api.getYears(historyType);var controls='<div class="fs-toolbar"><label class="fs-field">เทศกาล<select id="fsHistoryType">'+types.map(function(t){return '<option value="'+h(t)+'"'+(t===historyType?' selected':'')+'>'+h(formatName(t))+'</option>'}).join('')+'</select></label><label class="fs-field">ปี พ.ศ.<select id="fsHistoryYear"><option value="all">ทุกปี</option>'+yearList.map(function(y){return '<option value="'+y+'"'+(String(y)===String(historyYear)?' selected':'')+'>'+y+'</option>'}).join('')+'</select></label><label class="fs-field">ค้นหาชื่อ / หน่วยงาน<input id="fsSearch" class="fs-search" value="'+h(historySearch)+'" placeholder="ค้นหาบุคลากร"></label></div>';
+var rowsHtml=records.slice(0,600).map(function(r){return '<tr><td>'+h(trDate(r.date))+'</td><td>'+h(r.personName)+'</td><td>'+h(r.department||'–')+'</td><td>'+h(r.slotLabel)+'</td><td>'+h(r.status)+'</td></tr>'}).join('');
+var yearText=historyYear==='all'?'ทุกปี':historyYear;
+var summary={};records.forEach(function(r){var k=r.personId;var z=summary[k]||(summary[k]={name:r.personName,count:0,days:{},last:0});z.count++;z.days[r.date]=true;z.last=Math.max(z.last,r.yearBE)});
+if(selectedTab==='fairness'){api.people().filter(function(p){return p.active!==false}).forEach(function(p){if(!summary[p.id])summary[p.id]={name:p.name,count:0,days:{},last:0}})}
+var fairness=Object.keys(summary).map(function(k){return summary[k]}).sort(function(a,b){return a.count-b.count||a.last-b.last||a.name.localeCompare(b.name,'th')});
+return '<section class="fs-card"><h3>'+(selectedTab==='history'?'ประวัติเวรเทศกาล':'สรุปความยุติธรรมรายเทศกาล')+'</h3>'+controls+'<div class="fs-stats"><div class="fs-stat"><b>'+records.length+'</b><span>รายการเวรจากตารางที่บันทึก</span></div><div class="fs-stat"><b>'+Object.keys(unique).length+'</b><span>จำนวนบุคลากร</span></div><div class="fs-stat"><b>'+yearText+'</b><span>ปีที่เลือก</span></div></div>'+
+'<div class="fs-actions"><button id="fsExportCsv" class="fs-btn">ส่งออก CSV (Excel/Sheets)</button><button id="fsPrint" class="fs-btn">พิมพ์ / PDF</button></div><p class="fs-note">ข้อมูลนี้อ่านจากตารางเวรที่บันทึกไว้ในเครื่อง/Cloud ที่โหลดมาแล้ว สถานะ “ตามตารางบันทึก” ไม่ได้ยืนยันว่าบุคลากรปฏิบัติงานจริง หากมีการแก้ตารางย้อนหลัง ผลสรุปจะเปลี่ยนตาม</p>'+
+(selectedTab==='history'?'<div class="fs-table-wrap"><table class="fs-table"><thead><tr><th>วันที่</th><th>บุคลากร</th><th>หน่วยงาน</th><th>เวร</th><th>สถานะ</th></tr></thead><tbody>'+rowsHtml+(rowsHtml?'':'<tr><td colspan="5" class="fs-empty">ยังไม่มีประวัติที่บันทึกไว้</td></tr>')+'</tbody></table></div>'+(records.length>600?'<p class="fs-note">แสดง 600 รายการแรกจาก '+records.length+' รายการ สามารถส่งออก CSV เพื่อดูครบได้</p>':''):'<div class="fs-table-wrap"><table class="fs-table"><thead><tr><th>บุคลากร</th><th>จำนวนเวรสะสม</th><th>จำนวนวัน</th><th>ขึ้นล่าสุด พ.ศ.</th></tr></thead><tbody>'+fairness.map(function(r){return '<tr><td>'+h(r.name)+'</td><td>'+r.count+'</td><td>'+Object.keys(r.days).length+'</td><td>'+r.last+'</td></tr>'}).join('')+(fairness.length?'':'<tr><td colspan="4" class="fs-empty">ยังไม่พบข้อมูล</td></tr>')+'</tbody></table></div>')+'</section>';
+}
+function downloadCsv(){var rec=getRecords(),rows=[['เทศกาล','ปี พ.ศ.','วันที่','ชื่อ','หน่วยงาน','ช่องเวร','สถานะ']].concat(rec.map(function(r){return [formatName(r.festival),r.yearBE,r.date,r.personName,r.department,r.slotLabel,r.status]}));var csv='\ufeff'+rows.map(function(cols){return cols.map(function(c){return '"'+String(c===undefined?'':c).replace(/"/g,'""')+'"'}).join(',')}).join('\r\n');var blob=new Blob([csv],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='festival_history_'+historyType+'_'+historyYear+'.csv';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url)},1000)}
+root.addEventListener('click',function(ev){var btn=ev.target.closest('button');if(!btn)return;
+if(btn.dataset.fstab){selectedTab=btn.dataset.fstab;render();if((selectedTab==='history'||selectedTab==='fairness')&&!cloudHistoryFetched){cloudHistoryFetched=true;Promise.resolve(api.loadHistory()).then(function(result){if(result&&result.loaded)render()}).catch(function(err){cloudHistoryFetched=false;notify('อ่านประวัติ Cloud ไม่สำเร็จ: '+err.message,true)})}return}
+try{
+if(btn.id==='fsSavePeriod'){
+ if(!isEditable())throw new Error('ไม่มีสิทธิ์แก้ไขเทศกาล');var p=ensurePlan();if(p.locked)throw new Error('เทศกาลนี้ล็อกไว้ กรุณาปลดล็อกก่อนแก้วันที่');var start=root.querySelector('#fsStart').value,end=root.querySelector('#fsEnd').value;if(!/^\d{4}-\d{2}-\d{2}$/.test(start)||!/^\d{4}-\d{2}-\d{2}$/.test(end)||end<start||dateRange({start:start,end:end}).length>31||!dateRange({start:start,end:end}).length)throw new Error('ช่วงวันที่ต้องอยู่ระหว่าง 1–31 วัน');p.start=start;p.end=end;p.name=formatName(p.type);p.days=p.days||{};if(save()){render();notify('บันทึกเทศกาลและวันที่เรียบร้อย')}}
+if(btn.id==='fsNewCustom'){
+ if(!isEditable())return;var name=prompt('ชื่อเทศกาลใหม่ เช่น วันหยุดพิเศษ');if(!name)return;name=name.trim().slice(0,70);if(!name)return;var type='custom_'+Date.now();names[type]=name;selectedType=type;selectedPlanId='';var p=ensurePlan();p.name=name;if(save()){render();notify('เพิ่มเทศกาล '+name+' แล้ว')}}
+if(btn.id==='fsDeletePlan'){
+ var p=findPlan();if(!p||!isEditable())return;if(!confirm('ลบการตั้งค่า '+p.name+' '+p.yearBE+' หรือไม่? ไม่ลบตารางเวรที่เคยบันทึก'))return;plans=plans.filter(function(x){return x.id!==p.id});selectedPlanId='';if(save())render()}
+if(btn.id==='fsSaveSlots'){
+ var p=findPlan();if(!p||p.locked||!isEditable())return;var date=selectedDay||dateRange(p)[0],off=Array.from(root.querySelectorAll('.fsSlot')).filter(function(x){return !x.checked}).map(function(x){return x.dataset.slot});p.days=p.days||{};p.days[date]={disabled:off};p.enabled=root.querySelector('#fsEnabled').value==='yes';if(save()){render();notify('บันทึกเวรที่เปิด–ปิดสำหรับ '+trDate(date))}}
+if(btn.id==='fsCopyDays'){
+ var p=findPlan();if(!p||p.locked||!isEditable())return;var off=Array.from(root.querySelectorAll('.fsSlot')).filter(function(x){return !x.checked}).map(function(x){return x.dataset.slot});if(!confirm('ใช้เวรที่เลือกเหมือนกันทุกวันในเทศกาลนี้?'))return;p.days=p.days||{};dateRange(p).forEach(function(d){p.days[d]={disabled:off.slice()}});p.enabled=root.querySelector('#fsEnabled').value==='yes';if(save()){render();notify('คัดลอกรูปแบบเวรไปครบทุกวันแล้ว')}}
+if(btn.id==='fsLock'){
+ var p=findPlan();if(!p||!isEditable())return;if(!confirm((p.locked?'ปลดล็อก':'ล็อก')+'เวรเทศกาล '+p.name+' '+p.yearBE+' หรือไม่?'))return;p.locked=!p.locked;if(save()){render();notify(p.locked?'ล็อกเทศกาลแล้ว':'ปลดล็อกเทศกาลแล้ว')}}
+if(btn.id==='fsRun'){
+ var p=findPlan();if(!p||p.locked||!api.canRun())return;if(!confirm('การรันจะจัดตารางเวรทั้งเดือนที่เปิดอยู่ใหม่ รวมถึงวันนอกเทศกาล และใช้กฎเดิมทุกข้อ ยืนยันดำเนินการหรือไม่?'))return;btn.disabled=true;btn.textContent='กำลังรัน...';Promise.resolve(api.run()).then(function(){render();notify('รันตารางด้วยระบบเดิมเรียบร้อย กรุณาตรวจผลและข้อขัดแย้งในหน้าตารางเวร')}).catch(function(e){render();notify(e.message,true)})}
+if(btn.id==='fsExportCsv')downloadCsv();
+if(btn.id==='fsPrint'){document.body.classList.add('fs-festival-print');window.print();setTimeout(function(){document.body.classList.remove('fs-festival-print')},500)}
+}catch(e){notify(e.message,true)}
+});
+root.addEventListener('change',function(ev){var e=ev.target;
+if(e.id==='fsType'){selectedType=e.value;selectedPlanId='';selectedDay='';render()}
+if(e.id==='fsYear'){selectedYear=Number(e.value);selectedPlanId='';selectedDay='';render()}
+if(e.id==='fsDay'){selectedDay=e.value;render()}
+if(e.id==='fsHistoryType'){historyType=e.value;historyYear='all';render()}
+if(e.id==='fsHistoryYear'){historyYear=e.value;render()}
+if(e.id==='fsEnabled'){var p=findPlan();if(!p||!isEditable())return;p.enabled=e.value==='yes';save();render()}
+if(e.classList.contains('fsSlot')){var lab=e.closest('.fs-slot');if(lab)lab.classList.toggle('off',!e.checked)}
+});
+root.addEventListener('input',function(ev){if(ev.target.id==='fsSearch'){historySearch=ev.target.value;var pos=ev.target.selectionStart;render();var x=root.querySelector('#fsSearch');if(x){x.focus();x.setSelectionRange(pos,pos)}}});
+window.__FESTIVAL_UI__={render:render};
+if(document.getElementById('page-festival').classList.contains('active'))render();
 })();
 
 </script>
