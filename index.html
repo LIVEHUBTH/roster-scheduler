@@ -8994,6 +8994,107 @@ html body #page-summary .s34-tabs button[data-summary-tab="compare"]{background:
 html body #page-summary .s34-tabs button[data-summary-tab="holiday"]{background:#fff8e8!important;color:#a28143!important;}
 html body #page-summary .s34-tabs button.active{outline:2px solid #e89cbb!important;outline-offset:-2px!important;font-weight:800!important;}
 </style>
+
+<style id="requested-ui-patch-20261109">
+/* Design-only changes: HOME, FESTIVAL, SUMMARY, sidebar festival link and global font. */
+@import url('https://fonts.googleapis.com/css2?family=Mali:wght@400;500;600;700&display=swap');
+html,body,body *:not(svg):not(path):not(circle):not(rect):not(line):not(polyline):not(polygon):not(ellipse){font-family:'Mali','Noto Sans Thai',Tahoma,sans-serif!important;}
+/* Sidebar: match mint treatment of settings link. */
+html body .side-nav a[data-page="festival"],
+html body .side-nav a[data-page="festival"].active{
+ background:linear-gradient(110deg,#e5faf0,#ccf3e4)!important;
+ color:#418b78!important;border-color:#bce8d6!important;
+}
+html body .side-nav a[data-page="festival"] .nav-label,
+html body .side-nav a[data-page="festival"] .ico,
+html body .side-nav a[data-page="festival"] svg{
+ color:#3a9f88!important;stroke:#3a9f88!important;
+}
+/* Festival page title: replace the tall in-page title with compact header heading. */
+.fs-nav-heading{display:none;align-items:center;min-width:0;gap:9px;color:#36445d;}
+.fs-nav-icon{display:grid;place-items:center;color:#54bca7;flex:0 0 33px;}
+.fs-nav-icon svg{width:30px;height:30px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.fs-nav-text{min-width:0;display:flex;flex-direction:column;gap:1px;line-height:1.25;}
+.fs-nav-text strong{font-size:15px;white-space:nowrap;}
+.fs-nav-text small{font-size:9px;color:#8e93a5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:190px;}
+body:has(#page-festival.active) .fs-nav-heading{display:flex;}
+body:has(#page-festival.active) #page-festival .fs-head{display:none!important;}
+body:has(#page-festival.active) .header-clean-left{display:flex!important;align-items:center;gap:11px;min-width:0;flex:1;}
+body:has(#page-festival.active) .header-right{flex:0 0 auto;margin-left:auto!important;}
+/* Festival cards/inputs: consistent sizing and no horizontal clipping. */
+#page-festival,#page-festival *{min-width:0;}
+#page-festival .fstm-shell{box-sizing:border-box;width:100%;max-width:1480px;padding:10px 11px 36px;}
+#page-festival .fs-tabs{margin:3px 0 14px;}
+#page-festival .fs-card{padding:16px;border-color:#eadce4;border-radius:19px;overflow:visible;}
+#page-festival .fs-card h3{font-size:17px;line-height:1.45;}
+#page-festival label.fs-field{font-size:13px;line-height:1.5;min-width:0;}
+#page-festival .fs-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;min-width:0;}
+#page-festival .fs-field input,#page-festival .fs-field select,#page-festival .fs-search{
+ display:block;width:100%;max-width:100%;min-width:0;box-sizing:border-box;
+ min-height:46px;padding:9px 8px;border-radius:13px;font-size:13px;letter-spacing:-.3px;
+ -webkit-appearance:auto;appearance:auto;
+}
+#page-festival input[type=date]{font-size:12px;letter-spacing:-.6px;padding:7px 5px;}
+#page-festival .fs-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+#page-festival .fs-btn{min-height:51px;font-size:13px;white-space:normal;overflow-wrap:break-word;}
+#page-festival .fs-tab{font-size:14px;}
+#page-festival .fs-stat b{font-size:22px;}
+#page-festival .fs-note{font-size:12px;line-height:1.8;}
+/* Report tabs: separate, individual rectangular buttons like roster actions. */
+html body #page-summary .s34-report-type .s34-tabs{
+ box-sizing:border-box!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+ gap:9px!important;background:none!important;border:0!important;padding:0!important;
+ height:auto!important;min-height:0!important;max-height:none!important;
+ overflow:visible!important;align-self:stretch!important;
+}
+html body #page-summary .s34-report-type .s34-tabs button{
+ width:100%!important;min-width:0!important;height:52px!important;min-height:52px!important;max-height:none!important;
+ border-radius:13px!important;border:1px solid #e8d9e3!important;
+ box-sizing:border-box!important;box-shadow:0 3px 10px #d490ab12!important;
+ margin:0!important;padding:8px 6px!important;line-height:1.3!important;
+ white-space:normal!important;overflow:visible!important;font-size:12px!important;gap:6px!important;
+}
+html body #page-summary .s34-report-type .s34-tabs button.active{
+ outline:0!important;border:2px solid #e698bd!important;box-shadow:0 0 0 2px #fbe8f1!important;
+}
+/* Hide only redundant injected icon; retain original button SVG and handlers. */
+html body #page-summary .s34-actions .s34-action:has(svg.pastel-summary-icon) .s3911-page-svg,
+html body #page-summary .s34-actions .s34-action:has(svg.pastel-summary-icon) .s34-action-icon,
+html body #page-summary .s34-actions .s34-action:has(svg.pastel-summary-icon) > svg:not(.pastel-summary-icon){display:none!important;}
+html body #page-summary .s34-actions .s34-action svg.pastel-summary-icon{display:inline-block!important;width:20px!important;height:20px!important;flex:0 0 20px!important;}
+html body #page-summary .s34-actions .s34-action{gap:9px!important;}
+@media(max-width:640px){
+ /* Home: nearly edge-to-edge on phone, including top under header. */
+ html body main.app:has(#page-home.active){padding:3px 4px 10px!important;}
+ html body #page-home{margin:0!important;padding:0!important;width:100%!important;max-width:none!important;}
+ html body #page-home .v244-home-shell{width:100%!important;max-width:none!important;margin:0 auto 10px!important;padding:0!important;gap:7px!important;}
+ html body #page-home .v244-hero,html body #page-home .v244-home-shell .v244-stat,
+ html body #page-home .v244-home-shell .v244-calendar{max-width:100%!important;}
+ /* Keep toolbar title clear of user / notification buttons. */
+ body:has(#page-festival.active) .header-wrap{flex-wrap:nowrap!important;gap:4px!important;}
+ body:has(#page-festival.active) .header-clean-left{gap:7px!important;}
+ body:has(#page-festival.active) .fs-nav-icon{flex-basis:24px!important;}
+ body:has(#page-festival.active) .fs-nav-icon svg{height:24px;width:24px;}
+ body:has(#page-festival.active) .fs-nav-text strong{font-size:12px!important;}
+ body:has(#page-festival.active) .fs-nav-text small{font-size:7px!important;max-width:108px!important;}
+ #page-festival .fstm-shell{padding:7px 7px 30px!important;}
+ #page-festival .fs-card{padding:12px!important;}
+ #page-festival .fs-fields{gap:8px!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;}
+ #page-festival .fs-field input[type=date]{font-size:11px!important;padding:6px 2px!important;}
+ #page-festival .fs-actions{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important;}
+ #page-festival .fs-actions .fs-btn{font-size:11px!important;min-height:48px!important;padding:8px 5px!important;}
+ #page-festival .fs-tab{font-size:12px!important;}
+ #page-festival .fs-tab svg{width:19px!important;height:19px!important;flex:0 0 19px!important;}
+ html body #page-summary .s34-report-type .s34-tabs{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important;}
+ html body #page-summary .s34-report-type .s34-tabs button{font-size:12px!important;}
+}
+@media(max-width:365px){
+ body:has(#page-festival.active) .fs-nav-text small{display:none!important;}
+ #page-festival .fs-fields:has(input[type=date]){grid-template-columns:1fr!important;}
+ #page-festival .fs-actions{grid-template-columns:1fr!important;}
+}
+@media print{.fs-nav-heading{display:none!important;}}
+</style>
 </head>
 <body>
 
@@ -9048,6 +9149,10 @@ html body #page-summary .s34-tabs button.active{outline:2px solid #e89cbb!import
   <div class="header-wrap">
     <div class="header-clean-left">
       <button class="mobile-menu-btn no-print" id="mobileMenuBtn">☰</button>
+      <div class="fs-nav-heading" aria-label="จัดเวรเทศกาล">
+        <span class="fs-nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4M17 3v4M3 10h18m-10 4 2 2 4-4"/></svg></span>
+        <span class="fs-nav-text"><strong>จัดเวรเทศกาล</strong><small>หมุนเวียนบุคลากร · ประวัติแยกเทศกาล</small></span>
+      </div>
     </div>
     <div class="header-right no-print">
       <button class="header-bell" id="headerBellBtn" title="การแจ้งเตือน" aria-label="การแจ้งเตือน" aria-haspopup="true" aria-expanded="false">
@@ -17632,7 +17737,7 @@ function typeOptions(){var types=['newyear','songkran'];plans.forEach(function(p
 function notify(msg,err){var n=root.querySelector('#fsMsg');if(n){n.textContent=msg;n.classList.toggle('err',!!err)}else alert(msg)}
 function save(p){try{api.savePlans(plans);notify('บันทึกการตั้งค่าเทศกาลแล้ว • ระบบเดิมไม่ได้เปลี่ยนกฎ',false);return true}catch(e){notify(e.message,true);return false}}
 function isEditable(){return api.canEdit()}
-function render(){plans=api.getPlans();current=api.getCurrent();var html='<div class="fs-head"><div><h2>🌸 จัดเวรเทศกาล</h2><p>กำหนดเวรวันหยุดยาว • หมุนเวียนบุคลากร • ประวัติแยกแต่ละเทศกาล</p></div><span class="fs-chip">ส่วนเสริม ไม่แก้กฎเดิม</span></div>'+
+function render(){plans=api.getPlans();current=api.getCurrent();var html='<div class="fs-head"><div><h2>จัดเวรเทศกาล</h2><p>กำหนดเวรวันหยุดยาว • หมุนเวียนบุคลากร • ประวัติแยกแต่ละเทศกาล</p></div><span class="fs-chip">ส่วนเสริม ไม่แก้กฎเดิม</span></div>'+
 '<div class="fs-tabs">'+[['settings','ตั้งค่าเวร'],['run','จัดเวรเทศกาล'],['history','ประวัติย้อนหลัง'],['fairness','ความยุติธรรม']].map(function(a){return '<button class="fs-tab'+(selectedTab===a[0]?' on':'')+'" data-fstab="'+a[0]+'">'+({'settings':'<svg viewBox="0 0 24 24" aria-hidden="true">'+'<rect x="4" y="5" width="16" height="14" rx="3"/><path d="M8 9h8M8 13h8M12 5v14"/>'+'</svg>','run':'<svg viewBox="0 0 24 24" aria-hidden="true">'+'<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4M17 3v4M3 10h18m-10 4 2 2 4-4"/>'+'</svg>','history':'<svg viewBox="0 0 24 24" aria-hidden="true">'+'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/>'+'</svg>','fairness':'<svg viewBox="0 0 24 24" aria-hidden="true">'+'<path d="M4 20v-8h4v8M10 20V5h4v15M16 20v-11h4v11M3 20h18"/>'+'</svg>'})[a[0]]+a[1]+'</button>'}).join('')+'</div><div id="fsMsg" class="fs-msg" style="display:none"></div>';
 if(selectedTab==='settings')html+=settingsHTML();
 if(selectedTab==='run')html+=runHTML();
