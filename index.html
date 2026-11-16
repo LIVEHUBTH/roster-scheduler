@@ -18430,6 +18430,13 @@ if(document.getElementById('page-festival').classList.contains('active'))render(
 .v41-cancel strong{font-size:13px}.v41-cancel small{color:#8992a2}.v41-inline{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
 .v41-card-title{font-weight:800;color:#445c69;font-size:14px;margin:15px 0 9px}.v41-border{border-top:1px solid #e4ebe9;padding-top:10px;margin-top:14px}
 .v41-feedback{font-size:13px;margin-top:7px;min-height:20px;color:#2b7968}.v41-feedback.err{color:#b54b48}
+#v41Holiday .v41-saved-overview{background:#f2fbf8;border:1px solid #cce8df;border-radius:13px;padding:12px 13px;margin:12px 0}
+#v41Holiday .v41-saved-overview b{font-size:13px;color:#377b6b}
+#v41Holiday .v41-saved-item{padding:9px 0;border-top:1px solid #dcece8;color:#455a61;font-size:12px;line-height:1.7}
+#v41Holiday .v41-saved-item:first-of-type{margin-top:7px}
+#v41Holiday .v41-saved-date{color:#237963;font-weight:750;margin-right:8px;white-space:nowrap}
+#v41Holiday .v41-saved-type{color:#8c6e5b;font-size:11px}
+#v41Holiday .v41-new-date-help{font-size:12px;color:#788493;margin:0 0 7px;line-height:1.6}
 .v41-person-row{display:grid;grid-template-columns:minmax(160px,1fr) minmax(135px,210px);gap:10px;margin-top:10px}
 #v41Annual table.v41-table{min-width:1520px;font-variant-numeric:tabular-nums}
 #v41Annual .v41-table th:not(:first-child){min-width:79px;white-space:normal;line-height:1.6}
@@ -18518,6 +18525,7 @@ var previewFor='',currentPreview=null;
 function makeHoliday(){var host=q('v41Holiday');if(!host)return;
  host.innerHTML='<div class="v41-panel"><div class="v41-head">'+svg()+'<div><b>เพิ่มวันหยุดหลังออกตาราง (คงชื่อเดิมทุกช่อง)</b><small>สำรองฉบับเดิม • ตรวจผลกระทบก่อนยืนยัน • ชดเชยเฉพาะที่งดจริง</small></div></div>'+
  '<p class="v41-note v41-warn">เมื่อเพิ่มวันหยุดใหม่ ระบบจะไม่ลบ ไม่สลับ และไม่รันรายชื่อเวรเดิมอัตโนมัติ แม้บางช่องจะไม่เปิดในวันหยุดตามกฎเดิม</p>'+
+ '<div id="v41SavedHolidayOverview" class="v41-saved-overview" aria-live="polite"></div><p class="v41-new-date-help">ช่องวันที่ด้านล่างสำหรับเพิ่มวันหยุดใหม่เท่านั้น • วันหยุดที่บันทึกแล้วแสดงอยู่ด้านบนและในประวัติด้านล่าง</p>'+
  '<div class="v41-fields"><label>วันหยุดที่ประกาศเพิ่ม<input id="v41HolidayDate" type="date" value="'+(previewFor||'')+'"></label><label>ชื่อวันหยุด<input id="v41HolidayName" type="text" placeholder="วันหยุดราชการเพิ่มเติม"></label><label>ประเภท<select id="v41HolidayType"><option value="special">วันหยุดพิเศษ</option><option value="official">วันหยุดนักขัตฤกษ์</option><option value="substitute">วันหยุดชดเชย</option></select></label></div>'+
  '<div class="v41-actions"><button class="v41-btn blue" id="v41HolidayPreview">ตรวจผลกระทบ (ไม่เปลี่ยนเวร)</button><button class="v41-btn" id="v41HolidaySave" disabled>ยืนยันเพิ่มวันหยุด • คงตารางเดิม</button><button class="v41-btn pink" id="v41HolidayArchive">อ่านตารางเก่าจาก Cloud</button></div><div id="v41HolidayPreviewBox"></div><div id="v41HolidayMsg" class="v41-feedback"></div><div class="v41-border"><div class="v41-card-title">ประวัติวันหยุดเพิ่มเติม / ยอดเวรที่รอชดเชย</div><div id="v41HolidayRecords"></div></div></div>';
  q('v41HolidayPreview').onclick=doPreview;
@@ -18536,6 +18544,9 @@ function doPreview(){var date=q('v41HolidayDate').value,name=q('v41HolidayName')
  message('v41HolidayMsg','ตรวจแล้ว • ยังไม่มีการเปลี่ยนข้อมูลในตาราง');
  }catch(e){currentPreview=null;q('v41HolidaySave').disabled=true;message('v41HolidayMsg',e.message,true)}}
 function renderHolidayRecords(){var host=q('v41HolidayRecords');if(!host)return;var entries=api.getAmendments().slice().sort(function(a,b){return b.createdAt.localeCompare(a.createdAt)});
+ var overview=q('v41SavedHolidayOverview');if(overview){var byDate=entries.slice().sort(function(a,b){return String(b.date||'').localeCompare(String(a.date||''))});overview.innerHTML='<b>✓ วันหยุดเพิ่มเติมที่บันทึกแล้ว ('+byDate.length+' รายการ)</b>'+
+ (byDate.length?byDate.map(function(a){var bits=String(a.date||'').split('-'),thDate=bits.length===3?(Number(bits[2])+' '+(months[Number(bits[1])-1]||bits[1])+' '+(Number(bits[0])+543)):String(a.date||'-');var types={special:'วันหยุดพิเศษ',official:'นักขัตฤกษ์',substitute:'วันหยุดชดเชย'};return '<div class="v41-saved-item"><span class="v41-saved-date">'+esc(thDate)+'</span>'+esc(a.name||'วันหยุด')+' <span class="v41-saved-type">('+esc(types[a.type]||'วันหยุด')+')</span></div>'}).join(''):'<p class="v41-note">ยังไม่มีวันหยุดเพิ่มเติมที่บันทึกผ่านเมนูนี้</p>')+
+ '<p class="v41-note">ปฏิทินวันหยุดด้านบนแสดงตามเดือนที่เลือกในโปรแกรม ส่วนรายการนี้แสดงวันหยุดที่เพิ่มไว้ข้ามเดือน/ข้ามปี</p>'; }
  if(!entries.length){host.innerHTML='<p class="v41-note">ยังไม่มีประวัติวันหยุดที่เพิ่มผ่านเมนูนี้</p>';return}
  host.innerHTML=entries.map(function(a){var canceled=a.cancellations||[],pending=canceled.filter(function(c){return !c.makeup||!api.checkPairing(c)}).length;
  return '<section class="v41-cancel"><div class="v41-inline"><strong>'+esc(a.date)+' — '+esc(a.name)+'</strong><small>โดย '+esc(a.createdBy||'-')+'</small></div><div class="v41-note">ตารางต้นฉบับถูกเก็บไว้ในประวัติ • งด '+canceled.length+' เวร • ค้างตรวจชดเชย '+pending+' เวร</div><div class="v41-actions"><button class="v41-btn blue" data-v41-original="'+esc(a.id)+'">ดูฉบับเดิม</button><button class="v41-btn pink" data-v41-cancel-list="'+esc(a.id)+'">ตรวจ/งดเฉพาะช่อง</button></div><div id="v41Details_'+esc(a.id)+'"></div></section>'}).join('');
