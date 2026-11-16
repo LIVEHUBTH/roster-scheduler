@@ -12882,9 +12882,29 @@ function buildHeader(){return '<caption>ตารางเวรผู้ช่�
 '<th class="grp-sdmc56">7.00-23.00</th><th class="grp-sdmc56">7.00-23.00</th>'+
 '<th class="grp-sdmc78">16.00-24.00</th><th class="grp-sdmc78">16.00-24.00</th>'+
 '</tr></thead>'}
-function optionHtml(selected){var h='<option value=""></option>';state.people.forEach(function(p,i){var inactive=(p.active===false&&currentKey()!=='2026-09');h+='<option value="'+p.id+'"'+(selected===p.id?' selected':'')+(inactive?' disabled':'')+'>'+(i+1)+'. '+esc(p.name)+(inactive?' (พักเวร)':'')+'</option>'});return h}
+function optionHtml(selected){var h='<option value="">— เว้นว่าง / เอาชื่อออก —</option>';state.people.forEach(function(p,i){var inactive=(p.active===false&&currentKey()!=='2026-09');h+='<option value="'+p.id+'"'+(selected===p.id?' selected':'')+(inactive?' disabled':'')+'>'+(i+1)+'. '+esc(p.name)+(inactive?' (พักเวร)':'')+'</option>'});return h}
 function rosterCellLabel(pid){if(!pid)return '';for(var i=0;i<state.people.length;i++){if(state.people[i].id===pid)return (i+1)+'. '+state.people[i].name}return ''}
-function renderSheet(){if(!workflow)workflow=defaultWorkflow();var editable=canRosterEdit();var h=buildHeader()+'<tbody>';for(var d=1;d<=dim();d++){var w=dow(d);var cls=isHoliday(d)?'holiday':(w===6?'saturday':(w===0?'sunday':''));h+='<tr class="'+cls+'"><td class="date"><b>'+DAYS[dow(d)]+d+'</b>'+(isHoliday(d)?'<br><small>นักขัตฯ</small>':'')+'</td>';SLOTS.forEach(function(s){if(!active(s,d)){var _legacyPid=state.assignments[akey(d,s.id)],_holidayAdded=(state.holidayAmendments||[]).some(function(x){return x.date===dkey(d)});if(_legacyPid&&_holidayAdded){h+='<td class="inactive v41-protected-duty" data-d="'+d+'" data-s="'+s.id+'"><span class="v41-static-label">'+esc(rosterCellLabel(_legacyPid))+'</span><small>⚠ วันหยุดเพิ่ม • รอตรวจ</small></td>'}else h+='<td class="inactive"></td>';return}var v=state.assignments[akey(d,s.id)]||'';h+='<td data-d="'+d+'" data-s="'+s.id+'"><span class="phone-sheet-value">'+esc(rosterCellLabel(v))+'</span><select '+(editable?'':'disabled')+' data-d="'+d+'" data-s="'+s.id+'">'+optionHtml(v)+'</select></td>'});h+='</tr>'}h+='</tbody>';el('sheet').innerHTML=h;el('sheet').classList.toggle('is-readonly',!editable);el('sheet').querySelectorAll('select').forEach(function(s){s.onchange=function(){if(!requireRosterEdit('แก้ไขตาราง')){renderSheet();return}var d=parseInt(this.dataset.d,10),sid=this.dataset.s;if(festivalDayIsLocked(d)){showActionFeedback('ช่วงเทศกาลนี้ล็อกไว้แล้ว กรุณาปลดล็อกก่อนแก้ไข','err');renderSheet();return}if(this.value)state.assignments[akey(d,sid)]=this.value;else delete state.assignments[akey(d,sid)];var label=this.parentNode.querySelector('.phone-sheet-value');if(label)label.textContent=rosterCellLabel(this.value);if(!workflowEditLogged){auditWorkflow('เริ่มแก้ไขตารางเวรด้วยตนเอง');workflowEditLogged=true}validate(false);renderSummary();renderUnitWorkflow();saveMonth(true)}});validate(false);renderSummary();renderHomePreview();applyUnitPermissions();}
+function renderSheet(){if(!workflow)workflow=defaultWorkflow();var editable=canRosterEdit();var h=buildHeader()+'<tbody>';for(var d=1;d<=dim();d++){var w=dow(d);var cls=isHoliday(d)?'holiday':(w===6?'saturday':(w===0?'sunday':''));h+='<tr class="'+cls+'"><td class="date"><b>'+DAYS[dow(d)]+d+'</b>'+(isHoliday(d)?'<br><small>นักขัตฯ</small>':'')+'</td>';SLOTS.forEach(function(s){if(!active(s,d)){var _legacyPid=state.assignments[akey(d,s.id)],_holidayAdded=(state.holidayAmendments||[]).some(function(x){return x.date===dkey(d)});if(_legacyPid&&_holidayAdded){h+='<td class="inactive v41-protected-duty" data-d="'+d+'" data-s="'+s.id+'"><span class="v41-static-label">'+esc(rosterCellLabel(_legacyPid))+'</span><small>⚠ วันหยุดเพิ่ม • รอตรวจ</small>'+
+          ((unitUser.role==='admin'||unitUser.role==='scheduler')?'<button type="button" class="v43-holiday-clear" data-d="'+d+'" data-s="'+s.id+'">'+(editable?'งดเวรช่องนี้':'เสนอคำของด')+'</button>':'')+'</td>'}else h+='<td class="inactive"></td>';return}var v=state.assignments[akey(d,s.id)]||'';h+='<td data-d="'+d+'" data-s="'+s.id+'"><span class="phone-sheet-value">'+esc(rosterCellLabel(v))+'</span><select '+(editable?'':'disabled')+' data-d="'+d+'" data-s="'+s.id+'">'+optionHtml(v)+'</select></td>'});h+='</tr>'}h+='</tbody>';el('sheet').innerHTML=h;el('sheet').classList.toggle('is-readonly',!editable);el('sheet').querySelectorAll('select').forEach(function(s){s.onchange=function(){if(!requireRosterEdit('แก้ไขตาราง')){renderSheet();return}var d=parseInt(this.dataset.d,10),sid=this.dataset.s;if(festivalDayIsLocked(d)){showActionFeedback('ช่วงเทศกาลนี้ล็อกไว้แล้ว กรุณาปลดล็อกก่อนแก้ไข','err');renderSheet();return}if(this.value)state.assignments[akey(d,sid)]=this.value;else delete state.assignments[akey(d,sid)];var label=this.parentNode.querySelector('.phone-sheet-value');if(label)label.textContent=rosterCellLabel(this.value);if(!workflowEditLogged){auditWorkflow('เริ่มแก้ไขตารางเวรด้วยตนเอง');workflowEditLogged=true}validate(false);renderSummary();renderUnitWorkflow();saveMonth(true)}});
+// Additional-holiday-only correction action: existing V41/V42 confirmation and credit ledger.
+el('sheet').querySelectorAll('.v43-holiday-clear').forEach(function(btn){btn.onclick=function(){
+ var day=Number(btn.dataset.d),sid=btn.dataset.s,date=dkey(day);
+ var rec=(state.holidayAmendments||[]).find(function(r){return r.date===date});
+ if(!rec){showActionFeedback('ไม่พบประวัติวันหยุดที่เพิ่ม','err');return}
+ var pid=state.assignments[akey(day,sid)];
+ if(!pid){renderSheet();return}
+ var person=rosterCellLabel(pid),slot=SLOTS.find(function(x){return x.id===sid});
+ var editing=canRosterEdit();
+ var message=(editing?'ยืนยันงดเวรเฉพาะช่องนี้?':'ตารางล็อกอยู่ • ส่งคำของดเวรเพื่อรออนุมัติ?')+'\n'+date+' • '+(slot?slot.label:sid)+' • '+person+'\nเวรวันอื่นจะไม่เปลี่ยน';
+ if(!confirm(message))return;
+ try{
+   if(!window.__ROSTER_V41__)throw new Error('ยังไม่พร้อมดำเนินการงดเวร');
+   window.__ROSTER_V41__.cancelOneDutyWithApproval(rec.id,sid);
+   renderSheet();renderHolidays();
+   showActionFeedback(editing?'งดเวรเฉพาะช่องสำเร็จ • เก็บยอดรอชดเชยแล้ว':'ส่งคำของดเวรแล้ว • ชื่อเดิมยังอยู่จนกว่าจะอนุมัติ','ok');
+ }catch(err){showActionFeedback('ไม่สำเร็จ: '+err.message,'err')}
+}});
+validate(false);renderSummary();renderHomePreview();applyUnitPermissions();}
 function mark(d,sid){var td=document.querySelector('td[data-d="'+d+'"][data-s="'+sid+'"]');if(td)td.classList.add('conflict')}
 var lastConflictDetails=[];
 
@@ -18449,6 +18469,8 @@ if(document.getElementById('page-festival').classList.contains('active'))render(
 .sheet td.v41-protected-duty{background:#fff8dd!important;color:#66512c!important;min-width:75px;vertical-align:middle}
 .sheet td.v41-protected-duty .v41-static-label{display:block!important;white-space:normal;font-size:11px;font-weight:700;color:#66512c}
 .sheet td.v41-protected-duty small{display:block;font-size:8px;font-weight:600;color:#a67326}
+.sheet td.v41-protected-duty .v43-holiday-clear{display:block;position:relative;z-index:3;margin:3px auto 0;padding:3px 5px;max-width:95%;border-radius:7px;border:1px solid #cba45e;background:#fff6df;color:#8b6326;font-family:inherit;font-size:8px;font-weight:700;white-space:normal;cursor:pointer}
+@media print{.sheet td.v41-protected-duty .v43-holiday-clear{display:none!important}}
 
 
 /* V42.x: compact layout only for holiday-after-publication UI. No scheduler or shared view changes. */
