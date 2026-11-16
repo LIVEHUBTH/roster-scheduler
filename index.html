@@ -18450,6 +18450,49 @@ if(document.getElementById('page-festival').classList.contains('active'))render(
 .sheet td.v41-protected-duty .v41-static-label{display:block!important;white-space:normal;font-size:11px;font-weight:700;color:#66512c}
 .sheet td.v41-protected-duty small{display:block;font-size:8px;font-weight:600;color:#a67326}
 
+
+/* V42.x: compact layout only for holiday-after-publication UI. No scheduler or shared view changes. */
+#v41Holiday .v41-compact{padding:14px;border-color:#dcebe6}
+#v41Holiday .v41-compact .v41-head{margin-bottom:8px;align-items:flex-start}
+#v41Holiday .v41-compact .v41-head b{font-size:16px;line-height:1.45}
+#v41Holiday .v41-compact .v41-head small{font-size:11px;line-height:1.5}
+#v41Holiday .v41-compact-safety{margin:8px 0 10px;padding:10px 12px;border:1px solid #cfebe0;border-radius:11px;background:#eef9f4;font-size:12px;color:#387c6b;line-height:1.6}
+#v41Holiday .v41-quick-nav{display:flex;flex-wrap:wrap;gap:7px;margin:9px 0 12px}
+#v41Holiday .v41-quick-nav a{flex:1 1 118px;text-align:center;text-decoration:none;font-size:11px;line-height:1.45;font-weight:700;padding:9px 7px;border:1px solid #e0e6ee;background:#fbf8fd;border-radius:10px;color:#875b80}
+#v41Holiday .v41-saved-overview{margin:10px 0;padding:10px 12px}
+#v41Holiday .v41-saved-overview .v41-note{margin:4px 0 0;font-size:11px}
+#v41Holiday .v41-saved-overview .v41-saved-item{padding:6px 0}
+#v41Holiday .v41-compact-step{border:1px solid #e5eee9;background:#fff;border-radius:14px;padding:12px;margin-top:11px}
+#v41Holiday .v41-compact-step h3{font-size:15px;color:#366f67;margin:0 0 10px;display:flex;align-items:center;gap:9px;font-weight:800}
+#v41Holiday .v41-step-num{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;width:25px;height:25px;border-radius:9px;background:#e6f7ef;color:#347965;font-size:13px;font-weight:800}
+#v41Holiday .v41-compact-step .v41-fields{margin:8px 0 10px}
+#v41Holiday .v41-compact-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:8px 0 4px}
+#v41Holiday .v41-compact-actions .v41-btn{width:100%;padding:11px 8px;font-size:12px;white-space:normal;line-height:1.4;min-width:0}
+#v41Holiday .v41-step-hint{margin:0 0 8px;color:#778b89;font-size:11px;line-height:1.6}
+#v41Holiday .v41-compact-fold{margin-top:12px;background:#fbfdfd;border:1px solid #dceae7;border-radius:14px;overflow:hidden}
+#v41Holiday .v41-compact-fold>summary{display:flex;align-items:center;gap:10px;cursor:pointer;list-style:none;padding:13px 12px;min-height:59px}
+#v41Holiday .v41-compact-fold>summary::-webkit-details-marker{display:none}
+#v41Holiday .v41-fold-label{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+#v41Holiday .v41-fold-label b{font-size:14px;color:#396d62}
+#v41Holiday .v41-fold-label small{font-size:11px;color:#849392}
+#v41Holiday .v41-fold-action{color:#528b7f;background:#edf7f2;font-size:11px;font-weight:700;padding:6px 8px;border-radius:8px;white-space:nowrap}
+#v41Holiday .v41-compact-fold[open] .v41-fold-action{background:#e5f1ea}
+#v41Holiday .v41-fold-body{padding:0 12px 12px;border-top:1px solid #e1efea}
+#v41Holiday .v41-compact-sub{margin:10px 0;background:#fbfcff;border:1px solid #e4ebe8;border-radius:10px;padding:0 10px}
+#v41Holiday .v41-compact-sub>summary{padding:10px 2px;font-weight:700;font-size:12px;color:#537a71;cursor:pointer;line-height:1.5}
+#v41Holiday .v41-compact-sub>.v41-btn{margin:0 0 10px}
+#v41Holiday .v41-cancel{padding:10px;margin:8px 0}
+#v41Holiday .v41-cancel .v41-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+#v41Holiday .v41-cancel .v41-btn{width:100%;padding:9px 7px;min-width:0}
+#v41Holiday .v41-compact-sub .v41-inline.v41-border{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center}
+#v41Holiday .v41-compact-sub .v41-inline.v41-border>span{min-width:0!important;overflow-wrap:anywhere}
+#v41Holiday .v41-compact-sub .v41-inline.v41-border>.v41-btn{width:auto;margin:0;padding:8px 11px;white-space:nowrap}
+@media(max-width:650px){
+ #v41Holiday .v41-compact{padding:11px}
+ #v41Holiday .v41-compact-step{padding:10px}
+ #v41Holiday .v41-quick-nav a{flex-basis:104px}
+ #v41Holiday .v41-compact-actions .v41-btn{font-size:11px}
+}
 </style>
 <script id="roster-v41-scoped-ui-js">
 (function(){
@@ -18523,11 +18566,17 @@ function buildAnnualXlsx(rows){
 /* Holiday-after-publication UI: previews never write; confirm adds metadata only; cancellation is a separate explicit action. */
 var previewFor='',currentPreview=null;
 function makeHoliday(){var host=q('v41Holiday');if(!host)return;
- host.innerHTML='<div class="v41-panel"><div class="v41-head">'+svg()+'<div><b>เพิ่มวันหยุดหลังออกตาราง (คงชื่อเดิมทุกช่อง)</b><small>สำรองฉบับเดิม • ตรวจผลกระทบก่อนยืนยัน • ชดเชยเฉพาะที่งดจริง</small></div></div>'+
- '<p class="v41-note v41-warn">เมื่อเพิ่มวันหยุดใหม่ ระบบจะไม่ลบ ไม่สลับ และไม่รันรายชื่อเวรเดิมอัตโนมัติ แม้บางช่องจะไม่เปิดในวันหยุดตามกฎเดิม</p>'+
- '<div id="v41SavedHolidayOverview" class="v41-saved-overview" aria-live="polite"></div><p class="v41-new-date-help">ช่องวันที่ด้านล่างสำหรับเพิ่มวันหยุดใหม่เท่านั้น • วันหยุดที่บันทึกแล้วแสดงอยู่ด้านบนและในประวัติด้านล่าง</p>'+
- '<div class="v41-fields"><label>วันหยุดที่ประกาศเพิ่ม<input id="v41HolidayDate" type="date" value="'+(previewFor||'')+'"></label><label>ชื่อวันหยุด<input id="v41HolidayName" type="text" placeholder="วันหยุดราชการเพิ่มเติม"></label><label>ประเภท<select id="v41HolidayType"><option value="special">วันหยุดพิเศษ</option><option value="official">วันหยุดนักขัตฤกษ์</option><option value="substitute">วันหยุดชดเชย</option></select></label></div>'+
- '<div class="v41-actions"><button class="v41-btn blue" id="v41HolidayPreview">ตรวจผลกระทบ (ไม่เปลี่ยนเวร)</button><button class="v41-btn" id="v41HolidaySave" disabled>ยืนยันเพิ่มวันหยุด • คงตารางเดิม</button><button class="v41-btn pink" id="v41HolidayArchive">อ่านตารางเก่าจาก Cloud</button></div><div id="v41HolidayPreviewBox"></div><div id="v41HolidayMsg" class="v41-feedback"></div><div class="v41-border"><div class="v41-card-title">ประวัติวันหยุดเพิ่มเติม / ยอดเวรที่รอชดเชย</div><div id="v41HolidayRecords"></div></div></div>';
+ host.innerHTML='<div class="v41-panel v41-compact"><div class="v41-head">'+svg()+'<div><b>วันหยุดเพิ่มเติมหลังออกตาราง</b><small>จัดการเฉพาะวันหยุดที่เพิ่มใหม่ โดยคงเวรเดิม</small></div></div>'+
+ '<p class="v41-compact-safety">✓ เพิ่มวันหยุดได้โดย <strong>ไม่เปลี่ยนรายชื่อเวรเดิมอัตโนมัติ</strong></p>'+
+ '<nav class="v41-quick-nav" aria-label="ทางลัดจัดการวันหยุด"><a href="#v41AddHoliday">เพิ่มวันหยุด</a><a href="#v41HolidayHistory">ดูรายการ / งดเวร</a><a href="#v42Panel">ยอดชดเชย / แก้ไขเวร</a></nav>'+
+ '<div id="v41SavedHolidayOverview" class="v41-saved-overview" aria-live="polite"></div>'+
+ '<section class="v41-compact-step" id="v41AddHoliday"><h3><span class="v41-step-num">1</span> เพิ่มวันหยุดใหม่</h3>'+
+ '<div class="v41-fields"><label>วันที่เพิ่ม<input id="v41HolidayDate" type="date" value="'+(previewFor||'')+'"></label><label>ชื่อวันหยุด<input id="v41HolidayName" type="text" placeholder="เช่น วันหยุดราชการพิเศษ"></label><label>ประเภทวันหยุด<select id="v41HolidayType"><option value="special">วันหยุดพิเศษ</option><option value="official">วันหยุดนักขัตฤกษ์</option><option value="substitute">วันหยุดชดเชย</option></select></label></div>'+
+ '<div class="v41-actions v41-compact-actions"><button class="v41-btn blue" id="v41HolidayPreview">① ตรวจผลกระทบ</button><button class="v41-btn" id="v41HolidaySave" disabled>② ยืนยันเพิ่มวันหยุด</button></div><p class="v41-step-hint">ตรวจผลกระทบก่อนบันทึก • การยืนยันจะไม่ลบหรือสลับรายชื่อเวร</p>'+
+ '<div id="v41HolidayPreviewBox"></div><div id="v41HolidayMsg" class="v41-feedback" aria-live="polite"></div>'+
+ '<details class="v41-compact-sub"><summary>ตัวเลือกเพิ่มเติม</summary><button class="v41-btn pink" id="v41HolidayArchive">อ่านตารางเก่าจาก Cloud</button></details></section>'+
+ '<details id="v41HolidayHistory" class="v41-compact-fold"><summary><span class="v41-step-num">2</span><span class="v41-fold-label"><b>ตรวจและจัดการเวรวันหยุด</b><small>ดูตารางเดิม หรือเลือกงดเฉพาะช่อง</small></span><span class="v41-fold-action">เปิดดู</span></summary><div class="v41-fold-body"><div id="v41HolidayRecords"></div></div></details></div>';
+ host.querySelectorAll('.v41-quick-nav a').forEach(function(a){a.addEventListener('click',function(){var target=q((a.getAttribute('href')||'').slice(1));if(target&&target.tagName==='DETAILS')target.open=true})});
  q('v41HolidayPreview').onclick=doPreview;
  q('v41HolidayDate').oninput=q('v41HolidayName').oninput=q('v41HolidayType').onchange=function(){q('v41HolidaySave').disabled=true;currentPreview=null};
  q('v41HolidaySave').onclick=function(){var date=q('v41HolidayDate').value,name=q('v41HolidayName').value,type=q('v41HolidayType').value;if(!currentPreview||date!==currentPreview.date||name!==currentPreview.name||type!==currentPreview.type){message('v41HolidayMsg','กรุณาตรวจผลกระทบอีกครั้ง',true);return}if(!confirm('ยืนยันเพิ่มวันหยุด '+date+'?\n\nรายชื่อและตำแหน่งเวรเดิมจะไม่ถูกเปลี่ยนหรือลบโดยอัตโนมัติ'))return;try{api.addHolidayWithoutRosterChange(date,name,type);message('v41HolidayMsg','เพิ่มวันหยุดสำเร็จแล้ว • รายชื่อเวรเดิมยังอยู่ครบ กรุณาตรวจเวรที่ไม่เหมาะกับวันหยุดใหม่');q('v41HolidaySave').disabled=true;renderHolidayRecords()}catch(e){message('v41HolidayMsg',e.message,true)}};
@@ -18546,7 +18595,7 @@ function doPreview(){var date=q('v41HolidayDate').value,name=q('v41HolidayName')
 function renderHolidayRecords(){var host=q('v41HolidayRecords');if(!host)return;var entries=api.getAmendments().slice().sort(function(a,b){return b.createdAt.localeCompare(a.createdAt)});
  var overview=q('v41SavedHolidayOverview');if(overview){var byDate=entries.slice().sort(function(a,b){return String(b.date||'').localeCompare(String(a.date||''))});overview.innerHTML='<b>✓ วันหยุดเพิ่มเติมที่บันทึกแล้ว ('+byDate.length+' รายการ)</b>'+
  (byDate.length?byDate.map(function(a){var bits=String(a.date||'').split('-'),thDate=bits.length===3?(Number(bits[2])+' '+(months[Number(bits[1])-1]||bits[1])+' '+(Number(bits[0])+543)):String(a.date||'-');var types={special:'วันหยุดพิเศษ',official:'นักขัตฤกษ์',substitute:'วันหยุดชดเชย'};return '<div class="v41-saved-item"><span class="v41-saved-date">'+esc(thDate)+'</span>'+esc(a.name||'วันหยุด')+' <span class="v41-saved-type">('+esc(types[a.type]||'วันหยุด')+')</span></div>'}).join(''):'<p class="v41-note">ยังไม่มีวันหยุดเพิ่มเติมที่บันทึกผ่านเมนูนี้</p>')+
- '<p class="v41-note">ปฏิทินวันหยุดด้านบนแสดงตามเดือนที่เลือกในโปรแกรม ส่วนรายการนี้แสดงวันหยุดที่เพิ่มไว้ข้ามเดือน/ข้ามปี</p>'; }
+ '<p class="v41-new-date-help">แสดงรายการทุกเดือนและทุกปี • ช่องด้านล่างใช้เพิ่มวันหยุดใหม่</p>'; }
  if(!entries.length){host.innerHTML='<p class="v41-note">ยังไม่มีประวัติวันหยุดที่เพิ่มผ่านเมนูนี้</p>';return}
  host.innerHTML=entries.map(function(a){var canceled=a.cancellations||[],pending=canceled.filter(function(c){return !c.makeup||!api.checkPairing(c)}).length;
  return '<section class="v41-cancel"><div class="v41-inline"><strong>'+esc(a.date)+' — '+esc(a.name)+'</strong><small>โดย '+esc(a.createdBy||'-')+'</small></div><div class="v41-note">ตารางต้นฉบับถูกเก็บไว้ในประวัติ • งด '+canceled.length+' เวร • ค้างตรวจชดเชย '+pending+' เวร</div><div class="v41-actions"><button class="v41-btn blue" data-v41-original="'+esc(a.id)+'">ดูฉบับเดิม</button><button class="v41-btn pink" data-v41-cancel-list="'+esc(a.id)+'">ตรวจ/งดเฉพาะช่อง</button></div><div id="v41Details_'+esc(a.id)+'"></div></section>'}).join('');
@@ -18558,7 +18607,7 @@ function showCancellation(a){var el=q('v41Details_'+a.id);if(!el)return;var r=ap
  var averages=api.getAmendmentFairness(a.id),avgHtml='<div class="v41-card-title">ค่าเฉลี่ยก่อน–หลังงดเวรตาม 7 กลุ่มเดิม (อ่านอย่างเดียว)</div><div class="v41-tablewrap"><table class="v41-table"><thead><tr><th>กลุ่ม</th><th>ก่อน (ต่างสูงสุด–ต่ำสุด)</th><th>หลัง (ต่างสูงสุด–ต่ำสุด)</th><th>เวรรวมก่อน→หลัง</th></tr></thead><tbody>'+averages.map(function(x){return '<tr><td>'+esc(groups[x.group]||x.group)+'</td><td>'+x.beforeSpread+'</td><td>'+x.afterSpread+(x.afterSpread>1?' ⚠':'')+'</td><td>'+x.beforeTotal+' → '+x.afterTotal+'</td></tr>'}).join('')+'</tbody></table></div><p class="v41-note">ใช้ผู้มีสิทธิ์ในแต่ละกลุ่มตามการตั้งค่าปัจจุบัน โดยไม่เปลี่ยนเกณฑ์ ±1 เดิม หากหลังงดเวรต่างเกินเกณฑ์ให้ตรวจ/พิจารณาชดเชย ไม่รันเปลี่ยนคนอื่นอัตโนมัติ</p>';
  var canc=cancelled.map(function(c){var paired=c.makeup&&api.checkPairing(c),options=api.listMakeupChoices(a.id,c.id);
  return '<div class="v41-border"><div class="v41-note">'+esc(c.personName)+' • '+esc(c.slotLabel)+' • '+(paired?'<b style="color:#37856d">จับคู่ชดเชยและตรวจพบเวรจริงในตารางแล้ว</b>':c.makeup?'⚠ เวรที่จับคู่ไว้ไม่พบในตารางล่าสุด':'<b style="color:#af7540">ค้างพิจารณาชดเชย</b>')+'</div>'+(!c.makeup?'<div class="v41-inline"><select style="flex:1;min-width:155px" data-v41-options="'+esc(c.id)+'"><option value="">เลือกเวรชดเชยช่องเดิมจากเดือนที่บันทึกแล้ว</option>'+options.map(function(o){return '<option value="'+o.date+'|'+o.slotId+'">'+esc(o.label)+'</option>'}).join('')+'</select><button class="v41-btn" data-v41-makeup="'+esc(c.id)+'" '+(!options.length?'disabled':'')+'>ยืนยันจับคู่ชดเชย</button></div>':'')+'</div>'}).join('');
- el.innerHTML='<p class="v41-note v41-warn">การงดชื่อเป็นคนละขั้นกับเพิ่มวันหยุด และทำได้เฉพาะเมื่อเปิดเดือน '+esc(a.month)+' ที่อยู่ในสถานะร่างและมีสิทธิ์แก้ไข ไม่ปลดล็อกตารางอัตโนมัติ</p><div class="v41-card-title">รายชื่อที่ยังอยู่ในตารางฉบับปัจจุบัน</div>'+(rows||'<p class="v41-note">ไม่มีเวรที่มีชื่อในวันนี้</p>')+'<div class="v41-card-title">ยอดเวรงดที่ต้องพิจารณาชดเชย</div>'+(canc||'<p class="v41-note">ยังไม่งดเวรใด</p>')+avgHtml+'<div class="v41-feedback" id="v41DetailMsg"></div>';
+ el.innerHTML='<p class="v41-note v41-warn">การงดเวรต้องได้รับอนุมัติตามสิทธิ์และสถานะตาราง • ไม่ปลดล็อกอัตโนมัติ</p>'+'<details class="v41-compact-sub" open><summary>รายชื่อเวรปัจจุบัน ('+r.rows.length+' ช่อง) • เลือกงดเฉพาะช่อง</summary>'+(rows||'<p class="v41-note">ไม่มีเวรที่มีชื่อในวันนี้</p>')+'</details>'+'<div class="v41-card-title">เวรที่งด / รอชดเชย ('+cancelled.length+')</div>'+(canc||'<p class="v41-note">ยังไม่งดเวรใด</p>')+'<details class="v41-compact-sub"><summary>ดูค่าเฉลี่ยก่อน–หลังงดเวร</summary>'+avgHtml+'</details><div class="v41-feedback" id="v41DetailMsg"></div>';
  el.querySelectorAll('[data-v41-del]').forEach(function(btn){btn.onclick=function(){if(!confirm('ยืนยันงดเฉพาะ '+btn.dataset.v41Del+' วันที่ '+a.date+'?\n\nจะลบเฉพาะรายชื่อช่องนี้หลังตรวจสิทธิ์และบันทึกยอดชดเชย 1 เวร'))return;try{var result=api.cancelOneDutyWithApproval(a.id,btn.dataset.v41Del);renderHolidayRecords();var latest=api.getAmendments().find(function(x){return x.id===a.id});showCancellation(latest);if(result&&result.status==='pending'){
         message('v41DetailMsg','สร้างคำของดเวรแล้ว (ยังไม่เปลี่ยนรายชื่อ) • ดูหัวข้อคำขอด้านล่างเพื่อให้ผู้มีสิทธิ์อนุมัติ');
         if(window.__ROSTER_V42_REFRESH__)window.__ROSTER_V42_REFRESH__();
@@ -18600,6 +18649,7 @@ function msg(t,isError){var node=q('v42Message');if(node){node.textContent=t;nod
 function niceDate(d){if(!d)return '-';var p=d.split('-');return Number(p[2])+'/'+Number(p[1])+'/'+(Number(p[0])+543)}
 function personName(id){return (api.people().find(function(p){return p.id===id})||{}).name||id||'—'}
 var selectedYear='all',search='',formType='replace';
+var v42FoldState={ledger:false,edit:false,requests:false};
 function current(){return api.getCurrent()}
 function render(){
  var panel=q('v42Panel');if(!panel)return;
@@ -18613,8 +18663,9 @@ function render(){
  var slotOpts=api.slots.map(function(x){return '<option value="'+esc(x.id)+'">'+esc(x.label)+'</option>'}).join('');
  var today=current().key+'-01';
  panel.innerHTML='<section class="v42-shell">'+
- '<div class="v42-head">'+ico.ledger+'<div><strong>ทะเบียนเวรที่งด / ค้างชดเชยทุกเดือน</strong><small>ดูวันที่ ชื่อบุคลากร ช่องเวรเดิม และประวัติการชดเชย</small></div></div>'+
+ '<div class="v42-head">'+ico.ledger+'<div><strong>เวรที่งดและยอดรอชดเชย</strong><small>ดูจำนวนค้าง • กดขยายเพื่อดูรายชื่อและวันงดเวร</small></div></div>'+
  '<div class="v42-stats"><div><b>'+data.length+'</b><span>เวรงดที่บันทึก</span></div><div><b>'+pending+'</b><span>ค้างชดเชย</span></div><div><b>'+paired+'</b><span>ชดเชยแล้ว</span></div></div>'+
+ '<details class="v42-fold" data-v42-fold="ledger"'+(v42FoldState.ledger?' open':'')+'><summary>ดูรายการเวรงดและยอดค้างชดเชย</summary><div class="v42-fold-content">'+
  '<div class="v42-fields two"><label>ปี พ.ศ.<select id="v42Year"><option value="all">ทุกปี</option>'+Object.keys(years).sort().reverse().map(function(y){return '<option value="'+y+'"'+(activeYear===y?' selected':'')+'>'+(Number(y)+543)+'</option>'}).join('')+'</select></label><label>ค้นหาบุคลากร / ช่องเวร<input id="v42Search" value="'+esc(search)+'" placeholder="ชื่อบุคลากร หรือ OT1"/></label></div>'+
  '<div class="v42-list">'+(filtered.map(function(c){var status=c.paid?'done':c.makeup?'lost':'pending';var choices=status==='pending'?api.getClaimChoices(c.id):[];
  return '<article class="v42-item"><div class="v42-itemhead"><b>'+esc(c.personName)+'</b><span class="v42-pill '+status+'">'+(status==='done'?'ชดเชยแล้ว':status==='lost'?'ต้องตรวจการจับคู่':'ค้างชดเชย')+'</span></div><p><b>เวรที่ถูกงด:</b> '+esc(c.slotLabel)+' • '+niceDate(c.date)+'</p><p><b>เหตุผล:</b> '+esc(c.reason)+'</p>'+
@@ -18622,15 +18673,17 @@ function render(){
  (status==='pending'&&api.canApprove()?'<div class="v42-actions"><select aria-label="เลือกเวรชดเชยช่องเดิม" id="v42Choose_'+esc(c.id)+'"><option value="">เลือกเวร'+esc(c.slotLabel)+' ที่ได้รับเพิ่มภายหลัง</option>'+choices.map(function(x){return '<option value="'+esc(x.date)+'|'+esc(x.slotId)+'">'+esc(x.label)+'</option>'}).join('')+'</select><button class="v42-btn mint" data-v42-pair="'+esc(c.id)+'" '+(!choices.length?'disabled':'')+'>ยืนยันชดเชย</button></div>':'')+
  (status==='lost'&&api.canApprove()?'<button class="v42-btn rose" data-v42-reset="'+esc(c.id)+'">ยกเลิกการจับคู่ที่ตรวจไม่ผ่าน</button>':'')+
  (status==='pending'&&!choices.length?'<p class="v42-help">ยังไม่พบเวรช่องเดิมที่ได้รับใหม่ภายหลัง • คงยอดค้างไว้ต่อไป</p>':'')+
- '</article>'}).join('')||'<p class="v42-help">ยังไม่มีรายการในตัวกรองที่เลือก</p>')+'</div></section>'+
- '<section class="v42-shell"><div class="v42-head">'+ico.edit+'<div><strong>เสนอแก้ไขเวรหลังประกาศ (เฉพาะช่อง)</strong><small>ไม่รันทั้งเดือน • ผู้มีสิทธิ์ตรวจและอนุมัติก่อนบันทึกจริง</small></div></div>'+
+ '</article>'}).join('')||'<p class="v42-help">ยังไม่มีรายการในตัวกรองที่เลือก</p>')+'</div></div></details></section>'+
+ '<section class="v42-shell"><div class="v42-head">'+ico.edit+'<div><strong>แก้ไขเวรหลังประกาศ</strong><small>แก้เฉพาะช่อง และรออนุมัติก่อนเปลี่ยนจริง</small></div></div>'+
+ '<details class="v42-fold" data-v42-fold="edit"'+(v42FoldState.edit?' open':'')+'><summary>สร้างคำขอแก้เวร</summary><div class="v42-fold-content">'+
  '<p class="v42-help">เปิดเดือนที่ต้องการแก้ในหน้าตารางเวรก่อน สร้างคำขอได้แม้ล็อกตารางแล้ว แต่การส่งคำขอจะยังไม่เปลี่ยนเวรเดิม</p>'+
  '<div class="v42-fields two"><label>ประเภทการแก้ไข<select id="v42Kind"><option value="replace">เปลี่ยนผู้รับเวร 1 ช่อง</option><option value="cancel">งดเวร 1 ช่อง (เหตุหน่วยงาน)</option><option value="holiday_cancel">งดเวรจากวันหยุดที่เพิ่ม</option><option value="swap">สลับรายชื่อ 2 ช่องในเดือนเดียวกัน</option></select></label><label>วันที่ต้องการแก้<input type="date" id="v42Date" value="'+today+'"/></label><label>ช่องเวร<select id="v42Slot">'+slotOpts+'</select></label><label id="v42PersonField">บุคลากรที่รับเวรแทน<select id="v42Person">'+opts+'</select></label><label id="v42SecondDateField" hidden>วันที่ช่องที่จะสลับ<input type="date" id="v42SecondDate" value="'+today+'"/></label><label id="v42SecondSlotField" hidden>ช่องเวรที่จะสลับ<select id="v42SecondSlot">'+slotOpts+'</select></label><label id="v42HolidayField" hidden>วันหยุดเพิ่มเติม<select id="v42HolidayId">'+holidayOptions()+'</select></label></div>'+
  '<label class="v42-longlabel">เหตุผลการแก้ไข<textarea id="v42Reason" rows="2" placeholder="ระบุเหตุผล เช่น หน่วยงานลดกำลังคนหลังประกาศตาราง"></textarea></label>'+
  '<label class="v42-check"><input id="v42Credit" type="checkbox" checked/>สร้างยอดค้างชดเชยให้ผู้ที่ถูกเอาเวรออก (เฉพาะเมื่อเป็นเหตุของหน่วยงาน)</label>'+
  '<button class="v42-btn peach" id="v42Request">'+ico.edit+' บันทึกคำขอโดยไม่เปลี่ยนตารางเดิม</button><div id="v42Message" class="v42-help"></div>'+
- '<div class="v42-subhead">ประวัติคำขอแก้ไข</div>'+requests.slice().reverse().map(function(r){var approved=r.status==='approved';return '<article class="v42-item"><div class="v42-itemhead"><b>'+niceDate(r.date)+' • '+esc(r.kind)+'</b><span class="v42-pill '+(approved?'done':r.status==='rejected'?'lost':'pending')+'">'+(approved?'อนุมัติแล้ว':r.status==='rejected'?'ไม่อนุมัติ':'รออนุมัติ')+'</span></div><p>'+esc(r.reason)+' • เสนอโดย '+esc(r.createdBy)+'</p><p>'+r.changes.map(function(c){var sl=api.slots.find(function(s){return s.id===c.slotId});return niceDate(c.date)+' '+esc(sl?sl.label:c.slotId)+' : '+esc(personName(c.from))+' → '+esc(personName(c.to))}).join('<br>')+'</p>'+
- (r.status==='pending'?'<div class="v42-actions"><button class="v42-btn blue" data-v42-preview="'+esc(r.id)+'">ตรวจสอบผลกระทบ</button>'+(api.canApprove()?'<button class="v42-btn mint" data-v42-approve="'+esc(r.id)+'">อนุมัติและบันทึก</button><button class="v42-btn rose" data-v42-reject="'+esc(r.id)+'">ไม่อนุมัติ</button>':'')+'</div>':'')+'<div class="v42-actions"><button class="v42-btn blue" data-v42-original="'+esc(r.id)+'">ดูตารางต้นฉบับก่อนแก้</button></div><div id="v42Original_'+esc(r.id)+'"></div></article>'}).join('')+'</section>';
+ '</div></details><details class="v42-fold v42-fold-secondary" data-v42-fold="requests"'+(v42FoldState.requests?' open':'')+'><summary>ประวัติคำขอ ('+requests.length+' รายการ)</summary><div class="v42-fold-content">'+requests.slice().reverse().map(function(r){var approved=r.status==='approved';return '<article class="v42-item"><div class="v42-itemhead"><b>'+niceDate(r.date)+' • '+esc(r.kind)+'</b><span class="v42-pill '+(approved?'done':r.status==='rejected'?'lost':'pending')+'">'+(approved?'อนุมัติแล้ว':r.status==='rejected'?'ไม่อนุมัติ':'รออนุมัติ')+'</span></div><p>'+esc(r.reason)+' • เสนอโดย '+esc(r.createdBy)+'</p><p>'+r.changes.map(function(c){var sl=api.slots.find(function(s){return s.id===c.slotId});return niceDate(c.date)+' '+esc(sl?sl.label:c.slotId)+' : '+esc(personName(c.from))+' → '+esc(personName(c.to))}).join('<br>')+'</p>'+
+ (r.status==='pending'?'<div class="v42-actions"><button class="v42-btn blue" data-v42-preview="'+esc(r.id)+'">ตรวจสอบผลกระทบ</button>'+(api.canApprove()?'<button class="v42-btn mint" data-v42-approve="'+esc(r.id)+'">อนุมัติและบันทึก</button><button class="v42-btn rose" data-v42-reject="'+esc(r.id)+'">ไม่อนุมัติ</button>':'')+'</div>':'')+'<div class="v42-actions"><button class="v42-btn blue" data-v42-original="'+esc(r.id)+'">ดูตารางต้นฉบับก่อนแก้</button></div><div id="v42Original_'+esc(r.id)+'"></div></article>'}).join('')+'</div></details></section>';
+ panel.querySelectorAll('[data-v42-fold]').forEach(function(el){el.addEventListener('toggle',function(){v42FoldState[el.getAttribute('data-v42-fold')]=el.open})});
  function on(id,event,cb){var e=q(id);if(e)e.addEventListener(event,cb)}
  on('v42Year','change',function(){selectedYear=this.value;render()});
  on('v42Search','input',function(){search=this.value;var pos=this.selectionStart;render();var el=q('v42Search');if(el){el.focus();el.setSelectionRange(pos,pos)}});
@@ -18713,6 +18766,17 @@ function init(){var h=q('page-holidays');if(!h||q('v42Panel'))return;
  #v42Panel .v42-btn.rose{background:#ffe8ed;color:#a65069}
  #v42Panel .v42-btn:disabled{opacity:.5;cursor:not-allowed}
  #v42Panel .v42-tablewrap{overflow-x:auto;margin:8px 0;max-width:100%}#v42Panel .v42-table{border-collapse:collapse;min-width:1100px;font-size:11px;color:#496c5c}#v42Panel .v42-table th,#v42Panel .v42-table td{padding:6px 8px;border:1px solid #d9ebe4;white-space:nowrap}#v42Panel .v42-table th{background:#e9f8f0}#v42Panel .v42-subhead{font-weight:700;color:#557b71;font-size:14px;margin:15px 0 9px}
+
+ #v42Panel .v42-fold{border:1px solid #dcece5;background:#fbfefd;border-radius:12px;margin:10px 0;overflow:hidden}
+ #v42Panel .v42-fold>summary{cursor:pointer;padding:12px 13px;color:#337568;font-size:13px;font-weight:750;line-height:1.5}
+ #v42Panel .v42-fold[open]>summary{border-bottom:1px solid #e3efeb;background:#f0faf5}
+ #v42Panel .v42-fold-content{padding:10px 12px}
+ #v42Panel .v42-fold-secondary{background:#fffafc;border-color:#eedfe8}
+ #v42Panel .v42-fold-secondary>summary{color:#945b7e}
+ #v42Panel .v42-shell{margin:11px 0}
+ #v42Panel .v42-head{margin-bottom:7px}
+ #v42Panel .v42-stats{margin:8px 0}
+ #v42Panel .v42-help{margin:7px 0;line-height:1.55}
  #v42Panel [hidden]{display:none!important}
  @media(max-width:470px){#v42Panel .v42-fields.two{grid-template-columns:minmax(0,1fr)}#v42Panel .v42-shell{padding:12px}#v42Panel .v42-actions>.v42-btn{flex:1 1 40%}}
  `;
