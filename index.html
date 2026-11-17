@@ -15880,6 +15880,84 @@ window.__ROSTER_V41__={
     filtered.sort(function(a,b){return by[a].localeCompare(by[b]);});
     var oldest=by[filtered[0]];return filtered.filter(function(pid){return by[pid]===oldest;});
   }
+  /* V44: read-only holiday candidate helper. Uses existing core eligibility and
+     the unchanged V42 final validator, never saveConfig/Cloud or modify other dates. */
+  function previewHolidayRowSelection(id,selections){
+    var r=holidayRowReview(id),date=r.date,proposed=[],activeIds={},formerly={};
+    r.kept.forEach(function(x){if(x.personId)activeIds[String(x.personId)]=1;});
+    r.closed.forEach(function(x){if(x.personId){formerly[String(x.personId)]=1;proposed.push({date:date,slotId:x.slotId,from:x.personId,to:null})}});
+    r.opened.forEach(function(x){
+      var pid=String((selections||{})[x.slotId]||'');
+      if(!pid)throw new Error('ยังขาดผู้รับเวร: '+x.slotLabel);
+      if(activeIds[pid])throw new Error('บุคลากรซ้ำในวันเดียวกัน: '+x.slotLabel);
+      if(formerly[pid])throw new Error('บุคลากรที่ถูกงดต้องเก็บสิทธิ์ชดช่องเดิม ไม่ย้ายข้ามชนิดเวร');
+      activeIds[pid]=1;proposed.push({date:date,slotId:x.slotId,from:null,to:pid});
+    });
+    var records=state.publishedCorrections||(state.publishedCorrections=[]);
+    var temp={id:'__holiday_draft_check__'+Date.now(),kind:'holiday_row_reconcile',month:r.month,date:date,changes:proposed,status:'pending'};
+    records.push(temp);
+    try{return previewRequest(temp.id)}
+    finally{var index=records.indexOf(temp);if(index>=0)records.splice(index,1)}
+  }
+  function autoSuggestHolidayRow(id){
+    var r=holidayRowReview(id),slotIds=r.opened.slice(),day=Number(r.date.slice(8));
+    if(!slotIds.length)return {ok:true,chosen:{},message:'ไม่มีช่องเปิดใหม่ที่ต้องจัด'};
+    if(slotIds.length>12)throw new Error('มีช่องเวรเปิดใหม่เกินขอบเขตการทดลองอัตโนมัติ กรุณาตรวจช่องเวรด้วยตนเอง');
+    var excluded={};
+    r.kept.concat(r.closed).forEach(function(x){if(x.personId)excluded[String(x.personId)]=true;});
+    var people=r.people.filter(function(p){return !excluded[String(p.id)]});
+    var old=state.assignments,trial=clone(old),savedCount,solution=[],seen={};
+    r.closed.forEach(function(x){delete trial[day+'|'+x.slotId]});
+    var bySlot={};SLOTS.forEach(function(sl){bySlot[sl.id]=sl});
+    var t0=Date.now(),nodes=0,maxNodes=1200,maxDuration=1000,maxSolutions=12;
+    try{
+      state.assignments=trial;
+      savedCount=currentCounts();
+      var groups={};
+      slotIds.forEach(function(entry){
+        var slot=bySlot[entry.slotId],possible=people.filter(function(p){return !!slot&&canAssignWithForward(p.id,day,slot)});
+        groups[entry.slotId]=possible;
+      });
+      slotIds.sort(function(a,b){return groups[a.slotId].length-groups[b.slotId].length||a.slotId.localeCompare(b.slotId)});
+      if(slotIds.some(function(entry){return !groups[entry.slotId].length}))
+        return {ok:false,chosen:{},message:'ไม่มีบุคลากรที่ผ่านเงื่อนไขสำหรับช่อง: '+slotIds.filter(function(x){return !groups[x.slotId].length}).map(function(x){return x.slotLabel}).join(', ')};
+      var use={},chosen={};
+      function search(i,variation){
+        if(nodes++>=maxNodes||Date.now()-t0>maxDuration||solution.length>=Math.min(maxSolutions,(variation+1)*3))return;
+        if(i>=slotIds.length){
+          var result=Object.assign({},chosen),key=slotIds.map(function(x){return result[x.slotId]}).join('|');
+          if(!seen[key]){seen[key]=1;solution.push(result)}
+          return;
+        }
+        var entry=slotIds[i],sl=bySlot[entry.slotId],gp=SLOT_GROUP[entry.slotId];
+        var pool=groups[entry.slotId].filter(function(p){return !use[p.id]&&canAssignWithForward(p.id,day,sl)});
+        pool.sort(function(a,b){
+          function score(p){
+            var x=p.id,part=((savedCount.group[gp]||{})[x]||0),total=savedCount.total[x]||0,exact=(savedCount.slot[entry.slotId]||{})[x]||0;
+            var mix=((String(x).split('').reduce(function(acc,c){return acc+c.charCodeAt(0)},0)*7+variation*23+i*17)%31);
+            return part*140+total*18+exact*12+(variation===0?mix*.03:variation===1?mix*2:variation===2?mix*6:mix*18);
+          }
+          return score(a)-score(b)||String(a.id).localeCompare(String(b.id));
+        });
+        // Limit breadth so Safari stays responsive; preference remains with lowest load.
+        for(var j=0;j<pool.length&&j<Math.min(15,5+variation*3);j++){
+          var p=pool[j];trial[day+'|'+entry.slotId]=p.id;use[p.id]=1;chosen[entry.slotId]=p.id;
+          search(i+1,variation);
+          delete trial[day+'|'+entry.slotId];delete use[p.id];delete chosen[entry.slotId];
+          if(nodes>=maxNodes||Date.now()-t0>maxDuration||solution.length>=Math.min(maxSolutions,(variation+1)*3))break;
+        }
+      }
+      for(var v=0;v<4&&solution.length<maxSolutions&&nodes<maxNodes&&Date.now()-t0<maxDuration;v++)search(0,v);
+    }finally{state.assignments=old}
+    if(!solution.length)return {ok:false,chosen:{},message:'ยังหาชุดรายชื่อที่ไม่ซ้ำและผ่านเงื่อนไขเบื้องต้นไม่ได้ (ลองสลับเฉพาะคนในช่องใหม่ได้)'};
+    var failures=[];
+    for(var k=0;k<Math.min(solution.length,8);k++){
+      var assessment=previewHolidayRowSelection(id,solution[k]);
+      if(assessment.ok)return {ok:true,chosen:solution[k],checked:k+1,message:'จัดครบและผ่านการตรวจเดิมแล้ว • ยังไม่ได้เปลี่ยนตารางจริง'};
+      if(assessment.message&&failures.indexOf(assessment.message)<0)failures.push(assessment.message);
+    }
+    return {ok:false,chosen:{},checked:Math.min(solution.length,8),message:'ทดลองหลายชุดแล้ว ยังไม่มีชุดที่ผ่านกฎทั้งหมด: '+(failures[0]||'ไม่ผ่านการตรวจ')};
+  }
   /* V43 — bounded date-only holiday reconciliation, no roster auto-search.
      A cancelled slot remains cancelled; added holiday slots are independent
      assignments selected explicitly. Only one date is ever included in a request. */
@@ -15975,7 +16053,7 @@ window.__ROSTER_V41__={
     originalSnapshot:function(id){var r=byId(id);return r&&r.originalMonth?clone(r.originalMonth):null;},
     month:function(key){return getRosterMonth(key)},
     requestCorrection:requestCorrection,previewRequest:previewRequest,approveCorrection:approveCorrection,rejectRequest:rejectRequest,
-    holidayRowReview:holidayRowReview,requestHolidayRow:requestHolidayRow,makeupLedger:makeupLedger,earliestMakeupMonth:earliestMakeupMonth,
+    holidayRowReview:holidayRowReview,requestHolidayRow:requestHolidayRow,previewHolidayRowSelection:previewHolidayRowSelection,autoSuggestHolidayRow:autoSuggestHolidayRow,makeupLedger:makeupLedger,earliestMakeupMonth:earliestMakeupMonth,
     previewHolidayAuto:function(){throw new Error('ยกเลิกรันอัตโนมัติแบบเดิมแล้ว กรุณาใช้รายการงดและเพิ่มเวรเฉพาะวัน')},
     requestHolidayAuto:function(){throw new Error('ยกเลิกรันอัตโนมัติแบบเดิมแล้ว')},
     getClaimChoices:getClaimChoices,confirmClaim:confirmClaim,resetInvalidMakeup:resetInvalidMakeup,
@@ -18947,8 +19025,22 @@ function showReview(){var host=q('newHolidayReview');if(!host)return;
    '<h4>1. เวรเดิมที่ต้องงด</h4>'+(review.closed.length?'<div class="nh-tablewrap"><table><tr><th>ช่องเดิม</th><th>ชื่อที่ถูกงด</th><th>ชดเริ่ม</th></tr>'+review.closed.map(function(x){return '<tr><td>'+esc(x.slotLabel)+'</td><td>'+esc(x.personName)+'</td><td>ก.พ. 2570 หรือเดือนแรกที่ยังไม่ออกตาราง</td></tr>'}).join('')+'</table></div>':'<p class="nh-muted">ไม่มีเวรเดิมที่ต้องงดเพิ่มเติม</p>')+
    '<h4>2. ช่องวันหยุดที่เปิดเพิ่ม</h4>'+(rows||'<p class="nh-muted">ไม่มีช่องใหม่ที่ต้องเพิ่ม</p>')+
    (review.alreadyCancelled.length?'<p class="nh-muted">มีรายการงดที่บันทึกไว้แล้ว '+review.alreadyCancelled.length+' รายการ — ระบบไม่สร้างยอดซ้ำ</p>':'')+
+   '<button type="button" class="nh-primary nh-auto" id="newHolidayAuto">✨ จัดรายชื่อช่องใหม่อัตโนมัติ (ตรวจทุกกฎ)</button>'+
    '<button type="button" class="nh-primary" id="newHolidayRequest">ตรวจรายการก่อนส่งคำขอ</button><div id="newHolidayDraft"></div>';
   var btn=q('newHolidayRequest');if(btn)btn.onclick=prepareDraft;
+  var auto=q('newHolidayAuto');if(auto)auto.onclick=function(){
+    auto.disabled=true;auto.textContent='กำลังเลือกชื่อและตรวจเงื่อนไข…';message('กำลังทดลองจัดเฉพาะช่องวันหยุดใหม่ ไม่มีการบันทึกตารางจริง');
+    setTimeout(function(){
+      try{
+        var result=api.autoSuggestHolidayRow(selectedId);
+        if(!result.ok){message(result.message,true);return}
+        host.querySelectorAll('[data-nh-slot]').forEach(function(s){if(result.chosen[s.dataset.nhSlot])s.value=result.chosen[s.dataset.nhSlot]});
+        message('ระบบเลือกรายชื่อที่ผ่านการตรวจครบแล้ว • กรุณาตรวจผลก่อน–หลัง และส่งคำขออนุมัติ');
+        prepareDraft();
+      }catch(e){message('จัดอัตโนมัติไม่สำเร็จ: '+e.message,true)}
+      finally{if(q('newHolidayAuto')){q('newHolidayAuto').disabled=false;q('newHolidayAuto').textContent='✨ จัดรายชื่อช่องใหม่อัตโนมัติ (ตรวจทุกกฎ)'}}
+    },30);
+  };
   message('โหลดรายการแล้ว • ไม่มีการเปลี่ยนตารางเวร');
  }catch(e){review=null;host.innerHTML='';message(e.message,true)}
 }
@@ -18996,19 +19088,19 @@ function init(){var host=q('v41Holiday');if(!host||q('newHolidayPanel'))return;
  #newHolidayPanel .nh-tablewrap{max-width:100%;overflow:auto;border:1px solid #dbe8e3;border-radius:10px;margin:8px 0}
  #newHolidayPanel table{width:100%;border-collapse:collapse;min-width:510px;font-size:12px}#newHolidayPanel th,#newHolidayPanel td{text-align:left;border-bottom:1px solid #e6ece9;padding:9px 7px;white-space:normal}#newHolidayPanel th{background:#edf8f2;color:#3b7764}
  #newHolidayPanel .nh-primary{display:block;width:100%;background:#def5e9;border:1px solid #b0dcc9;color:#34785d;border-radius:12px;padding:13px 9px;font:inherit;font-weight:bold;font-size:13px;cursor:pointer;margin:12px 0}
- #newHolidayPanel .nh-primary:disabled{opacity:.5}#newHolidayPanel .nh-muted{color:#788d89;font-size:12px;line-height:1.6}
+ #newHolidayPanel .nh-auto{background:#d8f3ed;border-color:#95d5bf;color:#20795c}#newHolidayPanel .nh-primary:disabled{opacity:.5}#newHolidayPanel .nh-muted{color:#788d89;font-size:12px;line-height:1.6}
  #newHolidayPanel .nh-brief{display:flex;justify-content:space-between;gap:5px;flex-wrap:wrap;padding:8px;border:1px solid #dceee7;border-radius:12px;background:#f8fcfa}
  #newHolidayPanel .nh-brief span{font-size:12px;color:#4c7d6a}#newHolidayPanel .nh-brief b{font-size:16px}
  @media(max-width:360px){#newHolidayPanel{padding:10px}#newHolidayPanel .nh-stats small{font-size:9px}}
  `;document.head.appendChild(st);
- var node=document.createElement('section');node.id='newHolidayPanel';node.innerHTML='<h3>จัดการเวรเฉพาะวันหยุดเพิ่มเติม</h3>'+
+ var node=document.createElement('section');node.id='newHolidayPanel';node.innerHTML='<section id="newHolidayReconcile"><h3>จัดการเวรเฉพาะวันหยุดเพิ่มเติม</h3>'+
  '<p class="nh-muted">งดช่องเดิมที่ปิด • เปิดช่องวันหยุดใหม่ • ไม่ย้ายชื่อไปชดข้ามประเภท • ไม่มีการรันอัตโนมัติแบบเดิม</p>'+
  '<label>เลือกวันหยุดที่บันทึกไว้<select id="newHolidayDate"></select></label><button type="button" class="nh-primary" id="newHolidayLoad">ดูช่องที่ต้องงด/เพิ่ม</button>'+
  '<div id="newHolidayMessage" class="nh-muted" aria-live="polite"></div><div id="newHolidayReview"></div>'+
- '<hr style="border:0;border-top:1px solid #e1ebe7;margin:20px 0"><h3>ทะเบียนงดเวรและชดเชย</h3>'+
+ '</section><section id="newHolidayLedgerArea"><h3>ทะเบียนงดเวรและชดเชย</h3>'+
  '<p class="nh-muted">งดเวรช่องไหน ต้องชดช่องนั้น • เดือนที่ออกตารางแล้วไม่นับเป็นเวรชด</p>'+
- '<label>ดูยอดชดเชยเดือน<select id="newHolidayMonth"></select></label><div class="nh-brief" id="newHolidayLedgerStats"></div><div id="newHolidayLedgerTable"></div>';
- var anchor=q('v41HolidayHistory');if(anchor&&anchor.parentNode===host)host.insertBefore(node,anchor);else host.appendChild(node);
+ '<label>ดูยอดชดเชยเดือน<select id="newHolidayMonth"></select></label><div class="nh-brief" id="newHolidayLedgerStats"></div><div id="newHolidayLedgerTable"></div></section>';
+ var parentNode=q('page-holidays');if(parentNode)parentNode.appendChild(node);else host.appendChild(node);
  q('newHolidayDate').onchange=function(){selectedId=this.value;review=null;q('newHolidayReview').innerHTML='';message('')};
  q('newHolidayLoad').onclick=showReview;
  q('newHolidayMonth').onchange=function(){ledgerMonth=this.value;refreshLedger()};
@@ -19016,6 +19108,61 @@ function init(){var host=q('v41Holiday');if(!host||q('newHolidayPanel'))return;
  var parent=q('page-holidays');if(parent)new MutationObserver(function(){if(parent.classList.contains('active')){refreshSelect();refreshLedger()}}).observe(parent,{attributes:true,attributeFilter:['class']});
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+
+<script id="holiday-v44-subpage-navigation">
+/* V44: separate internal holiday views; never touches the main page router or roster state. */
+(function(){
+ 'use strict';
+ var names={calendar:'ปฏิทินวันหยุด',add:'เพิ่มวันหยุด',list:'ดูรายการ / จัดเวร',ledger:'ชดเชย',edit:'แก้ไขเวร'};
+ function init(){
+  var host=document.getElementById('page-holidays');if(!host||document.getElementById('v44HolidayNav'))return;
+  var style=document.createElement('style');style.textContent=`
+   #v44HolidayNav{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin:8px 12px 14px;max-width:100%;font-family:Mali,Arial,sans-serif}
+   #v44HolidayNav button{font:inherit;min-height:45px;padding:8px 5px;border-radius:12px;border:1px solid #d6e9e2;color:#438573;background:#f5fcfa;font-size:12px;font-weight:750;cursor:pointer;white-space:normal;line-height:1.4}
+   #v44HolidayNav button[aria-current="page"]{background:#d9f2e8;color:#24765b;border-color:#a8ddcb;box-shadow:0 2px 5px #bdded35a}
+   #page-holidays .v41-quick-nav{display:none!important}
+   #page-holidays[data-holiday-subpage="calendar"] #v41Holiday,#page-holidays[data-holiday-subpage="calendar"] #newHolidayPanel,#page-holidays[data-holiday-subpage="calendar"] #v42Panel{display:none!important}
+   #page-holidays:not([data-holiday-subpage="calendar"])>.h32-shell{display:none!important}
+   #page-holidays[data-holiday-subpage="add"] #v41HolidayHistory,#page-holidays[data-holiday-subpage="add"] #newHolidayPanel,#page-holidays[data-holiday-subpage="add"] #v42Panel{display:none!important}
+   #page-holidays[data-holiday-subpage="list"] #v41AddHoliday,#page-holidays[data-holiday-subpage="list"] #v42Panel,#page-holidays[data-holiday-subpage="list"] #newHolidayLedgerArea{display:none!important}
+   #page-holidays[data-holiday-subpage="ledger"] #v41Holiday,#page-holidays[data-holiday-subpage="ledger"] #newHolidayReconcile,#page-holidays[data-holiday-subpage="ledger"] #v42Panel>.v42-shell:nth-child(2){display:none!important}
+   #page-holidays[data-holiday-subpage="edit"] #v41Holiday,#page-holidays[data-holiday-subpage="edit"] #newHolidayPanel,#page-holidays[data-holiday-subpage="edit"] #v42Panel>.v42-shell:first-child{display:none!important}
+   #page-holidays[data-holiday-subpage="list"] #v41SavedHolidayOverview{display:block}
+   #page-holidays[data-holiday-subpage="list"] #v41HolidayHistory{display:block}
+   #page-holidays[data-holiday-subpage="list"] #v41HolidayHistory>summary{display:none}
+   #page-holidays[data-holiday-subpage="list"] #v41HolidayHistory .v41-fold-body{display:block}
+   #page-holidays[data-holiday-subpage="list"] #newHolidayReconcile{display:block}
+   #page-holidays[data-holiday-subpage="edit"] #v42Panel>.v42-shell:nth-child(2){display:block}
+   #newHolidayPanel #newHolidayLedgerArea{border:0;padding:0}
+   @media(max-width:650px){#v44HolidayNav{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:8px 10px 13px}#v44HolidayNav button{font-size:13px}#v44HolidayNav button:first-child{grid-column:span 2}}
+  `;
+  document.head.appendChild(style);
+  var nav=document.createElement('nav');nav.id='v44HolidayNav';nav.setAttribute('aria-label','หน้าจัดการวันหยุด');
+  Object.keys(names).forEach(function(key){var btn=document.createElement('button');btn.type='button';btn.dataset.view=key;btn.textContent=names[key];nav.appendChild(btn)});
+  host.insertBefore(nav,host.firstChild);
+  function current(){try{return new URL(location.href).searchParams.get('holidayView')||'calendar'}catch(e){return 'calendar'}}
+  function select(view,writeUrl){
+    if(!names[view])view='calendar';
+    host.dataset.holidaySubpage=view;
+    nav.querySelectorAll('button').forEach(function(btn){if(btn.dataset.view===view)btn.setAttribute('aria-current','page');else btn.removeAttribute('aria-current')});
+    if(view==='list'){
+      var hist=document.getElementById('v41HolidayHistory');if(hist)hist.open=true;
+    }
+    if(view==='ledger'||view==='edit'){
+      var target=document.querySelector('#v42Panel [data-v42-fold="'+(view==='ledger'?'ledger':'edit')+'"]');if(target)target.open=true;
+    }
+    if(writeUrl){
+      try{var u=new URL(location.href);u.searchParams.set('holidayView',view);u.hash='holidays';history.pushState({holidayView:view},'',u)}catch(e){}
+    }
+    try{window.scrollTo({top:0,left:0,behavior:'instant'})}catch(e){window.scrollTo(0,0)}
+  }
+  nav.addEventListener('click',function(e){var btn=e.target.closest('button[data-view]');if(btn)select(btn.dataset.view,true)});
+  window.addEventListener('popstate',function(){select(current(),false)});
+  select(current(),false);
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
 </script>
 
