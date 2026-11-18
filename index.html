@@ -19112,16 +19112,22 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 </script>
 
 <script id="holiday-v44-subpage-navigation">
-/* V44: separate internal holiday views; never touches the main page router or roster state. */
+/* V44 holiday subpages — V44.1 navigation layout only.
+   Calendar opens by default; the four task buttons sit below the calendar's
+   "ประวัติการแก้ไขล่าสุด" card. No roster rules or assignment logic changed. */
 (function(){
  'use strict';
- var names={calendar:'ปฏิทินวันหยุด',add:'เพิ่มวันหยุด',list:'ดูรายการ / จัดเวร',ledger:'ชดเชย',edit:'แก้ไขเวร'};
+ var names={add:'เพิ่มวันหยุด',list:'ดูรายการ / จัดเวร',ledger:'ชดเชย',edit:'แก้ไขเวร'};
  function init(){
-  var host=document.getElementById('page-holidays');if(!host||document.getElementById('v44HolidayNav'))return;
+  var host=document.getElementById('page-holidays');
+  if(!host||document.getElementById('v44HolidayNav'))return;
   var style=document.createElement('style');style.textContent=`
-   #v44HolidayNav{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin:8px 12px 14px;max-width:100%;font-family:Mali,Arial,sans-serif}
-   #v44HolidayNav button{font:inherit;min-height:45px;padding:8px 5px;border-radius:12px;border:1px solid #d6e9e2;color:#438573;background:#f5fcfa;font-size:12px;font-weight:750;cursor:pointer;white-space:normal;line-height:1.4}
+   #v44HolidayNav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;width:calc(100% - 24px);max-width:1456px;margin:14px auto 22px;font-family:Mali,Arial,sans-serif}
+   #v44HolidayNav button{font:inherit;min-height:53px;padding:10px 8px;border-radius:14px;border:1px solid #d6e9e2;color:#438573;background:#f5fcfa;font-size:13px;font-weight:750;cursor:pointer;white-space:normal;line-height:1.5}
    #v44HolidayNav button[aria-current="page"]{background:#d9f2e8;color:#24765b;border-color:#a8ddcb;box-shadow:0 2px 5px #bdded35a}
+   #v44HolidayBack{display:block;width:max-content;max-width:calc(100% - 24px);margin:12px 12px 4px;padding:9px 13px;border-radius:12px;border:1px solid #d6e9e2;background:#f5fcfa;color:#39836e;font:700 13px Mali,Arial,sans-serif;cursor:pointer}
+   #page-holidays[data-holiday-subpage="calendar"] #v44HolidayBack{display:none!important}
+   #page-holidays[data-holiday-subpage="calendar"] #v44HolidayNav{margin-top:14px}
    #page-holidays .v41-quick-nav{display:none!important}
    #page-holidays[data-holiday-subpage="calendar"] #v41Holiday,#page-holidays[data-holiday-subpage="calendar"] #newHolidayPanel,#page-holidays[data-holiday-subpage="calendar"] #v42Panel{display:none!important}
    #page-holidays:not([data-holiday-subpage="calendar"])>.h32-shell{display:none!important}
@@ -19136,15 +19142,21 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
    #page-holidays[data-holiday-subpage="list"] #newHolidayReconcile{display:block}
    #page-holidays[data-holiday-subpage="edit"] #v42Panel>.v42-shell:nth-child(2){display:block}
    #newHolidayPanel #newHolidayLedgerArea{border:0;padding:0}
-   @media(max-width:650px){#v44HolidayNav{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:8px 10px 13px}#v44HolidayNav button{font-size:13px}#v44HolidayNav button:first-child{grid-column:span 2}}
+   @media(max-width:650px){#v44HolidayNav{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;width:calc(100% - 24px);margin:12px auto 20px}#v44HolidayNav button{font-size:13px;min-height:54px}#v44HolidayBack{margin-left:12px}}
   `;
   document.head.appendChild(style);
-  var nav=document.createElement('nav');nav.id='v44HolidayNav';nav.setAttribute('aria-label','หน้าจัดการวันหยุด');
+  var nav=document.createElement('nav');nav.id='v44HolidayNav';nav.setAttribute('aria-label','ทางลัดจัดการวันหยุด');
   Object.keys(names).forEach(function(key){var btn=document.createElement('button');btn.type='button';btn.dataset.view=key;btn.textContent=names[key];nav.appendChild(btn)});
-  host.insertBefore(nav,host.firstChild);
+  var back=document.createElement('button');back.id='v44HolidayBack';back.type='button';back.textContent='← กลับหน้าวันหยุด';
+  // Place both controls AFTER the entire legacy calendar section, whose final
+  // card is the latest audit log. For task subpages that section is hidden,
+  // so the same four controls remain visible at the top without duplication.
+  var calendar=host.querySelector(':scope > .h32-shell');
+  if(calendar){calendar.insertAdjacentElement('afterend',back);back.insertAdjacentElement('afterend',nav)}
+  else{host.insertBefore(nav,host.firstChild);host.insertBefore(back,nav)}
   function current(){try{return new URL(location.href).searchParams.get('holidayView')||'calendar'}catch(e){return 'calendar'}}
   function select(view,writeUrl){
-    if(!names[view])view='calendar';
+    if(view!=='calendar'&&!names[view])view='calendar';
     host.dataset.holidaySubpage=view;
     nav.querySelectorAll('button').forEach(function(btn){if(btn.dataset.view===view)btn.setAttribute('aria-current','page');else btn.removeAttribute('aria-current')});
     if(view==='list'){
@@ -19154,13 +19166,16 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
       var target=document.querySelector('#v42Panel [data-v42-fold="'+(view==='ledger'?'ledger':'edit')+'"]');if(target)target.open=true;
     }
     if(writeUrl){
-      try{var u=new URL(location.href);u.searchParams.set('holidayView',view);u.hash='holidays';history.pushState({holidayView:view},'',u)}catch(e){}
+      try{var u=new URL(location.href);if(view==='calendar')u.searchParams.delete('holidayView');else u.searchParams.set('holidayView',view);u.hash='holidays';history.pushState({holidayView:view},'',u)}catch(e){}
     }
     try{window.scrollTo({top:0,left:0,behavior:'instant'})}catch(e){window.scrollTo(0,0)}
   }
   nav.addEventListener('click',function(e){var btn=e.target.closest('button[data-view]');if(btn)select(btn.dataset.view,true)});
+  back.addEventListener('click',function(){select('calendar',true)});
+  // Return to the calendar when the main application holiday menu is opened.
+  document.querySelectorAll('.side-nav a[data-page="holidays"]').forEach(function(a){a.addEventListener('click',function(){select('calendar',false)})});
   window.addEventListener('popstate',function(){select(current(),false)});
-  select(current(),false);
+  select('calendar',false);
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
