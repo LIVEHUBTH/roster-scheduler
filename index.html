@@ -19255,7 +19255,7 @@ function showReview(){var host=q('newHolidayReview');if(!host)return;
 }
 function describeRule(msg){
  var m=String(msg||'');
- if(/กฎ\s*(?:ข้อ\s*)?21|±1|ความสมดุล/.test(m))return 'กฎข้อ 21 — ความสมดุล (ขอพิเศษได้เมื่อผลต่างไม่เกิน 2 เวร)';
+ if(/กฎ\s*(?:ข้อ\s*)?21|±1|ความสมดุล/.test(m))return 'กฎข้อ 21 — ความสมดุล (กรณีวันหยุดเพิ่มเติมให้เทียบผลหลังงดกับหลังเพิ่ม และให้ Admin รับทราบ)';
  if(/กฎ\s*(?:ข้อ\s*)?22|ประเภทวัน/.test(m))return 'กฎข้อ 22 — การกระจายประเภทวัน';
  if(/กฎ\s*(?:ข้อ\s*)?23|วันติด|ติดต่อ/.test(m))return 'กฎข้อ 23 — วันต่อเนื่อง';
  if(/ชื่อซ้ำ|บุคลากรซ้ำ|เวรซ้ำ|ซ้ำในวัน/.test(m))return 'กฎข้อ 2 — ห้ามชื่อซ้ำวันเดียวกัน';
@@ -19266,7 +19266,7 @@ function describeRule(msg){
 }
 function draftStatus(html,failed){
  var e=q('newHolidayDraft');if(!e)return;
- e.innerHTML='<div class="nh-check-result '+(failed?'nh-check-error':'nh-check-ok')+'" role="status" aria-live="polite">'+html+'</div>';
+ e.innerHTML='<div class="nh-check-result '+(failed?'nh-check-error':'nh-check-ok')+'" role="status" aria-live="polite"><p style="font-size:11px;opacity:.83;margin:0 0 8px">ตัวตรวจวันหยุดพิเศษ V44.6.1 • เปรียบเทียบหลังงดกับหลังเพิ่ม</p>'+html+'</div>';
  e.scrollIntoView({block:'nearest',behavior:'auto'});
 }
 function prepareDraft(){
