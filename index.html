@@ -19231,26 +19231,49 @@ function prepareDraft(){
  var table='<div class="nh-tablewrap"><table><thead><tr><th>ช่องเวร</th><th>ก่อน</th><th>หลังเสนอ</th></tr></thead><tbody>'+changed.join('')+'</tbody></table></div>'+countHtml;
  if(!preview.ok){
   var reason=String(preview.message||'ผลตรวจไม่ผ่าน');
-   var targetOnly=/กฎ\s*(?:ข้อ\s*)?(?:21|22|23)|ประเภทวัน|ติดต่อกัน\s*3\s*วัน|±1|ความสมดุล/.test(reason);
-   var extra='<p>Admin พิจารณากฎข้อ 21/22/23 เป็นกรณีพิเศษได้เฉพาะวันที่เลือก • ค่าเฉลี่ยผลต่างไม่เกิน 2 เวร; กฎพักบ่ายดึก/ชื่อซ้ำ/สิทธิ์ยังห้ามข้าม</p>';
-   if(targetOnly)extra+='<label style="display:block;margin:10px 0">เหตุผลที่จำเป็นต้องอนุมัติพิเศษ (อย่างน้อย 10 ตัวอักษร)<textarea id="newHolidaySpecialReason" rows="2" style="width:100%;border:1px solid #e1b5a7;border-radius:9px;padding:10px" placeholder="เช่น SDMC2/SDMC6 คนที่ได้รับเวรน้อยไม่ผ่านกฎ 23 จึงขอให้ Admin พิจารณา"></textarea></label><button type="button" class="nh-primary" id="newHolidaySpecialCheck">ตรวจคำขอพิเศษ (กฎ 21 / 22 / 23)</button>';
-  draftStatus('<b>ยังไม่ผ่านการตรวจปกติ — ยังไม่ส่งคำขอ</b><p>'+esc(describeRule(reason))+': '+esc(reason)+'</p>'+table+extra,true);
-  if(targetOnly){var specialBtn=q('newHolidaySpecialCheck');if(specialBtn)specialBtn.onclick=function(){
-    var why=(q('newHolidaySpecialReason')||{}).value||'';
-    var specialCheck;try{specialCheck=api.previewHolidayRowSelection(selectedId,chosen,{special:true,reason:why});}catch(ex){specialCheck={ok:false,message:ex.message||String(ex)}}
-    if(!specialCheck.ok){draftStatus('<b>ไม่สามารถอนุมัติพิเศษ</b><p>'+esc(specialCheck.message)+'</p>'+table,true);return;}
-     var ruleText=(specialCheck.specialRuleIds||[]).map(function(x){return x==='r23'?'กฎข้อ 23 — เวรติดกัน 3 วัน':x==='r21'?'กฎข้อ 21 — ค่าเฉลี่ยต่างได้ไม่เกิน 2 เวร':'กฎข้อ 22 — ประเภทวัน'}).join(' และ ');
-     var specialInfo=(specialCheck.specialRuleDetails||[]).map(function(x){return '<li><b>'+esc(x.rule||x.ruleId)+'</b> '+esc(x.name||'')+' '+esc(x.message||'')+'</li>'}).join('');
-     var specialHtml='<b>ผ่านกฎความปลอดภัย • ความสมดุลตามเพดานกรณีพิเศษ — สามารถส่ง Admin พิจารณา '+esc(ruleText)+'</b><ul>'+specialInfo+'</ul><p>Admin ต้องรับทราบข้อผ่อนปรนและผลต่างก่อนอนุมัติ • กฎพักเวรและสิทธิ์บุคลากรยังห้ามข้าม</p><p>เหตุผล: '+esc(why)+'</p>'+table+
-       '<button type="button" class="nh-primary" id="newHolidaySpecialSend">ส่งคำขอพิเศษให้ Admin ตรวจ (ยังไม่แก้เวรจริง)</button>';
-    draftStatus(specialHtml,false);
-    var send=q('newHolidaySpecialSend');if(send)send.onclick=function(){
-      if(!confirm('ส่งคำขอกรณีพิเศษเฉพาะ '+prettyDate(review.date)+' โดยไม่เปลี่ยนเวรวันอื่น?'))return;
-      try{var sent=api.requestHolidayRow(selectedId,chosen,{special:true,reason:why});posted=sent.id;message('ส่งคำขอกรณีพิเศษแล้ว • รอ Admin ตรวจและอนุมัติ');send.disabled=true;send.textContent='ส่งคำขอแล้ว';if(window.__ROSTER_V42_REFRESH__)window.__ROSTER_V42_REFRESH__();}
-      catch(ex){draftStatus('<b>ส่งคำขอไม่สำเร็จ</b><p>'+esc(ex.message)+'</p>',true);message(ex.message,true)}
-    };
-  }};
-  message('ไม่ผ่านการตรวจปกติ: '+describeRule(reason)+' — ดูรายละเอียดใต้ปุ่มตรวจรายการ',true);return;
+  var targetOnly=/กฎ\s*(?:ข้อ\s*)?(?:21|22|23)|ประเภทวัน|ติดต่อกัน\s*3\s*วัน|±1|ความสมดุล/.test(reason);
+  var extra='<p>กรณีพิเศษอนุญาตเฉพาะกฎข้อ 21/22/23 ตามเงื่อนไขเดิม: ค่าสูงสุดลบค่าต่ำสุดต้องไม่เกิน 2 เวร และห้ามผิดกฎพักเวร ชื่อซ้ำ หรือสิทธิ์บุคลากร</p>';
+  // V44.5: The app records an audit reason automatically from the selected holiday
+  // and rule finding. The user does not need to type an approval explanation.
+  var why='ขอพิจารณากรณีพิเศษเฉพาะวันหยุดเพิ่มเติม '+prettyDate(review.date)+
+    ' เนื่องจากผลตรวจพบ '+describeRule(reason)+'; คงรายชื่อและเวรวันอื่นไว้ทั้งหมด';
+  var specialCheck=null;
+  if(targetOnly){
+    try{specialCheck=api.previewHolidayRowSelection(selectedId,chosen,{special:true,reason:why})}
+    catch(ex){specialCheck={ok:false,message:ex.message||String(ex)}}
+  }
+  if(!targetOnly){
+    draftStatus('<b>ยังยืนยันไม่ได้ — ไม่ผ่านกฎบังคับ</b><p>'+esc(describeRule(reason))+': '+esc(reason)+'</p>'+table+
+      '<p>กรุณาเปลี่ยนรายชื่อเฉพาะช่องที่มีปัญหาแล้วกดตรวจใหม่</p>',true);
+    message('ยังยืนยันไม่ได้: '+describeRule(reason),true);return;
+  }
+  if(!specialCheck.ok){
+    var blockReason=String(specialCheck.message||'ไม่ผ่านเงื่อนไขการอนุมัติกรณีพิเศษ');
+    extra+='<p><b>ผลตรวจพิเศษ: ยังยืนยันไม่ได้</b></p><p>'+esc(blockReason)+'</p>'+
+      '<button type="button" class="nh-primary" disabled aria-disabled="true" style="opacity:.48;cursor:not-allowed">ยืนยันส่งคำขอ (ยังไม่ผ่านเงื่อนไข)</button>'+
+      '<p>เลือกชื่อใหม่เฉพาะช่องที่มีปัญหา แล้วกด “ตรวจรายการก่อนส่งคำขอ” อีกครั้ง</p>';
+    draftStatus('<b>ไม่ผ่านการตรวจ — ยังไม่มีการเปลี่ยนตารางจริง</b><p>'+esc(describeRule(reason))+': '+esc(reason)+'</p>'+table+extra,true);
+    message('ยังยืนยันไม่ได้: '+blockReason,true);return;
+  }
+  var ruleText=(specialCheck.specialRuleIds||[]).map(function(x){return x==='r23'?'กฎข้อ 23 — เวรติดกัน 3 วัน':x==='r21'?'กฎข้อ 21 — ผลต่างไม่เกิน 2 เวร':'กฎข้อ 22 — ประเภทวัน'}).join(' และ ');
+  var specialInfo=(specialCheck.specialRuleDetails||[]).map(function(x){return '<li><b>'+esc(x.rule||x.ruleId)+'</b> '+esc(x.name||'')+' '+esc(x.message||'')+'</li>'}).join('');
+  var specialHtml='<b>ผ่านการตรวจกรณีพิเศษ • พร้อมส่งให้ Admin พิจารณา</b>'+
+    '<p>ข้อที่ต้องรับทราบ: '+esc(ruleText)+'</p><ul>'+specialInfo+'</ul>'+
+    '<p>ระบบบันทึกเหตุผลจากผลตรวจให้อัตโนมัติ ไม่ต้องพิมพ์เอง • Admin ต้องยืนยันรับทราบก่อนอนุมัติจริง</p>'+table+
+    '<button type="button" class="nh-primary" id="newHolidaySpecialSend">ยืนยันส่งคำขอพิเศษให้ Admin</button>';
+  draftStatus(specialHtml,false);
+  var send=q('newHolidaySpecialSend');if(send)send.onclick=function(){
+    if(!confirm('ยืนยันส่งคำขอกรณีพิเศษเฉพาะ '+prettyDate(review.date)+' โดยไม่เปลี่ยนเวรวันอื่น? (ยังไม่ใช่การอนุมัติขึ้นตารางจริง)'))return;
+    try{
+      var latest=api.previewHolidayRowSelection(selectedId,chosen,{special:true,reason:why});
+      if(!latest.ok)throw new Error(latest.message||'ผลตรวจพิเศษล่าสุดไม่ผ่าน');
+      var sent=api.requestHolidayRow(selectedId,chosen,{special:true,reason:why});posted=sent.id;
+      message('ส่งคำขอพิเศษแล้ว • รอ Admin รับทราบและอนุมัติ');
+      send.disabled=true;send.textContent='ส่งคำขอแล้ว (รอ Admin อนุมัติ)';
+      if(window.__ROSTER_V42_REFRESH__)window.__ROSTER_V42_REFRESH__();
+    }catch(ex){draftStatus('<b>ส่งคำขอไม่สำเร็จ</b><p>'+esc(ex.message)+'</p>',true);message(ex.message,true)}
+  };
+  message('ผ่านเงื่อนไขกรณีพิเศษแล้ว • กดยืนยันส่งคำขอได้');return;
  }
  var el=q('newHolidayDraft');
  el.innerHTML='<div class="nh-check-result nh-check-ok" role="status"><b>ผ่านการตรวจตามกฎปัจจุบัน — พร้อมส่งคำขอ</b><p>เป็นเพียงผลทดลอง ยังไม่เปลี่ยนเวรจริง</p>'+table+
