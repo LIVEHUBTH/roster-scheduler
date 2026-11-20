@@ -15768,49 +15768,97 @@ window.__ROSTER_V41__={
       var afterErrors=validate(false),report=rule21Report();
       var afterConflicts=lastConflictDetails.map(function(c){return {day:c.day,rule:c.rule,name:c.name,slot:c.slot,message:c.message}});
       var rule22After=hasRule(22)?rule22Report():{ok:true,details:[]};
-      /* Only distribution-by-day target (r22) may be reviewed by Admin. No new safety/fairness conflicts can be waived. */
+      /* V44.4: Admin may acknowledge ONLY newly introduced Rule 23 consecutive-duty
+         warnings for the selected holiday date, plus the pre-existing Rule 22
+         distribution exception. Rule 21 is waiver-eligible only within max-min <= 2,
+         for this holiday request. All other mandatory rules remain enforced. */
       function conflictKey(c){return [c.day,c.rule,c.name,c.slot,c.message].join('|')}
       var beforeHard={};baselineConflicts.filter(function(c){return c.rule!=='กฎ 22'}).forEach(function(c){beforeHard[conflictKey(c)]=(beforeHard[conflictKey(c)]||0)+1});
       var newlyAddedHard=[];afterConflicts.filter(function(c){return c.rule!=='กฎ 22'}).forEach(function(c){var k=conflictKey(c);if(beforeHard[k])beforeHard[k]--;else newlyAddedHard.push(c)});
-
+      var affectedDate=Number(rec.date.slice(8));
+      var addedNames={};rec.changes.forEach(function(c){if(!c.to)return;var person=state.people.find(function(p){return samePerson(p.id,c.to)});if(person)addedNames[person.name]=true});
+      var newRule23=newlyAddedHard.filter(function(c){return c.rule==='กฎ 23'&&!!addedNames[c.name]&&Number(c.day)>=affectedDate&&Number(c.day)<=affectedDate+2});
+      /* Fairness V44.4: keep Rule 21 unchanged in ordinary scheduling. For an
+         Admin-reviewed holiday-only request, permit spread <= 2 (max-min)
+         in every group, total, and exact EXTRA slot; never permit spread > 2. */
+      var fairnessDetails=[];
+      (report.groupDetails||[]).forEach(function(d){fairnessDetails.push({label:d.label,min:d.min,max:d.max,spread:d.spread});});
+      if(report.totalDetail){var td=report.totalDetail;fairnessDetails.push({label:td.label,min:td.min,max:td.max,spread:td.spread});}
+      ((report.exactExtra||{}).details||[]).forEach(function(d){fairnessDetails.push({label:d.label,min:d.min,max:d.max,spread:d.spread});});
+      var fairnessNeedsException=hasRule(21)&&!report.ok;
+      var fairnessExceptionAllowed=special&&fairnessNeedsException&&fairnessDetails.length>0&&fairnessDetails.every(function(d){return Number(d.spread)<=2;});
+      if(fairnessNeedsException&&!fairnessExceptionAllowed&&special)
+        throw new Error('กฎข้อ 21 — ผลต่างเวรเกินเพดานพิเศษ 2 เวร หรือไม่สามารถตรวจความสมดุลได้: '+fairnessDetails.map(function(d){return d.label+' ต่าง '+d.spread}).slice(0,4).join(' / '));
+      var nonWaivableAdded=newlyAddedHard.filter(function(c){
+        if(newRule23.indexOf(c)>=0)return false;
+        if(fairnessExceptionAllowed&&/^กฎ 21(?:\.|$)/.test(c.rule))return false;
+        return true;
+      });
+      if(nonWaivableAdded.length)throw new Error('ไม่สามารถข้ามกฎบังคับ: '+nonWaivableAdded.map(function(c){return c.rule+' — '+c.name+' '+c.message}).slice(0,3).join(' / '));
+      var specialRuleIds=[];
+      if(!rule22After.ok)specialRuleIds.push('r22');
+      if(newRule23.length)specialRuleIds.push('r23');
+      if(fairnessExceptionAllowed)specialRuleIds.push('r21');
+      var specialDetails=[];
+      if(fairnessExceptionAllowed)fairnessDetails.forEach(function(d){specialDetails.push({ruleId:'r21',rule:'กฎ 21',name:'',day:0,message:d.label+' • ต่ำสุด '+d.min+' สูงสุด '+d.max+' ต่าง '+d.spread+' เวร (เพดานพิเศษไม่เกิน 2)'});});
+      if(!rule22After.ok)(rule22After.details||[]).forEach(function(c){specialDetails.push({ruleId:'r22',rule:'กฎ 22',message:c.message||('เป้าหมายกระจายประเภทวัน '+c.label+' ยังไม่ผ่าน'),name:c.name||'',day:0})});
+      newRule23.forEach(function(c){
+        var end=Number(c.day),dates=[];
+        for(var off=-2;off<=0;off++){var dt=new Date(Number(rec.month.slice(0,4)),Number(rec.month.slice(5))-1,end+off);dates.push(dt.getDate()+'/'+(dt.getMonth()+1)+'/'+(dt.getFullYear()+543))}
+        specialDetails.push({ruleId:'r23',rule:'กฎ 23',name:c.name,day:c.day,
+          message:'ขึ้นเวรต่อเนื่อง 3 วัน ('+dates.join(', ')+') — '+c.message});
+      });
       if(rec.kind==='holiday_row_reconcile'){
-        var affectedDate=Number(rec.date.slice(8));
         if(rec.changes.some(function(c){return c.date!==rec.date}))throw new Error('คำขอวันหยุดต้องเปลี่ยนเฉพาะวันที่เลือก');
         if(!state.holidays[rec.date])throw new Error('ไม่พบวันหยุดเพิ่มเติมที่เลือก');
-        var dayConflict=lastConflictDetails.find(function(c){return Number(c.day)===affectedDate});
+        var dayConflict=lastConflictDetails.find(function(c){return Number(c.day)===affectedDate&&c.rule!=='กฎ 23'});
         if(dayConflict)throw new Error('แถววันที่เลือกไม่ผ่าน '+dayConflict.rule+' — '+dayConflict.message);
-        if(!rule22After.ok&&!special)throw new Error('ไม่ผ่านการกระจายเวรตามประเภทวัน (กฎ 22) — อาจขอให้ Admin พิจารณาเป้าหมายข้อนี้เป็นกรณีพิเศษ หากกฎ 1–21 และเงื่อนไขความปลอดภัยผ่าน');
-        if(special&&newlyAddedHard.length)throw new Error('ไม่อนุญาตให้อนุมัติพิเศษเพราะมีข้อขัดแย้งใหม่: '+newlyAddedHard.map(function(c){return c.rule+' '+c.message}).slice(0,2).join(' / '));
-        SLOTS.forEach(function(s){var key=affectedDate+'|'+s.id;
-          if(!active(s,affectedDate)&&state.assignments[key])throw new Error('ยังมีชื่อในช่องที่ปิดในวันหยุด: '+s.label);
-          if(active(s,affectedDate)&&!state.assignments[key])throw new Error('ยังจัดคนไม่ครบช่องวันหยุด: '+s.label);
+        if(!rule22After.ok&&!special)throw new Error('กฎข้อ 22 — การกระจายเวรตามประเภทวันยังไม่ผ่าน สามารถส่งให้ Admin พิจารณากรณีพิเศษได้เมื่อกฎบังคับอื่นผ่าน');
+        if(newRule23.length&&!special)throw new Error('กฎข้อ 23 — '+newRule23.map(function(c){return c.name+' ขึ้นเวรติดต่อกัน 3 วัน (สิ้นสุดวันที่ '+c.day+')'}).join(' / ')+' • ขอให้ Admin รับทราบและพิจารณากรณีพิเศษได้ โดยยังต้องผ่านกฎพักเวรและค่าเฉลี่ย ±1');
+        SLOTS.forEach(function(sl){var key=affectedDate+'|'+sl.id;
+          if(!active(sl,affectedDate)&&state.assignments[key])throw new Error('ยังมีชื่อในช่องที่ปิดในวันหยุด: '+sl.label);
+          if(active(sl,affectedDate)&&!state.assignments[key])throw new Error('ยังจัดคนไม่ครบช่องวันหยุด: '+sl.label);
         });
       }
-      if(special){if(newlyAddedHard.length)throw new Error('ไม่สามารถข้ามกฎที่บังคับ: '+newlyAddedHard[0].rule+' — '+newlyAddedHard[0].message);}
-      else if(afterErrors>baselineErrors)throw new Error('การแก้ไขทำให้ข้อขัดแย้งเพิ่มจาก '+baselineErrors+' เป็น '+afterErrors+' จุด');
-      if(hasRule(21)&&!report.ok)throw new Error('การแก้ไขไม่ผ่านกฎความสมดุล ±1 รายกลุ่ม/ยอดรวม/EXTRA แยกช่อง');
+      if(special){
+        var requestedIds=Array.isArray(rec.specialRuleIds)?rec.specialRuleIds:['r22']; /* legacy requests may waive only r22 */
+        if(specialRuleIds.some(function(id){return requestedIds.indexOf(id)<0}))throw new Error('คำขอไม่ได้ระบุข้อยกเว้น '+specialRuleIds.filter(function(id){return requestedIds.indexOf(id)<0}).join(', ')+' กรุณาสร้างคำขอใหม่');
+        if(!specialRuleIds.length)throw new Error('ไม่พบข้อผ่อนปรนที่ต้องใช้คำขอกรณีพิเศษ');
+      }else if(afterErrors>baselineErrors)throw new Error('การแก้ไขทำให้ข้อขัดแย้งเพิ่มจาก '+baselineErrors+' เป็น '+afterErrors+' จุด');
+      if(hasRule(21)&&!report.ok&&!fairnessExceptionAllowed)throw new Error('กฎข้อ 21 — การแก้ไขไม่ผ่านความสมดุล ±1 รายกลุ่ม/ยอดรวม/EXTRA แยกช่อง; ขออนุมัติพิเศษได้เฉพาะผลต่างไม่เกิน 2 เวร');
       return {ok:true,month:rec.month,beforeErrors:baselineErrors,afterErrors:afterErrors,
         beforeFair:!!baseline.ok,afterFair:!!report.ok,changes:clone(rec.changes),newAssignments:clone(newA),
-        specialApproval:special&&(!rule22After.ok),specialReason:specialReason,
-        specialRuleDetails:special&&(!rule22After.ok)?clone(rule22After.details||[]):[]};
+        specialApproval:special&&specialRuleIds.length>0,specialReason:specialReason,
+        specialRuleIds:special?specialRuleIds:[],specialRuleDetails:special?specialDetails:[],
+        fairnessException:special&&fairnessExceptionAllowed,fairnessSpreadLimit:special&&fairnessExceptionAllowed?2:1};
     }catch(e){reason=e.message;return {ok:false,month:rec.month,message:reason};}
     finally{state.assignments=old;renderSheet();}
   }
-  async function approveCorrection(id){
-    if(!canApproveSpecial())throw new Error('เฉพาะ Admin เท่านั้นที่อนุมัติแก้ไขหลังประกาศได้');
-    var rec=byId(id);if(!rec||rec.status!=='pending')throw new Error('ไม่พบคำขอที่รออนุมัติ');
-    var preview=previewRequest(id);if(!preview.ok)throw new Error(preview.message);
+   async function approveCorrection(id,acknowledgement){
+     if(!canApproveSpecial())throw new Error('เฉพาะ Admin เท่านั้นที่อนุมัติแก้ไขหลังประกาศได้');
+     var rec=byId(id);if(!rec||rec.status!=='pending')throw new Error('ไม่พบคำขอที่รออนุมัติ');
+     var preview=previewRequest(id);if(!preview.ok)throw new Error(preview.message);
+     if((preview.specialRuleIds||[]).indexOf('r23')>=0&&!(acknowledgement&&acknowledgement.confirmRule23===true))
+       throw new Error('Admin ต้องติ๊กรับทราบกฎข้อ 23 ที่ผิดก่อนอนุมัติกรณีพิเศษ');
+     if((preview.specialRuleIds||[]).indexOf('r21')>=0&&!(acknowledgement&&acknowledgement.confirmRule21===true))
+       throw new Error('Admin ต้องติ๊กรับทราบค่าเฉลี่ยกรณีพิเศษ (ผลต่างไม่เกิน 2 เวร) ก่อนอนุมัติ');
     if(!cloud.connected||!auth.token)throw new Error('ต้องเชื่อม Cloud ด้วยบัญชีผู้มีสิทธิ์ก่อนอนุมัติการแก้ไขหลังประกาศ');
     var original=monthSaved(rec.month),newMonth=clone(original);
     newMonth.assignments=preview.newAssignments;newMonth.savedAt=stamp();
     /* The original workflow locked / approvals remain unchanged. */
     var updated=clone(rec);updated.status='approved';updated.approvedAt=stamp();updated.approvedBy=unitUser.name||unitUser.username||'';
-    if(updated.specialApprovalRequested){
-      if(!preview.specialApproval||!preview.specialRuleDetails||!preview.specialRuleDetails.length)throw new Error('กรณีพิเศษไม่ตรงตามผลตรวจล่าสุด ไม่อนุมัติ');
-      updated.specialAudit={ruleId:'r22',reason:String(updated.specialApprovalReason||''),
-        details:clone(preview.specialRuleDetails),approvedBy:updated.approvedBy,approvedAt:updated.approvedAt,
-        assurance:'ผ่านกฎความปลอดภัยและความสมดุลข้อ 21 ตามตัวตรวจปัจจุบัน; ไม่เปลี่ยนวันอื่น'};
-    }
+     if(updated.specialApprovalRequested){
+       if(!preview.specialApproval||!preview.specialRuleDetails||!preview.specialRuleDetails.length)throw new Error('กรณีพิเศษไม่ตรงตามผลตรวจล่าสุด ไม่อนุมัติ');
+       updated.specialAudit={ruleId:(preview.specialRuleIds||[]).join(','),ruleIds:clone(preview.specialRuleIds||[]),
+         reason:String(updated.specialApprovalReason||''),details:clone(preview.specialRuleDetails),
+         rule21Acknowledged:(preview.specialRuleIds||[]).indexOf('r21')>=0,
+         fairnessSpreadLimit:preview.fairnessSpreadLimit||1,
+         rule23Acknowledged:(preview.specialRuleIds||[]).indexOf('r23')>=0,
+         acknowledgedBy:(preview.specialRuleIds||[]).indexOf('r23')>=0?updated.approvedBy:null,
+         acknowledgedAt:(preview.specialRuleIds||[]).indexOf('r23')>=0?updated.approvedAt:null,
+         approvedBy:updated.approvedBy,approvedAt:updated.approvedAt,
+         assurance:'ผ่อนปรนเฉพาะกฎ 22/23 และความสมดุลข้อ 21 เฉพาะคำขอวันหยุด โดยเพดานกลุ่ม/รวม/EXTRA ไม่เกิน 2 เวร; พักบ่ายดึก ชื่อซ้ำ สิทธิ์ยังบังคับ; ไม่เปลี่ยนวันอื่น'};
+     }
     updated.claims=[];
     if(updated.compensationEligible){
       updated.changes.forEach(function(c){if(!c.from||samePerson(c.from,c.to))return;
@@ -15942,8 +15990,9 @@ window.__ROSTER_V41__={
     });
     var records=state.publishedCorrections||(state.publishedCorrections=[]);
     specialOptions=specialOptions||{};
-    var temp={id:'__holiday_draft_check__'+Date.now(),kind:'holiday_row_reconcile',month:r.month,date:date,changes:proposed,status:'pending',
-      specialApprovalRequested:specialOptions.special===true,specialApprovalReason:String(specialOptions.reason||'').trim()};
+     var temp={id:'__holiday_draft_check__'+Date.now(),kind:'holiday_row_reconcile',month:r.month,date:date,changes:proposed,status:'pending',
+       specialApprovalRequested:specialOptions.special===true,specialApprovalReason:String(specialOptions.reason||'').trim(),
+       specialRuleIds:specialOptions.special===true?['r22','r23','r21']:[]};
     records.push(temp);
     try{return previewRequest(temp.id)}
     finally{var index=records.indexOf(temp);if(index>=0)records.splice(index,1)}
@@ -16074,18 +16123,21 @@ window.__ROSTER_V41__={
       activeIds[pid]=true;changes.push({date:date,slotId:x.slotId,from:null,to:pid});
     });
     if(changes.some(function(c){return c.date!==date}))throw new Error('คำขอต้องจำกัดเฉพาะวันที่เลือก');
-    specialOptions=specialOptions||{};
-    if(specialOptions.special===true){
-      var specialPreflight=previewHolidayRowSelection(id,selections,specialOptions);
-      if(!specialPreflight.ok)throw new Error('ไม่สามารถขออนุมัติกรณีพิเศษ: '+specialPreflight.message);
-      if(!specialPreflight.specialApproval)throw new Error('ไม่พบเป้าหมายกฎข้อ 22 ที่ต้องผ่อนปรน ใช้คำขออนุมัติปกติได้');
-    }
+     specialOptions=specialOptions||{};
+     var requestedSpecialRules=[];
+     if(specialOptions.special===true){
+       var specialPreflight=previewHolidayRowSelection(id,selections,specialOptions);
+       if(!specialPreflight.ok)throw new Error('ไม่สามารถขออนุมัติกรณีพิเศษ: '+specialPreflight.message);
+       if(!specialPreflight.specialApproval)throw new Error('ไม่พบข้อผ่อนปรนกฎ 21, 22 หรือ 23 ใช้คำขออนุมัติปกติได้');
+       requestedSpecialRules=clone(specialPreflight.specialRuleIds||[]);
+     }
     var d=getRosterMonth(review.month),h=(state.holidayAmendments||[]).find(function(x){return x.id===id});
     var rec={id:newid('pc_'),kind:'holiday_row_reconcile',month:review.month,date:date,changes:changes,
       reason:'งดเวรที่ปิดและเพิ่มเวรวันหยุดเฉพาะ '+date+' : '+review.name,
       compensationEligible:true,holidayId:id,status:'pending',createdAt:stamp(),createdBy:unitUser.name||unitUser.username||'',
-      specialApprovalRequested:specialOptions.special===true,specialApprovalReason:specialOptions.special===true?String(specialOptions.reason||'').trim().slice(0,500):'',
-      specialRuleId:specialOptions.special===true?'r22':null,
+       specialApprovalRequested:specialOptions.special===true,specialApprovalReason:specialOptions.special===true?String(specialOptions.reason||'').trim().slice(0,500):'',
+       specialRuleId:specialOptions.special===true?requestedSpecialRules.join(','):null,
+       specialRuleIds:requestedSpecialRules,
       originalMonth:clone(d),futureBaseline:Object.assign({},clone(h.futureBaseline||{}),storedBaselineAfter(date)),claims:[]};
     state.publishedCorrections=state.publishedCorrections||[];
     state.publishedCorrections.push(rec);
@@ -18974,9 +19026,9 @@ function render(){
  '<label class="v42-check"><input id="v42Credit" type="checkbox" checked/>สร้างยอดค้างชดเชยให้ผู้ที่ถูกเอาเวรออก (เฉพาะเมื่อเป็นเหตุของหน่วยงาน)</label>'+
  '<button class="v42-btn peach" id="v42Request">'+ico.edit+' บันทึกคำขอโดยไม่เปลี่ยนตารางเดิม</button><div id="v42Message" class="v42-help"></div>'+
  '</div></details><details class="v42-fold v42-fold-secondary" data-v42-fold="requests"'+(v42FoldState.requests?' open':'')+'><summary>ประวัติคำขอ ('+requests.length+' รายการ)</summary><div class="v42-fold-content">'+requests.slice().reverse().map(function(r){var approved=r.status==='approved';return '<article class="v42-item"><div class="v42-itemhead"><b>'+niceDate(r.date)+' • '+esc(r.kind==='holiday_auto'?'คำขอระบบเดิม (ยกเลิกใช้)':r.kind==='holiday_row_reconcile'?'งดเวรและเพิ่มเวรวันหยุดเฉพาะวัน':r.kind)+'</b><span class="v42-pill '+(approved?'done':r.status==='rejected'?'lost':'pending')+'">'+(approved?'อนุมัติแล้ว':r.status==='rejected'?'ไม่อนุมัติ':'รออนุมัติ')+'</span></div><p>'+esc(r.reason)+' • เสนอโดย '+esc(r.createdBy)+'</p>'+
- (r.specialApprovalRequested?'<p style="color:#9d5b22;font-weight:bold">⚠ ขออนุมัติกรณีพิเศษเฉพาะเป้าหมายกฎข้อ 22 — '+esc(r.specialApprovalReason||'')+(r.specialAudit?' • อนุมัติโดย '+esc(r.specialAudit.approvedBy):'')+'</p>':'')+
+  (r.specialApprovalRequested?'<p style="color:#9d5b22;font-weight:bold">⚠ ขออนุมัติกรณีพิเศษ '+esc((r.specialRuleIds||['r22']).map(function(x){return x==='r23'?'กฎข้อ 23 (วันติดกัน 3 วัน)':x==='r21'?'กฎข้อ 21 (ผลต่างไม่เกิน 2 เวร)':'กฎข้อ 22 (ประเภทวัน)'}).join(' และ '))+' — เหตุผล: '+esc(r.specialApprovalReason||'')+(r.specialAudit?' • อนุมัติโดย '+esc(r.specialAudit.approvedBy):'')+'</p>':'')+
  '<p>'+r.changes.map(function(c){var sl=api.slots.find(function(s){return s.id===c.slotId});return niceDate(c.date)+' '+esc(sl?sl.label:c.slotId)+' : '+esc(personName(c.from))+' → '+esc(personName(c.to))}).join('<br>')+'</p>'+
- (r.status==='pending'?'<div class="v42-actions"><button class="v42-btn blue" data-v42-preview="'+esc(r.id)+'">ตรวจสอบผลกระทบ</button>'+(api.canApprove()?'<button class="v42-btn mint" data-v42-approve="'+esc(r.id)+'">อนุมัติและบันทึก</button><button class="v42-btn rose" data-v42-reject="'+esc(r.id)+'">ไม่อนุมัติ</button>':'')+'</div>':'')+'<div class="v42-actions"><button class="v42-btn blue" data-v42-original="'+esc(r.id)+'">ดูตารางต้นฉบับก่อนแก้</button></div><div id="v42Original_'+esc(r.id)+'"></div></article>'}).join('')+'</div></details></section>';
+  (r.status==='pending'?'<div class="v42-actions"><button class="v42-btn blue" data-v42-preview="'+esc(r.id)+'">ตรวจสอบผลกระทบ</button>'+(api.canApprove()?((r.specialRuleIds||[]).some(function(x){return x==='r23'||x==='r21'})?'<label style="display:flex;gap:8px;align-items:flex-start;background:#fff4de;border:1px solid #e9ba76;border-radius:12px;padding:10px;width:100%;font-size:13px"><input type="checkbox" data-v42-ack="'+esc(r.id)+'" style="margin-top:4px"/> <span>Admin รับทราบข้อผ่อนปรนที่แสดงในผลตรวจ (กฎข้อ 23 และ/หรือค่าเฉลี่ยข้อ 21 สูงสุดต่าง 2 เวร) พร้อมเหตุผลแล้ว • ยืนยันเฉพาะวันที่ขอ</span></label>':'')+'<button class="v42-btn mint" data-v42-approve="'+esc(r.id)+'">อนุมัติและบันทึก</button><button class="v42-btn rose" data-v42-reject="'+esc(r.id)+'">ไม่อนุมัติ</button>':'')+'</div>':'')+'<div class="v42-actions"><button class="v42-btn blue" data-v42-original="'+esc(r.id)+'">ดูตารางต้นฉบับก่อนแก้</button></div><div id="v42Original_'+esc(r.id)+'"></div></article>'}).join('')+'</div></details></section>';
  panel.querySelectorAll('[data-v42-fold]').forEach(function(el){el.addEventListener('toggle',function(){v42FoldState[el.getAttribute('data-v42-fold')]=el.open})});
  function on(id,event,cb){var e=q(id);if(e)e.addEventListener(event,cb)}
  on('v42Year','change',function(){selectedYear=this.value;render()});
@@ -19006,11 +19058,16 @@ function render(){
  panel.querySelectorAll('[data-v42-pair]').forEach(function(b){b.onclick=function(){var id=b.dataset.v42Pair,sel=q('v42Choose_'+id);if(!sel||!sel.value)return;var v=sel.value.split('|');if(!confirm('ยืนยันจับคู่เวรช่องเดิมนี้เป็นเวรชดเชย?'))return;
   try{api.confirmClaim(id,v[0],v[1]);render()}catch(e){alert(e.message)}}});
  panel.querySelectorAll('[data-v42-reset]').forEach(function(b){b.onclick=function(){if(!confirm('ยกเลิกการจับคู่ที่ไม่ถูกต้องและคืนยอดค้างชดเชย?'))return;try{api.resetInvalidMakeup(b.dataset.v42Reset);render()}catch(e){alert(e.message)}}});
- panel.querySelectorAll('[data-v42-preview]').forEach(function(b){b.onclick=function(){var r=api.previewRequest(b.dataset.v42Preview);alert(r.ok?((r.specialApproval?'กรณีพิเศษกฎ 22: ':'')+'ไม่เพิ่มข้อขัดแย้งใหม่ตามกฎบังคับ • เกณฑ์ข้อ 21 ผ่านในผลตรวจใหม่\nข้อขัดแย้งก่อน '+r.beforeErrors+' / หลัง '+r.afterErrors+(r.specialApproval?'\nเหตุผล: '+r.specialReason:'')):r.message)}});
- panel.querySelectorAll('[data-v42-approve]').forEach(function(b){b.onclick=async function(){var r=api.previewRequest(b.dataset.v42Approve);if(!r.ok){alert('ไม่สามารถอนุมัติ: '+r.message);return}
-  if(!confirm('อนุมัติแก้ไขเฉพาะ '+r.changes.length+' ช่องในเดือน '+r.month+'?\nระบบจะไม่แก้ชื่อช่องอื่นหรือกฎเดิม'+(r.specialApproval?'\n\n⚠ อนุมัติพิเศษเฉพาะเป้าหมายกฎ 22 เหตุผล: '+r.specialReason+'\nข้อขัดแย้งเดิมที่ไม่เกี่ยวข้องยังคงต้องตรวจแยก':'') ))return;
-  b.disabled=true;try{var result=await api.approveCorrection(b.dataset.v42Approve);render();alert('บันทึกและยืนยันผล Cloud สำเร็จ • เปลี่ยนเฉพาะ '+result.changedCells+' ช่อง')}
-  catch(e){b.disabled=false;alert('อนุมัติไม่สำเร็จ: '+e.message)}}});
+  panel.querySelectorAll('[data-v42-preview]').forEach(function(b){b.onclick=function(){var r=api.previewRequest(b.dataset.v42Preview);var details=(r.specialRuleDetails||[]).map(function(x){return (x.rule||x.ruleId)+' — '+(x.name||'')+' '+(x.message||'')}).join('\n');alert(r.ok?((r.specialApproval?'กรณีพิเศษ '+(r.specialRuleIds||[]).join(', ')+': ':'')+'ผ่านกฎพักเวร ชื่อซ้ำและสิทธิ์ • เกณฑ์ความสมดุลตามผลตรวจ\nข้อขัดแย้งก่อน '+r.beforeErrors+' / หลัง '+r.afterErrors+(details?'\n\nข้อผ่อนปรนที่ต้องรับทราบ:\n'+details:'')+(r.specialApproval?'\nเหตุผล: '+r.specialReason:'')):r.message)}});
+  panel.querySelectorAll('[data-v42-approve]').forEach(function(b){b.onclick=async function(){var r=api.previewRequest(b.dataset.v42Approve);if(!r.ok){alert('ไม่สามารถอนุมัติ: '+r.message);return}
+   var needs23=(r.specialRuleIds||[]).indexOf('r23')>=0;
+   var needs21=(r.specialRuleIds||[]).indexOf('r21')>=0;
+   var ack=panel.querySelector('[data-v42-ack="'+b.dataset.v42Approve+'"]');
+   if((needs23||needs21)&&(!ack||!ack.checked)){alert('กรุณาติ๊กรับทราบข้อผ่อนปรนกฎข้อ 21/23 ก่อน Admin อนุมัติกรณีพิเศษ');return}
+   var specialDetails=(r.specialRuleDetails||[]).map(function(x){return (x.rule||x.ruleId)+' — '+(x.name||'')+' '+(x.message||'')}).join('\n');
+   if(!confirm('อนุมัติแก้ไขเฉพาะ '+r.changes.length+' ช่องในเดือน '+r.month+'?\nระบบจะไม่แก้ชื่อช่องอื่นหรือกฎเดิม'+(r.specialApproval?'\n\n⚠ รับทราบข้อผ่อนปรนกรณีพิเศษ:\n'+specialDetails+'\nเหตุผล: '+r.specialReason+'\nยังต้องผ่านกฎพักบ่ายดึก ชื่อซ้ำ และสิทธิ์; ความสมดุลกรณีพิเศษผลต่างไม่เกิน 2 เวร':'') ))return;
+   b.disabled=true;try{var result=await api.approveCorrection(b.dataset.v42Approve,{confirmRule23:needs23&&!!ack.checked,confirmRule21:needs21&&!!ack.checked});render();alert('บันทึกและยืนยันผล Cloud สำเร็จ • เปลี่ยนเฉพาะ '+result.changedCells+' ช่อง')}
+   catch(e){b.disabled=false;alert('อนุมัติไม่สำเร็จ: '+e.message)}}});
  panel.querySelectorAll('[data-v42-reject]').forEach(function(b){b.onclick=function(){var reason=prompt('เหตุผลที่ไม่อนุมัติ','ไม่ผ่านการตรวจ');if(reason===null)return;try{api.rejectRequest(b.dataset.v42Reject,reason);render()}catch(e){alert(e.message)}}});
 }
 function holidayOptions(){var arr=(window.__ROSTER_V41__&&window.__ROSTER_V41__.getAmendments())||[];
@@ -19129,7 +19186,7 @@ function showReview(){var host=q('newHolidayReview');if(!host)return;
 }
 function describeRule(msg){
  var m=String(msg||'');
- if(/กฎ\s*(?:ข้อ\s*)?21|±1|ความสมดุล/.test(m))return 'กฎข้อ 21 — ความสมดุล';
+ if(/กฎ\s*(?:ข้อ\s*)?21|±1|ความสมดุล/.test(m))return 'กฎข้อ 21 — ความสมดุล (ขอพิเศษได้เมื่อผลต่างไม่เกิน 2 เวร)';
  if(/กฎ\s*(?:ข้อ\s*)?22|ประเภทวัน/.test(m))return 'กฎข้อ 22 — การกระจายประเภทวัน';
  if(/กฎ\s*(?:ข้อ\s*)?23|วันติด|ติดต่อ/.test(m))return 'กฎข้อ 23 — วันต่อเนื่อง';
  if(/ชื่อซ้ำ|บุคลากรซ้ำ|เวรซ้ำ|ซ้ำในวัน/.test(m))return 'กฎข้อ 2 — ห้ามชื่อซ้ำวันเดียวกัน';
@@ -19174,16 +19231,18 @@ function prepareDraft(){
  var table='<div class="nh-tablewrap"><table><thead><tr><th>ช่องเวร</th><th>ก่อน</th><th>หลังเสนอ</th></tr></thead><tbody>'+changed.join('')+'</tbody></table></div>'+countHtml;
  if(!preview.ok){
   var reason=String(preview.message||'ผลตรวจไม่ผ่าน');
-  var targetOnly=/กฎ\s*(?:ข้อ\s*)?22|ประเภทวัน/.test(reason);
-  var extra='<p>ลองเปลี่ยนรายชื่อเฉพาะวัน หรือให้ Admin ตรวจเป้าหมายชนิดวันโดยไม่ข้ามกฎพักเวร/สิทธิ์/ค่าเฉลี่ย ±1</p>';
-  if(targetOnly)extra+='<label style="display:block;margin:10px 0">เหตุผลที่จำเป็นต้องอนุมัติพิเศษ (อย่างน้อย 10 ตัวอักษร)<textarea id="newHolidaySpecialReason" rows="2" style="width:100%;border:1px solid #e1b5a7;border-radius:9px;padding:10px" placeholder="เช่น จัดตามช่องวันหยุดใหม่แล้วไม่มีชุดที่ผ่านเป้าหมายชนิดวัน"></textarea></label><button type="button" class="nh-primary" id="newHolidaySpecialCheck">ตรวจคำขอกรณีพิเศษ (กฎข้อ 22 เท่านั้น)</button>';
+   var targetOnly=/กฎ\s*(?:ข้อ\s*)?(?:21|22|23)|ประเภทวัน|ติดต่อกัน\s*3\s*วัน|±1|ความสมดุล/.test(reason);
+   var extra='<p>Admin พิจารณากฎข้อ 21/22/23 เป็นกรณีพิเศษได้เฉพาะวันที่เลือก • ค่าเฉลี่ยผลต่างไม่เกิน 2 เวร; กฎพักบ่ายดึก/ชื่อซ้ำ/สิทธิ์ยังห้ามข้าม</p>';
+   if(targetOnly)extra+='<label style="display:block;margin:10px 0">เหตุผลที่จำเป็นต้องอนุมัติพิเศษ (อย่างน้อย 10 ตัวอักษร)<textarea id="newHolidaySpecialReason" rows="2" style="width:100%;border:1px solid #e1b5a7;border-radius:9px;padding:10px" placeholder="เช่น SDMC2/SDMC6 คนที่ได้รับเวรน้อยไม่ผ่านกฎ 23 จึงขอให้ Admin พิจารณา"></textarea></label><button type="button" class="nh-primary" id="newHolidaySpecialCheck">ตรวจคำขอพิเศษ (กฎ 21 / 22 / 23)</button>';
   draftStatus('<b>ยังไม่ผ่านการตรวจปกติ — ยังไม่ส่งคำขอ</b><p>'+esc(describeRule(reason))+': '+esc(reason)+'</p>'+table+extra,true);
   if(targetOnly){var specialBtn=q('newHolidaySpecialCheck');if(specialBtn)specialBtn.onclick=function(){
     var why=(q('newHolidaySpecialReason')||{}).value||'';
     var specialCheck;try{specialCheck=api.previewHolidayRowSelection(selectedId,chosen,{special:true,reason:why});}catch(ex){specialCheck={ok:false,message:ex.message||String(ex)}}
     if(!specialCheck.ok){draftStatus('<b>ไม่สามารถอนุมัติพิเศษ</b><p>'+esc(specialCheck.message)+'</p>'+table,true);return;}
-    var specialHtml='<b>ไม่เพิ่มข้อขัดแย้งใหม่ตามกฎบังคับ — ขอให้ Admin พิจารณาเป้าหมายกฎข้อ 22 ได้</b><p>เหตุผล: '+esc(why)+'</p>'+table+
-      '<button type="button" class="nh-primary" id="newHolidaySpecialSend">ส่งคำขอพิเศษให้ Admin อนุมัติ (ยังไม่แก้เวรจริง)</button>';
+     var ruleText=(specialCheck.specialRuleIds||[]).map(function(x){return x==='r23'?'กฎข้อ 23 — เวรติดกัน 3 วัน':x==='r21'?'กฎข้อ 21 — ค่าเฉลี่ยต่างได้ไม่เกิน 2 เวร':'กฎข้อ 22 — ประเภทวัน'}).join(' และ ');
+     var specialInfo=(specialCheck.specialRuleDetails||[]).map(function(x){return '<li><b>'+esc(x.rule||x.ruleId)+'</b> '+esc(x.name||'')+' '+esc(x.message||'')+'</li>'}).join('');
+     var specialHtml='<b>ผ่านกฎความปลอดภัย • ความสมดุลตามเพดานกรณีพิเศษ — สามารถส่ง Admin พิจารณา '+esc(ruleText)+'</b><ul>'+specialInfo+'</ul><p>Admin ต้องรับทราบข้อผ่อนปรนและผลต่างก่อนอนุมัติ • กฎพักเวรและสิทธิ์บุคลากรยังห้ามข้าม</p><p>เหตุผล: '+esc(why)+'</p>'+table+
+       '<button type="button" class="nh-primary" id="newHolidaySpecialSend">ส่งคำขอพิเศษให้ Admin ตรวจ (ยังไม่แก้เวรจริง)</button>';
     draftStatus(specialHtml,false);
     var send=q('newHolidaySpecialSend');if(send)send.onclick=function(){
       if(!confirm('ส่งคำขอกรณีพิเศษเฉพาะ '+prettyDate(review.date)+' โดยไม่เปลี่ยนเวรวันอื่น?'))return;
